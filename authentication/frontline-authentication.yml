@@ -1,0 +1,43 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/frontline-openapi-original.yml
+docs: https://docs.getfrontline.ai/docs/authentication.md
+summary:
+  types:
+  - http
+  http_schemes:
+  - bearer
+  api_key_location: Authorization header (Bearer)
+  oauth2_flows: []
+schemes:
+- name: accountApiKey
+  type: http
+  scheme: bearer
+  bearerFormat: Account API Key
+  key_type: GENERAL
+  description: >-
+    Account-level API key (GENERAL). Authenticates on behalf of the entire account with no user
+    identity. Use for read-only integrations, dashboards, and machine-to-machine sync. Created in
+    the app under Account settings > Developer. No fixed per-account cap.
+  sources:
+  - openapi/frontline-openapi-original.yml
+- name: userApiKey
+  type: http
+  scheme: bearer
+  bearerFormat: User API Key
+  key_type: USER
+  description: >-
+    User-level API key (USER). Authenticates on behalf of a specific user. Required for write
+    operations and user-owned resources; also accepted on all account-level endpoints. Created in
+    the app under My settings > Bring your own Agent. Up to 5 personal keys per user.
+  sources:
+  - openapi/frontline-openapi-original.yml
+transport: HTTPS/TLS only
+key_handling:
+  display: One-time display on creation; only a SHA-256 hash is stored server-side.
+  rotation: No in-place rotation — create new, swap, delete old.
+  revocation: Deleting a key invalidates it on the next request, no grace period.
+verify:
+  operation: getMe
+  request: 'GET /public/v1/me with Authorization: Bearer <key>'
+  note: data.user is null for GENERAL keys.
