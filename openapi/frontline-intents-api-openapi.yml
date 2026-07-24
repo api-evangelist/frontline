@@ -1,0 +1,506 @@
+openapi: 3.0.0
+info:
+  title: Public Account Intents API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Intents
+  description: Manage agent intents and training phrases
+paths:
+  /public/v1/agents/{agentId}/intents:
+    get:
+      summary: List intents
+      operationId: listIntents
+      description: Lists agent intents. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Intents
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type: string
+          example: cancel
+        required: false
+        name: filterText
+        in: query
+      - schema:
+          anyOf:
+          - type: boolean
+            example: false
+          - type: string
+            example: example
+          default: false
+          example: true
+        required: false
+        name: includeUsedStatus
+        in: query
+      responses:
+        '200':
+          description: Paginated intents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: number
+                    example: 1
+                  pageSize:
+                    type: number
+                    example: 1
+                  pageNum:
+                    type: number
+                    example: 1
+                  totalPages:
+                    type: number
+                    example: 1
+                  cursor:
+                    type: number
+                    example: 1
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Intent'
+                  paginationType:
+                    type: string
+                    enum:
+                    - offset
+                    - cursor
+                    default: offset
+                    example: offset
+                  nextCursor:
+                    anyOf:
+                    - type: string
+                      example: example
+                    - type: number
+                      example: 1
+                    - nullable: true
+                      type: object
+                required:
+                - pageSize
+                - results
+    post:
+      summary: Create intent
+      operationId: createIntent
+      description: Creates an agent intent. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Intents
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicIntentCreateInput'
+      responses:
+        '201':
+          description: Created intent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Intent'
+  /public/v1/agents/{agentId}/intents/all:
+    get:
+      summary: List all intents
+      operationId: listAllIntents
+      description: Lists all agent intents. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Intents
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type: string
+          example: cancel
+        required: false
+        name: filterText
+        in: query
+      - schema:
+          anyOf:
+          - type: boolean
+            example: false
+          - type: string
+            example: example
+          default: false
+          example: true
+        required: false
+        name: includeUsedStatus
+        in: query
+      responses:
+        '200':
+          description: Intents
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Intent'
+  /public/v1/agents/{agentId}/intents/generate-phrases:
+    post:
+      summary: Generate intent phrases
+      operationId: generateIntentPhrases
+      description: Generates suggested phrases for an intent. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Intents
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicIntentGeneratePhrasesInput'
+      responses:
+        '201':
+          description: Generated phrases
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIntentGeneratePhrasesOutput'
+  /public/v1/agents/{agentId}/intents/{intentId}:
+    get:
+      summary: Get intent
+      operationId: getIntent
+      description: Manages a single intent. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Intents
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type: number
+          nullable: true
+          example: 10
+        required: false
+        name: intentId
+        in: path
+      responses:
+        '200':
+          description: Intent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Intent'
+    put:
+      summary: Update intent
+      operationId: updateIntent
+      description: Manages a single intent. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Intents
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type: number
+          nullable: true
+          example: 10
+        required: false
+        name: intentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicIntentUpdateInput'
+      responses:
+        '200':
+          description: Intent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Intent'
+    delete:
+      summary: Delete intent
+      operationId: deleteIntent
+      description: Manages a single intent. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Intents
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type: number
+          nullable: true
+          example: 10
+        required: false
+        name: intentId
+        in: path
+      responses:
+        '204':
+          description: Intent deleted
+components:
+  schemas:
+    PublicIntentUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Cancel order
+        description:
+          type: string
+          nullable: true
+          example: User wants to cancel
+        phrases:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                nullable: true
+                example: 1
+              phrase:
+                type: string
+                example: cancel my order
+            required:
+            - phrase
+          minItems: 1
+      required:
+      - name
+      - phrases
+    PublicIntentGeneratePhrasesInput:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Cancel order
+        samples:
+          type: array
+          items:
+            type: string
+            example: example
+          example:
+          - cancel my order
+          - stop the order
+        amount:
+          type: integer
+          minimum: 1
+          maximum: 50
+          example: 10
+      required:
+      - name
+      - samples
+      - amount
+    PublicIntentGeneratePhrasesOutput:
+      type: object
+      properties:
+        phrases:
+          type: array
+          items:
+            type: string
+            example: example
+          example:
+          - I want to cancel my order
+      required:
+      - phrases
+    PublicIntentCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Cancel order
+        description:
+          type: string
+          nullable: true
+          example: User wants to cancel
+        phrases:
+          type: array
+          items:
+            type: string
+            example: example
+          minItems: 1
+          example:
+          - cancel my order
+      required:
+      - name
+      - phrases
+    Intent:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 10
+        name:
+          type: string
+          example: Cancel order
+        description:
+          type: string
+          nullable: true
+          example: example
+        createdAt:
+          type: string
+          nullable: true
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          nullable: true
+          example: '2024-01-01T12:00:00Z'
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          example: ACTIVE
+        assistantId:
+          type: string
+          example: 550e8400-e29b-41d4-a716-446655440000
+        phrases:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                example: 1
+              phrase:
+                type: string
+                example: cancel my order
+            required:
+            - id
+            - phrase
+        flowId:
+          type: number
+          nullable: true
+          example: 1
+      required:
+      - id
+      - name
+      - createdAt
+      - updatedAt
+      - status
+      - assistantId
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Tools
+  - Incoming Webhooks
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing

@@ -1,0 +1,1194 @@
+openapi: 3.0.0
+info:
+  title: Public Account Object views API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Object views
+  description: Saved view configurations on an object
+paths:
+  /public/v1/objects/{name}/views:
+    get:
+      summary: List views
+      operationId: listObjectViews
+      description: Returns the saved views configured on an object.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object views
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      responses:
+        '200':
+          description: Views list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        name:
+                          type: string
+                          example: example
+                        type:
+                          type: string
+                          enum:
+                          - TABLE
+                          - KANBAN
+                          - RECORD
+                          example: TABLE
+                        is_default:
+                          type: boolean
+                          example: false
+                        is_private:
+                          type: boolean
+                          example: false
+                        record_type_id:
+                          type: number
+                          nullable: true
+                          example: 1
+                        created_at:
+                          type: string
+                          nullable: true
+                          example: example
+                        updated_at:
+                          type: string
+                          nullable: true
+                          example: example
+                        column_order:
+                          type: array
+                          items:
+                            type: string
+                            example: example
+                        hidden_columns:
+                          type: array
+                          items:
+                            type: string
+                            example: example
+                        sticky_columns:
+                          type: array
+                          items:
+                            type: string
+                            example: example
+                        grouping_field_id:
+                          type: number
+                          example: 1
+                        column_ordering:
+                          nullable: true
+                          type: object
+                        title_field_id:
+                          type: number
+                          example: 1
+                        display_field_ids:
+                          type: array
+                          items:
+                            type: number
+                            example: 1
+                      required:
+                      - id
+                      - name
+                      - type
+                      - is_default
+                      - is_private
+                      - record_type_id
+                      - created_at
+                      - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create view
+      operationId: createObjectView
+      description: Creates a saved view on an object. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object views
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  example: example
+                type:
+                  type: string
+                  enum:
+                  - TABLE
+                  - KANBAN
+                  - RECORD
+                  example: TABLE
+                metadata:
+                  type: object
+                  properties:
+                    grouping_field_id:
+                      type: number
+                      example: 1
+                    groupingColumnId:
+                      type: number
+                      example: 1
+                    column_order:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    columnOrder:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    hidden_columns:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    hiddenColumns:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    dialog_field_order:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    dialogFieldOrder:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    sticky_columns:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    stickyColumns:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    kanban_lane_size:
+                      type: string
+                      enum:
+                      - THIN
+                      - MEDIUM
+                      - WIDE
+                      example: THIN
+                    kanbanLaneSize:
+                      type: string
+                      enum:
+                      - THIN
+                      - MEDIUM
+                      - WIDE
+                      example: THIN
+                  additionalProperties:
+                    nullable: true
+                    type: object
+              required:
+              - name
+              - type
+      responses:
+        '201':
+          description: Created view
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: example
+                      type:
+                        type: string
+                        enum:
+                        - TABLE
+                        - KANBAN
+                        - RECORD
+                        example: TABLE
+                      is_default:
+                        type: boolean
+                        example: false
+                      is_private:
+                        type: boolean
+                        example: false
+                      record_type_id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      created_at:
+                        type: string
+                        nullable: true
+                        example: example
+                      updated_at:
+                        type: string
+                        nullable: true
+                        example: example
+                      column_order:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      hidden_columns:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      sticky_columns:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      grouping_field_id:
+                        type: number
+                        example: 1
+                      column_ordering:
+                        nullable: true
+                        type: object
+                      title_field_id:
+                        type: number
+                        example: 1
+                      display_field_ids:
+                        type: array
+                        items:
+                          type: number
+                          example: 1
+                    required:
+                    - id
+                    - name
+                    - type
+                    - is_default
+                    - is_private
+                    - record_type_id
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/objects/record-types/{recordTypeId}/views:
+    post:
+      summary: Create record-type-scoped view
+      operationId: createObjectRecordTypeView
+      description: Creates a saved view scoped to a record type. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object views
+      parameters:
+      - schema:
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 3
+        required: true
+        name: recordTypeId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  example: example
+                type:
+                  type: string
+                  enum:
+                  - TABLE
+                  - KANBAN
+                  - RECORD
+                  example: TABLE
+                metadata:
+                  type: object
+                  properties:
+                    grouping_field_id:
+                      type: number
+                      example: 1
+                    groupingColumnId:
+                      type: number
+                      example: 1
+                    column_order:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    columnOrder:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    hidden_columns:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    hiddenColumns:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    dialog_field_order:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    dialogFieldOrder:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    sticky_columns:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    stickyColumns:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    kanban_lane_size:
+                      type: string
+                      enum:
+                      - THIN
+                      - MEDIUM
+                      - WIDE
+                      example: THIN
+                    kanbanLaneSize:
+                      type: string
+                      enum:
+                      - THIN
+                      - MEDIUM
+                      - WIDE
+                      example: THIN
+                  additionalProperties:
+                    nullable: true
+                    type: object
+              required:
+              - name
+              - type
+      responses:
+        '201':
+          description: Created view
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: example
+                      type:
+                        type: string
+                        enum:
+                        - TABLE
+                        - KANBAN
+                        - RECORD
+                        example: TABLE
+                      is_default:
+                        type: boolean
+                        example: false
+                      is_private:
+                        type: boolean
+                        example: false
+                      record_type_id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      created_at:
+                        type: string
+                        nullable: true
+                        example: example
+                      updated_at:
+                        type: string
+                        nullable: true
+                        example: example
+                      column_order:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      hidden_columns:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      sticky_columns:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      grouping_field_id:
+                        type: number
+                        example: 1
+                      column_ordering:
+                        nullable: true
+                        type: object
+                      title_field_id:
+                        type: number
+                        example: 1
+                      display_field_ids:
+                        type: array
+                        items:
+                          type: number
+                          example: 1
+                    required:
+                    - id
+                    - name
+                    - type
+                    - is_default
+                    - is_private
+                    - record_type_id
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/objects/{name}/views/{viewId}:
+    patch:
+      summary: Update view
+      operationId: updateObjectView
+      description: Updates a saved view. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object views
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 11
+        required: true
+        name: viewId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  example: example
+                metadata:
+                  type: object
+                  properties:
+                    column_order:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    hidden_columns:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    dialog_field_order:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    sticky_columns:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    kanban_lane_size:
+                      type: string
+                      enum:
+                      - THIN
+                      - MEDIUM
+                      - WIDE
+                      example: THIN
+                    column_ordering:
+                      type: array
+                      items:
+                        anyOf:
+                        - type: string
+                          example: example
+                        - type: number
+                          example: 1
+      responses:
+        '200':
+          description: Updated view
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: example
+                      type:
+                        type: string
+                        enum:
+                        - TABLE
+                        - KANBAN
+                        - RECORD
+                        example: TABLE
+                      is_default:
+                        type: boolean
+                        example: false
+                      is_private:
+                        type: boolean
+                        example: false
+                      record_type_id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      created_at:
+                        type: string
+                        nullable: true
+                        example: example
+                      updated_at:
+                        type: string
+                        nullable: true
+                        example: example
+                      column_order:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      hidden_columns:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      sticky_columns:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      grouping_field_id:
+                        type: number
+                        example: 1
+                      column_ordering:
+                        nullable: true
+                        type: object
+                      title_field_id:
+                        type: number
+                        example: 1
+                      display_field_ids:
+                        type: array
+                        items:
+                          type: number
+                          example: 1
+                    required:
+                    - id
+                    - name
+                    - type
+                    - is_default
+                    - is_private
+                    - record_type_id
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete view
+      operationId: deleteObjectView
+      description: Deletes a saved view. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object views
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 11
+        required: true
+        name: viewId
+        in: path
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      deleted:
+                        type: boolean
+                        enum:
+                        - true
+                        example: true
+                      id:
+                        anyOf:
+                        - type: string
+                          example: example
+                        - type: number
+                          example: 1
+                    required:
+                    - deleted
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/objects/record-types/{recordTypeId}/views/{viewId}:
+    patch:
+      summary: Update record-type-scoped view
+      operationId: updateObjectRecordTypeView
+      description: Updates a saved view that is scoped to a record type. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object views
+      parameters:
+      - schema:
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 3
+        required: true
+        name: recordTypeId
+        in: path
+      - schema:
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 11
+        required: true
+        name: viewId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  example: example
+                metadata:
+                  type: object
+                  properties:
+                    column_order:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    hidden_columns:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    dialog_field_order:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    sticky_columns:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                    kanban_lane_size:
+                      type: string
+                      enum:
+                      - THIN
+                      - MEDIUM
+                      - WIDE
+                      example: THIN
+                    column_ordering:
+                      type: array
+                      items:
+                        anyOf:
+                        - type: string
+                          example: example
+                        - type: number
+                          example: 1
+      responses:
+        '200':
+          description: Updated view
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: example
+                      type:
+                        type: string
+                        enum:
+                        - TABLE
+                        - KANBAN
+                        - RECORD
+                        example: TABLE
+                      is_default:
+                        type: boolean
+                        example: false
+                      is_private:
+                        type: boolean
+                        example: false
+                      record_type_id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      created_at:
+                        type: string
+                        nullable: true
+                        example: example
+                      updated_at:
+                        type: string
+                        nullable: true
+                        example: example
+                      column_order:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      hidden_columns:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      sticky_columns:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      grouping_field_id:
+                        type: number
+                        example: 1
+                      column_ordering:
+                        nullable: true
+                        type: object
+                      title_field_id:
+                        type: number
+                        example: 1
+                      display_field_ids:
+                        type: array
+                        items:
+                          type: number
+                          example: 1
+                    required:
+                    - id
+                    - name
+                    - type
+                    - is_default
+                    - is_private
+                    - record_type_id
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete record-type-scoped view
+      operationId: deleteObjectRecordTypeView
+      description: Deletes a record-type-scoped view. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object views
+      parameters:
+      - schema:
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 3
+        required: true
+        name: recordTypeId
+        in: path
+      - schema:
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 11
+        required: true
+        name: viewId
+        in: path
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      deleted:
+                        type: boolean
+                        enum:
+                        - true
+                        example: true
+                      id:
+                        anyOf:
+                        - type: string
+                          example: example
+                        - type: number
+                          example: 1
+                    required:
+                    - deleted
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Tools
+  - Incoming Webhooks
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing

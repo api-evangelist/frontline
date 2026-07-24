@@ -1,0 +1,1119 @@
+openapi: 3.0.0
+info:
+  title: Public Account Table fields API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Table fields
+  description: Manage columns on a table
+paths:
+  /public/v1/tables/{name}/fields:
+    get:
+      summary: List table fields
+      operationId: listTableFields
+      description: Returns the columns defined on a table.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table fields
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      responses:
+        '200':
+          description: Fields list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        name:
+                          type: string
+                          example: example
+                        key:
+                          type: string
+                          example: example
+                        type:
+                          type: string
+                          example: example
+                        editable:
+                          type: boolean
+                          example: false
+                        created_at:
+                          type: string
+                          nullable: true
+                          example: example
+                        updated_at:
+                          type: string
+                          nullable: true
+                          example: example
+                        read_only:
+                          type: boolean
+                          example: false
+                        required:
+                          type: boolean
+                          example: false
+                        unique:
+                          type: boolean
+                          example: false
+                        is_system:
+                          type: boolean
+                          example: false
+                        is_predefined:
+                          type: boolean
+                          example: false
+                        default_value:
+                          nullable: true
+                          type: object
+                        format:
+                          type: string
+                          example: example
+                        mode:
+                          type: string
+                          enum:
+                          - singleSelect
+                          - multiSelect
+                          - single
+                          - multi
+                          example: singleSelect
+                        timezone:
+                          type: string
+                          example: example
+                        decimals:
+                          type: number
+                          example: 1
+                        currency:
+                          type: string
+                          example: example
+                        time_format:
+                          type: string
+                          example: example
+                        show_preview:
+                          type: boolean
+                          example: false
+                        allowed_file_types:
+                          type: array
+                          items:
+                            type: string
+                            example: example
+                        max_file_size:
+                          type: number
+                          example: 1
+                        related_table_id:
+                          type: number
+                          example: 1
+                        display_field_id:
+                          type: number
+                          example: 1
+                        relation_mode:
+                          type: string
+                          example: example
+                        include_activity:
+                          type: boolean
+                          example: false
+                        options:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: number
+                                example: 1
+                              name:
+                                type: string
+                                example: example
+                              color:
+                                type: string
+                                example: example
+                              order:
+                                type: number
+                                example: 1
+                              created_at:
+                                type: string
+                                nullable: true
+                                example: example
+                              updated_at:
+                                type: string
+                                nullable: true
+                                example: example
+                            required:
+                            - id
+                            - name
+                            - color
+                            - order
+                            - created_at
+                            - updated_at
+                        expression:
+                          nullable: true
+                          type: object
+                        output_type:
+                          type: string
+                          example: example
+                        apply_if:
+                          nullable: true
+                          type: object
+                        number_config:
+                          nullable: true
+                          type: object
+                        date_config:
+                          nullable: true
+                          type: object
+                        string_config:
+                          nullable: true
+                          type: object
+                      required:
+                      - id
+                      - name
+                      - key
+                      - type
+                      - editable
+                      - created_at
+                      - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create table field
+      operationId: createTableField
+      description: Creates a column on a table. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table fields
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  example: example
+                type:
+                  anyOf:
+                  - type: string
+                    enum:
+                    - string
+                    - number
+                    - boolean
+                    - date
+                    - tags
+                    - relation
+                    - autoIncrement
+                    - dateOnly
+                    - prismaRelation
+                    - kanbanViewOrder
+                    - file
+                    - avatar
+                    - formula
+                    example: string
+                  - type: string
+                    enum:
+                    - select
+                    example: select
+                metadata:
+                  type: object
+                  additionalProperties:
+                    nullable: true
+                    type: object
+                record_type_id:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 1
+                recordTypeId:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 1
+              required:
+              - name
+              - type
+              additionalProperties: false
+      responses:
+        '201':
+          description: Created field
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: example
+                      key:
+                        type: string
+                        example: example
+                      type:
+                        type: string
+                        example: example
+                      editable:
+                        type: boolean
+                        example: false
+                      created_at:
+                        type: string
+                        nullable: true
+                        example: example
+                      updated_at:
+                        type: string
+                        nullable: true
+                        example: example
+                      read_only:
+                        type: boolean
+                        example: false
+                      required:
+                        type: boolean
+                        example: false
+                      unique:
+                        type: boolean
+                        example: false
+                      is_system:
+                        type: boolean
+                        example: false
+                      is_predefined:
+                        type: boolean
+                        example: false
+                      default_value:
+                        nullable: true
+                        type: object
+                      format:
+                        type: string
+                        example: example
+                      mode:
+                        type: string
+                        enum:
+                        - singleSelect
+                        - multiSelect
+                        - single
+                        - multi
+                        example: singleSelect
+                      timezone:
+                        type: string
+                        example: example
+                      decimals:
+                        type: number
+                        example: 1
+                      currency:
+                        type: string
+                        example: example
+                      time_format:
+                        type: string
+                        example: example
+                      show_preview:
+                        type: boolean
+                        example: false
+                      allowed_file_types:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      max_file_size:
+                        type: number
+                        example: 1
+                      related_table_id:
+                        type: number
+                        example: 1
+                      display_field_id:
+                        type: number
+                        example: 1
+                      relation_mode:
+                        type: string
+                        example: example
+                      include_activity:
+                        type: boolean
+                        example: false
+                      options:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            name:
+                              type: string
+                              example: example
+                            color:
+                              type: string
+                              example: example
+                            order:
+                              type: number
+                              example: 1
+                            created_at:
+                              type: string
+                              nullable: true
+                              example: example
+                            updated_at:
+                              type: string
+                              nullable: true
+                              example: example
+                          required:
+                          - id
+                          - name
+                          - color
+                          - order
+                          - created_at
+                          - updated_at
+                      expression:
+                        nullable: true
+                        type: object
+                      output_type:
+                        type: string
+                        example: example
+                      apply_if:
+                        nullable: true
+                        type: object
+                      number_config:
+                        nullable: true
+                        type: object
+                      date_config:
+                        nullable: true
+                        type: object
+                      string_config:
+                        nullable: true
+                        type: object
+                    required:
+                    - id
+                    - name
+                    - key
+                    - type
+                    - editable
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tables/{name}/fields/{fieldId}:
+    patch:
+      summary: Update table field
+      operationId: updateTableField
+      description: Updates a field's metadata, defaults, or ordering. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table fields
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 42
+        required: true
+        name: fieldId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  example: example
+                type:
+                  anyOf:
+                  - type: string
+                    enum:
+                    - string
+                    - number
+                    - boolean
+                    - date
+                    - tags
+                    - relation
+                    - autoIncrement
+                    - dateOnly
+                    - prismaRelation
+                    - kanbanViewOrder
+                    - file
+                    - avatar
+                    - formula
+                    example: string
+                  - type: string
+                    enum:
+                    - select
+                    example: select
+                metadata:
+                  type: object
+                  additionalProperties:
+                    nullable: true
+                    type: object
+                order:
+                  type: integer
+                  example: 1
+                required:
+                  type: boolean
+                  example: false
+                unique:
+                  type: boolean
+                  example: false
+                tags:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties:
+                      nullable: true
+                      type: object
+                defaultValue:
+                  nullable: true
+                  type: object
+              additionalProperties: false
+      responses:
+        '200':
+          description: Updated field
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: example
+                      key:
+                        type: string
+                        example: example
+                      type:
+                        type: string
+                        example: example
+                      editable:
+                        type: boolean
+                        example: false
+                      created_at:
+                        type: string
+                        nullable: true
+                        example: example
+                      updated_at:
+                        type: string
+                        nullable: true
+                        example: example
+                      read_only:
+                        type: boolean
+                        example: false
+                      required:
+                        type: boolean
+                        example: false
+                      unique:
+                        type: boolean
+                        example: false
+                      is_system:
+                        type: boolean
+                        example: false
+                      is_predefined:
+                        type: boolean
+                        example: false
+                      default_value:
+                        nullable: true
+                        type: object
+                      format:
+                        type: string
+                        example: example
+                      mode:
+                        type: string
+                        enum:
+                        - singleSelect
+                        - multiSelect
+                        - single
+                        - multi
+                        example: singleSelect
+                      timezone:
+                        type: string
+                        example: example
+                      decimals:
+                        type: number
+                        example: 1
+                      currency:
+                        type: string
+                        example: example
+                      time_format:
+                        type: string
+                        example: example
+                      show_preview:
+                        type: boolean
+                        example: false
+                      allowed_file_types:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      max_file_size:
+                        type: number
+                        example: 1
+                      related_table_id:
+                        type: number
+                        example: 1
+                      display_field_id:
+                        type: number
+                        example: 1
+                      relation_mode:
+                        type: string
+                        example: example
+                      include_activity:
+                        type: boolean
+                        example: false
+                      options:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            name:
+                              type: string
+                              example: example
+                            color:
+                              type: string
+                              example: example
+                            order:
+                              type: number
+                              example: 1
+                            created_at:
+                              type: string
+                              nullable: true
+                              example: example
+                            updated_at:
+                              type: string
+                              nullable: true
+                              example: example
+                          required:
+                          - id
+                          - name
+                          - color
+                          - order
+                          - created_at
+                          - updated_at
+                      expression:
+                        nullable: true
+                        type: object
+                      output_type:
+                        type: string
+                        example: example
+                      apply_if:
+                        nullable: true
+                        type: object
+                      number_config:
+                        nullable: true
+                        type: object
+                      date_config:
+                        nullable: true
+                        type: object
+                      string_config:
+                        nullable: true
+                        type: object
+                    required:
+                    - id
+                    - name
+                    - key
+                    - type
+                    - editable
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete table field
+      operationId: deleteTableField
+      description: Deletes a column from a table. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table fields
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 42
+        required: true
+        name: fieldId
+        in: path
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      deleted:
+                        type: boolean
+                        enum:
+                        - true
+                        example: true
+                      id:
+                        anyOf:
+                        - type: string
+                          example: example
+                        - type: number
+                          example: 1
+                    required:
+                    - deleted
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tables/{name}/fields/{fieldId}/formula-dependencies:
+    get:
+      summary: Get table field formula dependencies
+      operationId: getTableFieldFormulaDependencies
+      description: Returns the formula dependencies for a specific field.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table fields
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          minimum: 0
+          exclusiveMinimum: true
+          example: 42
+        required: true
+        name: fieldId
+        in: path
+      responses:
+        '200':
+          description: Formula dependencies
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    additionalProperties:
+                      type: array
+                      items:
+                        type: number
+                        example: 1
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tables/{name}/fields/preview-formula:
+    post:
+      summary: Preview formula evaluation
+      operationId: previewTableFormula
+      description: Previews formula evaluation on existing data. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table fields
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                formulaMetadata:
+                  type: object
+                  properties:
+                    applyIf:
+                      type: object
+                      description: Query preconditions filter
+                    expression:
+                      type: object
+                      description: Formula expression AST
+                previewFilter:
+                  type: object
+                  description: Filter for preview rows
+                limit:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 1
+              required:
+              - formulaMetadata
+      responses:
+        '200':
+          description: Formula preview evaluation results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            rowId:
+                              type: string
+                              example: example
+                            rowName:
+                              type: string
+                              example: example
+                            previewState:
+                              type: object
+                              properties:
+                                value:
+                                  nullable: true
+                                  type: object
+                                isValid:
+                                  type: boolean
+                                  example: false
+                                error:
+                                  type: string
+                                  nullable: true
+                                  example: example
+                              required:
+                              - isValid
+                              - error
+                            row:
+                              type: object
+                              additionalProperties:
+                                nullable: true
+                                type: object
+                          required:
+                          - rowId
+                          - rowName
+                          - previewState
+                          - row
+                      inferredOutputType:
+                        type: string
+                        example: example
+                    required:
+                    - results
+                    - inferredOutputType
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Tools
+  - Incoming Webhooks
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing

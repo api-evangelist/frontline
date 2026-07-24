@@ -1,0 +1,231 @@
+openapi: 3.0.0
+info:
+  title: Public Account Incoming Webhooks API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Incoming Webhooks
+  description: Inbound HTTPS endpoints that external systems can post events to
+paths:
+  /public/v1/incoming-webhooks:
+    post:
+      summary: Create an incoming webhook
+      operationId: createIncomingWebhook
+      description: Creates an incoming webhook for the authenticated account. Requires a USER API key and returns the access token needed to call the webhook.
+      security:
+      - userApiKey: []
+      tags:
+      - Incoming Webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicIncomingWebhookCreateInput'
+      responses:
+        '201':
+          description: Created incoming webhook
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IncomingWebhookCreateOutput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    IncomingWebhookCreateOutput:
+      type: object
+      properties:
+        id:
+          type: string
+          example: clx123incomingwebhook
+        name:
+          type: string
+          example: External CRM event
+        description:
+          type: string
+          nullable: true
+          example: Receives events from the external CRM
+        url:
+          type: string
+          example: https://hooks.example.com/webhook/clx123incomingwebhook
+        isActive:
+          type: boolean
+          example: true
+        useAuthentication:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        accessToken:
+          type: string
+          nullable: true
+          example: 64-character-access-token
+      required:
+      - id
+      - name
+      - url
+      - isActive
+      - useAuthentication
+      - createdAt
+      - updatedAt
+    PublicIncomingWebhookCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: External CRM event
+        description:
+          type: string
+          nullable: true
+          example: Receives events from the external CRM
+        isActive:
+          type: boolean
+          default: true
+          example: true
+        useAuthentication:
+          type: boolean
+          default: true
+          example: true
+      required:
+      - name
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Tools
+  - Incoming Webhooks
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing

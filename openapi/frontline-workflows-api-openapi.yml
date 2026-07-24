@@ -1,0 +1,4657 @@
+openapi: 3.0.0
+info:
+  title: Public Account Workflows API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Workflows
+  description: View and manage your workflows across your account
+paths:
+  /public/v1/workflows:
+    get:
+      summary: List all workflows
+      operationId: listWorkflows
+      description: Returns a list of workflows associated with the account. Nodes and logic are excluded.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Workflows
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          - DRAFT
+          example: ACTIVE
+        required: false
+        name: status
+        in: query
+      responses:
+        '200':
+          description: A list of workflows
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Workflow'
+                required:
+                - results
+                description: Standard list response
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a workflow
+      operationId: createWorkflow
+      description: Creates an automation workflow and an empty graph snapshot.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflows
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicWorkflowCreateInput'
+      responses:
+        '201':
+          description: Created workflow
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/workflows/{workflowId}:
+    get:
+      summary: Get workflow details
+      operationId: getWorkflow
+      description: Returns a workflow automation. Pass includeNodes=true to include graph nodes.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Workflows
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 42
+        required: false
+        name: workflowId
+        in: path
+      - schema:
+          anyOf:
+          - type: boolean
+            example: false
+          - type: string
+            example: example
+        required: false
+        name: includeNodes
+        in: query
+      responses:
+        '200':
+          description: Workflow details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDetail'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update workflow
+      operationId: updateWorkflow
+      description: Updates workflow metadata or status.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflows
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 42
+        required: false
+        name: workflowId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicWorkflowUpdateInput'
+      responses:
+        '200':
+          description: Updated workflow
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowDetail'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete workflow
+      operationId: deleteWorkflow
+      description: Soft deletes a workflow automation and cleans up trigger side effects.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflows
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 42
+        required: false
+        name: workflowId
+        in: path
+      responses:
+        '204':
+          description: Workflow deleted
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/workflows/{workflowId}/graph:
+    get:
+      summary: Get workflow graph
+      operationId: getWorkflowGraph
+      description: Returns the workflow snapshot with nodes and edges.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Workflows
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 42
+        required: false
+        name: workflowId
+        in: path
+      responses:
+        '200':
+          description: Workflow graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowGraph'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/workflows/{workflowId}/nodes:
+    post:
+      summary: Create workflow node
+      operationId: createWorkflowNode
+      description: Creates a node in an automation workflow graph.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflows
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 42
+        required: false
+        name: workflowId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicWorkflowNodeCreateInput'
+      responses:
+        '201':
+          description: Created node
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicWorkflowNode'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/workflows/{workflowId}/nodes/{nodeId}:
+    put:
+      summary: Update workflow node
+      operationId: updateWorkflowNode
+      description: Updates a node and returns the updated workflow graph.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflows
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 42
+        required: false
+        name: workflowId
+        in: path
+      - schema:
+          type: string
+          example: api_1
+        required: true
+        name: nodeId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicWorkflowNodeUpdateInput'
+      responses:
+        '200':
+          description: Updated graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowGraph'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete workflow node
+      operationId: deleteWorkflowNode
+      description: Deletes a node and removes all incoming and outgoing edges.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflows
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 42
+        required: false
+        name: workflowId
+        in: path
+      - schema:
+          type: string
+          example: api_1
+        required: true
+        name: nodeId
+        in: path
+      responses:
+        '200':
+          description: Updated graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowGraph'
+  /public/v1/workflows/{workflowId}/edges:
+    post:
+      summary: Create workflow edge
+      operationId: createWorkflowEdge
+      description: Adds or replaces the outgoing edge for a node.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflows
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 42
+        required: false
+        name: workflowId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicWorkflowEdgeInput'
+      responses:
+        '200':
+          description: Updated graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowGraph'
+        '409':
+          description: Invalid graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete workflow edge
+      operationId: deleteWorkflowEdge
+      description: Removes an edge from the workflow graph.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflows
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 42
+        required: false
+        name: workflowId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicWorkflowEdgeDeleteInput'
+      responses:
+        '200':
+          description: Updated graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowGraph'
+  /public/v1/workflows/{workflowId}/analytics:
+    get:
+      summary: Get workflow analytics
+      operationId: getWorkflowAnalytics
+      description: Returns analytics for a specific workflow, including runs by date and summary.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Workflows
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 42
+        required: false
+        name: workflowId
+        in: path
+      - schema:
+          type: string
+          nullable: true
+          example: '2024-01-01'
+        required: false
+        name: startDate
+        in: query
+      - schema:
+          type: string
+          nullable: true
+          example: '2024-01-01'
+        required: false
+        name: endDate
+        in: query
+      responses:
+        '200':
+          description: Workflow analytics data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkflowAnalytics'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/workflows/{workflowId}/logs:
+    get:
+      summary: List workflow run logs
+      operationId: listWorkflowLogs
+      description: Lists the run history (executions) of a workflow. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflows
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 501
+        required: false
+        name: workflowId
+        in: path
+      - schema:
+          type: string
+          enum:
+          - COMPLETED
+          - PENDING
+          - FAILED
+          example: COMPLETED
+        required: false
+        name: status
+        in: query
+      - schema:
+          type: string
+          nullable: true
+          example: '2026-01-01'
+        required: false
+        name: start_date
+        in: query
+      - schema:
+          type: string
+          nullable: true
+          example: '2026-12-31'
+        required: false
+        name: end_date
+        in: query
+      responses:
+        '200':
+          description: A list of runs
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicWorkflowLog'
+                required:
+                - results
+                description: Standard list response
+  /public/v1/workflows/{workflowId}/logs/{logId}:
+    get:
+      summary: Get a workflow run log
+      operationId: getWorkflowLog
+      description: Returns one run with its per-node results. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflows
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 501
+        required: false
+        name: workflowId
+        in: path
+      - schema:
+          type: number
+          nullable: true
+          example: 9001
+        required: false
+        name: logId
+        in: path
+      responses:
+        '200':
+          description: The run log with node results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicWorkflowLogDetail'
+components:
+  schemas:
+    WorkflowDetail:
+      allOf:
+      - $ref: '#/components/schemas/Workflow'
+      - type: object
+        properties:
+          liveSnapshotId:
+            type: string
+            nullable: true
+            example: 64f1c2e6a75f2d4a9a2f1234
+          draftSnapshotId:
+            type: string
+            nullable: true
+            example: 64f1c2e6a75f2d4a9a2f1234
+          nodes:
+            type: array
+            items:
+              $ref: '#/components/schemas/PublicWorkflowNode'
+        required:
+        - liveSnapshotId
+        - draftSnapshotId
+    WorkflowGraph:
+      type: object
+      properties:
+        id:
+          type: string
+          example: example
+        assistantId:
+          type: string
+          nullable: true
+          example: example
+        accountId:
+          type: number
+          nullable: true
+          example: 1
+        entityId:
+          type: number
+          example: 1
+        type:
+          type: string
+          enum:
+          - FLOW
+          - AUTOMATION
+          example: FLOW
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicWorkflowNode'
+        createdAt:
+          type: string
+          example: example
+        updatedAt:
+          type: string
+          nullable: true
+          example: example
+        executed:
+          type: boolean
+          default: false
+          example: false
+        breakingChangeAt:
+          type: string
+          nullable: true
+          example: example
+        breakingChangeReason:
+          type: string
+          nullable: true
+          example: example
+      required:
+      - entityId
+      - type
+      - nodes
+      - createdAt
+    WorkflowAnalytics:
+      type: object
+      properties:
+        runsByDate:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                nullable: true
+                example: '2024-01-01'
+              totalRuns:
+                type: number
+                example: 100
+              completedRuns:
+                type: number
+                example: 95
+              failedRuns:
+                type: number
+                example: 5
+              pendingRuns:
+                type: number
+                example: 0
+              totalCredits:
+                type: number
+                example: 250.5
+            required:
+            - date
+            - totalRuns
+            - completedRuns
+            - failedRuns
+            - pendingRuns
+            - totalCredits
+        summary:
+          type: object
+          properties:
+            totalRuns:
+              type: number
+              example: 1000
+            completedRuns:
+              type: number
+              example: 950
+            failedRuns:
+              type: number
+              example: 50
+            pendingRuns:
+              type: number
+              example: 0
+            totalCredits:
+              type: number
+              example: 2500
+            averageCreditsPerRun:
+              type: number
+              example: 2.5
+            nonExecutedRuns:
+              type: number
+              example: 10
+          required:
+          - totalRuns
+          - completedRuns
+          - failedRuns
+          - pendingRuns
+          - totalCredits
+          - averageCreditsPerRun
+          - nonExecutedRuns
+      required:
+      - runsByDate
+      - summary
+    PublicWorkflowNodeInput:
+      type: object
+      properties:
+        nodeId:
+          type: string
+          pattern: node_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}
+          example: node_550e8400-e29b-41d4-a716-446655440000
+        alias:
+          type: string
+          nullable: true
+          example: Initial trigger
+        name:
+          type: string
+          example: Initial trigger
+        position:
+          type: object
+          properties:
+            positionX:
+              type: number
+              example: 1
+            positionY:
+              type: number
+              example: 1
+          required:
+          - positionX
+          - positionY
+        type:
+          type: string
+          enum:
+          - TRIGGER
+          - SCHEDULED_TRIGGER
+          - WEBHOOK
+          - TOOLS_AI
+          - API
+          - CONDITIONAL_ROUTING
+          - AI_CAPTURE
+          - DATA_TRANSFORMER
+          - DYNAMIC_TABLES
+          - ITERATION
+          - BREAK
+          - AUTOMATION_STATUS
+          - SEND_MESSAGE
+          - SEND_WHATSAPP_MESSAGE
+          - TRANSCRIPTION
+          - FILE_ANALYSIS
+          - CREATE_RECORD_ACTIVITY
+          example: TRIGGER
+        data:
+          oneOf:
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TRIGGER
+                example: TRIGGER
+              triggerType:
+                type: string
+                nullable: true
+                enum:
+                - CONVERSATION_ENDED
+                - CONTACT_CREATED
+                - CONTACT_UPDATED
+                - FEEDBACK_CAPTURED
+                - INCOMING_WEBHOOK
+                - TABLE_ROW_CREATED
+                - OBJECT_RECORD_CREATED
+                - TABLE_ROW_UPDATED
+                - OBJECT_RECORD_UPDATED
+                - SCHEDULED_TRIGGER
+                - CONVERSATION_IDLE
+                - COMPOSIO_TRIGGER
+                example: CONVERSATION_ENDED
+              triggeredBy:
+                type: string
+                nullable: true
+                enum:
+                - BOTH
+                - AGENT
+                - USER
+                - INCOMING_WEBHOOK
+                example: BOTH
+              triggeredByAgentIds:
+                type: array
+                items:
+                  type: string
+                  example: example
+              triggerByWebhookIds:
+                type: array
+                items:
+                  type: string
+                  example: example
+              triggeredByTableId:
+                type: number
+                nullable: true
+                example: 1
+              triggeredByRecordTypeId:
+                type: number
+                nullable: true
+                example: 1
+              connectedAccountTriggerId:
+                type: string
+                nullable: true
+                example: example
+              triggerToolkit:
+                type: string
+                nullable: true
+                example: example
+              triggerSlug:
+                type: string
+                nullable: true
+                example: example
+              triggerConfig:
+                type: object
+                nullable: true
+                additionalProperties:
+                  nullable: true
+                  type: object
+              triggerQueryConfig:
+                type: object
+                nullable: true
+                properties:
+                  query:
+                    type: object
+                    description: 'Dynamic-table query: a single `{ path, operator, value }` condition, or a nested `{ operator: ''and'' | ''or'', conditions: [...] }` group.'
+              connectedAccountId:
+                type: number
+                nullable: true
+                example: 1
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - SCHEDULED_TRIGGER
+                example: SCHEDULED_TRIGGER
+              cronExpression:
+                type: string
+                description: Cron expression (default preset). Validated by cron-validate.
+                example: 0 9 * * 1-5
+              timezone:
+                type: string
+                description: IANA timezone identifier. Validated against the host ICU table.
+                example: America/Argentina/Buenos_Aires
+              startTime:
+                type: string
+                nullable: true
+                example: example
+              endTime:
+                type: string
+                nullable: true
+                example: example
+              startDate:
+                type: string
+                nullable: true
+                example: example
+              endDate:
+                type: string
+                nullable: true
+                example: example
+              frequency:
+                type: string
+                nullable: true
+                enum:
+                - INTERVALS
+                - DAILY
+                - WEEKLY
+                - MONTHLY
+                example: INTERVALS
+            required:
+            - type
+            - cronExpression
+            - timezone
+            - startTime
+            - endTime
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - WEBHOOK
+                example: WEBHOOK
+              includeConversationTranscript:
+                type: boolean
+                default: false
+                example: false
+              includeContactInfo:
+                type: boolean
+                default: false
+                example: false
+              includeFeedbackCaptured:
+                type: boolean
+                default: false
+                example: false
+              includeCapturedVariables:
+                type: boolean
+                default: false
+                example: false
+              includeWebhookPayload:
+                type: boolean
+                default: false
+                example: false
+              url:
+                type: string
+                nullable: true
+                format: uri
+                example: https://api.example.com/contacts/123
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TOOLS_AI
+                example: TOOLS_AI
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    handleId:
+                      type: string
+                      example: example
+                    expression:
+                      type: string
+                      example: example
+                  required:
+                  - handleId
+                  - expression
+              temperature:
+                type: number
+                example: 1
+              model:
+                type: string
+                example: example
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              instructions:
+                type: string
+                nullable: true
+                example: example
+              prompt:
+                type: string
+                nullable: true
+                example: example
+              customToolIds:
+                type: array
+                nullable: true
+                items:
+                  type: number
+                  example: 1
+              maxIterations:
+                type: number
+                minimum: 1
+                maximum: 30
+                default: 10
+                example: 1
+              agentType:
+                type: string
+                enum:
+                - BASIC
+                - ADVANCED
+                default: BASIC
+                example: BASIC
+              captureVariables:
+                type: array
+                nullable: true
+                items:
+                  nullable: true
+                  type: object
+              knowledgeBaseMode:
+                type: string
+                enum:
+                - DEFAULT
+                - CUSTOM
+                - DISABLED
+                default: DEFAULT
+                example: DEFAULT
+              knowledgeBaseIds:
+                type: array
+                nullable: true
+                items:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 1
+              selectedRecordTypes:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    recordTypeId:
+                      type: number
+                      example: 1
+                    read:
+                      type: boolean
+                      example: false
+                    create:
+                      type: boolean
+                      example: false
+                    update:
+                      type: boolean
+                      example: false
+                    delete:
+                      type: boolean
+                      example: false
+                    createActivity:
+                      type: boolean
+                      example: false
+                  required:
+                  - recordTypeId
+              systemToolsConfig:
+                type: object
+                nullable: true
+                properties:
+                  webSearchEnabled:
+                    type: boolean
+                    default: false
+                    example: false
+                  urlScrapeEnabled:
+                    type: boolean
+                    default: false
+                    example: false
+                  linkedinSearchEnabled:
+                    type: boolean
+                    default: false
+                    example: false
+              connectedAccountConfigs:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    connectedAccountId:
+                      type: number
+                      example: 1
+                    useAllTools:
+                      type: boolean
+                      default: true
+                      example: false
+                    selectedToolSlugs:
+                      type: array
+                      nullable: true
+                      items:
+                        type: string
+                        example: example
+                  required:
+                  - connectedAccountId
+              playbookIds:
+                type: array
+                nullable: true
+                items:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 1
+            required:
+            - type
+            - conditions
+            - instructions
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - API
+                example: API
+              url:
+                type: string
+                format: uri
+                example: https://api.example.com/hook
+              method:
+                type: string
+                enum:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - PATCH
+                example: GET
+              headers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: example
+                    value:
+                      type: string
+                      example: example
+                  required:
+                  - key
+                  - value
+              body:
+                type: string
+                nullable: true
+                example: example
+              response:
+                type: string
+                nullable: true
+                example: example
+              parameters:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: example
+                    value:
+                      type: string
+                      example: example
+                  required:
+                  - key
+                  - value
+              variables:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: example
+                    value:
+                      type: string
+                      example: example
+                    fullResponse:
+                      type: boolean
+                      default: false
+                      example: false
+                  required:
+                  - key
+                  - value
+            required:
+            - type
+            - url
+            - method
+            - headers
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - CONDITIONAL_ROUTING
+                example: CONDITIONAL_ROUTING
+              routingType:
+                type: string
+                enum:
+                - CONDITIONAL_AI
+                - DYNAMIC
+                example: CONDITIONAL_AI
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    handleId:
+                      type: string
+                      example: example
+                    expression:
+                      type: string
+                      example: example
+                  required:
+                  - handleId
+                  - expression
+              temperature:
+                type: number
+                example: 1
+              model:
+                type: string
+                example: example
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+            required:
+            - type
+            - routingType
+            - conditions
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - AI_CAPTURE
+                example: AI_CAPTURE
+              aiModelId:
+                type: number
+                nullable: true
+                example: 1
+              model:
+                type: string
+                example: example
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              instructions:
+                type: string
+                nullable: true
+                example: example
+              prompt:
+                type: string
+                nullable: true
+                example: example
+              temperature:
+                type: number
+                example: 1
+              captureVariables:
+                type: array
+                items:
+                  nullable: true
+                  type: object
+              knowledgeBaseMode:
+                type: string
+                enum:
+                - DEFAULT
+                - CUSTOM
+                - DISABLED
+                default: DEFAULT
+                example: DEFAULT
+              knowledgeBaseIds:
+                type: array
+                nullable: true
+                items:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 1
+            required:
+            - type
+            - model
+            - aiVendor
+            - prompt
+            - temperature
+            - captureVariables
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - DATA_TRANSFORMER
+                example: DATA_TRANSFORMER
+              prompt:
+                type: string
+                nullable: true
+                example: example
+              temperature:
+                type: number
+                default: 0.7
+                example: 1
+              model:
+                type: string
+                nullable: true
+                example: example
+              aiVendor:
+                type: string
+                nullable: true
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              outputJson:
+                type: string
+                nullable: true
+                example: example
+              outputMode:
+                type: string
+                nullable: true
+                enum:
+                - JSON
+                - KEY_VALUE
+                - TEXT
+                example: JSON
+              keyValuePairs:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: example
+                    value:
+                      type: string
+                      example: example
+                  required:
+                  - key
+                  - value
+            required:
+            - type
+            - prompt
+            - model
+            - aiVendor
+            - outputMode
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - DYNAMIC_TABLES
+                example: DYNAMIC_TABLES
+              tableId:
+                type: number
+                nullable: true
+                example: 1
+              recordTypeId:
+                type: number
+                nullable: true
+                example: 1
+              targetRecordTypeId:
+                type: number
+                nullable: true
+                description: Destination record type id. Required when actionType is CHANGE_RECORD_TYPE.
+                example: 12
+              actionType:
+                type: string
+                nullable: true
+                enum:
+                - CREATE
+                - UPDATE
+                - DELETE
+                - SEARCH
+                - SEARCH_BY_ID
+                - CHANGE_RECORD_TYPE
+                description: 'Operation to run. Required-field rules per action: CREATE → rowData; UPDATE → rowId + rowData; DELETE / SEARCH_BY_ID → rowId; CHANGE_RECORD_TYPE → rowId + targetRecordTypeId.'
+                example: CREATE
+              rowData:
+                type: object
+                nullable: true
+                additionalProperties:
+                  nullable: true
+                  type: object
+              inputModeByField:
+                type: object
+                nullable: true
+                additionalProperties:
+                  type: string
+                  enum:
+                  - INPUT
+                  - VARIABLE
+                  - EMPTY
+                  example: INPUT
+              rowId:
+                type: string
+                nullable: true
+                example: example
+              search:
+                type: string
+                nullable: true
+                example: example
+              pageNum:
+                type: number
+                nullable: true
+                example: 1
+              pageSize:
+                type: number
+                nullable: true
+                example: 1
+              sort:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    path:
+                      type: string
+                      example: example
+                    type:
+                      type: string
+                      enum:
+                      - asc
+                      - desc
+                      example: asc
+                  required:
+                  - path
+                  - type
+              query:
+                $ref: '#/components/schemas/DynamicTablesQuery'
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - ITERATION
+                example: ITERATION
+              variableName:
+                type: string
+                default: ''
+                example: example
+              variablePath:
+                type: string
+                default: ''
+                example: example
+              continueOnError:
+                type: boolean
+                default: false
+                example: false
+            required:
+            - type
+            description: Loop node. Wire type is ITERATION. Connect edges with sourceHandle body (for-each), completed (after all items), and empty (null/empty list).
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - BREAK
+                example: BREAK
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - AUTOMATION_STATUS
+                example: AUTOMATION_STATUS
+              automationId:
+                type: integer
+                nullable: true
+                minimum: 0
+                exclusiveMinimum: true
+                example: 1
+              automationName:
+                type: string
+                nullable: true
+                example: example
+              action:
+                type: string
+                enum:
+                - SET_ACTIVE
+                - SET_DRAFT
+                - TOGGLE
+                default: SET_ACTIVE
+                example: SET_ACTIVE
+            required:
+            - type
+            description: Changes another automation's status (live/draft/toggle). Does not publish draft graph changes.
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - SEND_MESSAGE
+                example: SEND_MESSAGE
+              whatsapp:
+                type: object
+                nullable: true
+                properties:
+                  messageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    - WHATSAPP_TEMPLATE
+                    example: STATIC
+                  message:
+                    type: string
+                    nullable: true
+                    example: example
+                  prompt:
+                    type: string
+                    nullable: true
+                    example: example
+                  temperature:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiModelId:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiVendor:
+                    type: string
+                    nullable: true
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                    example: OPENAI
+                  model:
+                    type: string
+                    nullable: true
+                    example: example
+                  template:
+                    type: string
+                    nullable: true
+                    example: example
+                  templateVariables:
+                    type: object
+                    nullable: true
+                    properties:
+                      body:
+                        type: object
+                        additionalProperties:
+                          nullable: true
+                          type: object
+                      header:
+                        type: object
+                        additionalProperties:
+                          nullable: true
+                          type: object
+                      buttons:
+                        type: array
+                        items:
+                          type: object
+                          additionalProperties:
+                            nullable: true
+                            type: object
+                  templateData:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      nullable: true
+                      type: object
+                required:
+                - messageType
+              instagram:
+                type: object
+                nullable: true
+                properties:
+                  messageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    - WHATSAPP_TEMPLATE
+                    example: STATIC
+                  message:
+                    type: string
+                    nullable: true
+                    example: example
+                  prompt:
+                    type: string
+                    nullable: true
+                    example: example
+                  temperature:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiModelId:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiVendor:
+                    type: string
+                    nullable: true
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                    example: OPENAI
+                  model:
+                    type: string
+                    nullable: true
+                    example: example
+                required:
+                - messageType
+              messenger:
+                type: object
+                nullable: true
+                properties:
+                  messageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    - WHATSAPP_TEMPLATE
+                    example: STATIC
+                  message:
+                    type: string
+                    nullable: true
+                    example: example
+                  prompt:
+                    type: string
+                    nullable: true
+                    example: example
+                  temperature:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiModelId:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiVendor:
+                    type: string
+                    nullable: true
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                    example: OPENAI
+                  model:
+                    type: string
+                    nullable: true
+                    example: example
+                required:
+                - messageType
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - SEND_WHATSAPP_MESSAGE
+                example: SEND_WHATSAPP_MESSAGE
+              recipientMode:
+                type: string
+                nullable: true
+                enum:
+                - PHONE_NUMBER
+                - PEOPLE_RECORD
+                example: PHONE_NUMBER
+              peopleRecordTypeId:
+                type: number
+                nullable: true
+                example: 1
+              peopleRowId:
+                type: string
+                nullable: true
+                example: example
+              personName:
+                type: string
+                nullable: true
+                example: example
+              phoneNumber:
+                type: string
+                nullable: true
+                example: example
+              phoneNumberId:
+                type: string
+                nullable: true
+                example: example
+              template:
+                type: string
+                nullable: true
+                example: example
+              templateVariables:
+                type: object
+                nullable: true
+                properties:
+                  body:
+                    type: object
+                    additionalProperties:
+                      nullable: true
+                      type: object
+                  header:
+                    type: object
+                    additionalProperties:
+                      nullable: true
+                      type: object
+                  buttons:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties:
+                        nullable: true
+                        type: object
+            required:
+            - type
+            description: Sends a WhatsApp Business template message. phoneNumberId must belong to this account and have an assistantId assigned.
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TRANSCRIPTION
+                example: TRANSCRIPTION
+              audioUrl:
+                type: string
+                example: example
+              language:
+                type: string
+                default: es
+                example: example
+              aiModelId:
+                type: number
+                nullable: true
+                example: 1
+              aiVendor:
+                type: string
+                nullable: true
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              model:
+                type: string
+                default: gpt-4o-transcribe
+                example: example
+              captureVariables:
+                type: array
+                nullable: true
+                items:
+                  nullable: true
+                  type: object
+              enableDiarization:
+                type: boolean
+                default: false
+                example: false
+              captureSegmentsVariable:
+                type: object
+                nullable: true
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type: string
+                    example: example
+                required:
+                - id
+                - name
+            required:
+            - type
+            - audioUrl
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - FILE_ANALYSIS
+                example: FILE_ANALYSIS
+              fileUrl:
+                type: string
+                example: example
+              aiModelId:
+                type: number
+                nullable: true
+                example: 1
+              aiVendor:
+                type: string
+                nullable: true
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              model:
+                type: string
+                nullable: true
+                example: example
+              prompt:
+                type: string
+                nullable: true
+                example: example
+              captureVariables:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: example
+                    description:
+                      type: string
+                      example: example
+                  required:
+                  - id
+                  - name
+              captureOcrVariable:
+                type: object
+                nullable: true
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type: string
+                    example: example
+                required:
+                - id
+                - name
+            required:
+            - type
+            - fileUrl
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - CREATE_RECORD_ACTIVITY
+                example: CREATE_RECORD_ACTIVITY
+              recordTypeId:
+                nullable: true
+                type: object
+              rowId:
+                type: string
+                nullable: true
+                example: example
+              activityType:
+                type: string
+                nullable: true
+                enum:
+                - NOTE
+                - EMAIL
+                - PHONE_CALL
+                - MEETING
+                - WHATSAPP
+                example: NOTE
+              content:
+                type: string
+                nullable: true
+                example: example
+            required:
+            - type
+          - nullable: true
+            type: object
+      required:
+      - nodeId
+      - position
+      - type
+    PublicWorkflowLog:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 501
+        successful:
+          type: boolean
+          example: false
+        started_at:
+          type: string
+          nullable: true
+          example: example
+        completed_at:
+          type: string
+          nullable: true
+          example: example
+        duration:
+          type: number
+          nullable: true
+          description: Run duration in ms.
+          example: 1
+        operations:
+          type: number
+          nullable: true
+          example: 1
+        ai_credits:
+          type: number
+          nullable: true
+          example: 1
+        error:
+          type: string
+          nullable: true
+          example: example
+        insufficient_credits:
+          type: boolean
+          nullable: true
+          example: false
+        prevented_loop:
+          type: boolean
+          nullable: true
+          example: false
+      required:
+      - id
+      - successful
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicWorkflowEdgeDeleteInput:
+      type: object
+      properties:
+        edge:
+          type: object
+          properties:
+            source:
+              type: string
+              example: trigger_1
+            sourceHandle:
+              type: string
+              example: default
+            target:
+              type: string
+              example: api_1
+            targetHandle:
+              type: string
+              example: default
+          required:
+          - source
+          - sourceHandle
+          - target
+          - targetHandle
+      required:
+      - edge
+    DynamicTablesQueryGroup:
+      type: object
+      properties:
+        operator:
+          type: string
+          enum:
+          - and
+          - or
+          example: and
+        conditions:
+          type: array
+          items:
+            nullable: true
+            type: object
+          description: Nested filter conditions or AND/OR groups
+      required:
+      - operator
+      - conditions
+    PublicWorkflowNodeCreateInput:
+      type: object
+      properties:
+        node:
+          $ref: '#/components/schemas/PublicWorkflowNodeInput'
+      required:
+      - node
+    DynamicTablesQueryCondition:
+      type: object
+      properties:
+        path:
+          type: string
+          description: Field path in format [Field] or [Relation].[Field]
+          example: '[Status]'
+        operator:
+          type: string
+          example: equals
+        value:
+          nullable: true
+          type: object
+        valueType:
+          nullable: true
+          type: object
+      required:
+      - path
+      - operator
+    PublicWorkflowUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Daily CRM Sync
+        description:
+          type: string
+          nullable: true
+          example: Syncs contacts daily
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          - DRAFT
+          example: ACTIVE
+      required:
+      - name
+    PublicWorkflowNodePatch:
+      type: object
+      properties:
+        alias:
+          type: string
+          nullable: true
+          example: Initial trigger
+        name:
+          type: string
+          example: Initial trigger
+        position:
+          type: object
+          properties:
+            positionX:
+              type: number
+              example: 1
+            positionY:
+              type: number
+              example: 1
+          required:
+          - positionX
+          - positionY
+        type:
+          type: string
+          enum:
+          - TRIGGER
+          - SCHEDULED_TRIGGER
+          - WEBHOOK
+          - TOOLS_AI
+          - API
+          - CONDITIONAL_ROUTING
+          - AI_CAPTURE
+          - DATA_TRANSFORMER
+          - DYNAMIC_TABLES
+          - ITERATION
+          - BREAK
+          - AUTOMATION_STATUS
+          - SEND_MESSAGE
+          - SEND_WHATSAPP_MESSAGE
+          - TRANSCRIPTION
+          - FILE_ANALYSIS
+          - CREATE_RECORD_ACTIVITY
+          example: TRIGGER
+        data:
+          oneOf:
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TRIGGER
+                example: TRIGGER
+              triggerType:
+                type: string
+                nullable: true
+                enum:
+                - CONVERSATION_ENDED
+                - CONTACT_CREATED
+                - CONTACT_UPDATED
+                - FEEDBACK_CAPTURED
+                - INCOMING_WEBHOOK
+                - TABLE_ROW_CREATED
+                - OBJECT_RECORD_CREATED
+                - TABLE_ROW_UPDATED
+                - OBJECT_RECORD_UPDATED
+                - SCHEDULED_TRIGGER
+                - CONVERSATION_IDLE
+                - COMPOSIO_TRIGGER
+                example: CONVERSATION_ENDED
+              triggeredBy:
+                type: string
+                nullable: true
+                enum:
+                - BOTH
+                - AGENT
+                - USER
+                - INCOMING_WEBHOOK
+                example: BOTH
+              triggeredByAgentIds:
+                type: array
+                items:
+                  type: string
+                  example: example
+              triggerByWebhookIds:
+                type: array
+                items:
+                  type: string
+                  example: example
+              triggeredByTableId:
+                type: number
+                nullable: true
+                example: 1
+              triggeredByRecordTypeId:
+                type: number
+                nullable: true
+                example: 1
+              connectedAccountTriggerId:
+                type: string
+                nullable: true
+                example: example
+              triggerToolkit:
+                type: string
+                nullable: true
+                example: example
+              triggerSlug:
+                type: string
+                nullable: true
+                example: example
+              triggerConfig:
+                type: object
+                nullable: true
+                additionalProperties:
+                  nullable: true
+                  type: object
+              triggerQueryConfig:
+                type: object
+                nullable: true
+                properties:
+                  query:
+                    type: object
+                    description: 'Dynamic-table query: a single `{ path, operator, value }` condition, or a nested `{ operator: ''and'' | ''or'', conditions: [...] }` group.'
+              connectedAccountId:
+                type: number
+                nullable: true
+                example: 1
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - SCHEDULED_TRIGGER
+                example: SCHEDULED_TRIGGER
+              cronExpression:
+                type: string
+                description: Cron expression (default preset). Validated by cron-validate.
+                example: 0 9 * * 1-5
+              timezone:
+                type: string
+                description: IANA timezone identifier. Validated against the host ICU table.
+                example: America/Argentina/Buenos_Aires
+              startTime:
+                type: string
+                nullable: true
+                example: example
+              endTime:
+                type: string
+                nullable: true
+                example: example
+              startDate:
+                type: string
+                nullable: true
+                example: example
+              endDate:
+                type: string
+                nullable: true
+                example: example
+              frequency:
+                type: string
+                nullable: true
+                enum:
+                - INTERVALS
+                - DAILY
+                - WEEKLY
+                - MONTHLY
+                example: INTERVALS
+            required:
+            - type
+            - cronExpression
+            - timezone
+            - startTime
+            - endTime
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - WEBHOOK
+                example: WEBHOOK
+              includeConversationTranscript:
+                type: boolean
+                default: false
+                example: false
+              includeContactInfo:
+                type: boolean
+                default: false
+                example: false
+              includeFeedbackCaptured:
+                type: boolean
+                default: false
+                example: false
+              includeCapturedVariables:
+                type: boolean
+                default: false
+                example: false
+              includeWebhookPayload:
+                type: boolean
+                default: false
+                example: false
+              url:
+                type: string
+                nullable: true
+                format: uri
+                example: https://api.example.com/contacts/123
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TOOLS_AI
+                example: TOOLS_AI
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    handleId:
+                      type: string
+                      example: example
+                    expression:
+                      type: string
+                      example: example
+                  required:
+                  - handleId
+                  - expression
+              temperature:
+                type: number
+                example: 1
+              model:
+                type: string
+                example: example
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              instructions:
+                type: string
+                nullable: true
+                example: example
+              prompt:
+                type: string
+                nullable: true
+                example: example
+              customToolIds:
+                type: array
+                nullable: true
+                items:
+                  type: number
+                  example: 1
+              maxIterations:
+                type: number
+                minimum: 1
+                maximum: 30
+                default: 10
+                example: 1
+              agentType:
+                type: string
+                enum:
+                - BASIC
+                - ADVANCED
+                default: BASIC
+                example: BASIC
+              captureVariables:
+                type: array
+                nullable: true
+                items:
+                  nullable: true
+                  type: object
+              knowledgeBaseMode:
+                type: string
+                enum:
+                - DEFAULT
+                - CUSTOM
+                - DISABLED
+                default: DEFAULT
+                example: DEFAULT
+              knowledgeBaseIds:
+                type: array
+                nullable: true
+                items:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 1
+              selectedRecordTypes:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    recordTypeId:
+                      type: number
+                      example: 1
+                    read:
+                      type: boolean
+                      example: false
+                    create:
+                      type: boolean
+                      example: false
+                    update:
+                      type: boolean
+                      example: false
+                    delete:
+                      type: boolean
+                      example: false
+                    createActivity:
+                      type: boolean
+                      example: false
+                  required:
+                  - recordTypeId
+              systemToolsConfig:
+                type: object
+                nullable: true
+                properties:
+                  webSearchEnabled:
+                    type: boolean
+                    default: false
+                    example: false
+                  urlScrapeEnabled:
+                    type: boolean
+                    default: false
+                    example: false
+                  linkedinSearchEnabled:
+                    type: boolean
+                    default: false
+                    example: false
+              connectedAccountConfigs:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    connectedAccountId:
+                      type: number
+                      example: 1
+                    useAllTools:
+                      type: boolean
+                      default: true
+                      example: false
+                    selectedToolSlugs:
+                      type: array
+                      nullable: true
+                      items:
+                        type: string
+                        example: example
+                  required:
+                  - connectedAccountId
+              playbookIds:
+                type: array
+                nullable: true
+                items:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 1
+            required:
+            - type
+            - conditions
+            - instructions
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - API
+                example: API
+              url:
+                type: string
+                format: uri
+                example: https://api.example.com/hook
+              method:
+                type: string
+                enum:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - PATCH
+                example: GET
+              headers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: example
+                    value:
+                      type: string
+                      example: example
+                  required:
+                  - key
+                  - value
+              body:
+                type: string
+                nullable: true
+                example: example
+              response:
+                type: string
+                nullable: true
+                example: example
+              parameters:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: example
+                    value:
+                      type: string
+                      example: example
+                  required:
+                  - key
+                  - value
+              variables:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: example
+                    value:
+                      type: string
+                      example: example
+                    fullResponse:
+                      type: boolean
+                      default: false
+                      example: false
+                  required:
+                  - key
+                  - value
+            required:
+            - type
+            - url
+            - method
+            - headers
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - CONDITIONAL_ROUTING
+                example: CONDITIONAL_ROUTING
+              routingType:
+                type: string
+                enum:
+                - CONDITIONAL_AI
+                - DYNAMIC
+                example: CONDITIONAL_AI
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    handleId:
+                      type: string
+                      example: example
+                    expression:
+                      type: string
+                      example: example
+                  required:
+                  - handleId
+                  - expression
+              temperature:
+                type: number
+                example: 1
+              model:
+                type: string
+                example: example
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+            required:
+            - type
+            - routingType
+            - conditions
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - AI_CAPTURE
+                example: AI_CAPTURE
+              aiModelId:
+                type: number
+                nullable: true
+                example: 1
+              model:
+                type: string
+                example: example
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              instructions:
+                type: string
+                nullable: true
+                example: example
+              prompt:
+                type: string
+                nullable: true
+                example: example
+              temperature:
+                type: number
+                example: 1
+              captureVariables:
+                type: array
+                items:
+                  nullable: true
+                  type: object
+              knowledgeBaseMode:
+                type: string
+                enum:
+                - DEFAULT
+                - CUSTOM
+                - DISABLED
+                default: DEFAULT
+                example: DEFAULT
+              knowledgeBaseIds:
+                type: array
+                nullable: true
+                items:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 1
+            required:
+            - type
+            - model
+            - aiVendor
+            - prompt
+            - temperature
+            - captureVariables
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - DATA_TRANSFORMER
+                example: DATA_TRANSFORMER
+              prompt:
+                type: string
+                nullable: true
+                example: example
+              temperature:
+                type: number
+                default: 0.7
+                example: 1
+              model:
+                type: string
+                nullable: true
+                example: example
+              aiVendor:
+                type: string
+                nullable: true
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              outputJson:
+                type: string
+                nullable: true
+                example: example
+              outputMode:
+                type: string
+                nullable: true
+                enum:
+                - JSON
+                - KEY_VALUE
+                - TEXT
+                example: JSON
+              keyValuePairs:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: example
+                    value:
+                      type: string
+                      example: example
+                  required:
+                  - key
+                  - value
+            required:
+            - type
+            - prompt
+            - model
+            - aiVendor
+            - outputMode
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - DYNAMIC_TABLES
+                example: DYNAMIC_TABLES
+              tableId:
+                type: number
+                nullable: true
+                example: 1
+              recordTypeId:
+                type: number
+                nullable: true
+                example: 1
+              targetRecordTypeId:
+                type: number
+                nullable: true
+                description: Destination record type id. Required when actionType is CHANGE_RECORD_TYPE.
+                example: 12
+              actionType:
+                type: string
+                nullable: true
+                enum:
+                - CREATE
+                - UPDATE
+                - DELETE
+                - SEARCH
+                - SEARCH_BY_ID
+                - CHANGE_RECORD_TYPE
+                description: 'Operation to run. Required-field rules per action: CREATE → rowData; UPDATE → rowId + rowData; DELETE / SEARCH_BY_ID → rowId; CHANGE_RECORD_TYPE → rowId + targetRecordTypeId.'
+                example: CREATE
+              rowData:
+                type: object
+                nullable: true
+                additionalProperties:
+                  nullable: true
+                  type: object
+              inputModeByField:
+                type: object
+                nullable: true
+                additionalProperties:
+                  type: string
+                  enum:
+                  - INPUT
+                  - VARIABLE
+                  - EMPTY
+                  example: INPUT
+              rowId:
+                type: string
+                nullable: true
+                example: example
+              search:
+                type: string
+                nullable: true
+                example: example
+              pageNum:
+                type: number
+                nullable: true
+                example: 1
+              pageSize:
+                type: number
+                nullable: true
+                example: 1
+              sort:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    path:
+                      type: string
+                      example: example
+                    type:
+                      type: string
+                      enum:
+                      - asc
+                      - desc
+                      example: asc
+                  required:
+                  - path
+                  - type
+              query:
+                $ref: '#/components/schemas/DynamicTablesQuery'
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - ITERATION
+                example: ITERATION
+              variableName:
+                type: string
+                default: ''
+                example: example
+              variablePath:
+                type: string
+                default: ''
+                example: example
+              continueOnError:
+                type: boolean
+                default: false
+                example: false
+            required:
+            - type
+            description: Loop node. Wire type is ITERATION. Connect edges with sourceHandle body (for-each), completed (after all items), and empty (null/empty list).
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - BREAK
+                example: BREAK
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - AUTOMATION_STATUS
+                example: AUTOMATION_STATUS
+              automationId:
+                type: integer
+                nullable: true
+                minimum: 0
+                exclusiveMinimum: true
+                example: 1
+              automationName:
+                type: string
+                nullable: true
+                example: example
+              action:
+                type: string
+                enum:
+                - SET_ACTIVE
+                - SET_DRAFT
+                - TOGGLE
+                default: SET_ACTIVE
+                example: SET_ACTIVE
+            required:
+            - type
+            description: Changes another automation's status (live/draft/toggle). Does not publish draft graph changes.
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - SEND_MESSAGE
+                example: SEND_MESSAGE
+              whatsapp:
+                type: object
+                nullable: true
+                properties:
+                  messageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    - WHATSAPP_TEMPLATE
+                    example: STATIC
+                  message:
+                    type: string
+                    nullable: true
+                    example: example
+                  prompt:
+                    type: string
+                    nullable: true
+                    example: example
+                  temperature:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiModelId:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiVendor:
+                    type: string
+                    nullable: true
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                    example: OPENAI
+                  model:
+                    type: string
+                    nullable: true
+                    example: example
+                  template:
+                    type: string
+                    nullable: true
+                    example: example
+                  templateVariables:
+                    type: object
+                    nullable: true
+                    properties:
+                      body:
+                        type: object
+                        additionalProperties:
+                          nullable: true
+                          type: object
+                      header:
+                        type: object
+                        additionalProperties:
+                          nullable: true
+                          type: object
+                      buttons:
+                        type: array
+                        items:
+                          type: object
+                          additionalProperties:
+                            nullable: true
+                            type: object
+                  templateData:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      nullable: true
+                      type: object
+                required:
+                - messageType
+              instagram:
+                type: object
+                nullable: true
+                properties:
+                  messageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    - WHATSAPP_TEMPLATE
+                    example: STATIC
+                  message:
+                    type: string
+                    nullable: true
+                    example: example
+                  prompt:
+                    type: string
+                    nullable: true
+                    example: example
+                  temperature:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiModelId:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiVendor:
+                    type: string
+                    nullable: true
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                    example: OPENAI
+                  model:
+                    type: string
+                    nullable: true
+                    example: example
+                required:
+                - messageType
+              messenger:
+                type: object
+                nullable: true
+                properties:
+                  messageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    - WHATSAPP_TEMPLATE
+                    example: STATIC
+                  message:
+                    type: string
+                    nullable: true
+                    example: example
+                  prompt:
+                    type: string
+                    nullable: true
+                    example: example
+                  temperature:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiModelId:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiVendor:
+                    type: string
+                    nullable: true
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                    example: OPENAI
+                  model:
+                    type: string
+                    nullable: true
+                    example: example
+                required:
+                - messageType
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - SEND_WHATSAPP_MESSAGE
+                example: SEND_WHATSAPP_MESSAGE
+              recipientMode:
+                type: string
+                nullable: true
+                enum:
+                - PHONE_NUMBER
+                - PEOPLE_RECORD
+                example: PHONE_NUMBER
+              peopleRecordTypeId:
+                type: number
+                nullable: true
+                example: 1
+              peopleRowId:
+                type: string
+                nullable: true
+                example: example
+              personName:
+                type: string
+                nullable: true
+                example: example
+              phoneNumber:
+                type: string
+                nullable: true
+                example: example
+              phoneNumberId:
+                type: string
+                nullable: true
+                example: example
+              template:
+                type: string
+                nullable: true
+                example: example
+              templateVariables:
+                type: object
+                nullable: true
+                properties:
+                  body:
+                    type: object
+                    additionalProperties:
+                      nullable: true
+                      type: object
+                  header:
+                    type: object
+                    additionalProperties:
+                      nullable: true
+                      type: object
+                  buttons:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties:
+                        nullable: true
+                        type: object
+            required:
+            - type
+            description: Sends a WhatsApp Business template message. phoneNumberId must belong to this account and have an assistantId assigned.
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TRANSCRIPTION
+                example: TRANSCRIPTION
+              audioUrl:
+                type: string
+                example: example
+              language:
+                type: string
+                default: es
+                example: example
+              aiModelId:
+                type: number
+                nullable: true
+                example: 1
+              aiVendor:
+                type: string
+                nullable: true
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              model:
+                type: string
+                default: gpt-4o-transcribe
+                example: example
+              captureVariables:
+                type: array
+                nullable: true
+                items:
+                  nullable: true
+                  type: object
+              enableDiarization:
+                type: boolean
+                default: false
+                example: false
+              captureSegmentsVariable:
+                type: object
+                nullable: true
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type: string
+                    example: example
+                required:
+                - id
+                - name
+            required:
+            - type
+            - audioUrl
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - FILE_ANALYSIS
+                example: FILE_ANALYSIS
+              fileUrl:
+                type: string
+                example: example
+              aiModelId:
+                type: number
+                nullable: true
+                example: 1
+              aiVendor:
+                type: string
+                nullable: true
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              model:
+                type: string
+                nullable: true
+                example: example
+              prompt:
+                type: string
+                nullable: true
+                example: example
+              captureVariables:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: example
+                    description:
+                      type: string
+                      example: example
+                  required:
+                  - id
+                  - name
+              captureOcrVariable:
+                type: object
+                nullable: true
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type: string
+                    example: example
+                required:
+                - id
+                - name
+            required:
+            - type
+            - fileUrl
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - CREATE_RECORD_ACTIVITY
+                example: CREATE_RECORD_ACTIVITY
+              recordTypeId:
+                nullable: true
+                type: object
+              rowId:
+                type: string
+                nullable: true
+                example: example
+              activityType:
+                type: string
+                nullable: true
+                enum:
+                - NOTE
+                - EMAIL
+                - PHONE_CALL
+                - MEETING
+                - WHATSAPP
+                example: NOTE
+              content:
+                type: string
+                nullable: true
+                example: example
+            required:
+            - type
+          - nullable: true
+            type: object
+    PublicWorkflowNode:
+      type: object
+      properties:
+        nodeId:
+          type: string
+          pattern: node_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}
+          example: node_550e8400-e29b-41d4-a716-446655440000
+        alias:
+          type: string
+          nullable: true
+          example: Initial trigger
+        name:
+          type: string
+          example: Initial trigger
+        position:
+          type: object
+          properties:
+            positionX:
+              type: number
+              example: 1
+            positionY:
+              type: number
+              example: 1
+          required:
+          - positionX
+          - positionY
+        type:
+          type: string
+          enum:
+          - TRIGGER
+          - SCHEDULED_TRIGGER
+          - WEBHOOK
+          - TOOLS_AI
+          - API
+          - CONDITIONAL_ROUTING
+          - AI_CAPTURE
+          - DATA_TRANSFORMER
+          - DYNAMIC_TABLES
+          - ITERATION
+          - BREAK
+          - AUTOMATION_STATUS
+          - SEND_MESSAGE
+          - SEND_WHATSAPP_MESSAGE
+          - TRANSCRIPTION
+          - FILE_ANALYSIS
+          - CREATE_RECORD_ACTIVITY
+          example: TRIGGER
+        data:
+          oneOf:
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TRIGGER
+                example: TRIGGER
+              triggerType:
+                type: string
+                nullable: true
+                enum:
+                - CONVERSATION_ENDED
+                - CONTACT_CREATED
+                - CONTACT_UPDATED
+                - FEEDBACK_CAPTURED
+                - INCOMING_WEBHOOK
+                - TABLE_ROW_CREATED
+                - OBJECT_RECORD_CREATED
+                - TABLE_ROW_UPDATED
+                - OBJECT_RECORD_UPDATED
+                - SCHEDULED_TRIGGER
+                - CONVERSATION_IDLE
+                - COMPOSIO_TRIGGER
+                example: CONVERSATION_ENDED
+              triggeredBy:
+                type: string
+                nullable: true
+                enum:
+                - BOTH
+                - AGENT
+                - USER
+                - INCOMING_WEBHOOK
+                example: BOTH
+              triggeredByAgentIds:
+                type: array
+                items:
+                  type: string
+                  example: example
+              triggerByWebhookIds:
+                type: array
+                items:
+                  type: string
+                  example: example
+              triggeredByTableId:
+                type: number
+                nullable: true
+                example: 1
+              triggeredByRecordTypeId:
+                type: number
+                nullable: true
+                example: 1
+              connectedAccountTriggerId:
+                type: string
+                nullable: true
+                example: example
+              triggerToolkit:
+                type: string
+                nullable: true
+                example: example
+              triggerSlug:
+                type: string
+                nullable: true
+                example: example
+              triggerConfig:
+                type: object
+                nullable: true
+                additionalProperties:
+                  nullable: true
+                  type: object
+              triggerQueryConfig:
+                type: object
+                nullable: true
+                properties:
+                  query:
+                    type: object
+                    description: 'Dynamic-table query: a single `{ path, operator, value }` condition, or a nested `{ operator: ''and'' | ''or'', conditions: [...] }` group.'
+              connectedAccountId:
+                type: number
+                nullable: true
+                example: 1
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - SCHEDULED_TRIGGER
+                example: SCHEDULED_TRIGGER
+              cronExpression:
+                type: string
+                description: Cron expression (default preset). Validated by cron-validate.
+                example: 0 9 * * 1-5
+              timezone:
+                type: string
+                description: IANA timezone identifier. Validated against the host ICU table.
+                example: America/Argentina/Buenos_Aires
+              startTime:
+                type: string
+                nullable: true
+                example: example
+              endTime:
+                type: string
+                nullable: true
+                example: example
+              startDate:
+                type: string
+                nullable: true
+                example: example
+              endDate:
+                type: string
+                nullable: true
+                example: example
+              frequency:
+                type: string
+                nullable: true
+                enum:
+                - INTERVALS
+                - DAILY
+                - WEEKLY
+                - MONTHLY
+                example: INTERVALS
+            required:
+            - type
+            - cronExpression
+            - timezone
+            - startTime
+            - endTime
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - WEBHOOK
+                example: WEBHOOK
+              includeConversationTranscript:
+                type: boolean
+                default: false
+                example: false
+              includeContactInfo:
+                type: boolean
+                default: false
+                example: false
+              includeFeedbackCaptured:
+                type: boolean
+                default: false
+                example: false
+              includeCapturedVariables:
+                type: boolean
+                default: false
+                example: false
+              includeWebhookPayload:
+                type: boolean
+                default: false
+                example: false
+              url:
+                type: string
+                nullable: true
+                format: uri
+                example: https://api.example.com/contacts/123
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TOOLS_AI
+                example: TOOLS_AI
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    handleId:
+                      type: string
+                      example: example
+                    expression:
+                      type: string
+                      example: example
+                  required:
+                  - handleId
+                  - expression
+              temperature:
+                type: number
+                example: 1
+              model:
+                type: string
+                example: example
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              instructions:
+                type: string
+                nullable: true
+                example: example
+              prompt:
+                type: string
+                nullable: true
+                example: example
+              customToolIds:
+                type: array
+                nullable: true
+                items:
+                  type: number
+                  example: 1
+              maxIterations:
+                type: number
+                minimum: 1
+                maximum: 30
+                default: 10
+                example: 1
+              agentType:
+                type: string
+                enum:
+                - BASIC
+                - ADVANCED
+                default: BASIC
+                example: BASIC
+              captureVariables:
+                type: array
+                nullable: true
+                items:
+                  nullable: true
+                  type: object
+              knowledgeBaseMode:
+                type: string
+                enum:
+                - DEFAULT
+                - CUSTOM
+                - DISABLED
+                default: DEFAULT
+                example: DEFAULT
+              knowledgeBaseIds:
+                type: array
+                nullable: true
+                items:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 1
+              selectedRecordTypes:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    recordTypeId:
+                      type: number
+                      example: 1
+                    read:
+                      type: boolean
+                      example: false
+                    create:
+                      type: boolean
+                      example: false
+                    update:
+                      type: boolean
+                      example: false
+                    delete:
+                      type: boolean
+                      example: false
+                    createActivity:
+                      type: boolean
+                      example: false
+                  required:
+                  - recordTypeId
+              systemToolsConfig:
+                type: object
+                nullable: true
+                properties:
+                  webSearchEnabled:
+                    type: boolean
+                    default: false
+                    example: false
+                  urlScrapeEnabled:
+                    type: boolean
+                    default: false
+                    example: false
+                  linkedinSearchEnabled:
+                    type: boolean
+                    default: false
+                    example: false
+              connectedAccountConfigs:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    connectedAccountId:
+                      type: number
+                      example: 1
+                    useAllTools:
+                      type: boolean
+                      default: true
+                      example: false
+                    selectedToolSlugs:
+                      type: array
+                      nullable: true
+                      items:
+                        type: string
+                        example: example
+                  required:
+                  - connectedAccountId
+              playbookIds:
+                type: array
+                nullable: true
+                items:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 1
+            required:
+            - type
+            - conditions
+            - instructions
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - API
+                example: API
+              url:
+                type: string
+                format: uri
+                example: https://api.example.com/hook
+              method:
+                type: string
+                enum:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - PATCH
+                example: GET
+              headers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: example
+                    value:
+                      type: string
+                      example: example
+                  required:
+                  - key
+                  - value
+              body:
+                type: string
+                nullable: true
+                example: example
+              response:
+                type: string
+                nullable: true
+                example: example
+              parameters:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: example
+                    value:
+                      type: string
+                      example: example
+                  required:
+                  - key
+                  - value
+              variables:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: example
+                    value:
+                      type: string
+                      example: example
+                    fullResponse:
+                      type: boolean
+                      default: false
+                      example: false
+                  required:
+                  - key
+                  - value
+            required:
+            - type
+            - url
+            - method
+            - headers
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - CONDITIONAL_ROUTING
+                example: CONDITIONAL_ROUTING
+              routingType:
+                type: string
+                enum:
+                - CONDITIONAL_AI
+                - DYNAMIC
+                example: CONDITIONAL_AI
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    handleId:
+                      type: string
+                      example: example
+                    expression:
+                      type: string
+                      example: example
+                  required:
+                  - handleId
+                  - expression
+              temperature:
+                type: number
+                example: 1
+              model:
+                type: string
+                example: example
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+            required:
+            - type
+            - routingType
+            - conditions
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - AI_CAPTURE
+                example: AI_CAPTURE
+              aiModelId:
+                type: number
+                nullable: true
+                example: 1
+              model:
+                type: string
+                example: example
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              instructions:
+                type: string
+                nullable: true
+                example: example
+              prompt:
+                type: string
+                nullable: true
+                example: example
+              temperature:
+                type: number
+                example: 1
+              captureVariables:
+                type: array
+                items:
+                  nullable: true
+                  type: object
+              knowledgeBaseMode:
+                type: string
+                enum:
+                - DEFAULT
+                - CUSTOM
+                - DISABLED
+                default: DEFAULT
+                example: DEFAULT
+              knowledgeBaseIds:
+                type: array
+                nullable: true
+                items:
+                  type: integer
+                  minimum: 0
+                  exclusiveMinimum: true
+                  example: 1
+            required:
+            - type
+            - model
+            - aiVendor
+            - prompt
+            - temperature
+            - captureVariables
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - DATA_TRANSFORMER
+                example: DATA_TRANSFORMER
+              prompt:
+                type: string
+                nullable: true
+                example: example
+              temperature:
+                type: number
+                default: 0.7
+                example: 1
+              model:
+                type: string
+                nullable: true
+                example: example
+              aiVendor:
+                type: string
+                nullable: true
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              outputJson:
+                type: string
+                nullable: true
+                example: example
+              outputMode:
+                type: string
+                nullable: true
+                enum:
+                - JSON
+                - KEY_VALUE
+                - TEXT
+                example: JSON
+              keyValuePairs:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                      example: example
+                    value:
+                      type: string
+                      example: example
+                  required:
+                  - key
+                  - value
+            required:
+            - type
+            - prompt
+            - model
+            - aiVendor
+            - outputMode
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - DYNAMIC_TABLES
+                example: DYNAMIC_TABLES
+              tableId:
+                type: number
+                nullable: true
+                example: 1
+              recordTypeId:
+                type: number
+                nullable: true
+                example: 1
+              targetRecordTypeId:
+                type: number
+                nullable: true
+                description: Destination record type id. Required when actionType is CHANGE_RECORD_TYPE.
+                example: 12
+              actionType:
+                type: string
+                nullable: true
+                enum:
+                - CREATE
+                - UPDATE
+                - DELETE
+                - SEARCH
+                - SEARCH_BY_ID
+                - CHANGE_RECORD_TYPE
+                description: 'Operation to run. Required-field rules per action: CREATE → rowData; UPDATE → rowId + rowData; DELETE / SEARCH_BY_ID → rowId; CHANGE_RECORD_TYPE → rowId + targetRecordTypeId.'
+                example: CREATE
+              rowData:
+                type: object
+                nullable: true
+                additionalProperties:
+                  nullable: true
+                  type: object
+              inputModeByField:
+                type: object
+                nullable: true
+                additionalProperties:
+                  type: string
+                  enum:
+                  - INPUT
+                  - VARIABLE
+                  - EMPTY
+                  example: INPUT
+              rowId:
+                type: string
+                nullable: true
+                example: example
+              search:
+                type: string
+                nullable: true
+                example: example
+              pageNum:
+                type: number
+                nullable: true
+                example: 1
+              pageSize:
+                type: number
+                nullable: true
+                example: 1
+              sort:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    path:
+                      type: string
+                      example: example
+                    type:
+                      type: string
+                      enum:
+                      - asc
+                      - desc
+                      example: asc
+                  required:
+                  - path
+                  - type
+              query:
+                $ref: '#/components/schemas/DynamicTablesQuery'
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - ITERATION
+                example: ITERATION
+              variableName:
+                type: string
+                default: ''
+                example: example
+              variablePath:
+                type: string
+                default: ''
+                example: example
+              continueOnError:
+                type: boolean
+                default: false
+                example: false
+            required:
+            - type
+            description: Loop node. Wire type is ITERATION. Connect edges with sourceHandle body (for-each), completed (after all items), and empty (null/empty list).
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - BREAK
+                example: BREAK
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - AUTOMATION_STATUS
+                example: AUTOMATION_STATUS
+              automationId:
+                type: integer
+                nullable: true
+                minimum: 0
+                exclusiveMinimum: true
+                example: 1
+              automationName:
+                type: string
+                nullable: true
+                example: example
+              action:
+                type: string
+                enum:
+                - SET_ACTIVE
+                - SET_DRAFT
+                - TOGGLE
+                default: SET_ACTIVE
+                example: SET_ACTIVE
+            required:
+            - type
+            description: Changes another automation's status (live/draft/toggle). Does not publish draft graph changes.
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - SEND_MESSAGE
+                example: SEND_MESSAGE
+              whatsapp:
+                type: object
+                nullable: true
+                properties:
+                  messageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    - WHATSAPP_TEMPLATE
+                    example: STATIC
+                  message:
+                    type: string
+                    nullable: true
+                    example: example
+                  prompt:
+                    type: string
+                    nullable: true
+                    example: example
+                  temperature:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiModelId:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiVendor:
+                    type: string
+                    nullable: true
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                    example: OPENAI
+                  model:
+                    type: string
+                    nullable: true
+                    example: example
+                  template:
+                    type: string
+                    nullable: true
+                    example: example
+                  templateVariables:
+                    type: object
+                    nullable: true
+                    properties:
+                      body:
+                        type: object
+                        additionalProperties:
+                          nullable: true
+                          type: object
+                      header:
+                        type: object
+                        additionalProperties:
+                          nullable: true
+                          type: object
+                      buttons:
+                        type: array
+                        items:
+                          type: object
+                          additionalProperties:
+                            nullable: true
+                            type: object
+                  templateData:
+                    type: object
+                    nullable: true
+                    additionalProperties:
+                      nullable: true
+                      type: object
+                required:
+                - messageType
+              instagram:
+                type: object
+                nullable: true
+                properties:
+                  messageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    - WHATSAPP_TEMPLATE
+                    example: STATIC
+                  message:
+                    type: string
+                    nullable: true
+                    example: example
+                  prompt:
+                    type: string
+                    nullable: true
+                    example: example
+                  temperature:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiModelId:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiVendor:
+                    type: string
+                    nullable: true
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                    example: OPENAI
+                  model:
+                    type: string
+                    nullable: true
+                    example: example
+                required:
+                - messageType
+              messenger:
+                type: object
+                nullable: true
+                properties:
+                  messageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    - WHATSAPP_TEMPLATE
+                    example: STATIC
+                  message:
+                    type: string
+                    nullable: true
+                    example: example
+                  prompt:
+                    type: string
+                    nullable: true
+                    example: example
+                  temperature:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiModelId:
+                    type: number
+                    nullable: true
+                    example: 1
+                  aiVendor:
+                    type: string
+                    nullable: true
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                    example: OPENAI
+                  model:
+                    type: string
+                    nullable: true
+                    example: example
+                required:
+                - messageType
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - SEND_WHATSAPP_MESSAGE
+                example: SEND_WHATSAPP_MESSAGE
+              recipientMode:
+                type: string
+                nullable: true
+                enum:
+                - PHONE_NUMBER
+                - PEOPLE_RECORD
+                example: PHONE_NUMBER
+              peopleRecordTypeId:
+                type: number
+                nullable: true
+                example: 1
+              peopleRowId:
+                type: string
+                nullable: true
+                example: example
+              personName:
+                type: string
+                nullable: true
+                example: example
+              phoneNumber:
+                type: string
+                nullable: true
+                example: example
+              phoneNumberId:
+                type: string
+                nullable: true
+                example: example
+              template:
+                type: string
+                nullable: true
+                example: example
+              templateVariables:
+                type: object
+                nullable: true
+                properties:
+                  body:
+                    type: object
+                    additionalProperties:
+                      nullable: true
+                      type: object
+                  header:
+                    type: object
+                    additionalProperties:
+                      nullable: true
+                      type: object
+                  buttons:
+                    type: array
+                    items:
+                      type: object
+                      additionalProperties:
+                        nullable: true
+                        type: object
+            required:
+            - type
+            description: Sends a WhatsApp Business template message. phoneNumberId must belong to this account and have an assistantId assigned.
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TRANSCRIPTION
+                example: TRANSCRIPTION
+              audioUrl:
+                type: string
+                example: example
+              language:
+                type: string
+                default: es
+                example: example
+              aiModelId:
+                type: number
+                nullable: true
+                example: 1
+              aiVendor:
+                type: string
+                nullable: true
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              model:
+                type: string
+                default: gpt-4o-transcribe
+                example: example
+              captureVariables:
+                type: array
+                nullable: true
+                items:
+                  nullable: true
+                  type: object
+              enableDiarization:
+                type: boolean
+                default: false
+                example: false
+              captureSegmentsVariable:
+                type: object
+                nullable: true
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type: string
+                    example: example
+                required:
+                - id
+                - name
+            required:
+            - type
+            - audioUrl
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - FILE_ANALYSIS
+                example: FILE_ANALYSIS
+              fileUrl:
+                type: string
+                example: example
+              aiModelId:
+                type: number
+                nullable: true
+                example: 1
+              aiVendor:
+                type: string
+                nullable: true
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+                example: OPENAI
+              model:
+                type: string
+                nullable: true
+                example: example
+              prompt:
+                type: string
+                nullable: true
+                example: example
+              captureVariables:
+                type: array
+                nullable: true
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                      example: 1
+                    name:
+                      type: string
+                      example: example
+                    description:
+                      type: string
+                      example: example
+                  required:
+                  - id
+                  - name
+              captureOcrVariable:
+                type: object
+                nullable: true
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type: string
+                    example: example
+                required:
+                - id
+                - name
+            required:
+            - type
+            - fileUrl
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - CREATE_RECORD_ACTIVITY
+                example: CREATE_RECORD_ACTIVITY
+              recordTypeId:
+                nullable: true
+                type: object
+              rowId:
+                type: string
+                nullable: true
+                example: example
+              activityType:
+                type: string
+                nullable: true
+                enum:
+                - NOTE
+                - EMAIL
+                - PHONE_CALL
+                - MEETING
+                - WHATSAPP
+                example: NOTE
+              content:
+                type: string
+                nullable: true
+                example: example
+            required:
+            - type
+          - nullable: true
+            type: object
+        workflowId:
+          type: string
+          example: example
+        handles:
+          type: array
+          items:
+            type: object
+            properties:
+              handleId:
+                type: string
+                example: example
+              sourceEdge:
+                type: object
+                properties:
+                  from:
+                    type: string
+                    example: example
+                  fromHandleId:
+                    type: string
+                    example: example
+                  to:
+                    type: string
+                    example: example
+                  toHandleId:
+                    type: string
+                    example: example
+                required:
+                - from
+                - fromHandleId
+                - to
+                - toHandleId
+              text:
+                type: string
+                example: example
+            required:
+            - handleId
+            - sourceEdge
+            - text
+        targetEdges:
+          type: array
+          items:
+            type: object
+            properties:
+              from:
+                type: string
+                example: example
+              fromHandleId:
+                type: string
+                example: example
+              to:
+                type: string
+                example: example
+              toHandleId:
+                type: string
+                example: example
+            required:
+            - from
+            - fromHandleId
+            - to
+            - toHandleId
+        createdAt:
+          type: string
+          nullable: true
+          example: example
+        updatedAt:
+          type: string
+          nullable: true
+          example: example
+      required:
+      - nodeId
+      - position
+      - type
+    DynamicTablesQuery:
+      anyOf:
+      - $ref: '#/components/schemas/DynamicTablesQueryCondition'
+      - $ref: '#/components/schemas/DynamicTablesQueryGroup'
+      - nullable: true
+        type: object
+    PublicWorkflowLogDetail:
+      allOf:
+      - $ref: '#/components/schemas/PublicWorkflowLog'
+      - type: object
+        properties:
+          node_results:
+            type: array
+            nullable: true
+            items:
+              $ref: '#/components/schemas/PublicWorkflowLogNodeResult'
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicWorkflowEdgeInput:
+      type: object
+      properties:
+        edge:
+          type: object
+          properties:
+            source:
+              type: string
+              example: trigger_1
+            sourceHandle:
+              type: string
+              example: default
+            target:
+              type: string
+              example: api_1
+            targetHandle:
+              type: string
+              example: default
+          required:
+          - source
+          - sourceHandle
+          - target
+          - targetHandle
+      required:
+      - edge
+    PublicWorkflowCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Daily CRM Sync
+        description:
+          type: string
+          nullable: true
+          example: Syncs contacts daily
+      required:
+      - name
+    Workflow:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 501
+        name:
+          type: string
+          example: Daily CRM Sync
+        description:
+          type: string
+          nullable: true
+          example: Syncs contacts to HubSpot
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          - DRAFT
+          example: ACTIVE
+        triggerType:
+          type: string
+          nullable: true
+          enum:
+          - CONVERSATION_ENDED
+          - CONTACT_CREATED
+          - CONTACT_UPDATED
+          - FEEDBACK_CAPTURED
+          - INCOMING_WEBHOOK
+          - TABLE_ROW_CREATED
+          - OBJECT_RECORD_CREATED
+          - TABLE_ROW_UPDATED
+          - OBJECT_RECORD_UPDATED
+          - SCHEDULED_TRIGGER
+          - CONVERSATION_IDLE
+          - COMPOSIO_TRIGGER
+          example: CONVERSATION_ENDED
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        runsCount:
+          type: number
+          example: 1200
+        runsFailedCount:
+          type: number
+          example: 5
+        lastRunDate:
+          type: string
+          nullable: true
+          example: '2024-01-01T12:00:00Z'
+      required:
+      - id
+      - name
+      - description
+      - status
+      - triggerType
+      - createdAt
+      - updatedAt
+      - runsCount
+      - runsFailedCount
+      - lastRunDate
+    PublicWorkflowLogNodeResult:
+      type: object
+      properties:
+        node_id:
+          type: string
+          example: example
+        alias:
+          type: string
+          nullable: true
+          example: example
+        type:
+          type: string
+          nullable: true
+          example: example
+        success:
+          type: boolean
+          example: false
+        error:
+          type: string
+          nullable: true
+          example: example
+        ai_credits:
+          type: number
+          nullable: true
+          example: 1
+        created_at:
+          type: string
+          example: example
+      required:
+      - node_id
+      - success
+      - created_at
+    PublicWorkflowNodeUpdateInput:
+      type: object
+      properties:
+        node:
+          $ref: '#/components/schemas/PublicWorkflowNodePatch'
+      required:
+      - node
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Tools
+  - Incoming Webhooks
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing

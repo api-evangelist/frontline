@@ -1,0 +1,252 @@
+openapi: 3.0.0
+info:
+  title: Public Account Agents API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Agents
+  description: 'Agent runtime data: conversations and transcripts'
+paths:
+  /public/v1/agents/{agentId}/conversations:
+    get:
+      summary: List agent conversations
+      operationId: listAgentConversations
+      description: Lists conversations for an agent (basic fields). Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agents
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          example: 'true'
+        required: false
+        name: is_closed
+        in: query
+      - schema:
+          type: string
+          nullable: true
+          example: '2026-01-01'
+        required: false
+        name: start_date
+        in: query
+      - schema:
+          type: string
+          nullable: true
+          example: '2026-12-31'
+        required: false
+        name: end_date
+        in: query
+      responses:
+        '200':
+          description: A list of conversations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicConversation'
+                required:
+                - results
+                description: Standard list response
+  /public/v1/agents/{agentId}/conversations/{conversationId}:
+    get:
+      summary: Get a conversation transcript
+      operationId: getAgentConversation
+      description: Returns a conversation with its message transcript (basic fields). Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agents
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type: number
+          nullable: true
+          example: 42
+        required: false
+        name: conversationId
+        in: path
+      responses:
+        '200':
+          description: The conversation transcript
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicConversationTranscript'
+components:
+  schemas:
+    PublicConversationMessage:
+      type: object
+      properties:
+        id:
+          type: number
+          nullable: true
+          example: 1
+        role:
+          type: string
+          example: USER
+        type:
+          type: string
+          example: MESSAGE
+        text:
+          type: string
+          nullable: true
+          example: example
+        created_at:
+          type: string
+          example: example
+      required:
+      - role
+      - type
+      - created_at
+    PublicConversationTranscript:
+      allOf:
+      - $ref: '#/components/schemas/PublicConversation'
+      - type: object
+        properties:
+          messages:
+            type: array
+            items:
+              $ref: '#/components/schemas/PublicConversationMessage'
+        required:
+        - messages
+    PublicConversation:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 42
+        name:
+          type: string
+          nullable: true
+          example: Anonymous Visitor
+        channel:
+          type: string
+          example: API
+        is_closed:
+          type: boolean
+          example: false
+        contact_id:
+          type: string
+          nullable: true
+          example: example
+        created_at:
+          type: string
+          example: example
+        updated_at:
+          type: string
+          nullable: true
+          example: example
+      required:
+      - id
+      - channel
+      - is_closed
+      - created_at
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Tools
+  - Incoming Webhooks
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing

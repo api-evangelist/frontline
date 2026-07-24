@@ -1,0 +1,3364 @@
+openapi: 3.0.0
+info:
+  title: Public Account Agent Builder API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Agent Builder
+  description: View and manage your AI agents across your account
+paths:
+  /public/v1/agents:
+    get:
+      summary: List all agents
+      operationId: listAgents
+      description: Returns a list of agents associated with the account.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - NONE
+          - ACTIVE
+          - INACTIVE
+          - TRAINING
+          - TRAIN_ERROR
+          example: ACTIVE
+        required: false
+        name: status
+        in: query
+      responses:
+        '200':
+          description: A list of agents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Agent'
+                required:
+                - results
+                description: Standard list response
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create an agent
+      operationId: createAgent
+      description: Creates an assistant with the internal defaults for theme, channels, settings, flow, and billing checks. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAgentCreateInput'
+      responses:
+        '201':
+          description: Created agent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/agents/{agentId}:
+    get:
+      summary: Get agent details
+      operationId: getAgent
+      description: Returns a safe agent detail without secret key or HMAC fields.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      responses:
+        '200':
+          description: Agent details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDetail'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update an agent
+      operationId: updateAgent
+      description: Updates basic agent metadata. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAgentUpdateInput'
+      responses:
+        '200':
+          description: Updated agent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDetail'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete an agent
+      operationId: deleteAgent
+      description: Soft deletes an agent using the assistant manager. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      responses:
+        '204':
+          description: Agent deleted
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/agents/{agentId}/agent-setting:
+    get:
+      summary: Get agent setting
+      operationId: getAgentSetting
+      description: Returns safe agent model, instruction, tool, playbook, and connected-account settings.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      responses:
+        '200':
+          description: Agent setting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentSetting'
+    put:
+      summary: Update agent setting
+      operationId: updateAgentSetting
+      description: Updates instructions, model, tools, playbooks, connected accounts, and system tool settings. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAgentSettingUpdateInput'
+      responses:
+        '200':
+          description: Updated agent setting
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentSetting'
+  /public/v1/agents/{agentId}/theme:
+    get:
+      summary: Get agent theme
+      operationId: getAgentTheme
+      description: Returns textual and color theme settings. Image uploads are not exposed in the public builder.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      responses:
+        '200':
+          description: Agent theme
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentTheme'
+    put:
+      summary: Update agent theme
+      operationId: updateAgentTheme
+      description: Updates textual and color theme settings. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAgentThemeUpdateInput'
+      responses:
+        '200':
+          description: Updated agent theme
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAgentThemeUpdateOutput'
+  /public/v1/agents/{agentId}/deployment-status:
+    put:
+      summary: Update agent deployment status
+      operationId: updateAgentDeploymentStatus
+      description: Publishes or pauses an agent by changing isOffline. Requires a USER API key and runs billing checks.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAgentDeploymentStatusInput'
+      responses:
+        '200':
+          description: Updated agent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentDetail'
+  /public/v1/agents/{agentId}/settings:
+    get:
+      summary: Get all agent channel settings
+      operationId: getAgentChannelSettings
+      description: Returns livechat, WhatsApp, Instagram, and Messenger channel settings.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      responses:
+        '200':
+          description: Channel settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentChannelSettings'
+  /public/v1/agents/{agentId}/settings/livechat:
+    get:
+      summary: Get livechat settings
+      operationId: getAgentlivechatSettings
+      description: Returns livechat channel settings for an agent.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      responses:
+        '200':
+          description: Channel settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  splitMessages:
+                    type: boolean
+                    example: false
+                  splitCharacterLimit:
+                    type: integer
+                    example: 1
+                  closeAfter:
+                    type: number
+                    nullable: true
+                    example: 1
+                  timeUnit:
+                    type: string
+                    nullable: true
+                    enum:
+                    - MINUTES
+                    - HOURS
+                    example: MINUTES
+                  conversationClose:
+                    type: string
+                    enum:
+                    - NEVER
+                    - AUTOMATICALLY
+                    - DYNAMICALLY
+                    example: NEVER
+                  collectFeedback:
+                    type: boolean
+                    example: false
+                  feedbackVisibility:
+                    type: string
+                    enum:
+                    - ON_HOVER
+                    - ALWAYS_VISIBLE
+                    example: ON_HOVER
+                  feedbackText:
+                    type: string
+                    nullable: true
+                    example: example
+                  collectFeedbackReason:
+                    type: boolean
+                    example: false
+                  includeOtherReason:
+                    type: boolean
+                    example: false
+                  openFeedbackText:
+                    type: string
+                    nullable: true
+                    example: example
+                  feedbackReasons:
+                    type: array
+                    nullable: true
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        reason:
+                          type: string
+                          example: example
+                        order:
+                          type: number
+                          example: 1
+                      required:
+                      - id
+                      - reason
+                      - order
+                  enableDocumentProcessing:
+                    type: boolean
+                    example: false
+                  enableImageProcessing:
+                    type: boolean
+                    example: false
+                  enableIdle:
+                    type: boolean
+                    example: false
+                  idleSettings:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      after:
+                        type: number
+                        nullable: true
+                        example: 1
+                      timeUnit:
+                        type: string
+                        nullable: true
+                        enum:
+                        - MINUTES
+                        - HOURS
+                        example: MINUTES
+                      resetsLimit:
+                        type: number
+                        nullable: true
+                        example: 1
+                    required:
+                    - after
+                    - timeUnit
+                    - resetsLimit
+                required:
+                - splitMessages
+                - splitCharacterLimit
+                - closeAfter
+                - timeUnit
+                - conversationClose
+                - collectFeedback
+                - feedbackVisibility
+                - feedbackText
+                - collectFeedbackReason
+                - includeOtherReason
+                - openFeedbackText
+                - enableIdle
+    put:
+      summary: Update livechat settings
+      operationId: updateAgentlivechatSettings
+      description: Updates livechat channel settings. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                splitMessages:
+                  type: boolean
+                  example: false
+                splitCharacterLimit:
+                  type: integer
+                  example: 1
+                conversationClose:
+                  type: string
+                  enum:
+                  - NEVER
+                  - AUTOMATICALLY
+                  - DYNAMICALLY
+                  example: NEVER
+                closeAfter:
+                  type: integer
+                  nullable: true
+                  example: 1
+                timeUnit:
+                  type: string
+                  nullable: true
+                  enum:
+                  - MINUTES
+                  - HOURS
+                  example: MINUTES
+                collectFeedback:
+                  type: boolean
+                  example: false
+                feedbackVisibility:
+                  type: string
+                  enum:
+                  - ON_HOVER
+                  - ALWAYS_VISIBLE
+                  example: ON_HOVER
+                feedbackText:
+                  type: string
+                  nullable: true
+                  minLength: 1
+                  maxLength: 45
+                  example: example
+                collectFeedbackReason:
+                  type: boolean
+                  example: false
+                includeOtherReason:
+                  type: boolean
+                  example: false
+                openFeedbackText:
+                  type: string
+                  nullable: true
+                  maxLength: 45
+                  example: example
+                feedbackReasons:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      reason:
+                        type: string
+                        minLength: 1
+                        maxLength: 45
+                        example: example
+                      order:
+                        type: integer
+                        minimum: 0
+                        example: 0
+                    required:
+                    - reason
+                  maxItems: 5
+                enableDocumentProcessing:
+                  type: boolean
+                  example: false
+                enableImageProcessing:
+                  type: boolean
+                  example: false
+                enableIdle:
+                  type: boolean
+                  example: false
+                idleSettings:
+                  type: object
+                  nullable: true
+                  properties:
+                    after:
+                      type: integer
+                      nullable: true
+                      example: 1
+                    timeUnit:
+                      type: string
+                      nullable: true
+                      enum:
+                      - MINUTES
+                      - HOURS
+                      example: MINUTES
+                    resetsLimit:
+                      type: integer
+                      nullable: true
+                      example: 1
+                  required:
+                  - after
+                  - timeUnit
+                  - resetsLimit
+              required:
+              - splitMessages
+              - splitCharacterLimit
+              - conversationClose
+              - closeAfter
+              - timeUnit
+              - collectFeedback
+              - feedbackText
+              - collectFeedbackReason
+              - includeOtherReason
+              - feedbackReasons
+      responses:
+        '200':
+          description: Updated channel settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  splitMessages:
+                    type: boolean
+                    example: false
+                  splitCharacterLimit:
+                    type: integer
+                    example: 1
+                  conversationClose:
+                    type: string
+                    enum:
+                    - NEVER
+                    - AUTOMATICALLY
+                    - DYNAMICALLY
+                    example: NEVER
+                  closeAfter:
+                    type: number
+                    nullable: true
+                    example: 1
+                  timeUnit:
+                    type: string
+                    nullable: true
+                    enum:
+                    - MINUTES
+                    - HOURS
+                    example: MINUTES
+                  collectFeedback:
+                    type: boolean
+                    example: false
+                  feedbackVisibility:
+                    type: string
+                    enum:
+                    - ON_HOVER
+                    - ALWAYS_VISIBLE
+                    example: ON_HOVER
+                  feedbackText:
+                    type: string
+                    nullable: true
+                    example: example
+                  collectFeedbackReason:
+                    type: boolean
+                    example: false
+                  includeOtherReason:
+                    type: boolean
+                    example: false
+                  openFeedbackText:
+                    type: string
+                    nullable: true
+                    example: example
+                  feedbackReasons:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        reason:
+                          type: string
+                          example: example
+                        order:
+                          type: number
+                          example: 1
+                      required:
+                      - id
+                      - reason
+                      - order
+                  enableDocumentProcessing:
+                    type: boolean
+                    example: false
+                  enableImageProcessing:
+                    type: boolean
+                    example: false
+                  enableIdle:
+                    type: boolean
+                    example: false
+                  idleSettings:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      after:
+                        type: number
+                        nullable: true
+                        example: 1
+                      timeUnit:
+                        type: string
+                        nullable: true
+                        enum:
+                        - MINUTES
+                        - HOURS
+                        example: MINUTES
+                      resetsLimit:
+                        type: number
+                        nullable: true
+                        example: 1
+                    required:
+                    - after
+                    - timeUnit
+                    - resetsLimit
+                  conversationInterruptTimeout:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                required:
+                - splitMessages
+                - splitCharacterLimit
+                - conversationClose
+                - closeAfter
+                - timeUnit
+                - collectFeedback
+                - feedbackVisibility
+                - feedbackText
+                - collectFeedbackReason
+                - includeOtherReason
+                - openFeedbackText
+                - enableIdle
+  /public/v1/agents/{agentId}/settings/whatsapp:
+    get:
+      summary: Get whatsapp settings
+      operationId: getAgentwhatsappSettings
+      description: Returns whatsapp channel settings for an agent.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      responses:
+        '200':
+          description: Channel settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  splitMessages:
+                    type: boolean
+                    example: false
+                  splitCharacterLimit:
+                    type: integer
+                    example: 1
+                  closeAfter:
+                    type: number
+                    nullable: true
+                    example: 1
+                  timeUnit:
+                    type: string
+                    nullable: true
+                    enum:
+                    - MINUTES
+                    - HOURS
+                    example: MINUTES
+                  conversationClose:
+                    type: string
+                    nullable: true
+                    enum:
+                    - NEVER
+                    - AUTOMATICALLY
+                    - DYNAMICALLY
+                    example: NEVER
+                  enableDocumentProcessing:
+                    type: boolean
+                    example: false
+                  enableImageProcessing:
+                    type: boolean
+                    example: false
+                  debounce:
+                    type: boolean
+                    example: false
+                  debounceTime:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                  enableIdle:
+                    type: boolean
+                    example: false
+                  idleSettings:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      after:
+                        type: number
+                        nullable: true
+                        example: 1
+                      timeUnit:
+                        type: string
+                        nullable: true
+                        enum:
+                        - MINUTES
+                        - HOURS
+                        example: MINUTES
+                      resetsLimit:
+                        type: number
+                        nullable: true
+                        example: 1
+                    required:
+                    - after
+                    - timeUnit
+                    - resetsLimit
+                  conversationInterruptTimeout:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                  sendCloseMessage:
+                    type: boolean
+                    example: false
+                  closeMessageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    example: STATIC
+                  closeMessage:
+                    type: string
+                    nullable: true
+                    example: example
+                  closeInstruction:
+                    type: string
+                    nullable: true
+                    example: example
+                  autoReplyOnUninterrupt:
+                    type: boolean
+                    example: false
+                required:
+                - splitMessages
+                - splitCharacterLimit
+                - enableIdle
+                - sendCloseMessage
+                - closeMessageType
+    put:
+      summary: Update whatsapp settings
+      operationId: updateAgentwhatsappSettings
+      description: Updates whatsapp channel settings. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                splitMessages:
+                  type: boolean
+                  example: false
+                splitCharacterLimit:
+                  type: integer
+                  example: 1
+                conversationClose:
+                  type: string
+                  enum:
+                  - NEVER
+                  - AUTOMATICALLY
+                  - DYNAMICALLY
+                  example: NEVER
+                closeAfter:
+                  type: integer
+                  nullable: true
+                  example: 1
+                timeUnit:
+                  type: string
+                  nullable: true
+                  enum:
+                  - MINUTES
+                  - HOURS
+                  example: MINUTES
+                enableDocumentProcessing:
+                  type: boolean
+                  example: false
+                enableImageProcessing:
+                  type: boolean
+                  example: false
+                debounce:
+                  type: boolean
+                  example: false
+                debounceTime:
+                  type: integer
+                  minimum: 0
+                  example: 0
+                enableIdle:
+                  type: boolean
+                  example: false
+                idleSettings:
+                  type: object
+                  nullable: true
+                  properties:
+                    after:
+                      type: integer
+                      nullable: true
+                      example: 1
+                    timeUnit:
+                      type: string
+                      nullable: true
+                      enum:
+                      - MINUTES
+                      - HOURS
+                      example: MINUTES
+                    resetsLimit:
+                      type: integer
+                      nullable: true
+                      example: 1
+                  required:
+                  - after
+                  - timeUnit
+                  - resetsLimit
+                conversationInterruptTimeout:
+                  type: integer
+                  minimum: 0
+                  example: 0
+                sendCloseMessage:
+                  type: boolean
+                  example: false
+                closeMessageType:
+                  type: string
+                  enum:
+                  - STATIC
+                  - DYNAMIC
+                  example: STATIC
+                closeMessage:
+                  type: string
+                  nullable: true
+                  example: example
+                closeInstruction:
+                  type: string
+                  nullable: true
+                  example: example
+                autoReplyOnUninterrupt:
+                  type: boolean
+                  example: false
+              required:
+              - splitMessages
+              - splitCharacterLimit
+              - conversationClose
+              - closeAfter
+              - timeUnit
+      responses:
+        '200':
+          description: Updated channel settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  splitMessages:
+                    type: boolean
+                    example: false
+                  splitCharacterLimit:
+                    type: integer
+                    example: 1
+                  conversationClose:
+                    type: string
+                    enum:
+                    - NEVER
+                    - AUTOMATICALLY
+                    - DYNAMICALLY
+                    example: NEVER
+                  closeAfter:
+                    type: integer
+                    nullable: true
+                    example: 1
+                  timeUnit:
+                    type: string
+                    nullable: true
+                    enum:
+                    - MINUTES
+                    - HOURS
+                    example: MINUTES
+                  enableDocumentProcessing:
+                    type: boolean
+                    example: false
+                  enableImageProcessing:
+                    type: boolean
+                    example: false
+                  debounce:
+                    type: boolean
+                    example: false
+                  debounceTime:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                  enableIdle:
+                    type: boolean
+                    example: false
+                  idleSettings:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      after:
+                        type: number
+                        nullable: true
+                        example: 1
+                      timeUnit:
+                        type: string
+                        nullable: true
+                        enum:
+                        - MINUTES
+                        - HOURS
+                        example: MINUTES
+                      resetsLimit:
+                        type: number
+                        nullable: true
+                        example: 1
+                    required:
+                    - after
+                    - timeUnit
+                    - resetsLimit
+                  conversationInterruptTimeout:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                  sendCloseMessage:
+                    type: boolean
+                    example: false
+                  closeMessageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    example: STATIC
+                  closeMessage:
+                    type: string
+                    nullable: true
+                    example: example
+                  closeInstruction:
+                    type: string
+                    nullable: true
+                    example: example
+                  autoReplyOnUninterrupt:
+                    type: boolean
+                    example: false
+                required:
+                - splitMessages
+                - splitCharacterLimit
+                - conversationClose
+                - closeAfter
+                - timeUnit
+                - enableIdle
+                - sendCloseMessage
+                - closeMessageType
+  /public/v1/agents/{agentId}/settings/instagram:
+    get:
+      summary: Get instagram settings
+      operationId: getAgentinstagramSettings
+      description: Returns instagram channel settings for an agent.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      responses:
+        '200':
+          description: Channel settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  splitMessages:
+                    type: boolean
+                    example: false
+                  splitCharacterLimit:
+                    type: integer
+                    example: 1
+                  closeAfter:
+                    type: number
+                    nullable: true
+                    example: 1
+                  timeUnit:
+                    type: string
+                    nullable: true
+                    enum:
+                    - MINUTES
+                    - HOURS
+                    example: MINUTES
+                  conversationClose:
+                    type: string
+                    nullable: true
+                    enum:
+                    - NEVER
+                    - AUTOMATICALLY
+                    - DYNAMICALLY
+                    example: NEVER
+                  enableImageProcessing:
+                    type: boolean
+                    example: false
+                  enableIdle:
+                    type: boolean
+                    example: false
+                  idleSettings:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      after:
+                        type: number
+                        nullable: true
+                        example: 1
+                      timeUnit:
+                        type: string
+                        nullable: true
+                        enum:
+                        - MINUTES
+                        - HOURS
+                        example: MINUTES
+                      resetsLimit:
+                        type: number
+                        nullable: true
+                        example: 1
+                    required:
+                    - after
+                    - timeUnit
+                    - resetsLimit
+                  conversationInterruptTimeout:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                  sendCloseMessage:
+                    type: boolean
+                    example: false
+                  closeMessageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    example: STATIC
+                  closeMessage:
+                    type: string
+                    nullable: true
+                    example: example
+                  closeInstruction:
+                    type: string
+                    nullable: true
+                    example: example
+                  autoReplyOnUninterrupt:
+                    type: boolean
+                    example: false
+                required:
+                - splitMessages
+                - splitCharacterLimit
+                - enableIdle
+                - sendCloseMessage
+                - closeMessageType
+    put:
+      summary: Update instagram settings
+      operationId: updateAgentinstagramSettings
+      description: Updates instagram channel settings. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                splitMessages:
+                  type: boolean
+                  example: false
+                splitCharacterLimit:
+                  type: integer
+                  example: 1
+                conversationClose:
+                  type: string
+                  enum:
+                  - NEVER
+                  - AUTOMATICALLY
+                  - DYNAMICALLY
+                  example: NEVER
+                closeAfter:
+                  type: integer
+                  nullable: true
+                  example: 1
+                timeUnit:
+                  type: string
+                  nullable: true
+                  enum:
+                  - MINUTES
+                  - HOURS
+                  example: MINUTES
+                enableImageProcessing:
+                  type: boolean
+                  example: false
+                enableIdle:
+                  type: boolean
+                  example: false
+                idleSettings:
+                  type: object
+                  nullable: true
+                  properties:
+                    after:
+                      type: integer
+                      nullable: true
+                      example: 1
+                    timeUnit:
+                      type: string
+                      nullable: true
+                      enum:
+                      - MINUTES
+                      - HOURS
+                      example: MINUTES
+                    resetsLimit:
+                      type: integer
+                      nullable: true
+                      example: 1
+                  required:
+                  - after
+                  - timeUnit
+                  - resetsLimit
+                conversationInterruptTimeout:
+                  type: integer
+                  minimum: 0
+                  example: 0
+                sendCloseMessage:
+                  type: boolean
+                  example: false
+                closeMessageType:
+                  type: string
+                  enum:
+                  - STATIC
+                  - DYNAMIC
+                  example: STATIC
+                closeMessage:
+                  type: string
+                  nullable: true
+                  example: example
+                closeInstruction:
+                  type: string
+                  nullable: true
+                  example: example
+                autoReplyOnUninterrupt:
+                  type: boolean
+                  example: false
+              required:
+              - splitMessages
+              - splitCharacterLimit
+              - conversationClose
+              - closeAfter
+              - timeUnit
+      responses:
+        '200':
+          description: Updated channel settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  splitMessages:
+                    type: boolean
+                    example: false
+                  splitCharacterLimit:
+                    type: integer
+                    example: 1
+                  conversationClose:
+                    type: string
+                    enum:
+                    - NEVER
+                    - AUTOMATICALLY
+                    - DYNAMICALLY
+                    example: NEVER
+                  closeAfter:
+                    type: integer
+                    nullable: true
+                    example: 1
+                  timeUnit:
+                    type: string
+                    nullable: true
+                    enum:
+                    - MINUTES
+                    - HOURS
+                    example: MINUTES
+                  enableImageProcessing:
+                    type: boolean
+                    example: false
+                  enableIdle:
+                    type: boolean
+                    example: false
+                  idleSettings:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      after:
+                        type: number
+                        nullable: true
+                        example: 1
+                      timeUnit:
+                        type: string
+                        nullable: true
+                        enum:
+                        - MINUTES
+                        - HOURS
+                        example: MINUTES
+                      resetsLimit:
+                        type: number
+                        nullable: true
+                        example: 1
+                    required:
+                    - after
+                    - timeUnit
+                    - resetsLimit
+                  conversationInterruptTimeout:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                  sendCloseMessage:
+                    type: boolean
+                    example: false
+                  closeMessageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    example: STATIC
+                  closeMessage:
+                    type: string
+                    nullable: true
+                    example: example
+                  closeInstruction:
+                    type: string
+                    nullable: true
+                    example: example
+                  autoReplyOnUninterrupt:
+                    type: boolean
+                    example: false
+                required:
+                - splitMessages
+                - splitCharacterLimit
+                - conversationClose
+                - closeAfter
+                - timeUnit
+                - enableIdle
+                - sendCloseMessage
+                - closeMessageType
+  /public/v1/agents/{agentId}/settings/messenger:
+    get:
+      summary: Get messenger settings
+      operationId: getAgentmessengerSettings
+      description: Returns messenger channel settings for an agent.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      responses:
+        '200':
+          description: Channel settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  splitMessages:
+                    type: boolean
+                    example: false
+                  splitCharacterLimit:
+                    type: integer
+                    example: 1
+                  closeAfter:
+                    type: number
+                    nullable: true
+                    example: 1
+                  timeUnit:
+                    type: string
+                    nullable: true
+                    enum:
+                    - MINUTES
+                    - HOURS
+                    example: MINUTES
+                  conversationClose:
+                    type: string
+                    nullable: true
+                    enum:
+                    - NEVER
+                    - AUTOMATICALLY
+                    - DYNAMICALLY
+                    example: NEVER
+                  enableImageProcessing:
+                    type: boolean
+                    example: false
+                  enableIdle:
+                    type: boolean
+                    example: false
+                  idleSettings:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      after:
+                        type: number
+                        nullable: true
+                        example: 1
+                      timeUnit:
+                        type: string
+                        nullable: true
+                        enum:
+                        - MINUTES
+                        - HOURS
+                        example: MINUTES
+                      resetsLimit:
+                        type: number
+                        nullable: true
+                        example: 1
+                    required:
+                    - after
+                    - timeUnit
+                    - resetsLimit
+                  conversationInterruptTimeout:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                  autoReplyOnUninterrupt:
+                    type: boolean
+                    example: false
+                  sendCloseMessage:
+                    type: boolean
+                    example: false
+                  closeMessageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    example: STATIC
+                  closeMessage:
+                    type: string
+                    nullable: true
+                    example: example
+                  closeInstruction:
+                    type: string
+                    nullable: true
+                    example: example
+                required:
+                - splitMessages
+                - splitCharacterLimit
+                - enableIdle
+                - sendCloseMessage
+                - closeMessageType
+    put:
+      summary: Update messenger settings
+      operationId: updateAgentmessengerSettings
+      description: Updates messenger channel settings. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                splitMessages:
+                  type: boolean
+                  example: false
+                splitCharacterLimit:
+                  type: integer
+                  example: 1
+                conversationClose:
+                  type: string
+                  enum:
+                  - NEVER
+                  - AUTOMATICALLY
+                  - DYNAMICALLY
+                  example: NEVER
+                closeAfter:
+                  type: integer
+                  nullable: true
+                  example: 1
+                timeUnit:
+                  type: string
+                  nullable: true
+                  enum:
+                  - MINUTES
+                  - HOURS
+                  example: MINUTES
+                enableImageProcessing:
+                  type: boolean
+                  example: false
+                enableIdle:
+                  type: boolean
+                  example: false
+                idleSettings:
+                  type: object
+                  nullable: true
+                  properties:
+                    after:
+                      type: integer
+                      nullable: true
+                      example: 1
+                    timeUnit:
+                      type: string
+                      nullable: true
+                      enum:
+                      - MINUTES
+                      - HOURS
+                      example: MINUTES
+                    resetsLimit:
+                      type: integer
+                      nullable: true
+                      example: 1
+                  required:
+                  - after
+                  - timeUnit
+                  - resetsLimit
+                conversationInterruptTimeout:
+                  type: integer
+                  minimum: 0
+                  example: 0
+                sendCloseMessage:
+                  type: boolean
+                  example: false
+                closeMessageType:
+                  type: string
+                  enum:
+                  - STATIC
+                  - DYNAMIC
+                  example: STATIC
+                closeMessage:
+                  type: string
+                  nullable: true
+                  example: example
+                closeInstruction:
+                  type: string
+                  nullable: true
+                  example: example
+                autoReplyOnUninterrupt:
+                  type: boolean
+                  example: false
+              required:
+              - splitMessages
+              - splitCharacterLimit
+              - conversationClose
+              - closeAfter
+              - timeUnit
+      responses:
+        '200':
+          description: Updated channel settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  splitMessages:
+                    type: boolean
+                    example: false
+                  splitCharacterLimit:
+                    type: integer
+                    example: 1
+                  conversationClose:
+                    type: string
+                    enum:
+                    - NEVER
+                    - AUTOMATICALLY
+                    - DYNAMICALLY
+                    example: NEVER
+                  closeAfter:
+                    type: integer
+                    nullable: true
+                    example: 1
+                  timeUnit:
+                    type: string
+                    nullable: true
+                    enum:
+                    - MINUTES
+                    - HOURS
+                    example: MINUTES
+                  enableImageProcessing:
+                    type: boolean
+                    example: false
+                  enableIdle:
+                    type: boolean
+                    example: false
+                  idleSettings:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      after:
+                        type: number
+                        nullable: true
+                        example: 1
+                      timeUnit:
+                        type: string
+                        nullable: true
+                        enum:
+                        - MINUTES
+                        - HOURS
+                        example: MINUTES
+                      resetsLimit:
+                        type: number
+                        nullable: true
+                        example: 1
+                    required:
+                    - after
+                    - timeUnit
+                    - resetsLimit
+                  conversationInterruptTimeout:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                  sendCloseMessage:
+                    type: boolean
+                    example: false
+                  closeMessageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    example: STATIC
+                  closeMessage:
+                    type: string
+                    nullable: true
+                    example: example
+                  closeInstruction:
+                    type: string
+                    nullable: true
+                    example: example
+                  autoReplyOnUninterrupt:
+                    type: boolean
+                    example: false
+                required:
+                - splitMessages
+                - splitCharacterLimit
+                - conversationClose
+                - closeAfter
+                - timeUnit
+                - enableIdle
+                - sendCloseMessage
+                - closeMessageType
+  /public/v1/agents/{agentId}/analytics:
+    get:
+      summary: Get agent analytics
+      operationId: getAgentAnalytics
+      description: Returns credit usage, conversation counts, and conversations breakdown by channel for a specific agent.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Agent Builder
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type: string
+          nullable: true
+          example: '2024-01-01'
+        required: false
+        name: startDate
+        in: query
+      - schema:
+          type: string
+          nullable: true
+          example: '2024-01-01'
+        required: false
+        name: endDate
+        in: query
+      responses:
+        '200':
+          description: Agent analytics data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AgentAnalytics'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    PublicAgentThemeUpdateInput:
+      type: object
+      properties:
+        avatar:
+          type: string
+          nullable: true
+          example: example
+        bubbleImage:
+          type: string
+          nullable: true
+          example: example
+        title:
+          type: string
+          example: example
+        initialMessage:
+          type: string
+          example: example
+        placeholder:
+          type: string
+          example: example
+        bubbleColor:
+          type: string
+          example: example
+        userMessageColor:
+          type: string
+          example: example
+        agentMessageColor:
+          type: string
+          nullable: true
+          example: example
+        bubbleAlignment:
+          type: string
+          enum:
+          - RIGHT
+          - LEFT
+          example: RIGHT
+        progressIndicator:
+          type: string
+          enum:
+          - STATIC
+          - DYNAMIC
+          example: STATIC
+        verticalPositionInPixels:
+          type: number
+          example: 1
+      required:
+      - avatar
+      - bubbleImage
+      - title
+      - initialMessage
+      - placeholder
+      - bubbleColor
+      - userMessageColor
+      - agentMessageColor
+      - bubbleAlignment
+      - progressIndicator
+      - verticalPositionInPixels
+    PublicAgentUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 256
+          example: Support Agent
+      required:
+      - name
+    AgentAnalytics:
+      type: object
+      properties:
+        summary:
+          type: object
+          properties:
+            totalCredits:
+              type: number
+              example: 500.25
+            totalConversations:
+              type: number
+              example: 150
+          required:
+          - totalCredits
+          - totalConversations
+        creditsByDate:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                example: '2024-01-01'
+              totalCredits:
+                type: number
+                example: 25.5
+              conversationCount:
+                type: number
+                example: 10
+            required:
+            - date
+            - totalCredits
+            - conversationCount
+        conversationsByChannel:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                example: '2024-01-15'
+              channel:
+                type: string
+                example: WHATSAPP
+              count:
+                type: number
+                example: 12
+            required:
+            - date
+            - channel
+            - count
+      required:
+      - summary
+      - creditsByDate
+      - conversationsByChannel
+    PublicAgentDeploymentStatusInput:
+      type: object
+      properties:
+        isOffline:
+          type: boolean
+          example: false
+      required:
+      - isOffline
+    AgentDetail:
+      allOf:
+      - $ref: '#/components/schemas/Agent'
+      - type: object
+        properties:
+          isOffline:
+            type: boolean
+            example: false
+          ownerId:
+            type: number
+            example: 1
+          accountId:
+            type: number
+            example: 1
+          theme:
+            $ref: '#/components/schemas/AgentTheme'
+          agentSetting:
+            $ref: '#/components/schemas/AgentSetting'
+          channel:
+            type: object
+            nullable: true
+            properties:
+              id:
+                type: number
+                example: 1
+              channelLiveChat:
+                type: object
+                nullable: true
+                properties:
+                  splitMessages:
+                    type: boolean
+                    example: false
+                  splitCharacterLimit:
+                    type: integer
+                    example: 1
+                  closeAfter:
+                    type: number
+                    nullable: true
+                    example: 1
+                  timeUnit:
+                    type: string
+                    nullable: true
+                    enum:
+                    - MINUTES
+                    - HOURS
+                    example: MINUTES
+                  conversationClose:
+                    type: string
+                    enum:
+                    - NEVER
+                    - AUTOMATICALLY
+                    - DYNAMICALLY
+                    example: NEVER
+                  collectFeedback:
+                    type: boolean
+                    example: false
+                  feedbackVisibility:
+                    type: string
+                    enum:
+                    - ON_HOVER
+                    - ALWAYS_VISIBLE
+                    example: ON_HOVER
+                  feedbackText:
+                    type: string
+                    nullable: true
+                    example: example
+                  collectFeedbackReason:
+                    type: boolean
+                    example: false
+                  includeOtherReason:
+                    type: boolean
+                    example: false
+                  openFeedbackText:
+                    type: string
+                    nullable: true
+                    example: example
+                  feedbackReasons:
+                    type: array
+                    nullable: true
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        reason:
+                          type: string
+                          example: example
+                        order:
+                          type: number
+                          example: 1
+                      required:
+                      - id
+                      - reason
+                      - order
+                  enableDocumentProcessing:
+                    type: boolean
+                    example: false
+                  enableImageProcessing:
+                    type: boolean
+                    example: false
+                  enableIdle:
+                    type: boolean
+                    example: false
+                  idleSettings:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      after:
+                        type: number
+                        nullable: true
+                        example: 1
+                      timeUnit:
+                        type: string
+                        nullable: true
+                        enum:
+                        - MINUTES
+                        - HOURS
+                        example: MINUTES
+                      resetsLimit:
+                        type: number
+                        nullable: true
+                        example: 1
+                    required:
+                    - after
+                    - timeUnit
+                    - resetsLimit
+                  id:
+                    type: number
+                    example: 1
+                required:
+                - splitMessages
+                - splitCharacterLimit
+                - closeAfter
+                - timeUnit
+                - conversationClose
+                - collectFeedback
+                - feedbackVisibility
+                - feedbackText
+                - collectFeedbackReason
+                - includeOtherReason
+                - openFeedbackText
+                - enableIdle
+                - id
+              channelWhatsapp:
+                type: object
+                nullable: true
+                properties:
+                  splitMessages:
+                    type: boolean
+                    example: false
+                  splitCharacterLimit:
+                    type: integer
+                    example: 1
+                  closeAfter:
+                    type: number
+                    nullable: true
+                    example: 1
+                  timeUnit:
+                    type: string
+                    nullable: true
+                    enum:
+                    - MINUTES
+                    - HOURS
+                    example: MINUTES
+                  conversationClose:
+                    type: string
+                    nullable: true
+                    enum:
+                    - NEVER
+                    - AUTOMATICALLY
+                    - DYNAMICALLY
+                    example: NEVER
+                  enableDocumentProcessing:
+                    type: boolean
+                    example: false
+                  enableImageProcessing:
+                    type: boolean
+                    example: false
+                  debounce:
+                    type: boolean
+                    example: false
+                  debounceTime:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                  enableIdle:
+                    type: boolean
+                    example: false
+                  idleSettings:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      after:
+                        type: number
+                        nullable: true
+                        example: 1
+                      timeUnit:
+                        type: string
+                        nullable: true
+                        enum:
+                        - MINUTES
+                        - HOURS
+                        example: MINUTES
+                      resetsLimit:
+                        type: number
+                        nullable: true
+                        example: 1
+                    required:
+                    - after
+                    - timeUnit
+                    - resetsLimit
+                  conversationInterruptTimeout:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                  sendCloseMessage:
+                    type: boolean
+                    example: false
+                  closeMessageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    example: STATIC
+                  closeMessage:
+                    type: string
+                    nullable: true
+                    example: example
+                  closeInstruction:
+                    type: string
+                    nullable: true
+                    example: example
+                  autoReplyOnUninterrupt:
+                    type: boolean
+                    example: false
+                  id:
+                    type: number
+                    example: 1
+                required:
+                - splitMessages
+                - splitCharacterLimit
+                - enableIdle
+                - sendCloseMessage
+                - closeMessageType
+                - id
+              channelInstagram:
+                type: object
+                nullable: true
+                properties:
+                  splitMessages:
+                    type: boolean
+                    example: false
+                  splitCharacterLimit:
+                    type: integer
+                    example: 1
+                  closeAfter:
+                    type: number
+                    nullable: true
+                    example: 1
+                  timeUnit:
+                    type: string
+                    nullable: true
+                    enum:
+                    - MINUTES
+                    - HOURS
+                    example: MINUTES
+                  conversationClose:
+                    type: string
+                    nullable: true
+                    enum:
+                    - NEVER
+                    - AUTOMATICALLY
+                    - DYNAMICALLY
+                    example: NEVER
+                  enableImageProcessing:
+                    type: boolean
+                    example: false
+                  enableIdle:
+                    type: boolean
+                    example: false
+                  idleSettings:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      after:
+                        type: number
+                        nullable: true
+                        example: 1
+                      timeUnit:
+                        type: string
+                        nullable: true
+                        enum:
+                        - MINUTES
+                        - HOURS
+                        example: MINUTES
+                      resetsLimit:
+                        type: number
+                        nullable: true
+                        example: 1
+                    required:
+                    - after
+                    - timeUnit
+                    - resetsLimit
+                  conversationInterruptTimeout:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                  sendCloseMessage:
+                    type: boolean
+                    example: false
+                  closeMessageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    example: STATIC
+                  closeMessage:
+                    type: string
+                    nullable: true
+                    example: example
+                  closeInstruction:
+                    type: string
+                    nullable: true
+                    example: example
+                  autoReplyOnUninterrupt:
+                    type: boolean
+                    example: false
+                  id:
+                    type: number
+                    example: 1
+                required:
+                - splitMessages
+                - splitCharacterLimit
+                - enableIdle
+                - sendCloseMessage
+                - closeMessageType
+                - id
+              channelMessenger:
+                type: object
+                nullable: true
+                properties:
+                  splitMessages:
+                    type: boolean
+                    example: false
+                  splitCharacterLimit:
+                    type: integer
+                    example: 1
+                  closeAfter:
+                    type: number
+                    nullable: true
+                    example: 1
+                  timeUnit:
+                    type: string
+                    nullable: true
+                    enum:
+                    - MINUTES
+                    - HOURS
+                    example: MINUTES
+                  conversationClose:
+                    type: string
+                    nullable: true
+                    enum:
+                    - NEVER
+                    - AUTOMATICALLY
+                    - DYNAMICALLY
+                    example: NEVER
+                  enableImageProcessing:
+                    type: boolean
+                    example: false
+                  enableIdle:
+                    type: boolean
+                    example: false
+                  idleSettings:
+                    type: object
+                    nullable: true
+                    properties:
+                      id:
+                        type: number
+                        nullable: true
+                        example: 1
+                      after:
+                        type: number
+                        nullable: true
+                        example: 1
+                      timeUnit:
+                        type: string
+                        nullable: true
+                        enum:
+                        - MINUTES
+                        - HOURS
+                        example: MINUTES
+                      resetsLimit:
+                        type: number
+                        nullable: true
+                        example: 1
+                    required:
+                    - after
+                    - timeUnit
+                    - resetsLimit
+                  conversationInterruptTimeout:
+                    type: integer
+                    minimum: 0
+                    example: 0
+                  autoReplyOnUninterrupt:
+                    type: boolean
+                    example: false
+                  sendCloseMessage:
+                    type: boolean
+                    example: false
+                  closeMessageType:
+                    type: string
+                    enum:
+                    - STATIC
+                    - DYNAMIC
+                    example: STATIC
+                  closeMessage:
+                    type: string
+                    nullable: true
+                    example: example
+                  closeInstruction:
+                    type: string
+                    nullable: true
+                    example: example
+                  id:
+                    type: number
+                    example: 1
+                required:
+                - splitMessages
+                - splitCharacterLimit
+                - enableIdle
+                - sendCloseMessage
+                - closeMessageType
+                - id
+            required:
+            - id
+        required:
+        - isOffline
+        - accountId
+    PublicAgentSettingUpdateInput:
+      type: object
+      properties:
+        aiModelId:
+          type: number
+          nullable: true
+          example: 1
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0
+        instructions:
+          type: string
+          nullable: true
+          example: example
+        maxIterations:
+          type: number
+          minimum: 3
+          maximum: 30
+          default: 10
+          example: 3
+        agentType:
+          type: string
+          enum:
+          - BASIC
+          - ADVANCED
+          default: BASIC
+          example: BASIC
+        customToolIds:
+          type: array
+          nullable: true
+          items:
+            type: number
+            example: 1
+        connectedAccountConfigs:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              connectedAccountId:
+                type: number
+                example: 1
+              useAllTools:
+                type: boolean
+                default: true
+                example: false
+              selectedToolSlugs:
+                type: array
+                nullable: true
+                items:
+                  type: string
+                  example: example
+            required:
+            - connectedAccountId
+        systemToolsConfig:
+          type: object
+          nullable: true
+          properties:
+            webSearchEnabled:
+              type: boolean
+              default: false
+              example: false
+            urlScrapeEnabled:
+              type: boolean
+              default: false
+              example: false
+            linkedinSearchEnabled:
+              type: boolean
+              default: false
+              example: false
+      required:
+      - aiModelId
+      - temperature
+      - instructions
+    AgentTheme:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: number
+          example: 1
+        assistantId:
+          type: string
+          example: example
+        avatar:
+          type: string
+          nullable: true
+          example: example
+        bubbleImage:
+          type: string
+          nullable: true
+          example: example
+        title:
+          type: string
+          example: example
+        initialMessage:
+          type: string
+          example: example
+        placeholder:
+          type: string
+          example: example
+        bubbleColor:
+          type: string
+          example: example
+        userMessageColor:
+          type: string
+          example: example
+        agentMessageColor:
+          type: string
+          nullable: true
+          example: example
+        bubbleAlignment:
+          type: string
+          enum:
+          - RIGHT
+          - LEFT
+          example: RIGHT
+        progressIndicator:
+          type: string
+          enum:
+          - STATIC
+          - DYNAMIC
+          example: STATIC
+        verticalPositionInPixels:
+          type: number
+          example: 1
+        removePowerBy:
+          type: boolean
+          example: false
+        updatedAt:
+          type: string
+          example: example
+      required:
+      - id
+      - avatar
+      - bubbleImage
+      - title
+      - initialMessage
+      - placeholder
+      - bubbleColor
+      - userMessageColor
+      - agentMessageColor
+      - bubbleAlignment
+      - progressIndicator
+      - verticalPositionInPixels
+    AgentSetting:
+      type: object
+      nullable: true
+      properties:
+        id:
+          type: number
+          example: 1
+        aiModelId:
+          type: number
+          nullable: true
+          example: 1
+        aiModel:
+          allOf:
+          - $ref: '#/components/schemas/AiModel'
+          nullable: true
+          type: object
+        model:
+          type: string
+          nullable: true
+          example: example
+        aiType:
+          type: string
+          enum:
+          - ASSISTANT
+          - AGENT
+          example: ASSISTANT
+        temperature:
+          type: number
+          example: 1
+        instructions:
+          type: string
+          nullable: true
+          example: example
+        agentRole:
+          type: string
+          enum:
+          - NONE
+          - CUSTOM
+          - CUSTOMER_SUPPORT
+          - SALES_REPRESENTATIVE
+          - COLLECTIONS
+          - RECRUITING_AGENT
+          - HR_MANAGER
+          - PRODUCT_COPILOT
+          - AI_ASSISTANT
+          - ANALYST
+          - POST_SALES
+          example: NONE
+        toneOfVoice:
+          type: string
+          enum:
+          - NONE
+          - CUSTOM
+          - FRIENDLY
+          - NEUTRAL
+          - MATTER_OF_FACT
+          - PROFESSIONAL
+          - HUMOROUS
+          - WITTY
+          - GEN_Z
+          example: NONE
+        answerLength:
+          type: string
+          enum:
+          - NONE
+          - CUSTOM
+          - DYNAMIC
+          - CONCISE
+          - STANDARD
+          - THOROUGH
+          example: NONE
+        maxIterations:
+          type: number
+          example: 1
+        agentType:
+          type: string
+          enum:
+          - BASIC
+          - ADVANCED
+          example: BASIC
+        customTools:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                example: 1
+              name:
+                type: string
+                example: example
+              description:
+                type: string
+                nullable: true
+                example: example
+              status:
+                type: string
+                nullable: true
+                example: example
+              type:
+                type: string
+                nullable: true
+                example: example
+            required:
+            - id
+            - name
+        systemToolsConfig:
+          nullable: true
+          type: object
+        agentConnectedAccounts:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              connectedAccountId:
+                type: number
+                example: 1
+              useAllTools:
+                type: boolean
+                example: false
+              selectedToolSlugs:
+                type: array
+                nullable: true
+                items:
+                  type: string
+                  example: example
+              connectedAccount:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  toolkit:
+                    type: string
+                    example: example
+                  alias:
+                    type: string
+                    nullable: true
+                    example: example
+                  connectedEmail:
+                    type: string
+                    nullable: true
+                    example: example
+                  isConnected:
+                    type: boolean
+                    example: false
+                required:
+                - id
+                - toolkit
+                - alias
+                - connectedEmail
+                - isConnected
+            required:
+            - connectedAccountId
+            - useAllTools
+        agentPlaybooks:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              playbookId:
+                type: number
+                example: 1
+              assignedAt:
+                type: string
+                example: example
+              playbook:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type: string
+                    nullable: true
+                    example: example
+                required:
+                - id
+                - name
+            required:
+            - playbookId
+      required:
+      - id
+    AiModel:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: example
+        description:
+          type: string
+          nullable: true
+          example: example
+        creditsPerMessage:
+          type: number
+          example: 1
+        isDefault:
+          type: boolean
+          example: false
+        order:
+          type: number
+          example: 1
+        analyticsColor:
+          type: string
+          nullable: true
+          example: example
+        externalId:
+          type: string
+          nullable: true
+          example: example
+        aiVendor:
+          type: string
+          example: example
+        reasoningModel:
+          type: boolean
+          example: false
+        type:
+          type: string
+          enum:
+          - TEXT
+          - TRANSCRIPTION
+          - FILE_ANALYSIS
+          example: TEXT
+      required:
+      - id
+      - name
+    PublicAgentCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Support Agent
+      required:
+      - name
+    AgentChannelSettings:
+      type: object
+      properties:
+        liveChat:
+          type: object
+          properties:
+            splitMessages:
+              type: boolean
+              example: false
+            splitCharacterLimit:
+              type: integer
+              example: 1
+            closeAfter:
+              type: number
+              nullable: true
+              example: 1
+            timeUnit:
+              type: string
+              nullable: true
+              enum:
+              - MINUTES
+              - HOURS
+              example: MINUTES
+            conversationClose:
+              type: string
+              enum:
+              - NEVER
+              - AUTOMATICALLY
+              - DYNAMICALLY
+              example: NEVER
+            collectFeedback:
+              type: boolean
+              example: false
+            feedbackVisibility:
+              type: string
+              enum:
+              - ON_HOVER
+              - ALWAYS_VISIBLE
+              example: ON_HOVER
+            feedbackText:
+              type: string
+              nullable: true
+              example: example
+            collectFeedbackReason:
+              type: boolean
+              example: false
+            includeOtherReason:
+              type: boolean
+              example: false
+            openFeedbackText:
+              type: string
+              nullable: true
+              example: example
+            feedbackReasons:
+              type: array
+              nullable: true
+              items:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  reason:
+                    type: string
+                    example: example
+                  order:
+                    type: number
+                    example: 1
+                required:
+                - id
+                - reason
+                - order
+            enableDocumentProcessing:
+              type: boolean
+              example: false
+            enableImageProcessing:
+              type: boolean
+              example: false
+            enableIdle:
+              type: boolean
+              example: false
+            idleSettings:
+              type: object
+              nullable: true
+              properties:
+                id:
+                  type: number
+                  nullable: true
+                  example: 1
+                after:
+                  type: number
+                  nullable: true
+                  example: 1
+                timeUnit:
+                  type: string
+                  nullable: true
+                  enum:
+                  - MINUTES
+                  - HOURS
+                  example: MINUTES
+                resetsLimit:
+                  type: number
+                  nullable: true
+                  example: 1
+              required:
+              - after
+              - timeUnit
+              - resetsLimit
+          required:
+          - splitMessages
+          - splitCharacterLimit
+          - closeAfter
+          - timeUnit
+          - conversationClose
+          - collectFeedback
+          - feedbackVisibility
+          - feedbackText
+          - collectFeedbackReason
+          - includeOtherReason
+          - openFeedbackText
+          - enableIdle
+        whatsApp:
+          type: object
+          properties:
+            splitMessages:
+              type: boolean
+              example: false
+            splitCharacterLimit:
+              type: integer
+              example: 1
+            closeAfter:
+              type: number
+              nullable: true
+              example: 1
+            timeUnit:
+              type: string
+              nullable: true
+              enum:
+              - MINUTES
+              - HOURS
+              example: MINUTES
+            conversationClose:
+              type: string
+              nullable: true
+              enum:
+              - NEVER
+              - AUTOMATICALLY
+              - DYNAMICALLY
+              example: NEVER
+            enableDocumentProcessing:
+              type: boolean
+              example: false
+            enableImageProcessing:
+              type: boolean
+              example: false
+            debounce:
+              type: boolean
+              example: false
+            debounceTime:
+              type: integer
+              minimum: 0
+              example: 0
+            enableIdle:
+              type: boolean
+              example: false
+            idleSettings:
+              type: object
+              nullable: true
+              properties:
+                id:
+                  type: number
+                  nullable: true
+                  example: 1
+                after:
+                  type: number
+                  nullable: true
+                  example: 1
+                timeUnit:
+                  type: string
+                  nullable: true
+                  enum:
+                  - MINUTES
+                  - HOURS
+                  example: MINUTES
+                resetsLimit:
+                  type: number
+                  nullable: true
+                  example: 1
+              required:
+              - after
+              - timeUnit
+              - resetsLimit
+            conversationInterruptTimeout:
+              type: integer
+              minimum: 0
+              example: 0
+            sendCloseMessage:
+              type: boolean
+              example: false
+            closeMessageType:
+              type: string
+              enum:
+              - STATIC
+              - DYNAMIC
+              example: STATIC
+            closeMessage:
+              type: string
+              nullable: true
+              example: example
+            closeInstruction:
+              type: string
+              nullable: true
+              example: example
+            autoReplyOnUninterrupt:
+              type: boolean
+              example: false
+          required:
+          - splitMessages
+          - splitCharacterLimit
+          - enableIdle
+          - sendCloseMessage
+          - closeMessageType
+        instagram:
+          type: object
+          properties:
+            splitMessages:
+              type: boolean
+              example: false
+            splitCharacterLimit:
+              type: integer
+              example: 1
+            closeAfter:
+              type: number
+              nullable: true
+              example: 1
+            timeUnit:
+              type: string
+              nullable: true
+              enum:
+              - MINUTES
+              - HOURS
+              example: MINUTES
+            conversationClose:
+              type: string
+              nullable: true
+              enum:
+              - NEVER
+              - AUTOMATICALLY
+              - DYNAMICALLY
+              example: NEVER
+            enableImageProcessing:
+              type: boolean
+              example: false
+            enableIdle:
+              type: boolean
+              example: false
+            idleSettings:
+              type: object
+              nullable: true
+              properties:
+                id:
+                  type: number
+                  nullable: true
+                  example: 1
+                after:
+                  type: number
+                  nullable: true
+                  example: 1
+                timeUnit:
+                  type: string
+                  nullable: true
+                  enum:
+                  - MINUTES
+                  - HOURS
+                  example: MINUTES
+                resetsLimit:
+                  type: number
+                  nullable: true
+                  example: 1
+              required:
+              - after
+              - timeUnit
+              - resetsLimit
+            conversationInterruptTimeout:
+              type: integer
+              minimum: 0
+              example: 0
+            sendCloseMessage:
+              type: boolean
+              example: false
+            closeMessageType:
+              type: string
+              enum:
+              - STATIC
+              - DYNAMIC
+              example: STATIC
+            closeMessage:
+              type: string
+              nullable: true
+              example: example
+            closeInstruction:
+              type: string
+              nullable: true
+              example: example
+            autoReplyOnUninterrupt:
+              type: boolean
+              example: false
+          required:
+          - splitMessages
+          - splitCharacterLimit
+          - enableIdle
+          - sendCloseMessage
+          - closeMessageType
+        messenger:
+          type: object
+          properties:
+            splitMessages:
+              type: boolean
+              example: false
+            splitCharacterLimit:
+              type: integer
+              example: 1
+            closeAfter:
+              type: number
+              nullable: true
+              example: 1
+            timeUnit:
+              type: string
+              nullable: true
+              enum:
+              - MINUTES
+              - HOURS
+              example: MINUTES
+            conversationClose:
+              type: string
+              nullable: true
+              enum:
+              - NEVER
+              - AUTOMATICALLY
+              - DYNAMICALLY
+              example: NEVER
+            enableImageProcessing:
+              type: boolean
+              example: false
+            enableIdle:
+              type: boolean
+              example: false
+            idleSettings:
+              type: object
+              nullable: true
+              properties:
+                id:
+                  type: number
+                  nullable: true
+                  example: 1
+                after:
+                  type: number
+                  nullable: true
+                  example: 1
+                timeUnit:
+                  type: string
+                  nullable: true
+                  enum:
+                  - MINUTES
+                  - HOURS
+                  example: MINUTES
+                resetsLimit:
+                  type: number
+                  nullable: true
+                  example: 1
+              required:
+              - after
+              - timeUnit
+              - resetsLimit
+            conversationInterruptTimeout:
+              type: integer
+              minimum: 0
+              example: 0
+            autoReplyOnUninterrupt:
+              type: boolean
+              example: false
+            sendCloseMessage:
+              type: boolean
+              example: false
+            closeMessageType:
+              type: string
+              enum:
+              - STATIC
+              - DYNAMIC
+              example: STATIC
+            closeMessage:
+              type: string
+              nullable: true
+              example: example
+            closeInstruction:
+              type: string
+              nullable: true
+              example: example
+          required:
+          - splitMessages
+          - splitCharacterLimit
+          - enableIdle
+          - sendCloseMessage
+          - closeMessageType
+      required:
+      - liveChat
+      - whatsApp
+      - instagram
+      - messenger
+    Agent:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 550e8400-e29b-41d4-a716-446655440000
+        name:
+          type: string
+          example: Support Bot
+        description:
+          type: string
+          nullable: true
+          example: Main customer support agent
+        status:
+          type: string
+          enum:
+          - NONE
+          - ACTIVE
+          - INACTIVE
+          - TRAINING
+          - TRAIN_ERROR
+          example: ACTIVE
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+      required:
+      - id
+      - name
+      - description
+      - status
+      - createdAt
+      - updatedAt
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicAgentThemeUpdateOutput:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        assistantId:
+          type: string
+          example: example
+        avatar:
+          type: string
+          nullable: true
+          example: example
+        bubbleImage:
+          type: string
+          nullable: true
+          example: example
+        title:
+          type: string
+          example: example
+        initialMessage:
+          type: string
+          example: example
+        placeholder:
+          type: string
+          example: example
+        bubbleColor:
+          type: string
+          example: example
+        userMessageColor:
+          type: string
+          example: example
+        agentMessageColor:
+          type: string
+          nullable: true
+          example: example
+        bubbleAlignment:
+          type: string
+          enum:
+          - RIGHT
+          - LEFT
+          example: RIGHT
+        progressIndicator:
+          type: string
+          enum:
+          - STATIC
+          - DYNAMIC
+          example: STATIC
+        verticalPositionInPixels:
+          type: number
+          example: 1
+        updatedAt:
+          type: string
+          example: example
+      required:
+      - id
+      - assistantId
+      - avatar
+      - bubbleImage
+      - title
+      - initialMessage
+      - placeholder
+      - bubbleColor
+      - userMessageColor
+      - agentMessageColor
+      - bubbleAlignment
+      - progressIndicator
+      - verticalPositionInPixels
+      - updatedAt
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Tools
+  - Incoming Webhooks
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing

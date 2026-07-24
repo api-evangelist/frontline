@@ -1,0 +1,449 @@
+openapi: 3.0.0
+info:
+  title: Public Account Workflow Variables API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Workflow Variables
+  description: Manage variables scoped to an automation workflow
+paths:
+  /public/v1/workflows/{workflowId}/variables:
+    get:
+      summary: List workflow variables
+      operationId: listWorkflowVariables
+      description: Lists variables for an automation workflow. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflow Variables
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 501
+        required: false
+        name: workflowId
+        in: path
+      - schema:
+          type: string
+          example: customer
+        required: false
+        name: filterText
+        in: query
+      - schema:
+          anyOf:
+          - type: boolean
+            example: false
+          - type: string
+            example: example
+          example: false
+        required: false
+        name: isDefault
+        in: query
+      responses:
+        '200':
+          description: Paginated variables
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: number
+                    example: 1
+                  pageSize:
+                    type: number
+                    example: 1
+                  pageNum:
+                    type: number
+                    example: 1
+                  totalPages:
+                    type: number
+                    example: 1
+                  cursor:
+                    type: number
+                    example: 1
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Variable'
+                  paginationType:
+                    type: string
+                    enum:
+                    - offset
+                    - cursor
+                    default: offset
+                    example: offset
+                  nextCursor:
+                    anyOf:
+                    - type: string
+                      example: example
+                    - type: number
+                      example: 1
+                    - nullable: true
+                      type: object
+                required:
+                - pageSize
+                - results
+    post:
+      summary: Create workflow variable
+      operationId: createWorkflowVariable
+      description: Creates a variable for an automation workflow. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflow Variables
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 501
+        required: false
+        name: workflowId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicWorkflowVariableCreateInput'
+      responses:
+        '201':
+          description: Created variable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variable'
+  /public/v1/workflows/{workflowId}/variables/all:
+    get:
+      summary: List all workflow variables
+      operationId: listAllWorkflowVariables
+      description: Lists all workflow variables including defaults. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflow Variables
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 501
+        required: false
+        name: workflowId
+        in: path
+      responses:
+        '200':
+          description: Variables
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Variable'
+  /public/v1/workflows/{workflowId}/variables/check-name:
+    get:
+      summary: Check workflow variable name
+      operationId: checkWorkflowVariableName
+      description: Checks whether a variable name exists for a workflow. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflow Variables
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 501
+        required: false
+        name: workflowId
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          example: customer_name
+        required: true
+        name: name
+        in: query
+      responses:
+        '200':
+          description: Name existence
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariableCheckName'
+  /public/v1/workflows/{workflowId}/variables/{variableId}:
+    get:
+      summary: Get workflow variable
+      operationId: getWorkflowVariable
+      description: Manages a single workflow variable. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflow Variables
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 501
+        required: false
+        name: workflowId
+        in: path
+      - schema:
+          type: number
+          nullable: true
+          example: 123
+        required: false
+        name: variableId
+        in: path
+      responses:
+        '200':
+          description: Variable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variable'
+    put:
+      summary: Update workflow variable
+      operationId: updateWorkflowVariable
+      description: Manages a single workflow variable. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflow Variables
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 501
+        required: false
+        name: workflowId
+        in: path
+      - schema:
+          type: number
+          nullable: true
+          example: 123
+        required: false
+        name: variableId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicVariableUpdateInput'
+      responses:
+        '200':
+          description: Variable
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variable'
+    delete:
+      summary: Delete workflow variable
+      operationId: deleteWorkflowVariable
+      description: Manages a single workflow variable. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Workflow Variables
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 501
+        required: false
+        name: workflowId
+        in: path
+      - schema:
+          type: number
+          nullable: true
+          example: 123
+        required: false
+        name: variableId
+        in: path
+      responses:
+        '204':
+          description: Variable deleted
+components:
+  schemas:
+    Variable:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 123
+        name:
+          type: string
+          example: customer_name
+        description:
+          type: string
+          nullable: true
+          example: example
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          example: ACTIVE
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        assistantId:
+          type: string
+          nullable: true
+          example: example
+        automationId:
+          type: number
+          nullable: true
+          example: 1
+        pattern:
+          type: string
+          nullable: true
+          example: example
+        defaultValue:
+          type: string
+          nullable: true
+          example: example
+        isDefault:
+          type: boolean
+          example: false
+      required:
+      - id
+      - name
+      - status
+      - createdAt
+      - updatedAt
+      - isDefault
+    PublicVariableUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: customer_name
+        description:
+          type: string
+          nullable: true
+          example: Customer name captured during the conversation
+        pattern:
+          type: string
+          nullable: true
+          example: ^[A-Za-z ]+$
+      required:
+      - name
+    VariableCheckName:
+      type: object
+      properties:
+        exists:
+          type: boolean
+          example: false
+      required:
+      - exists
+    PublicWorkflowVariableCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: customer_name
+        description:
+          type: string
+          nullable: true
+          example: Customer name captured during the conversation
+        pattern:
+          type: string
+          nullable: true
+          example: ^[A-Za-z ]+$
+      required:
+      - name
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Tools
+  - Incoming Webhooks
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing

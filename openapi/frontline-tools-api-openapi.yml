@@ -1,0 +1,604 @@
+openapi: 3.0.0
+info:
+  title: Public Account Tools API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Tools
+  description: Manage reusable HTTP integrations callable from flows and workflows
+paths:
+  /public/v1/tools:
+    get:
+      summary: List tools
+      operationId: listTools
+      description: Returns API call tools associated with the account. WhatsApp template tools are not exposed in this public surface.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Tools
+      parameters:
+      - schema:
+          type: string
+          example: contact
+        required: false
+        name: filterText
+        in: query
+      - schema:
+          type: string
+          enum:
+          - ACTIVE
+          - PAUSED
+          example: ACTIVE
+        required: false
+        name: status
+        in: query
+      responses:
+        '200':
+          description: A list of tools
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Tool'
+                required:
+                - results
+                description: Standard list response
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a tool
+      operationId: createTool
+      description: Creates an API call tool. Requires a USER API key. WhatsApp template tools are not supported in the public API.
+      security:
+      - userApiKey: []
+      tags:
+      - Tools
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicToolCreateInput'
+      responses:
+        '201':
+          description: Created tool
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tool'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tools/{toolId}:
+    get:
+      summary: Get tool details
+      operationId: getTool
+      description: Returns an API call tool by ID.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Tools
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 123
+        required: false
+        name: toolId
+        in: path
+      responses:
+        '200':
+          description: Tool details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tool'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a tool
+      operationId: updateTool
+      description: Updates an API call tool. Requires a USER API key. The tool type cannot be changed.
+      security:
+      - userApiKey: []
+      tags:
+      - Tools
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 123
+        required: false
+        name: toolId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicToolUpdateInput'
+      responses:
+        '200':
+          description: Updated tool
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tool'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a tool
+      operationId: deleteTool
+      description: Soft deletes an API call tool. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Tools
+      parameters:
+      - schema:
+          type: number
+          nullable: true
+          example: 123
+        required: false
+        name: toolId
+        in: path
+      responses:
+        '204':
+          description: Tool deleted
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    PublicToolCreateInput:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - API_CALL
+          default: API_CALL
+          example: API_CALL
+        name:
+          type: string
+          minLength: 1
+          maxLength: 256
+          example: Fetch contact
+        description:
+          type: string
+          maxLength: 1000
+          example: Fetches a contact from the external CRM
+        method:
+          type: string
+          enum:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          example: GET
+        url:
+          type: string
+          format: uri
+          example: https://api.example.com/contacts/123
+        body:
+          type: string
+          description: Raw request body template (typically a JSON string). Interpolate argument values with single braces, e.g. {contactName} (not double braces).
+          example: '{"name":"{contactName}"}'
+        arguments:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                minLength: 1
+                example: contactId
+              description:
+                type: string
+                minLength: 1
+                example: The contact ID to fetch
+              dataType:
+                type: string
+                enum:
+                - STRING
+                - NUMBER
+                - DECIMAL
+                - BOOLEAN
+                description: Argument type. Use STRING, NUMBER (covers decimals), or BOOLEAN. DECIMAL is accepted but not shown in the app UI — prefer NUMBER.
+                example: STRING
+            required:
+            - name
+            - dataType
+        headers:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: Authorization
+              value:
+                type: string
+                example: Bearer {apiKey}
+            required:
+            - key
+            - value
+        queryParams:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: limit
+              value:
+                type: string
+                example: '10'
+            required:
+            - key
+            - value
+      required:
+      - name
+      - description
+      - method
+      - url
+    Tool:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 123
+        name:
+          type: string
+          example: Fetch contact
+        description:
+          type: string
+          example: Fetches a contact from the external CRM
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        status:
+          type: string
+          nullable: true
+          enum:
+          - PAUSED
+          - ACTIVE
+          - DELETED
+          example: ACTIVE
+        method:
+          type: string
+          nullable: true
+          enum:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          example: GET
+        url:
+          type: string
+          nullable: true
+          example: https://api.example.com/contacts/123
+        body:
+          type: string
+          nullable: true
+          example: example
+        arguments:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: example
+              description:
+                type: string
+                nullable: true
+                example: example
+              dataType:
+                type: string
+                enum:
+                - STRING
+                - NUMBER
+                - DECIMAL
+                - BOOLEAN
+                example: STRING
+            required:
+            - name
+            - dataType
+        headers:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: Authorization
+              value:
+                type: string
+                example: Bearer {apiKey}
+            required:
+            - key
+            - value
+        queryParams:
+          type: array
+          nullable: true
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: limit
+              value:
+                type: string
+                example: '10'
+            required:
+            - key
+            - value
+        type:
+          type: string
+          enum:
+          - API_CALL
+          - WHATSAPP_TEMPLATE_MESSAGE
+          example: API_CALL
+      required:
+      - id
+      - name
+      - description
+      - createdAt
+      - updatedAt
+      - type
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicToolUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 256
+          example: Fetch contact
+        description:
+          type: string
+          maxLength: 1000
+          example: Fetches a contact from the external CRM
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - PAUSED
+          example: ACTIVE
+        method:
+          type: string
+          enum:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          example: GET
+        url:
+          type: string
+          format: uri
+          example: https://api.example.com/contacts/123
+        body:
+          type: string
+          description: Raw request body template (typically a JSON string). Interpolate argument values with single braces, e.g. {contactName} (not double braces).
+          example: '{"name":"{contactName}"}'
+        arguments:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                minLength: 1
+                example: contactId
+              description:
+                type: string
+                minLength: 1
+                example: The contact ID to fetch
+              dataType:
+                type: string
+                enum:
+                - STRING
+                - NUMBER
+                - DECIMAL
+                - BOOLEAN
+                description: Argument type. Use STRING, NUMBER (covers decimals), or BOOLEAN. DECIMAL is accepted but not shown in the app UI — prefer NUMBER.
+                example: STRING
+            required:
+            - name
+            - dataType
+        headers:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: Authorization
+              value:
+                type: string
+                example: Bearer {apiKey}
+            required:
+            - key
+            - value
+        queryParams:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: limit
+              value:
+                type: string
+                example: '10'
+            required:
+            - key
+            - value
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Tools
+  - Incoming Webhooks
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
