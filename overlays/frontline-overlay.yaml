@@ -1,0 +1,29 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Frontline Public API
+  version: 1.0.0
+extends: openapi/frontline-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-19'
+    x-apievangelist-artifacts:
+    - authentication
+    - errors
+    - conventions
+    - rate-limits
+    - lifecycle
+    - conformance
+    - data-model
+    - mcp
+    - cli
+    - packages
+    - skills
+    - agentic-access
+    - llms
+    x-error-format: custom-envelope { ok:false, error:{ code, message, details } }
+    x-rate-limit: 1000 requests / 60s per account; X-RateLimit-Limit / X-RateLimit-Remaining headers
+- target: $.servers
+  update:
+  - url: https://prod-api.getfrontline.ai
+    description: Production; all Public API paths under /public/v1

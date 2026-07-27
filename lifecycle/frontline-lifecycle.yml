@@ -1,0 +1,22 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.getfrontline.ai/
+versioning:
+  scheme: uri-path
+  current: v1
+  base_path: /public/v1
+  docs: https://docs.getfrontline.ai/reference/openapi
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: No published deprecation policy or RFC 8594 Sunset/Deprecation header support was found.
+client_version_gate:
+  note: >-
+    The API enforces a minimum @getfrontline/cli version — requests from an outdated CLI receive
+    400 cli_outdated with details.minSupportedVersion and an upgrade suggestion.
+sla:
+  url: null
+status_page: null
+status_page_note: No public status page was found (status.getfrontline.ai does not resolve).
+deprecated_operations: []
+deprecated_operations_note: No operations are marked deprecated in the OpenAPI.

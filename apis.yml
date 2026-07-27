@@ -1,25 +1,635 @@
 aid: frontline
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/frontline.png
 name: Frontline
-description: Frontline is a company surfaced as a portfolio company of 500-global and added to the API
-  Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Frontline is an AI-native CRM platform that builds and maintains itself. It unifies customer
+  context from WhatsApp, email, and meetings, ships AI agents (Max) that draft replies, proposals,
+  follow-ups and meeting notes, and a Studio for building an AI workforce for sales and support.
+  The Frontline Public API exposes agents, agent-builder flows, automation workflows, CRM objects
+  and rows, tables, tools, intents, AI models, incoming webhooks, account, and billing over REST at
+  https://prod-api.getfrontline.ai/public/v1, authenticated with GENERAL (account) and USER Bearer
+  API keys. Backed by 500 Global.
 url: https://raw.githubusercontent.com/api-evangelist/frontline/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - 500-global
-x-tier: stub
-x-tier-reason: portfolio-lead
+x-tier: enriched
+x-tier-reason: has-public-api
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
 tags:
 - Company
-apis: []
+- CRM
+- AI Agents
+- Sales Automation
+- Customer Support
+- Workflows
+- Conversational AI
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: frontline:frontline-account-api
+  name: Frontline Account API
+  description: Inspect the identity attached to the current API key
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Account
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-account-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-agent-builder-api
+  name: Frontline Agent Builder API
+  description: View and manage your AI agents across your account
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Agent Builder
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-agent-builder-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-agents-api
+  name: Frontline Agents API
+  description: 'Agent runtime data: conversations and transcripts'
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Agents
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-agents-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-ai-models-api
+  name: Frontline AI Models API
+  description: Discover available AI models for agent configuration
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - AI Models
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-ai-models-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-billing-api
+  name: Frontline Billing API
+  description: View billing plan details, credits, and renewal information
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Billing
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-billing-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-flow-variables-api
+  name: Frontline Flow Variables API
+  description: Manage variables scoped to an agent's flow
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Flow Variables
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-flow-variables-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-flows-api
+  name: Frontline Flows API
+  description: View and manage flows associated with your agents
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Flows
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-flows-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-incoming-webhooks-api
+  name: Frontline Incoming Webhooks API
+  description: Inbound HTTPS endpoints that external systems can post events to
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Incoming Webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-incoming-webhooks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-intents-api
+  name: Frontline Intents API
+  description: Manage agent intents and training phrases
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Intents
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-intents-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-object-activities-api
+  name: Frontline Object activities API
+  description: Manual activities (notes, calls, meetings, emails) attached to object rows
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Object activities
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-object-activities-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-object-aggregations-api
+  name: Frontline Object aggregations API
+  description: Per-view aggregations on objects
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Object aggregations
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-object-aggregations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-object-export-api
+  name: Frontline Object export API
+  description: Export object data as XLSX or CSV
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Object export
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-object-export-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-object-fields-api
+  name: Frontline Object fields API
+  description: Manage columns on an object
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Object fields
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-object-fields-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-object-files-api
+  name: Frontline Object files API
+  description: Files attached to object rows
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Object files
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-object-files-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-object-options-api
+  name: Frontline Object options API
+  description: Manage tag/select options on object fields
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Object options
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-object-options-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-object-record-types-api
+  name: Frontline Object record types API
+  description: Categorize records inside an object
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Object record types
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-object-record-types-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-object-relations-api
+  name: Frontline Object relations API
+  description: Link and unlink records across objects
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Object relations
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-object-relations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-object-rows-api
+  name: Frontline Object rows API
+  description: Read and write object records
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Object rows
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-object-rows-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-object-tasks-api
+  name: Frontline Object tasks API
+  description: Tasks attached to object rows
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Object tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-object-tasks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-object-views-api
+  name: Frontline Object views API
+  description: Saved view configurations on an object
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Object views
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-object-views-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-objects-api
+  name: Frontline Objects API
+  description: Manage CRM objects (standard and custom)
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Objects
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-objects-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-table-activities-api
+  name: Frontline Table activities API
+  description: Manual activities (notes, calls, meetings, emails) attached to table rows
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Table activities
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-table-activities-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-table-aggregations-api
+  name: Frontline Table aggregations API
+  description: Per-view aggregations on tables
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Table aggregations
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-table-aggregations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-table-export-api
+  name: Frontline Table export API
+  description: Export table data as XLSX or CSV
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Table export
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-table-export-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-table-fields-api
+  name: Frontline Table fields API
+  description: Manage columns on a table
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Table fields
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-table-fields-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-table-files-api
+  name: Frontline Table files API
+  description: Files attached to table rows
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Table files
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-table-files-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-table-options-api
+  name: Frontline Table options API
+  description: Manage tag/select options on table fields
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Table options
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-table-options-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-table-rows-api
+  name: Frontline Table rows API
+  description: Read and write table rows
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Table rows
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-table-rows-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-table-tasks-api
+  name: Frontline Table tasks API
+  description: Tasks attached to table rows
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Table tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-table-tasks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-tables-api
+  name: Frontline Tables API
+  description: Manage spreadsheet-style tables
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Tables
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-tables-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-tools-api
+  name: Frontline Tools API
+  description: Manage reusable HTTP integrations callable from flows and workflows
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Tools
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-tools-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-workflow-variables-api
+  name: Frontline Workflow Variables API
+  description: Manage variables scoped to an automation workflow
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Workflow Variables
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-workflow-variables-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-workflows-api
+  name: Frontline Workflows API
+  description: View and manage your workflows across your account
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Workflows
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-workflows-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
 common:
+- type: Authentication
+  url: authentication/frontline-authentication.yml
+- type: Conventions
+  url: conventions/frontline-conventions.yml
+- type: ErrorCatalog
+  url: errors/frontline-problem-types.yml
+- type: RateLimits
+  url: rate-limits/frontline-rate-limits.yml
+- type: Lifecycle
+  url: lifecycle/frontline-lifecycle.yml
+- type: Conformance
+  url: conformance/frontline-conformance.yml
+- type: Compliance
+  url: https://trust.getfrontline.ai/
+- type: TrustCenter
+  url: security/frontline-trust-center.yml
+- type: DomainSecurity
+  url: security/frontline-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/frontline-agentic-access.yml
+- type: MCPServer
+  url: mcp/frontline-mcp.yml
+- type: LLMsTxt
+  url: llms/frontline-llms.txt
+- type: DataModel
+  url: data-model/frontline-data-model.yml
+- type: Overlay
+  url: overlays/frontline-overlay.yaml
+- type: Packages
+  url: packages/frontline-packages.yml
+- type: CLI
+  url: cli/frontline-cli.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Documentation
+  url: https://docs.getfrontline.ai/
+- type: APIReference
+  url: https://frontline-public-api.redocly.app/
+- type: GettingStarted
+  url: https://docs.getfrontline.ai/docs/getting-started
+- type: Pricing
+  url: https://www.getfrontline.ai/pricing
+- type: SignUp
+  url: https://app.getfrontline.ai
+- type: Support
+  url: https://www.getfrontline.ai/help
+- type: TermsOfService
+  url: https://www.getfrontline.ai/terms-of-service
+- type: PrivacyPolicy
+  url: https://www.getfrontline.ai/privacy-policy
+- type: Integrations
+  url: https://www.getfrontline.ai/integrations
 - type: Website
   url: https://getfrontline.ai
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

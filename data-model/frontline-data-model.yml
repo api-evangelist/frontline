@@ -1,0 +1,80 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/frontline-openapi-original.yml
+note: Entity graph derived from OpenAPI component schemas and id-reference fields. IDs are custom-prefixed
+  cuid-style strings (e.g. clx123incomingwebhook); numeric ids also appear (aiModelId, tool ids).
+entities:
+- name: Agent
+  description: Deployable AI agent (Max / Studio) with settings, theme, channel settings, intents and
+    tools.
+- name: Flow
+  description: Agent conversation flow graph (nodes + edges) with flow variables.
+- name: Workflow
+  description: Automation workflow graph (nodes + edges) with triggers, variables, run logs and analytics.
+- name: Object
+  description: CRM object type (People, Companies, Deals, custom) with fields, options, record types,
+    views, relations, rows, activities, tasks, files.
+- name: Table
+  description: Spreadsheet-style dataset with fields, options, rows, activities, tasks, files.
+- name: Intent
+  description: Named intent with training phrases used by agents.
+- name: Tool
+  description: Custom tool an agent can call.
+- name: AiModel
+  description: Available AI model for agents/flows.
+- name: IncomingWebhook
+  description: Inbound HTTPS endpoint external systems POST events to; consumed by workflow WEBHOOK trigger
+    nodes.
+- name: BillingPlan
+  description: Account subscription/credit usage.
+- name: Account
+  description: Tenant account (id, name, namespace); user optionally attached for USER keys.
+relationships:
+- from: AgentSetting
+  to: AiModel
+  kind: belongs_to
+  via: aiModelId
+- from: AgentTheme
+  to: Agent
+  kind: belongs_to
+  via: assistantId
+- from: FlowGraph
+  to: Agent
+  kind: belongs_to
+  via: assistantId
+- from: Intent
+  to: Agent
+  kind: belongs_to
+  via: assistantId
+- from: Intent
+  to: Flow
+  kind: belongs_to
+  via: flowId
+- from: PublicAgentSettingUpdateInput
+  to: AiModel
+  kind: belongs_to
+  via: aiModelId
+- from: PublicAgentSettingUpdateInput
+  to: Tool
+  kind: has_many
+  via: customToolIds
+- from: PublicAgentThemeUpdateOutput
+  to: Agent
+  kind: belongs_to
+  via: assistantId
+- from: PublicFlowNode
+  to: Workflow
+  kind: belongs_to
+  via: workflowId
+- from: PublicWorkflowNode
+  to: Workflow
+  kind: belongs_to
+  via: workflowId
+- from: Variable
+  to: Agent
+  kind: belongs_to
+  via: assistantId
+- from: WorkflowGraph
+  to: Agent
+  kind: belongs_to
+  via: assistantId

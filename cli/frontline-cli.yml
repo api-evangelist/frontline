@@ -1,0 +1,52 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.getfrontline.ai/cli.md
+name: Frontline CLI
+package: '@getfrontline/cli'
+requires: Node 18+
+install:
+- npm install -g @getfrontline/cli
+- npx @getfrontline/cli --help
+auth:
+  login: frontline auth login <api-key>
+  whoami: frontline auth whoami
+  note: >-
+    Reuses the same Public API keys (USER / GENERAL). One login authenticates both the frontline and
+    max binaries. Supports multiple named profiles.
+  profiles:
+  - frontline auth profiles list
+  - frontline auth profiles use <name>
+  - frontline auth logout [--profile <name>]
+output:
+  default: JSON to stdout (pipes into jq)
+  flags:
+  - '--pretty'
+  - '--table'
+  - '--profile <name>'
+binaries:
+- name: frontline
+  description: Public REST API client plus Claude Code skills setup.
+  command_groups:
+  - ai-models
+  - api
+  - auth
+  - billing
+  - agents
+  - incoming-webhooks
+  - integrations
+  - setup
+  - object
+  - table
+  - tools
+  - workflows
+  - util
+- name: max
+  description: Max chat & admin client (send messages, manage conversations, interactive REPL).
+  command_groups:
+  - auth
+  - chat
+  - config-path
+  - conversations
+references:
+- https://docs.getfrontline.ai/cli/getting-started.md
+- https://docs.getfrontline.ai/cli/authentication.md

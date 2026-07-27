@@ -1,0 +1,953 @@
+generated: '2026-07-19'
+method: derived
+status: candidate
+source: openapi/frontline-openapi-original.yml
+note: No official hosted/remote MCP server was found for Frontline as of the generated date. This is a
+  candidate tool surface derived one-tool-per-operation from the public OpenAPI, to seed an MCP server.
+server:
+  name: frontline
+  transport: http
+  base_url: https://prod-api.getfrontline.ai/public/v1
+  auth: Bearer API key (accountApiKey GENERAL or userApiKey USER)
+tool_count: 188
+tools:
+- name: listObjects
+  description: List objects
+  method: GET
+  path: /public/v1/objects
+  source_operation: openapi/frontline-openapi-original.yml#listObjects
+- name: createObject
+  description: Create object
+  method: POST
+  path: /public/v1/objects
+  source_operation: openapi/frontline-openapi-original.yml#createObject
+- name: getObject
+  description: Get object
+  method: GET
+  path: /public/v1/objects/{name}
+  source_operation: openapi/frontline-openapi-original.yml#getObject
+- name: updateObject
+  description: Update object
+  method: PATCH
+  path: /public/v1/objects/{name}
+  source_operation: openapi/frontline-openapi-original.yml#updateObject
+- name: deleteObject
+  description: Delete object
+  method: DELETE
+  path: /public/v1/objects/{name}
+  source_operation: openapi/frontline-openapi-original.yml#deleteObject
+- name: getObjectSchema
+  description: Get object schema
+  method: GET
+  path: /public/v1/objects/{name}/schema
+  source_operation: openapi/frontline-openapi-original.yml#getObjectSchema
+- name: listObjectFields
+  description: List object fields
+  method: GET
+  path: /public/v1/objects/{name}/fields
+  source_operation: openapi/frontline-openapi-original.yml#listObjectFields
+- name: createObjectField
+  description: Create object field
+  method: POST
+  path: /public/v1/objects/{name}/fields
+  source_operation: openapi/frontline-openapi-original.yml#createObjectField
+- name: updateObjectField
+  description: Update object field
+  method: PATCH
+  path: /public/v1/objects/{name}/fields/{fieldId}
+  source_operation: openapi/frontline-openapi-original.yml#updateObjectField
+- name: deleteObjectField
+  description: Delete object field
+  method: DELETE
+  path: /public/v1/objects/{name}/fields/{fieldId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteObjectField
+- name: getObjectFieldFormulaDependencies
+  description: Get object field formula dependencies
+  method: GET
+  path: /public/v1/objects/{name}/fields/{fieldId}/formula-dependencies
+  source_operation: openapi/frontline-openapi-original.yml#getObjectFieldFormulaDependencies
+- name: previewObjectFormula
+  description: Preview formula evaluation
+  method: POST
+  path: /public/v1/objects/{name}/fields/preview-formula
+  source_operation: openapi/frontline-openapi-original.yml#previewObjectFormula
+- name: listObjectFieldOptions
+  description: List field options
+  method: GET
+  path: /public/v1/objects/{name}/fields/{fieldId}/options
+  source_operation: openapi/frontline-openapi-original.yml#listObjectFieldOptions
+- name: createObjectFieldOption
+  description: Create field option
+  method: POST
+  path: /public/v1/objects/{name}/fields/{fieldId}/options
+  source_operation: openapi/frontline-openapi-original.yml#createObjectFieldOption
+- name: updateObjectFieldOption
+  description: Update field option
+  method: PATCH
+  path: /public/v1/objects/{name}/options/{tagId}
+  source_operation: openapi/frontline-openapi-original.yml#updateObjectFieldOption
+- name: deleteObjectFieldOption
+  description: Delete field option
+  method: DELETE
+  path: /public/v1/objects/{name}/options/{tagId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteObjectFieldOption
+- name: listObjectRecordTypes
+  description: List record types
+  method: GET
+  path: /public/v1/objects/{name}/record-types
+  source_operation: openapi/frontline-openapi-original.yml#listObjectRecordTypes
+- name: createObjectRecordType
+  description: Create record type
+  method: POST
+  path: /public/v1/objects/{name}/record-types
+  source_operation: openapi/frontline-openapi-original.yml#createObjectRecordType
+- name: updateObjectRecordType
+  description: Update record type
+  method: PATCH
+  path: /public/v1/objects/{name}/record-types/{recordTypeId}
+  source_operation: openapi/frontline-openapi-original.yml#updateObjectRecordType
+- name: deleteObjectRecordType
+  description: Delete record type
+  method: DELETE
+  path: /public/v1/objects/{name}/record-types/{recordTypeId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteObjectRecordType
+- name: listObjectViews
+  description: List views
+  method: GET
+  path: /public/v1/objects/{name}/views
+  source_operation: openapi/frontline-openapi-original.yml#listObjectViews
+- name: createObjectView
+  description: Create view
+  method: POST
+  path: /public/v1/objects/{name}/views
+  source_operation: openapi/frontline-openapi-original.yml#createObjectView
+- name: createObjectRecordTypeView
+  description: Create record-type-scoped view
+  method: POST
+  path: /public/v1/objects/record-types/{recordTypeId}/views
+  source_operation: openapi/frontline-openapi-original.yml#createObjectRecordTypeView
+- name: updateObjectView
+  description: Update view
+  method: PATCH
+  path: /public/v1/objects/{name}/views/{viewId}
+  source_operation: openapi/frontline-openapi-original.yml#updateObjectView
+- name: deleteObjectView
+  description: Delete view
+  method: DELETE
+  path: /public/v1/objects/{name}/views/{viewId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteObjectView
+- name: updateObjectRecordTypeView
+  description: Update record-type-scoped view
+  method: PATCH
+  path: /public/v1/objects/record-types/{recordTypeId}/views/{viewId}
+  source_operation: openapi/frontline-openapi-original.yml#updateObjectRecordTypeView
+- name: deleteObjectRecordTypeView
+  description: Delete record-type-scoped view
+  method: DELETE
+  path: /public/v1/objects/record-types/{recordTypeId}/views/{viewId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteObjectRecordTypeView
+- name: listObjectRelations
+  description: List related rows
+  method: GET
+  path: /public/v1/objects/{name}/rows/{id}/relations/{relation}
+  source_operation: openapi/frontline-openapi-original.yml#listObjectRelations
+- name: findObjectByRelation
+  description: Find rows by relation target
+  method: GET
+  path: /public/v1/objects/{name}/relations/{relation}/target/{targetId}
+  source_operation: openapi/frontline-openapi-original.yml#findObjectByRelation
+- name: linkObjectRelation
+  description: Link relation
+  method: POST
+  path: /public/v1/objects/{name}/rows/{id}/relations/{relation}/link
+  source_operation: openapi/frontline-openapi-original.yml#linkObjectRelation
+- name: unlinkObjectRelation
+  description: Unlink relation
+  method: POST
+  path: /public/v1/objects/{name}/rows/{id}/relations/{relation}/unlink
+  source_operation: openapi/frontline-openapi-original.yml#unlinkObjectRelation
+- name: listObjectRows
+  description: List rows
+  method: POST
+  path: /public/v1/objects/{name}/rows/list
+  source_operation: openapi/frontline-openapi-original.yml#listObjectRows
+- name: createObjectRow
+  description: Create row
+  method: POST
+  path: /public/v1/objects/{name}/rows
+  source_operation: openapi/frontline-openapi-original.yml#createObjectRow
+- name: createObjectRowsBulk
+  description: Bulk-create rows
+  method: POST
+  path: /public/v1/objects/{name}/rows/bulk
+  source_operation: openapi/frontline-openapi-original.yml#createObjectRowsBulk
+- name: getObjectRow
+  description: Get row
+  method: GET
+  path: /public/v1/objects/{name}/rows/{id}
+  source_operation: openapi/frontline-openapi-original.yml#getObjectRow
+- name: updateObjectRow
+  description: Update row
+  method: PATCH
+  path: /public/v1/objects/{name}/rows/{id}
+  source_operation: openapi/frontline-openapi-original.yml#updateObjectRow
+- name: deleteObjectRow
+  description: Delete row
+  method: DELETE
+  path: /public/v1/objects/{name}/rows/{id}
+  source_operation: openapi/frontline-openapi-original.yml#deleteObjectRow
+- name: countObjectRows
+  description: Count rows
+  method: POST
+  path: /public/v1/objects/{name}/rows/count
+  source_operation: openapi/frontline-openapi-original.yml#countObjectRows
+- name: listObjectAggregations
+  description: List aggregations
+  method: GET
+  path: /public/v1/objects/{name}/views/{viewId}/aggregations
+  source_operation: openapi/frontline-openapi-original.yml#listObjectAggregations
+- name: createObjectAggregation
+  description: Create aggregation
+  method: POST
+  path: /public/v1/objects/{name}/views/{viewId}/aggregations
+  source_operation: openapi/frontline-openapi-original.yml#createObjectAggregation
+- name: updateObjectAggregation
+  description: Update aggregation
+  method: PATCH
+  path: /public/v1/objects/{name}/views/{viewId}/aggregations/{aggId}
+  source_operation: openapi/frontline-openapi-original.yml#updateObjectAggregation
+- name: deleteObjectAggregation
+  description: Delete aggregation
+  method: DELETE
+  path: /public/v1/objects/{name}/views/{viewId}/aggregations/{aggId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteObjectAggregation
+- name: computeObjectAggregations
+  description: Compute aggregations
+  method: POST
+  path: /public/v1/objects/{name}/views/{viewId}/aggregations/compute
+  source_operation: openapi/frontline-openapi-original.yml#computeObjectAggregations
+- name: listObjectActivities
+  description: List activities
+  method: GET
+  path: /public/v1/objects/{name}/rows/{rowId}/activities
+  source_operation: openapi/frontline-openapi-original.yml#listObjectActivities
+- name: createObjectActivity
+  description: Create activity
+  method: POST
+  path: /public/v1/objects/{name}/rows/{rowId}/activities
+  source_operation: openapi/frontline-openapi-original.yml#createObjectActivity
+- name: getObjectActivity
+  description: Get activity
+  method: GET
+  path: /public/v1/objects/{name}/activities/{id}
+  source_operation: openapi/frontline-openapi-original.yml#getObjectActivity
+- name: updateObjectActivity
+  description: Update activity
+  method: PATCH
+  path: /public/v1/objects/{name}/activities/{id}
+  source_operation: openapi/frontline-openapi-original.yml#updateObjectActivity
+- name: deleteObjectActivity
+  description: Delete activity
+  method: DELETE
+  path: /public/v1/objects/{name}/activities/{id}
+  source_operation: openapi/frontline-openapi-original.yml#deleteObjectActivity
+- name: listObjectTasks
+  description: List tasks
+  method: GET
+  path: /public/v1/objects/{name}/rows/{rowId}/tasks
+  source_operation: openapi/frontline-openapi-original.yml#listObjectTasks
+- name: createObjectTask
+  description: Create task
+  method: POST
+  path: /public/v1/objects/{name}/rows/{rowId}/tasks
+  source_operation: openapi/frontline-openapi-original.yml#createObjectTask
+- name: getObjectTask
+  description: Get task
+  method: GET
+  path: /public/v1/objects/{name}/tasks/{id}
+  source_operation: openapi/frontline-openapi-original.yml#getObjectTask
+- name: updateObjectTask
+  description: Update task
+  method: PATCH
+  path: /public/v1/objects/{name}/tasks/{id}
+  source_operation: openapi/frontline-openapi-original.yml#updateObjectTask
+- name: deleteObjectTask
+  description: Delete task
+  method: DELETE
+  path: /public/v1/objects/{name}/tasks/{id}
+  source_operation: openapi/frontline-openapi-original.yml#deleteObjectTask
+- name: completeObjectTask
+  description: Complete task
+  method: POST
+  path: /public/v1/objects/{name}/tasks/{id}/complete
+  source_operation: openapi/frontline-openapi-original.yml#completeObjectTask
+- name: uncompleteObjectTask
+  description: Uncomplete task
+  method: POST
+  path: /public/v1/objects/{name}/tasks/{id}/uncomplete
+  source_operation: openapi/frontline-openapi-original.yml#uncompleteObjectTask
+- name: listObjectFiles
+  description: List files
+  method: GET
+  path: /public/v1/objects/{name}/rows/{rowId}/files
+  source_operation: openapi/frontline-openapi-original.yml#listObjectFiles
+- name: uploadObjectFiles
+  description: Upload files
+  method: POST
+  path: /public/v1/objects/{name}/rows/{rowId}/files
+  source_operation: openapi/frontline-openapi-original.yml#uploadObjectFiles
+- name: getObjectFile
+  description: Get file
+  method: GET
+  path: /public/v1/objects/{name}/files/{id}
+  source_operation: openapi/frontline-openapi-original.yml#getObjectFile
+- name: deleteObjectFile
+  description: Delete file
+  method: DELETE
+  path: /public/v1/objects/{name}/files/{id}
+  source_operation: openapi/frontline-openapi-original.yml#deleteObjectFile
+- name: downloadObjectFile
+  description: Download file
+  method: GET
+  path: /public/v1/objects/{name}/files/{id}/download
+  source_operation: openapi/frontline-openapi-original.yml#downloadObjectFile
+- name: exportObjectXlsx
+  description: Export as XLSX
+  method: POST
+  path: /public/v1/objects/{name}/export/xlsx
+  source_operation: openapi/frontline-openapi-original.yml#exportObjectXlsx
+- name: exportObjectCsv
+  description: Export as CSV
+  method: POST
+  path: /public/v1/objects/{name}/export/csv
+  source_operation: openapi/frontline-openapi-original.yml#exportObjectCsv
+- name: listTables
+  description: List tables
+  method: GET
+  path: /public/v1/tables
+  source_operation: openapi/frontline-openapi-original.yml#listTables
+- name: createTable
+  description: Create table
+  method: POST
+  path: /public/v1/tables
+  source_operation: openapi/frontline-openapi-original.yml#createTable
+- name: getTable
+  description: Get table
+  method: GET
+  path: /public/v1/tables/{name}
+  source_operation: openapi/frontline-openapi-original.yml#getTable
+- name: updateTable
+  description: Update table
+  method: PATCH
+  path: /public/v1/tables/{name}
+  source_operation: openapi/frontline-openapi-original.yml#updateTable
+- name: deleteTable
+  description: Delete table
+  method: DELETE
+  path: /public/v1/tables/{name}
+  source_operation: openapi/frontline-openapi-original.yml#deleteTable
+- name: getTableSchema
+  description: Get table schema
+  method: GET
+  path: /public/v1/tables/{name}/schema
+  source_operation: openapi/frontline-openapi-original.yml#getTableSchema
+- name: listTableFields
+  description: List table fields
+  method: GET
+  path: /public/v1/tables/{name}/fields
+  source_operation: openapi/frontline-openapi-original.yml#listTableFields
+- name: createTableField
+  description: Create table field
+  method: POST
+  path: /public/v1/tables/{name}/fields
+  source_operation: openapi/frontline-openapi-original.yml#createTableField
+- name: updateTableField
+  description: Update table field
+  method: PATCH
+  path: /public/v1/tables/{name}/fields/{fieldId}
+  source_operation: openapi/frontline-openapi-original.yml#updateTableField
+- name: deleteTableField
+  description: Delete table field
+  method: DELETE
+  path: /public/v1/tables/{name}/fields/{fieldId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteTableField
+- name: getTableFieldFormulaDependencies
+  description: Get table field formula dependencies
+  method: GET
+  path: /public/v1/tables/{name}/fields/{fieldId}/formula-dependencies
+  source_operation: openapi/frontline-openapi-original.yml#getTableFieldFormulaDependencies
+- name: previewTableFormula
+  description: Preview formula evaluation
+  method: POST
+  path: /public/v1/tables/{name}/fields/preview-formula
+  source_operation: openapi/frontline-openapi-original.yml#previewTableFormula
+- name: listTableFieldOptions
+  description: List field options
+  method: GET
+  path: /public/v1/tables/{name}/fields/{fieldId}/tags
+  source_operation: openapi/frontline-openapi-original.yml#listTableFieldOptions
+- name: createTableFieldOption
+  description: Create field option
+  method: POST
+  path: /public/v1/tables/{name}/fields/{fieldId}/tags
+  source_operation: openapi/frontline-openapi-original.yml#createTableFieldOption
+- name: updateTableFieldOption
+  description: Update field option
+  method: PATCH
+  path: /public/v1/tables/{name}/tags/{tagId}
+  source_operation: openapi/frontline-openapi-original.yml#updateTableFieldOption
+- name: deleteTableFieldOption
+  description: Delete field option
+  method: DELETE
+  path: /public/v1/tables/{name}/tags/{tagId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteTableFieldOption
+- name: listTableRows
+  description: List rows
+  method: POST
+  path: /public/v1/tables/{name}/rows/list
+  source_operation: openapi/frontline-openapi-original.yml#listTableRows
+- name: createTableRow
+  description: Create row
+  method: POST
+  path: /public/v1/tables/{name}/rows
+  source_operation: openapi/frontline-openapi-original.yml#createTableRow
+- name: createTableRowsBulk
+  description: Bulk-create rows
+  method: POST
+  path: /public/v1/tables/{name}/rows/bulk
+  source_operation: openapi/frontline-openapi-original.yml#createTableRowsBulk
+- name: getTableRow
+  description: Get row
+  method: GET
+  path: /public/v1/tables/{name}/rows/{id}
+  source_operation: openapi/frontline-openapi-original.yml#getTableRow
+- name: updateTableRow
+  description: Update row
+  method: PATCH
+  path: /public/v1/tables/{name}/rows/{id}
+  source_operation: openapi/frontline-openapi-original.yml#updateTableRow
+- name: deleteTableRow
+  description: Delete row
+  method: DELETE
+  path: /public/v1/tables/{name}/rows/{id}
+  source_operation: openapi/frontline-openapi-original.yml#deleteTableRow
+- name: countTableRows
+  description: Count rows
+  method: POST
+  path: /public/v1/tables/{name}/rows/count
+  source_operation: openapi/frontline-openapi-original.yml#countTableRows
+- name: listTableAggregations
+  description: List aggregations
+  method: GET
+  path: /public/v1/tables/{name}/views/{viewId}/aggregations
+  source_operation: openapi/frontline-openapi-original.yml#listTableAggregations
+- name: createTableAggregation
+  description: Create aggregation
+  method: POST
+  path: /public/v1/tables/{name}/views/{viewId}/aggregations
+  source_operation: openapi/frontline-openapi-original.yml#createTableAggregation
+- name: updateTableAggregation
+  description: Update aggregation
+  method: PATCH
+  path: /public/v1/tables/{name}/views/{viewId}/aggregations/{aggId}
+  source_operation: openapi/frontline-openapi-original.yml#updateTableAggregation
+- name: deleteTableAggregation
+  description: Delete aggregation
+  method: DELETE
+  path: /public/v1/tables/{name}/views/{viewId}/aggregations/{aggId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteTableAggregation
+- name: computeTableAggregations
+  description: Compute aggregations
+  method: POST
+  path: /public/v1/tables/{name}/views/{viewId}/aggregations/compute
+  source_operation: openapi/frontline-openapi-original.yml#computeTableAggregations
+- name: listTableActivities
+  description: List activities
+  method: GET
+  path: /public/v1/tables/{name}/rows/{rowId}/activities
+  source_operation: openapi/frontline-openapi-original.yml#listTableActivities
+- name: createTableActivity
+  description: Create activity
+  method: POST
+  path: /public/v1/tables/{name}/rows/{rowId}/activities
+  source_operation: openapi/frontline-openapi-original.yml#createTableActivity
+- name: getTableActivity
+  description: Get activity
+  method: GET
+  path: /public/v1/tables/{name}/activities/{id}
+  source_operation: openapi/frontline-openapi-original.yml#getTableActivity
+- name: updateTableActivity
+  description: Update activity
+  method: PATCH
+  path: /public/v1/tables/{name}/activities/{id}
+  source_operation: openapi/frontline-openapi-original.yml#updateTableActivity
+- name: deleteTableActivity
+  description: Delete activity
+  method: DELETE
+  path: /public/v1/tables/{name}/activities/{id}
+  source_operation: openapi/frontline-openapi-original.yml#deleteTableActivity
+- name: listTableTasks
+  description: List tasks
+  method: GET
+  path: /public/v1/tables/{name}/rows/{rowId}/tasks
+  source_operation: openapi/frontline-openapi-original.yml#listTableTasks
+- name: createTableTask
+  description: Create task
+  method: POST
+  path: /public/v1/tables/{name}/rows/{rowId}/tasks
+  source_operation: openapi/frontline-openapi-original.yml#createTableTask
+- name: getTableTask
+  description: Get task
+  method: GET
+  path: /public/v1/tables/{name}/tasks/{id}
+  source_operation: openapi/frontline-openapi-original.yml#getTableTask
+- name: updateTableTask
+  description: Update task
+  method: PATCH
+  path: /public/v1/tables/{name}/tasks/{id}
+  source_operation: openapi/frontline-openapi-original.yml#updateTableTask
+- name: deleteTableTask
+  description: Delete task
+  method: DELETE
+  path: /public/v1/tables/{name}/tasks/{id}
+  source_operation: openapi/frontline-openapi-original.yml#deleteTableTask
+- name: completeTableTask
+  description: Complete task
+  method: POST
+  path: /public/v1/tables/{name}/tasks/{id}/complete
+  source_operation: openapi/frontline-openapi-original.yml#completeTableTask
+- name: uncompleteTableTask
+  description: Uncomplete task
+  method: POST
+  path: /public/v1/tables/{name}/tasks/{id}/uncomplete
+  source_operation: openapi/frontline-openapi-original.yml#uncompleteTableTask
+- name: listTableFiles
+  description: List files
+  method: GET
+  path: /public/v1/tables/{name}/rows/{rowId}/files
+  source_operation: openapi/frontline-openapi-original.yml#listTableFiles
+- name: uploadTableFiles
+  description: Upload files
+  method: POST
+  path: /public/v1/tables/{name}/rows/{rowId}/files
+  source_operation: openapi/frontline-openapi-original.yml#uploadTableFiles
+- name: getTableFile
+  description: Get file
+  method: GET
+  path: /public/v1/tables/{name}/files/{id}
+  source_operation: openapi/frontline-openapi-original.yml#getTableFile
+- name: deleteTableFile
+  description: Delete file
+  method: DELETE
+  path: /public/v1/tables/{name}/files/{id}
+  source_operation: openapi/frontline-openapi-original.yml#deleteTableFile
+- name: downloadTableFile
+  description: Download file
+  method: GET
+  path: /public/v1/tables/{name}/files/{id}/download
+  source_operation: openapi/frontline-openapi-original.yml#downloadTableFile
+- name: exportTableXlsx
+  description: Export as XLSX
+  method: POST
+  path: /public/v1/tables/{name}/export/xlsx
+  source_operation: openapi/frontline-openapi-original.yml#exportTableXlsx
+- name: exportTableCsv
+  description: Export as CSV
+  method: POST
+  path: /public/v1/tables/{name}/export/csv
+  source_operation: openapi/frontline-openapi-original.yml#exportTableCsv
+- name: getMe
+  description: Get current identity
+  method: GET
+  path: /public/v1/me
+  source_operation: openapi/frontline-openapi-original.yml#getMe
+- name: listAiModels
+  description: List AI models
+  method: GET
+  path: /public/v1/ai-models
+  source_operation: openapi/frontline-openapi-original.yml#listAiModels
+- name: getDefaultAiModel
+  description: Get default AI model
+  method: GET
+  path: /public/v1/ai-models/default
+  source_operation: openapi/frontline-openapi-original.yml#getDefaultAiModel
+- name: getAiModel
+  description: Get AI model
+  method: GET
+  path: /public/v1/ai-models/{aiModelId}
+  source_operation: openapi/frontline-openapi-original.yml#getAiModel
+- name: createIncomingWebhook
+  description: Create an incoming webhook
+  method: POST
+  path: /public/v1/incoming-webhooks
+  source_operation: openapi/frontline-openapi-original.yml#createIncomingWebhook
+- name: listTools
+  description: List tools
+  method: GET
+  path: /public/v1/tools
+  source_operation: openapi/frontline-openapi-original.yml#listTools
+- name: createTool
+  description: Create a tool
+  method: POST
+  path: /public/v1/tools
+  source_operation: openapi/frontline-openapi-original.yml#createTool
+- name: listAgentVariables
+  description: List agent variables
+  method: GET
+  path: /public/v1/agents/{agentId}/variables
+  source_operation: openapi/frontline-openapi-original.yml#listAgentVariables
+- name: createAgentVariable
+  description: Create agent variable
+  method: POST
+  path: /public/v1/agents/{agentId}/variables
+  source_operation: openapi/frontline-openapi-original.yml#createAgentVariable
+- name: listAllAgentVariables
+  description: List all agent variables
+  method: GET
+  path: /public/v1/agents/{agentId}/variables/all
+  source_operation: openapi/frontline-openapi-original.yml#listAllAgentVariables
+- name: checkAgentVariableName
+  description: Check agent variable name
+  method: GET
+  path: /public/v1/agents/{agentId}/variables/check-name
+  source_operation: openapi/frontline-openapi-original.yml#checkAgentVariableName
+- name: getAgentVariable
+  description: Get agent variable
+  method: GET
+  path: /public/v1/agents/{agentId}/variables/{variableId}
+  source_operation: openapi/frontline-openapi-original.yml#getAgentVariable
+- name: updateAgentVariable
+  description: Update agent variable
+  method: PUT
+  path: /public/v1/agents/{agentId}/variables/{variableId}
+  source_operation: openapi/frontline-openapi-original.yml#updateAgentVariable
+- name: deleteAgentVariable
+  description: Delete agent variable
+  method: DELETE
+  path: /public/v1/agents/{agentId}/variables/{variableId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteAgentVariable
+- name: listWorkflowVariables
+  description: List workflow variables
+  method: GET
+  path: /public/v1/workflows/{workflowId}/variables
+  source_operation: openapi/frontline-openapi-original.yml#listWorkflowVariables
+- name: createWorkflowVariable
+  description: Create workflow variable
+  method: POST
+  path: /public/v1/workflows/{workflowId}/variables
+  source_operation: openapi/frontline-openapi-original.yml#createWorkflowVariable
+- name: listAllWorkflowVariables
+  description: List all workflow variables
+  method: GET
+  path: /public/v1/workflows/{workflowId}/variables/all
+  source_operation: openapi/frontline-openapi-original.yml#listAllWorkflowVariables
+- name: checkWorkflowVariableName
+  description: Check workflow variable name
+  method: GET
+  path: /public/v1/workflows/{workflowId}/variables/check-name
+  source_operation: openapi/frontline-openapi-original.yml#checkWorkflowVariableName
+- name: getWorkflowVariable
+  description: Get workflow variable
+  method: GET
+  path: /public/v1/workflows/{workflowId}/variables/{variableId}
+  source_operation: openapi/frontline-openapi-original.yml#getWorkflowVariable
+- name: updateWorkflowVariable
+  description: Update workflow variable
+  method: PUT
+  path: /public/v1/workflows/{workflowId}/variables/{variableId}
+  source_operation: openapi/frontline-openapi-original.yml#updateWorkflowVariable
+- name: deleteWorkflowVariable
+  description: Delete workflow variable
+  method: DELETE
+  path: /public/v1/workflows/{workflowId}/variables/{variableId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteWorkflowVariable
+- name: listIntents
+  description: List intents
+  method: GET
+  path: /public/v1/agents/{agentId}/intents
+  source_operation: openapi/frontline-openapi-original.yml#listIntents
+- name: createIntent
+  description: Create intent
+  method: POST
+  path: /public/v1/agents/{agentId}/intents
+  source_operation: openapi/frontline-openapi-original.yml#createIntent
+- name: listAllIntents
+  description: List all intents
+  method: GET
+  path: /public/v1/agents/{agentId}/intents/all
+  source_operation: openapi/frontline-openapi-original.yml#listAllIntents
+- name: generateIntentPhrases
+  description: Generate intent phrases
+  method: POST
+  path: /public/v1/agents/{agentId}/intents/generate-phrases
+  source_operation: openapi/frontline-openapi-original.yml#generateIntentPhrases
+- name: getIntent
+  description: Get intent
+  method: GET
+  path: /public/v1/agents/{agentId}/intents/{intentId}
+  source_operation: openapi/frontline-openapi-original.yml#getIntent
+- name: updateIntent
+  description: Update intent
+  method: PUT
+  path: /public/v1/agents/{agentId}/intents/{intentId}
+  source_operation: openapi/frontline-openapi-original.yml#updateIntent
+- name: deleteIntent
+  description: Delete intent
+  method: DELETE
+  path: /public/v1/agents/{agentId}/intents/{intentId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteIntent
+- name: getTool
+  description: Get tool details
+  method: GET
+  path: /public/v1/tools/{toolId}
+  source_operation: openapi/frontline-openapi-original.yml#getTool
+- name: updateTool
+  description: Update a tool
+  method: PUT
+  path: /public/v1/tools/{toolId}
+  source_operation: openapi/frontline-openapi-original.yml#updateTool
+- name: deleteTool
+  description: Delete a tool
+  method: DELETE
+  path: /public/v1/tools/{toolId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteTool
+- name: listAgents
+  description: List all agents
+  method: GET
+  path: /public/v1/agents
+  source_operation: openapi/frontline-openapi-original.yml#listAgents
+- name: createAgent
+  description: Create an agent
+  method: POST
+  path: /public/v1/agents
+  source_operation: openapi/frontline-openapi-original.yml#createAgent
+- name: getAgent
+  description: Get agent details
+  method: GET
+  path: /public/v1/agents/{agentId}
+  source_operation: openapi/frontline-openapi-original.yml#getAgent
+- name: updateAgent
+  description: Update an agent
+  method: PUT
+  path: /public/v1/agents/{agentId}
+  source_operation: openapi/frontline-openapi-original.yml#updateAgent
+- name: deleteAgent
+  description: Delete an agent
+  method: DELETE
+  path: /public/v1/agents/{agentId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteAgent
+- name: getAgentSetting
+  description: Get agent setting
+  method: GET
+  path: /public/v1/agents/{agentId}/agent-setting
+  source_operation: openapi/frontline-openapi-original.yml#getAgentSetting
+- name: updateAgentSetting
+  description: Update agent setting
+  method: PUT
+  path: /public/v1/agents/{agentId}/agent-setting
+  source_operation: openapi/frontline-openapi-original.yml#updateAgentSetting
+- name: getAgentTheme
+  description: Get agent theme
+  method: GET
+  path: /public/v1/agents/{agentId}/theme
+  source_operation: openapi/frontline-openapi-original.yml#getAgentTheme
+- name: updateAgentTheme
+  description: Update agent theme
+  method: PUT
+  path: /public/v1/agents/{agentId}/theme
+  source_operation: openapi/frontline-openapi-original.yml#updateAgentTheme
+- name: updateAgentDeploymentStatus
+  description: Update agent deployment status
+  method: PUT
+  path: /public/v1/agents/{agentId}/deployment-status
+  source_operation: openapi/frontline-openapi-original.yml#updateAgentDeploymentStatus
+- name: getAgentChannelSettings
+  description: Get all agent channel settings
+  method: GET
+  path: /public/v1/agents/{agentId}/settings
+  source_operation: openapi/frontline-openapi-original.yml#getAgentChannelSettings
+- name: getAgentlivechatSettings
+  description: Get livechat settings
+  method: GET
+  path: /public/v1/agents/{agentId}/settings/livechat
+  source_operation: openapi/frontline-openapi-original.yml#getAgentlivechatSettings
+- name: updateAgentlivechatSettings
+  description: Update livechat settings
+  method: PUT
+  path: /public/v1/agents/{agentId}/settings/livechat
+  source_operation: openapi/frontline-openapi-original.yml#updateAgentlivechatSettings
+- name: getAgentwhatsappSettings
+  description: Get whatsapp settings
+  method: GET
+  path: /public/v1/agents/{agentId}/settings/whatsapp
+  source_operation: openapi/frontline-openapi-original.yml#getAgentwhatsappSettings
+- name: updateAgentwhatsappSettings
+  description: Update whatsapp settings
+  method: PUT
+  path: /public/v1/agents/{agentId}/settings/whatsapp
+  source_operation: openapi/frontline-openapi-original.yml#updateAgentwhatsappSettings
+- name: getAgentinstagramSettings
+  description: Get instagram settings
+  method: GET
+  path: /public/v1/agents/{agentId}/settings/instagram
+  source_operation: openapi/frontline-openapi-original.yml#getAgentinstagramSettings
+- name: updateAgentinstagramSettings
+  description: Update instagram settings
+  method: PUT
+  path: /public/v1/agents/{agentId}/settings/instagram
+  source_operation: openapi/frontline-openapi-original.yml#updateAgentinstagramSettings
+- name: getAgentmessengerSettings
+  description: Get messenger settings
+  method: GET
+  path: /public/v1/agents/{agentId}/settings/messenger
+  source_operation: openapi/frontline-openapi-original.yml#getAgentmessengerSettings
+- name: updateAgentmessengerSettings
+  description: Update messenger settings
+  method: PUT
+  path: /public/v1/agents/{agentId}/settings/messenger
+  source_operation: openapi/frontline-openapi-original.yml#updateAgentmessengerSettings
+- name: listAgentFlows
+  description: List flows for an agent
+  method: GET
+  path: /public/v1/agents/{agentId}/flows
+  source_operation: openapi/frontline-openapi-original.yml#listAgentFlows
+- name: createAgentFlow
+  description: Create a flow for an agent
+  method: POST
+  path: /public/v1/agents/{agentId}/flows
+  source_operation: openapi/frontline-openapi-original.yml#createAgentFlow
+- name: getAgentFlow
+  description: Get flow details
+  method: GET
+  path: /public/v1/agents/{agentId}/flows/{flowId}
+  source_operation: openapi/frontline-openapi-original.yml#getAgentFlow
+- name: updateAgentFlow
+  description: Update a flow
+  method: PUT
+  path: /public/v1/agents/{agentId}/flows/{flowId}
+  source_operation: openapi/frontline-openapi-original.yml#updateAgentFlow
+- name: deleteAgentFlow
+  description: Delete a flow
+  method: DELETE
+  path: /public/v1/agents/{agentId}/flows/{flowId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteAgentFlow
+- name: getAgentFlowGraph
+  description: Get flow graph
+  method: GET
+  path: /public/v1/agents/{agentId}/flows/{flowId}/graph
+  source_operation: openapi/frontline-openapi-original.yml#getAgentFlowGraph
+- name: createAgentFlowNode
+  description: Create flow node
+  method: POST
+  path: /public/v1/agents/{agentId}/flows/{flowId}/nodes
+  source_operation: openapi/frontline-openapi-original.yml#createAgentFlowNode
+- name: updateAgentFlowNode
+  description: Update flow node
+  method: PUT
+  path: /public/v1/agents/{agentId}/flows/{flowId}/nodes/{nodeId}
+  source_operation: openapi/frontline-openapi-original.yml#updateAgentFlowNode
+- name: deleteAgentFlowNode
+  description: Delete flow node
+  method: DELETE
+  path: /public/v1/agents/{agentId}/flows/{flowId}/nodes/{nodeId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteAgentFlowNode
+- name: createAgentFlowEdge
+  description: Create flow edge
+  method: POST
+  path: /public/v1/agents/{agentId}/flows/{flowId}/edges
+  source_operation: openapi/frontline-openapi-original.yml#createAgentFlowEdge
+- name: deleteAgentFlowEdge
+  description: Delete flow edge
+  method: DELETE
+  path: /public/v1/agents/{agentId}/flows/{flowId}/edges
+  source_operation: openapi/frontline-openapi-original.yml#deleteAgentFlowEdge
+- name: getAgentAnalytics
+  description: Get agent analytics
+  method: GET
+  path: /public/v1/agents/{agentId}/analytics
+  source_operation: openapi/frontline-openapi-original.yml#getAgentAnalytics
+- name: listWorkflows
+  description: List all workflows
+  method: GET
+  path: /public/v1/workflows
+  source_operation: openapi/frontline-openapi-original.yml#listWorkflows
+- name: createWorkflow
+  description: Create a workflow
+  method: POST
+  path: /public/v1/workflows
+  source_operation: openapi/frontline-openapi-original.yml#createWorkflow
+- name: getWorkflow
+  description: Get workflow details
+  method: GET
+  path: /public/v1/workflows/{workflowId}
+  source_operation: openapi/frontline-openapi-original.yml#getWorkflow
+- name: updateWorkflow
+  description: Update workflow
+  method: PUT
+  path: /public/v1/workflows/{workflowId}
+  source_operation: openapi/frontline-openapi-original.yml#updateWorkflow
+- name: deleteWorkflow
+  description: Delete workflow
+  method: DELETE
+  path: /public/v1/workflows/{workflowId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteWorkflow
+- name: getWorkflowGraph
+  description: Get workflow graph
+  method: GET
+  path: /public/v1/workflows/{workflowId}/graph
+  source_operation: openapi/frontline-openapi-original.yml#getWorkflowGraph
+- name: createWorkflowNode
+  description: Create workflow node
+  method: POST
+  path: /public/v1/workflows/{workflowId}/nodes
+  source_operation: openapi/frontline-openapi-original.yml#createWorkflowNode
+- name: updateWorkflowNode
+  description: Update workflow node
+  method: PUT
+  path: /public/v1/workflows/{workflowId}/nodes/{nodeId}
+  source_operation: openapi/frontline-openapi-original.yml#updateWorkflowNode
+- name: deleteWorkflowNode
+  description: Delete workflow node
+  method: DELETE
+  path: /public/v1/workflows/{workflowId}/nodes/{nodeId}
+  source_operation: openapi/frontline-openapi-original.yml#deleteWorkflowNode
+- name: createWorkflowEdge
+  description: Create workflow edge
+  method: POST
+  path: /public/v1/workflows/{workflowId}/edges
+  source_operation: openapi/frontline-openapi-original.yml#createWorkflowEdge
+- name: deleteWorkflowEdge
+  description: Delete workflow edge
+  method: DELETE
+  path: /public/v1/workflows/{workflowId}/edges
+  source_operation: openapi/frontline-openapi-original.yml#deleteWorkflowEdge
+- name: getWorkflowAnalytics
+  description: Get workflow analytics
+  method: GET
+  path: /public/v1/workflows/{workflowId}/analytics
+  source_operation: openapi/frontline-openapi-original.yml#getWorkflowAnalytics
+- name: getBillingPlan
+  description: Get billing plan details
+  method: GET
+  path: /public/v1/billing
+  source_operation: openapi/frontline-openapi-original.yml#getBillingPlan
+- name: listAgentConversations
+  description: List agent conversations
+  method: GET
+  path: /public/v1/agents/{agentId}/conversations
+  source_operation: openapi/frontline-openapi-original.yml#listAgentConversations
+- name: getAgentConversation
+  description: Get a conversation transcript
+  method: GET
+  path: /public/v1/agents/{agentId}/conversations/{conversationId}
+  source_operation: openapi/frontline-openapi-original.yml#getAgentConversation
+- name: listWorkflowLogs
+  description: List workflow run logs
+  method: GET
+  path: /public/v1/workflows/{workflowId}/logs
+  source_operation: openapi/frontline-openapi-original.yml#listWorkflowLogs
+- name: getWorkflowLog
+  description: Get a workflow run log
+  method: GET
+  path: /public/v1/workflows/{workflowId}/logs/{logId}
+  source_operation: openapi/frontline-openapi-original.yml#getWorkflowLog

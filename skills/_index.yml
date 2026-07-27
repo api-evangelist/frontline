@@ -1,0 +1,20 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/frontline-openapi-original.yml
+note: >-
+  Agent Skills generated from the Frontline Public API OpenAPI; every operationId is verified in the
+  spec. Frontline's own CLI also ships a `frontline setup` command for Claude Code skills setup
+  (docs.getfrontline.ai/cli).
+skills:
+- file: frontline-build-and-deploy-agent.md
+  name: Build and deploy a Frontline AI agent
+  api: openapi/frontline-openapi-original.yml
+  operations: [listAiModels, createAgent, getAgent, updateAgentSetting, updateAgentTheme, updateAgentDeploymentStatus]
+- file: frontline-crm-object-and-records.md
+  name: Create a Frontline CRM object and load records
+  api: openapi/frontline-openapi-original.yml
+  operations: [listObjects, createObject, getObjectSchema, createObjectRow, createObjectRowsBulk, listObjectRows, countObjectRows]
+- file: frontline-workflow-with-webhook-trigger.md
+  name: Build a Frontline workflow triggered by an incoming webhook
+  api: openapi/frontline-openapi-original.yml
+  operations: [createIncomingWebhook, createWorkflow, getWorkflowGraph, createWorkflowNode, createWorkflowEdge, getWorkflowAnalytics]

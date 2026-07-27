@@ -1,0 +1,27 @@
+generated: '2026-07-19'
+method: probed
+note: >-
+  Probed the standard /.well-known/ discovery surface on the API host and the marketing/app hosts.
+  No well-known documents are published (all 404). Absence recorded for auditability; no WellKnown
+  pointer is wired.
+hosts:
+- host: https://prod-api.getfrontline.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+- host: https://www.getfrontline.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+- host: https://getfrontline.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404

@@ -1,0 +1,23 @@
+generated: '2026-07-19'
+method: searched
+source: https://registry.npmjs.org/@getfrontline/cli
+note: >-
+  Frontline publishes one first-party package: the unified CLI (@getfrontline/cli), which ships two
+  binaries (frontline, max). No separate server-side client SDK libraries were found on npm, PyPI,
+  Maven Central, NuGet, pkg.go.dev, RubyGems, Packagist, or crates.io as of the generated date.
+packages:
+- language: javascript
+  registry: npm
+  name: '@getfrontline/cli'
+  version: 1.1.0
+  url: https://www.npmjs.com/package/@getfrontline/cli
+  install: npm install -g @getfrontline/cli
+  official: true
+  kind: cli
+  binaries:
+  - frontline
+  - max
+  requires: Node 18+
+  description: >-
+    Frontline CLI — Public API client (agents, workflows, billing, tables, objects) plus Max
+    chat/admin REST from the terminal.

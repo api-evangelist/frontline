@@ -1,0 +1,28 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.getfrontline.ai/docs/rate-limits.md
+scope: per-account
+note: >-
+  Requests are rate-limited per account (a fixed 60-second bucket that resets on the first request
+  of each window). Requests from any key under the same account share the bucket. Unauthenticated
+  requests are limited per IP at the same threshold.
+rate_limits:
+- name: Per account
+  limit_count: 1000
+  window_seconds: 60
+  window: 60s fixed bucket
+headers:
+- name: X-RateLimit-Limit
+  meaning: Total requests allowed per window (currently 1000).
+- name: X-RateLimit-Remaining
+  meaning: Requests remaining in the current window; drops to 0 at the limit.
+over_limit:
+  status: 429
+  code: internal_error
+  message: Rate limit exceeded. Please try again later.
+  guidance: Wait until the next 60-second window and retry; use exponential backoff.
+best_practices:
+- Cache reference data (/ai-models, /billing) instead of polling.
+- Use the highest pageSize you can tolerate on list calls (default 20).
+- Run scheduled syncs off-peak.
+- Contact support for a higher limit for legitimate integrations.

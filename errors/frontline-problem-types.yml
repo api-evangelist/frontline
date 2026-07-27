@@ -1,0 +1,58 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.getfrontline.ai/docs/errors.md
+derived_from: openapi/frontline-openapi-original.yml
+format: custom-envelope
+envelope:
+  shape: '{ ok: false, error: { code, message, details? } }'
+  fields:
+    ok: always false on errors
+    error.code: stable machine-readable string; branch on this
+    error.message: human-readable, may change
+    error.details: optional; validation errors carry details.issues[] (zod-style path/message/code)
+validation_issue_codes:
+- invalid_type
+- too_small
+- too_big
+- invalid_enum_value
+- invalid_string
+- not_found
+- wrong_kind
+- wrong_owner
+http_status_codes_in_spec:
+  '400': 107
+  '401': 123
+  '404': 129
+  '409': 4
+problems:
+- code: bad_request
+  status: 400
+  title: Bad Request
+  remediation: Validation failed (body, params, query). Inspect error.details.issues[] for the offending
+    fields.
+- code: unauthorized
+  status: 401
+  title: Unauthorized
+  remediation: Missing, malformed, revoked, or wrong-scope API key.
+- code: forbidden
+  status: 403
+  title: Forbidden
+  remediation: The key is valid but does not have access to the target resource.
+- code: not_found
+  status: 404
+  title: Not Found
+  remediation: The resource does not exist or has been soft-deleted.
+- code: conflict
+  status: 409
+  title: Conflict
+  remediation: Uniqueness or relational constraint violated (e.g. duplicate name, foreign key).
+- code: internal_error
+  status: 500
+  title: Internal Error
+  remediation: Unexpected server error (also returned for 402 billing gate and 429 rate-limit). Safe to
+    retry once.
+- code: cli_outdated
+  status: 400
+  title: CLI Outdated
+  remediation: Caller is @getfrontline/cli below the minimum supported version; payload includes details.minSupportedVersion
+    and a suggestion to upgrade.

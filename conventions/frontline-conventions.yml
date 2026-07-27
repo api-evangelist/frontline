@@ -1,0 +1,48 @@
+generated: '2026-07-19'
+method: searched
+source: https://docs.getfrontline.ai/docs/
+derived_from: openapi/frontline-openapi-original.yml
+authentication:
+  style: Bearer API key
+  header: 'Authorization: Bearer <API_KEY>'
+  key_types:
+  - GENERAL (account-level, no user identity)
+  - USER (user-level, required for writes and user-owned resources)
+  transport: HTTPS/TLS only
+  verify: GET /public/v1/me
+  see: authentication/frontline-authentication.yml
+idempotency:
+  supported: false
+  note: >-
+    The Public API documents no idempotency-key header or parameter, and the OpenAPI declares none.
+    Writes are not idempotent by contract. (No Idempotency pointer is emitted.)
+pagination:
+  style: page-number
+  params:
+  - name: page
+    description: 1-based page number.
+  - name: page_size
+    description: Items per page. Default 20; raise within reason to reduce request count.
+  note: List endpoints accept page / page_size query parameters.
+versioning:
+  scheme: uri-path
+  current: v1
+  base_path: /public/v1
+  base_url: https://prod-api.getfrontline.ai
+error_envelope:
+  shape: '{ ok: false, error: { code, message, details? } }'
+  branch_on: error.code (stable machine-readable string)
+  validation_details: error.details.issues[] with zod-style { path, message, code }
+  see: errors/frontline-problem-types.yml
+rate_limit_signaling:
+  headers:
+  - X-RateLimit-Limit
+  - X-RateLimit-Remaining
+  over_limit_status: 429
+  see: rate-limits/frontline-rate-limits.yml
+success_envelope:
+  shape: '{ ok: true, data: {...} }'
+identifiers:
+  note: >-
+    Resource IDs are custom-prefixed cuid-style strings (e.g. clx123incomingwebhook); some
+    references use numeric ids (aiModelId, tool ids).
