@@ -30,7 +30,7 @@ x-tier: enriched
 x-tier-reason: has-public-api
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-19'
+modified: '2026-08-14'
 tags:
 - Company
 - CRM
@@ -619,17 +619,23 @@ common:
 - type: SignUp
   url: https://app.getfrontline.ai
 - type: Support
-  url: https://www.getfrontline.ai/help
+  url: https://help.getfrontline.ai/
 - type: TermsOfService
   url: https://www.getfrontline.ai/terms-of-service
 - type: PrivacyPolicy
   url: https://www.getfrontline.ai/privacy-policy
 - type: Integrations
   url: https://www.getfrontline.ai/integrations
+- type: Plans
+  url: plans/frontline-plans-pricing.yml
+- type: DeveloperPortal
+  url: https://docs.getfrontline.ai/
+- type: Blog
+  url: https://www.getfrontline.ai/blog
 - type: Website
   url: https://getfrontline.ai
 x-enrichment:
-  date: '2026-07-19'
-  status: backfilled
+  date: '2026-08-14'
+  status: enriched
+  artifacts_added: 45
   pass: local-v1
-  note: backfilled from .gitignore signal + verified work evidence
