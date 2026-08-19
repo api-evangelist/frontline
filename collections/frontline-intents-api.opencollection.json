@@ -1,0 +1,219 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Account Intents API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Intents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List intents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/intents",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "filterText",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "includeUsedStatus",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Lists agent intents. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Create intent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/intents",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates an agent intent. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "List all intents",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/intents/all",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "filterText",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "includeUsedStatus",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Lists all agent intents. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Generate intent phrases",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/intents/generate-phrases",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Generates suggested phrases for an intent. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Get intent",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/intents/:intentId",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "intentId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Manages a single intent. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Update intent",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/intents/:intentId",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "intentId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Manages a single intent. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Delete intent",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/intents/:intentId",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "intentId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Manages a single intent. Requires a USER API key."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

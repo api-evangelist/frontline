@@ -1,0 +1,600 @@
+{
+  "item": [
+    {
+      "id": "045c7df3-e904-43aa-9ef0-69f99d3cb75a",
+      "name": "Table export",
+      "description": {
+        "content": "Export table data as XLSX or CSV",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ee0c9f48-16aa-426b-8af5-5285056ce6b9",
+          "name": "Export as XLSX",
+          "request": {
+            "name": "Export as XLSX",
+            "description": {
+              "content": "Exports rows matching the query as an XLSX file.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "tables",
+                ":name",
+                "export",
+                "xlsx"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<object>\",\n  \"search\": \"<string>\",\n  \"sort\": [\n    {\n      \"key_0\": \"<object>\",\n      \"key_1\": \"<object>\"\n    },\n    {\n      \"key_0\": \"<object>\",\n      \"key_1\": \"<object>\",\n      \"key_2\": \"<object>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f27afb7a-ca0d-4d87-88ea-f00bf078e2dc",
+              "name": "XLSX binary",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tables",
+                    ":name",
+                    "export",
+                    "xlsx"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<object>\",\n  \"search\": \"example\",\n  \"sort\": [\n    {\n      \"key_0\": \"<object>\",\n      \"key_1\": \"<object>\"\n    },\n    {\n      \"key_0\": \"<object>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "aeb35093-9a45-4b9b-bc41-78106ac1daa3",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tables",
+                    ":name",
+                    "export",
+                    "xlsx"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<object>\",\n  \"search\": \"example\",\n  \"sort\": [\n    {\n      \"key_0\": \"<object>\",\n      \"key_1\": \"<object>\"\n    },\n    {\n      \"key_0\": \"<object>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "99cdf4d1-3ed1-4198-a489-7c7687b43caa",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tables",
+                    ":name",
+                    "export",
+                    "xlsx"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<object>\",\n  \"search\": \"example\",\n  \"sort\": [\n    {\n      \"key_0\": \"<object>\",\n      \"key_1\": \"<object>\"\n    },\n    {\n      \"key_0\": \"<object>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33f664d1-6fee-4960-ac3c-f79cfe45599d",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tables",
+                    ":name",
+                    "export",
+                    "xlsx"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<object>\",\n  \"search\": \"example\",\n  \"sort\": [\n    {\n      \"key_0\": \"<object>\",\n      \"key_1\": \"<object>\"\n    },\n    {\n      \"key_0\": \"<object>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "74745ffd-d838-4da4-951d-322136d93481",
+          "name": "Export as CSV",
+          "request": {
+            "name": "Export as CSV",
+            "description": {
+              "content": "Exports rows matching the query as CSV.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "tables",
+                ":name",
+                "export",
+                "csv"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "text/csv"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": \"<object>\",\n  \"search\": \"<string>\",\n  \"sort\": [\n    {\n      \"key_0\": \"<object>\",\n      \"key_1\": \"<object>\"\n    },\n    {\n      \"key_0\": \"<object>\",\n      \"key_1\": \"<object>\",\n      \"key_2\": \"<object>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b26e95b0-57a9-421b-871b-ea4d4b57cca5",
+              "name": "CSV body",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tables",
+                    ":name",
+                    "export",
+                    "csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/csv"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<object>\",\n  \"search\": \"example\",\n  \"sort\": [\n    {\n      \"key_0\": \"<object>\",\n      \"key_1\": \"<object>\"\n    },\n    {\n      \"key_0\": \"<object>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/csv"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9a7eb25e-43f5-4d36-b096-ac2141857859",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tables",
+                    ":name",
+                    "export",
+                    "csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<object>\",\n  \"search\": \"example\",\n  \"sort\": [\n    {\n      \"key_0\": \"<object>\",\n      \"key_1\": \"<object>\"\n    },\n    {\n      \"key_0\": \"<object>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "24ff07ca-0d99-4e08-b729-87592a4d6f5c",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tables",
+                    ":name",
+                    "export",
+                    "csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<object>\",\n  \"search\": \"example\",\n  \"sort\": [\n    {\n      \"key_0\": \"<object>\",\n      \"key_1\": \"<object>\"\n    },\n    {\n      \"key_0\": \"<object>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8c79d1dd-a8dc-4a82-ab83-da229c03d210",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tables",
+                    ":name",
+                    "export",
+                    "csv"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": \"<object>\",\n  \"search\": \"example\",\n  \"sort\": [\n    {\n      \"key_0\": \"<object>\",\n      \"key_1\": \"<object>\"\n    },\n    {\n      \"key_0\": \"<object>\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://prod-api.getfrontline.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "08a0b893-da17-403d-b0b3-58860d6729d6",
+    "name": "Public Account Table export API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public API for accessing agents, flows, and analytics.\n\n## Authentication\n\nThe Public API supports two API key types. Pass the key as a Bearer token:\n\n```\nAuthorization: Bearer <YOUR_API_KEY>\n```\n\n### Account API key (GENERAL)\n\nAccount-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.\n\n### User API key (USER)\n\nUser-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**\n\nEach operation documents which key type(s) it accepts in its **Security** section.",
+      "type": "text/plain"
+    }
+  }
+}

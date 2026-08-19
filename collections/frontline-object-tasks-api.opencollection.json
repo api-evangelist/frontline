@@ -1,0 +1,187 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Account Object tasks API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Object tasks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/rows/:rowId/tasks",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "rowId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns tasks attached to a row."
+        },
+        {
+          "info": {
+            "name": "Create task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/rows/:rowId/tasks",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "rowId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Attaches a task to a row. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Get task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/tasks/:id",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns a task by id."
+        },
+        {
+          "info": {
+            "name": "Update task",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/tasks/:id",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a task's content, due date, or assignees. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Delete task",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/tasks/:id",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a task. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Complete task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/tasks/:id/complete",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Marks a task as completed. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Uncomplete task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/tasks/:id/uncomplete",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Marks a previously completed task as open again. Requires a USER API key."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

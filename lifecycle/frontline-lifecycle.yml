@@ -1,4 +1,4 @@
-generated: '2026-07-19'
+generated: '2026-08-14'
 method: searched
 source: https://docs.getfrontline.ai/
 versioning:
@@ -9,7 +9,9 @@ versioning:
 deprecation:
   policy_url: null
   sunset_header: false
-  note: No published deprecation policy or RFC 8594 Sunset/Deprecation header support was found.
+  note: >-
+    Re-verified 2026-08-14: no published deprecation policy and no RFC 8594 Sunset/Deprecation
+    header support. No Deprecation pointer is emitted.
 client_version_gate:
   note: >-
     The API enforces a minimum @getfrontline/cli version — requests from an outdated CLI receive
@@ -17,6 +19,34 @@ client_version_gate:
 sla:
   url: null
 status_page: null
-status_page_note: No public status page was found (status.getfrontline.ai does not resolve).
+status_page_note: >-
+  Re-verified 2026-08-14: status.getfrontline.ai does not resolve (curl exit 6, HTTP 000) and no
+  status/uptime page is linked from the site, docs or trust center. No StatusPage pointer is emitted.
 deprecated_operations: []
 deprecated_operations_note: No operations are marked deprecated in the OpenAPI.
+changelog:
+  published: false
+  note: >-
+    No dated changelog, release-notes or what's-new page exists. Probed /changelog on both
+    www.getfrontline.ai (404) and docs.getfrontline.ai (404), plus /whats-new (404) and /releases
+    (404); the docs llms.txt index of all 60 pages contains no changelog entry. Product updates are
+    announced only in the blog. No ChangeLog pointer is emitted and no changelog/ artifact is
+    written.
+  probed:
+  - {url: 'https://www.getfrontline.ai/changelog', status: 404}
+  - {url: 'https://docs.getfrontline.ai/changelog', status: 404}
+  - {url: 'https://www.getfrontline.ai/whats-new', status: 404}
+  - {url: 'https://www.getfrontline.ai/releases', status: 404}
+  blog: https://www.getfrontline.ai/blog
+spec_drift:
+  note: >-
+    The harvested _original OpenAPI now carries 271 operations across tags the refined per-tag
+    specs and apis.yml do not yet list (Users, User Tasks, Knowledge Bases, Agent Playbooks,
+    Account Integrations, Agent Channels, Integration Resources, Guidance, Channels, Custom Tools).
+    The 34 refined specs and the derived mcp/agentic-access artifacts reflect an earlier 188-op
+    snapshot. Flagged for the next refine-openapis pass — not repaired here.
+  original_operations: 271
+  refined_snapshot_operations: 188
+x-evidence:
+- {url: 'https://status.getfrontline.ai/', status: 0, note: DNS does not resolve}
+- {url: 'https://www.getfrontline.ai/security', status: 404}

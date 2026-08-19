@@ -1,0 +1,354 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Account Flows API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Flows",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List flows for an agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/flows",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a list of flows associated with a specific agent. Nodes and logic are excluded."
+        },
+        {
+          "info": {
+            "name": "Create a flow for an agent",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/flows",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a flow and an empty graph snapshot for a specific agent."
+        },
+        {
+          "info": {
+            "name": "Get flow details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/flows/:flowId",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "flowId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "includeNodes",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "draft",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns flow metadata. Pass includeNodes=true to include graph nodes."
+        },
+        {
+          "info": {
+            "name": "Update a flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/flows/:flowId",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "flowId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates flow metadata or status."
+        },
+        {
+          "info": {
+            "name": "Delete a flow",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/flows/:flowId",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "flowId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Soft deletes a flow."
+        },
+        {
+          "info": {
+            "name": "Get flow graph",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/flows/:flowId/graph",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "flowId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the flow snapshot with nodes and edges."
+        },
+        {
+          "info": {
+            "name": "Create flow node",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/flows/:flowId/nodes",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "flowId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a node in a flow graph."
+        },
+        {
+          "info": {
+            "name": "Update flow node",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/flows/:flowId/nodes/:nodeId",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "flowId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "nodeId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates a flow node and returns the updated graph."
+        },
+        {
+          "info": {
+            "name": "Delete flow node",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/flows/:flowId/nodes/:nodeId",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "flowId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "nodeId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Deletes a node and removes incoming and outgoing edges."
+        },
+        {
+          "info": {
+            "name": "Create flow edge",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/flows/:flowId/edges",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "flowId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Adds or replaces an edge by handle in the flow graph."
+        },
+        {
+          "info": {
+            "name": "Delete flow edge",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/flows/:flowId/edges",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "flowId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Removes an edge from the flow graph."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

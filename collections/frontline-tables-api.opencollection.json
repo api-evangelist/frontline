@@ -1,0 +1,120 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Account Tables API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tables",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List tables",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/tables"
+          },
+          "docs": "Returns every table for the authenticated account."
+        },
+        {
+          "info": {
+            "name": "Create table",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/tables",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a table. Columns can be supplied at creation or added later. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Get table",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/tables/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns one table including fields and views."
+        },
+        {
+          "info": {
+            "name": "Update table",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://prod-api.getfrontline.ai/public/v1/tables/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates display name, emoji, color, or description. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Delete table",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://prod-api.getfrontline.ai/public/v1/tables/:name",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a table. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Get table schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/tables/:name/schema",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns only the schema (fields, types, formats) for a table."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

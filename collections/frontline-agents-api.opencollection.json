@@ -1,0 +1,82 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Account Agents API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Agents",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List agent conversations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/conversations",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "is_closed",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "start_date",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "end_date",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Lists conversations for an agent (basic fields). Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Get a conversation transcript",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/agents/:agentId/conversations/:conversationId",
+            "params": [
+              {
+                "name": "agentId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "conversationId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a conversation with its message transcript (basic fields). Requires a USER API key."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

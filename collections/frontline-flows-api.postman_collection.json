@@ -1,0 +1,2235 @@
+{
+  "item": [
+    {
+      "id": "f3310f26-6aa2-409b-9eff-0c265f4ac128",
+      "name": "Flows",
+      "description": {
+        "content": "View and manage flows associated with your agents",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f4978672-8c42-4821-9d41-e6d75e2b2e1a",
+          "name": "List flows for an agent",
+          "request": {
+            "name": "List flows for an agent",
+            "description": {
+              "content": "Returns a list of flows associated with a specific agent. Nodes and logic are excluded.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "flows"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a7ec2247-9bb4-4a5b-a53b-e8ec2e04cbc3",
+              "name": "A list of flows",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "ACTIVE"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"id\": 101,\n      \"name\": \"Order Retrieval\",\n      \"description\": \"Extracts order info from DB\",\n      \"status\": \"ACTIVE\",\n      \"createdAt\": \"2024-01-01T12:00:00Z\",\n      \"updatedAt\": \"2024-01-01T12:00:00Z\",\n      \"runCount\": 450\n    },\n    {\n      \"id\": 101,\n      \"name\": \"Order Retrieval\",\n      \"description\": \"Extracts order info from DB\",\n      \"status\": \"ACTIVE\",\n      \"createdAt\": \"2024-01-01T12:00:00Z\",\n      \"updatedAt\": \"2024-01-01T12:00:00Z\",\n      \"runCount\": 450\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e713001-4a0f-42ee-ba0f-f635cbe1b791",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "ACTIVE"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "314b5670-e63f-43ed-b49f-7ced351e5952",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "ACTIVE"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3046094a-6acb-4630-8db0-97262e8669db",
+          "name": "Create a flow for an agent",
+          "request": {
+            "name": "Create a flow for an agent",
+            "description": {
+              "content": "Creates a flow and an empty graph snapshot for a specific agent.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "flows"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "39104566-0fa0-4dd7-b638-c1db568ac016",
+              "name": "Created flow",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Order Routing\",\n  \"description\": \"Routes order conversations\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"assistantId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"description\": \"Extracts order info from DB\",\n  \"draftSnapshotId\": \"64f1c2e6a75f2d4a9a2f1234\",\n  \"id\": 101,\n  \"isDefault\": false,\n  \"liveSnapshotId\": \"64f1c2e6a75f2d4a9a2f1234\",\n  \"name\": \"Order Retrieval\",\n  \"runCount\": 450,\n  \"status\": \"ACTIVE\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "64ea9da5-f6d5-4076-8539-b609fc7ec96a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Order Routing\",\n  \"description\": \"Routes order conversations\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "43875266-5eea-43ad-b15a-e38b14123e73",
+          "name": "Get flow details",
+          "request": {
+            "name": "Get flow details",
+            "description": {
+              "content": "Returns flow metadata. Pass includeNodes=true to include graph nodes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "flows",
+                ":flowId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "includeNodes",
+                  "value": "<boolean>"
+                },
+                {
+                  "disabled": false,
+                  "key": "draft",
+                  "value": "<boolean>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "flowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c41629af-fc4a-417a-91cd-e8e643f88f19",
+              "name": "Flow details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeNodes",
+                      "value": "false"
+                    },
+                    {
+                      "key": "draft",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"assistantId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"description\": \"Extracts order info from DB\",\n  \"draftSnapshotId\": \"64f1c2e6a75f2d4a9a2f1234\",\n  \"id\": 101,\n  \"isDefault\": false,\n  \"liveSnapshotId\": \"64f1c2e6a75f2d4a9a2f1234\",\n  \"name\": \"Order Retrieval\",\n  \"runCount\": 450,\n  \"status\": \"ACTIVE\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a8cdb594-8235-4911-a173-15bddf971533",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeNodes",
+                      "value": "false"
+                    },
+                    {
+                      "key": "draft",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fb2e4387-2544-4f77-ad68-d56d278fb9ec",
+          "name": "Update a flow",
+          "request": {
+            "name": "Update a flow",
+            "description": {
+              "content": "Updates flow metadata or status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "flows",
+                ":flowId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "flowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "3b621891-1032-4bce-9f05-24afdb84f57f",
+              "name": "Updated flow",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Order Routing\",\n  \"description\": \"Routes order conversations\",\n  \"status\": \"ACTIVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"assistantId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"description\": \"Extracts order info from DB\",\n  \"draftSnapshotId\": \"64f1c2e6a75f2d4a9a2f1234\",\n  \"id\": 101,\n  \"isDefault\": false,\n  \"liveSnapshotId\": \"64f1c2e6a75f2d4a9a2f1234\",\n  \"name\": \"Order Retrieval\",\n  \"runCount\": 450,\n  \"status\": \"ACTIVE\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d95c4c01-407c-41e5-aea5-13a81a890581",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Order Routing\",\n  \"description\": \"Routes order conversations\",\n  \"status\": \"ACTIVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c1f1e869-7458-4c28-b170-43239f0399df",
+          "name": "Delete a flow",
+          "request": {
+            "name": "Delete a flow",
+            "description": {
+              "content": "Soft deletes a flow.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "flows",
+                ":flowId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "flowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3a965543-404a-4680-98f2-d29182b2b7aa",
+              "name": "Flow deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "11b6e57c-e4c9-4022-9986-c9c4a393c61f",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4daa6c5a-65c0-4318-ad5a-b8f0f66fef88",
+          "name": "Get flow graph",
+          "request": {
+            "name": "Get flow graph",
+            "description": {
+              "content": "Returns the flow snapshot with nodes and edges.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "flows",
+                ":flowId",
+                "graph"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "flowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9155345e-a8b9-4f18-82ef-b18e247490be",
+              "name": "Flow graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entityId\": 1,\n  \"type\": \"FLOW\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ],\n  \"createdAt\": \"example\",\n  \"id\": \"example\",\n  \"assistantId\": \"example\",\n  \"accountId\": 1,\n  \"updatedAt\": \"example\",\n  \"executed\": false,\n  \"breakingChangeAt\": \"example\",\n  \"breakingChangeReason\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9ab80242-6ada-492d-ac8f-9984eb6fa356",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "639dbe77-01b1-4e4d-af97-de613f1698a1",
+          "name": "Create flow node",
+          "request": {
+            "name": "Create flow node",
+            "description": {
+              "content": "Creates a node in a flow graph.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "flows",
+                ":flowId",
+                "nodes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "flowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"node\": {\n    \"nodeId\": \"<string>\",\n    \"position\": {\n      \"positionX\": \"<number>\",\n      \"positionY\": \"<number>\"\n    },\n    \"type\": \"<string>\",\n    \"alias\": \"<string>\",\n    \"name\": \"<string>\",\n    \"data\": {\n      \"type\": \"<string>\",\n      \"agenticRouting\": \"<string>\",\n      \"intentIds\": [\n        \"<number>\",\n        \"<number>\"\n      ],\n      \"intents\": [\n        {\n          \"id\": \"<number>\",\n          \"name\": \"<string>\",\n          \"createdAt\": \"<string>\",\n          \"updatedAt\": \"<string>\",\n          \"status\": \"<string>\",\n          \"assistantId\": \"<string>\",\n          \"description\": \"<string>\",\n          \"phrases\": [\n            {\n              \"id\": \"<number>\",\n              \"phrase\": \"<string>\"\n            },\n            {\n              \"id\": \"<number>\",\n              \"phrase\": \"<string>\"\n            }\n          ],\n          \"flowId\": \"<number>\"\n        },\n        {\n          \"id\": \"<number>\",\n          \"name\": \"<string>\",\n          \"createdAt\": \"<string>\",\n          \"updatedAt\": \"<string>\",\n          \"status\": \"<string>\",\n          \"assistantId\": \"<string>\",\n          \"description\": \"<string>\",\n          \"phrases\": [\n            {\n              \"id\": \"<number>\",\n              \"phrase\": \"<string>\"\n            },\n            {\n              \"id\": \"<number>\",\n              \"phrase\": \"<string>\"\n            }\n          ],\n          \"flowId\": \"<number>\"\n        }\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "df4f55fa-1892-47fc-aecf-f7fec32755ad",
+              "name": "Created node",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId",
+                    "nodes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"node\": {\n    \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n    \"position\": {\n      \"positionX\": 1,\n      \"positionY\": 1\n    },\n    \"type\": \"START\",\n    \"alias\": \"Start\",\n    \"name\": \"Start\",\n    \"data\": {\n      \"type\": \"TRIGGER_INTENT\",\n      \"agenticRouting\": \"example\",\n      \"intentIds\": [\n        1,\n        1\n      ],\n      \"intents\": [\n        {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"createdAt\": \"example\",\n          \"updatedAt\": \"example\",\n          \"status\": \"ACTIVE\",\n          \"assistantId\": \"example\",\n          \"description\": \"example\",\n          \"phrases\": [\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            },\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            }\n          ],\n          \"flowId\": 1\n        },\n        {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"createdAt\": \"example\",\n          \"updatedAt\": \"example\",\n          \"status\": \"ACTIVE\",\n          \"assistantId\": \"example\",\n          \"description\": \"example\",\n          \"phrases\": [\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            },\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            }\n          ],\n          \"flowId\": 1\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n  \"position\": {\n    \"positionX\": 1,\n    \"positionY\": 1\n  },\n  \"type\": \"START\",\n  \"alias\": \"Start\",\n  \"name\": \"Start\",\n  \"data\": {\n    \"type\": \"TRIGGER_INTENT\",\n    \"agenticRouting\": \"example\",\n    \"intentIds\": [\n      1,\n      1\n    ],\n    \"intents\": [\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"createdAt\": \"example\",\n        \"updatedAt\": \"example\",\n        \"status\": \"ACTIVE\",\n        \"assistantId\": \"example\",\n        \"description\": \"example\",\n        \"phrases\": [\n          {\n            \"id\": 1,\n            \"phrase\": \"example\"\n          },\n          {\n            \"id\": 1,\n            \"phrase\": \"example\"\n          }\n        ],\n        \"flowId\": 1\n      },\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"createdAt\": \"example\",\n        \"updatedAt\": \"example\",\n        \"status\": \"ACTIVE\",\n        \"assistantId\": \"example\",\n        \"description\": \"example\",\n        \"phrases\": [\n          {\n            \"id\": 1,\n            \"phrase\": \"example\"\n          },\n          {\n            \"id\": 1,\n            \"phrase\": \"example\"\n          }\n        ],\n        \"flowId\": 1\n      }\n    ]\n  },\n  \"workflowId\": \"example\",\n  \"handles\": [\n    {\n      \"handleId\": \"example\",\n      \"sourceEdge\": {\n        \"from\": \"example\",\n        \"fromHandleId\": \"example\",\n        \"to\": \"example\",\n        \"toHandleId\": \"example\"\n      },\n      \"text\": \"example\"\n    },\n    {\n      \"handleId\": \"example\",\n      \"sourceEdge\": {\n        \"from\": \"example\",\n        \"fromHandleId\": \"example\",\n        \"to\": \"example\",\n        \"toHandleId\": \"example\"\n      },\n      \"text\": \"example\"\n    }\n  ],\n  \"targetEdges\": [\n    {\n      \"from\": \"example\",\n      \"fromHandleId\": \"example\",\n      \"to\": \"example\",\n      \"toHandleId\": \"example\"\n    },\n    {\n      \"from\": \"example\",\n      \"fromHandleId\": \"example\",\n      \"to\": \"example\",\n      \"toHandleId\": \"example\"\n    }\n  ],\n  \"createdAt\": \"example\",\n  \"updatedAt\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4e9c5d63-86f2-4eb0-ae31-de2ef749e9ed",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId",
+                    "nodes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"node\": {\n    \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n    \"position\": {\n      \"positionX\": 1,\n      \"positionY\": 1\n    },\n    \"type\": \"START\",\n    \"alias\": \"Start\",\n    \"name\": \"Start\",\n    \"data\": {\n      \"type\": \"TRIGGER_INTENT\",\n      \"agenticRouting\": \"example\",\n      \"intentIds\": [\n        1,\n        1\n      ],\n      \"intents\": [\n        {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"createdAt\": \"example\",\n          \"updatedAt\": \"example\",\n          \"status\": \"ACTIVE\",\n          \"assistantId\": \"example\",\n          \"description\": \"example\",\n          \"phrases\": [\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            },\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            }\n          ],\n          \"flowId\": 1\n        },\n        {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"createdAt\": \"example\",\n          \"updatedAt\": \"example\",\n          \"status\": \"ACTIVE\",\n          \"assistantId\": \"example\",\n          \"description\": \"example\",\n          \"phrases\": [\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            },\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            }\n          ],\n          \"flowId\": 1\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b6a635d1-f1b5-4d49-bdf0-097aba702946",
+          "name": "Update flow node",
+          "request": {
+            "name": "Update flow node",
+            "description": {
+              "content": "Updates a flow node and returns the updated graph.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "flows",
+                ":flowId",
+                "nodes",
+                ":nodeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "flowId"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "nodeId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"node\": {\n    \"alias\": \"<string>\",\n    \"name\": \"<string>\",\n    \"position\": {\n      \"positionX\": \"<number>\",\n      \"positionY\": \"<number>\"\n    },\n    \"type\": \"<string>\",\n    \"data\": {\n      \"type\": \"<string>\",\n      \"agenticRouting\": \"<string>\",\n      \"intentIds\": [\n        \"<number>\",\n        \"<number>\"\n      ],\n      \"intents\": [\n        {\n          \"id\": \"<number>\",\n          \"name\": \"<string>\",\n          \"createdAt\": \"<string>\",\n          \"updatedAt\": \"<string>\",\n          \"status\": \"<string>\",\n          \"assistantId\": \"<string>\",\n          \"description\": \"<string>\",\n          \"phrases\": [\n            {\n              \"id\": \"<number>\",\n              \"phrase\": \"<string>\"\n            },\n            {\n              \"id\": \"<number>\",\n              \"phrase\": \"<string>\"\n            }\n          ],\n          \"flowId\": \"<number>\"\n        },\n        {\n          \"id\": \"<number>\",\n          \"name\": \"<string>\",\n          \"createdAt\": \"<string>\",\n          \"updatedAt\": \"<string>\",\n          \"status\": \"<string>\",\n          \"assistantId\": \"<string>\",\n          \"description\": \"<string>\",\n          \"phrases\": [\n            {\n              \"id\": \"<number>\",\n              \"phrase\": \"<string>\"\n            },\n            {\n              \"id\": \"<number>\",\n              \"phrase\": \"<string>\"\n            }\n          ],\n          \"flowId\": \"<number>\"\n        }\n      ]\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a0a2d21c-da29-4922-b57b-6d1503a1553d",
+              "name": "Updated graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId",
+                    "nodes",
+                    ":nodeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "nodeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"node\": {\n    \"alias\": \"Start\",\n    \"name\": \"Start\",\n    \"position\": {\n      \"positionX\": 1,\n      \"positionY\": 1\n    },\n    \"type\": \"START\",\n    \"data\": {\n      \"type\": \"TRIGGER_INTENT\",\n      \"agenticRouting\": \"example\",\n      \"intentIds\": [\n        1,\n        1\n      ],\n      \"intents\": [\n        {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"createdAt\": \"example\",\n          \"updatedAt\": \"example\",\n          \"status\": \"ACTIVE\",\n          \"assistantId\": \"example\",\n          \"description\": \"example\",\n          \"phrases\": [\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            },\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            }\n          ],\n          \"flowId\": 1\n        },\n        {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"createdAt\": \"example\",\n          \"updatedAt\": \"example\",\n          \"status\": \"ACTIVE\",\n          \"assistantId\": \"example\",\n          \"description\": \"example\",\n          \"phrases\": [\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            },\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            }\n          ],\n          \"flowId\": 1\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entityId\": 1,\n  \"type\": \"FLOW\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ],\n  \"createdAt\": \"example\",\n  \"id\": \"example\",\n  \"assistantId\": \"example\",\n  \"accountId\": 1,\n  \"updatedAt\": \"example\",\n  \"executed\": false,\n  \"breakingChangeAt\": \"example\",\n  \"breakingChangeReason\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "395d09b9-3fde-4e87-b9dc-3f2ca6226e2a",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId",
+                    "nodes",
+                    ":nodeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "nodeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"node\": {\n    \"alias\": \"Start\",\n    \"name\": \"Start\",\n    \"position\": {\n      \"positionX\": 1,\n      \"positionY\": 1\n    },\n    \"type\": \"START\",\n    \"data\": {\n      \"type\": \"TRIGGER_INTENT\",\n      \"agenticRouting\": \"example\",\n      \"intentIds\": [\n        1,\n        1\n      ],\n      \"intents\": [\n        {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"createdAt\": \"example\",\n          \"updatedAt\": \"example\",\n          \"status\": \"ACTIVE\",\n          \"assistantId\": \"example\",\n          \"description\": \"example\",\n          \"phrases\": [\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            },\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            }\n          ],\n          \"flowId\": 1\n        },\n        {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"createdAt\": \"example\",\n          \"updatedAt\": \"example\",\n          \"status\": \"ACTIVE\",\n          \"assistantId\": \"example\",\n          \"description\": \"example\",\n          \"phrases\": [\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            },\n            {\n              \"id\": 1,\n              \"phrase\": \"example\"\n            }\n          ],\n          \"flowId\": 1\n        }\n      ]\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "88345639-349a-4533-a050-df98f1368eb2",
+          "name": "Delete flow node",
+          "request": {
+            "name": "Delete flow node",
+            "description": {
+              "content": "Deletes a node and removes incoming and outgoing edges.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "flows",
+                ":flowId",
+                "nodes",
+                ":nodeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "flowId"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "nodeId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "baaa0bae-1451-4f82-b83a-f0ed6eaab768",
+              "name": "Updated graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId",
+                    "nodes",
+                    ":nodeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "nodeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entityId\": 1,\n  \"type\": \"FLOW\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ],\n  \"createdAt\": \"example\",\n  \"id\": \"example\",\n  \"assistantId\": \"example\",\n  \"accountId\": 1,\n  \"updatedAt\": \"example\",\n  \"executed\": false,\n  \"breakingChangeAt\": \"example\",\n  \"breakingChangeReason\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d18ac857-7789-4892-a027-51cb7e942c0a",
+          "name": "Create flow edge",
+          "request": {
+            "name": "Create flow edge",
+            "description": {
+              "content": "Adds or replaces an edge by handle in the flow graph.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "flows",
+                ":flowId",
+                "edges"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "flowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"edge\": {\n    \"source\": \"<string>\",\n    \"sourceHandle\": \"<string>\",\n    \"target\": \"<string>\",\n    \"targetHandle\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b5d6d176-dd18-431d-81d0-a799364e2798",
+              "name": "Updated graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId",
+                    "edges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"edge\": {\n    \"source\": \"trigger_1\",\n    \"sourceHandle\": \"default\",\n    \"target\": \"api_1\",\n    \"targetHandle\": \"default\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entityId\": 1,\n  \"type\": \"FLOW\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ],\n  \"createdAt\": \"example\",\n  \"id\": \"example\",\n  \"assistantId\": \"example\",\n  \"accountId\": 1,\n  \"updatedAt\": \"example\",\n  \"executed\": false,\n  \"breakingChangeAt\": \"example\",\n  \"breakingChangeReason\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "52eca9ba-10ee-4667-bc60-66e8208d015e",
+              "name": "Invalid graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId",
+                    "edges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"edge\": {\n    \"source\": \"trigger_1\",\n    \"sourceHandle\": \"default\",\n    \"target\": \"api_1\",\n    \"targetHandle\": \"default\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "533c29fd-57f5-462c-971e-2289f7d86b56",
+          "name": "Delete flow edge",
+          "request": {
+            "name": "Delete flow edge",
+            "description": {
+              "content": "Removes an edge from the flow graph.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "flows",
+                ":flowId",
+                "edges"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "flowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"edge\": {\n    \"source\": \"<string>\",\n    \"sourceHandle\": \"<string>\",\n    \"target\": \"<string>\",\n    \"targetHandle\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "558dbede-aa2d-42f8-9693-d3d07d9e21d0",
+              "name": "Updated graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "flows",
+                    ":flowId",
+                    "edges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "flowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"edge\": {\n    \"source\": \"trigger_1\",\n    \"sourceHandle\": \"default\",\n    \"target\": \"api_1\",\n    \"targetHandle\": \"default\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entityId\": 1,\n  \"type\": \"FLOW\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"START\",\n      \"alias\": \"Start\",\n      \"name\": \"Start\",\n      \"data\": {\n        \"type\": \"TRIGGER_INTENT\",\n        \"agenticRouting\": \"example\",\n        \"intentIds\": [\n          1,\n          1\n        ],\n        \"intents\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"createdAt\": \"example\",\n            \"updatedAt\": \"example\",\n            \"status\": \"ACTIVE\",\n            \"assistantId\": \"example\",\n            \"description\": \"example\",\n            \"phrases\": [\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              },\n              {\n                \"id\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                },\n                \"phrase\": {\n                  \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n                }\n              }\n            ],\n            \"flowId\": 1\n          }\n        ]\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ],\n  \"createdAt\": \"example\",\n  \"id\": \"example\",\n  \"assistantId\": \"example\",\n  \"accountId\": 1,\n  \"updatedAt\": \"example\",\n  \"executed\": false,\n  \"breakingChangeAt\": \"example\",\n  \"breakingChangeReason\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://prod-api.getfrontline.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "38c8a39d-b836-4a64-9b0a-3f8b0a6f13aa",
+    "name": "Public Account Flows API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public API for accessing agents, flows, and analytics.\n\n## Authentication\n\nThe Public API supports two API key types. Pass the key as a Bearer token:\n\n```\nAuthorization: Bearer <YOUR_API_KEY>\n```\n\n### Account API key (GENERAL)\n\nAccount-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.\n\n### User API key (USER)\n\nUser-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**\n\nEach operation documents which key type(s) it accepts in its **Security** section.",
+      "type": "text/plain"
+    }
+  }
+}

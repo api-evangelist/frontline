@@ -1,0 +1,108 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Account Object record types API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Object record types",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List record types",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/record-types",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns the record types defined on an object."
+        },
+        {
+          "info": {
+            "name": "Create record type",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/record-types",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a record type on an object. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Update record type",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/record-types/:recordTypeId",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a record type. The default record type's name and display name cannot be changed (promote another record type to default first). Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Delete record type",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/record-types/:recordTypeId",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a record type. The default record type cannot be deleted. Requires a USER API key."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

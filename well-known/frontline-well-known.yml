@@ -1,27 +1,72 @@
-generated: '2026-07-19'
+generated: '2026-08-14'
 method: probed
+source: live HTTP probes of every apis.yml host and every OpenAPI servers[] host
 note: >-
-  Probed the standard /.well-known/ discovery surface on the API host and the marketing/app hosts.
-  No well-known documents are published (all 404). Absence recorded for auditability; no WellKnown
-  pointer is wired.
+  Re-probed the standard /.well-known/ discovery surface on all five Frontline hosts. NO well-known
+  document is published anywhere. No WellKnown, SecurityTxt or APICatalog pointer is wired — this
+  file records a verified ABSENCE.
+soft_200_warning: >-
+  app.getfrontline.ai answers HTTP 200 with the same SPA HTML shell for EVERY /.well-known/* path,
+  including paths that cannot exist. These are catch-all responses, not documents, and are recorded
+  as MISSES. Treating them as hits would manufacture a discovery surface Frontline does not serve.
+documents_found: 0
 hosts:
 - host: https://prod-api.getfrontline.ai
+  role: API host (OpenAPI servers[])
   documents:
-  - path: /.well-known/security.txt
-    status: 404
-  - path: /.well-known/openid-configuration
-    status: 404
-  - path: /.well-known/oauth-authorization-server
-    status: 404
-  - path: /.well-known/api-catalog
-    status: 404
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
 - host: https://www.getfrontline.ai
+  role: marketing site
   documents:
-  - path: /.well-known/security.txt
-    status: 404
-  - path: /.well-known/ai-plugin.json
-    status: 404
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
 - host: https://getfrontline.ai
+  role: apex
   documents:
-  - path: /.well-known/security.txt
-    status: 404
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+- host: https://docs.getfrontline.ai
+  role: developer docs
+  documents:
+  - {path: /.well-known/security.txt, status: 404}
+  - {path: /.well-known/openid-configuration, status: 404}
+  - {path: /.well-known/oauth-authorization-server, status: 404}
+  - {path: /.well-known/oauth-protected-resource, status: 404}
+  - {path: /.well-known/api-catalog, status: 404}
+  - {path: /.well-known/ai-plugin.json, status: 404}
+  - {path: /.well-known/agent-card.json, status: 404}
+  - {path: /.well-known/agent.json, status: 404}
+- host: https://app.getfrontline.ai
+  role: application console
+  soft_200: true
+  documents:
+  - {path: /.well-known/security.txt, status: 200, document: false, body: SPA HTML shell, verdict: miss}
+  - {path: /.well-known/openid-configuration, status: 200, document: false, body: SPA HTML shell, verdict: miss}
+  - {path: /.well-known/oauth-authorization-server, status: 200, document: false, body: SPA HTML shell, verdict: miss}
+  - {path: /.well-known/oauth-protected-resource, status: 200, document: false, body: SPA HTML shell, verdict: miss}
+  - {path: /.well-known/api-catalog, status: 200, document: false, body: SPA HTML shell, verdict: miss}
+  - {path: /.well-known/ai-plugin.json, status: 200, document: false, body: SPA HTML shell, verdict: miss}
+  - {path: /.well-known/agent-card.json, status: 200, document: false, body: SPA HTML shell, verdict: miss}
+x-evidence:
+  fetched: '2026-08-14'
+  hosts_probed: 5
+  paths_probed: 38
+  real_documents: 0

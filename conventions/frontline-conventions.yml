@@ -1,7 +1,7 @@
-generated: '2026-07-19'
+generated: '2026-08-14'
 method: searched
 source: https://docs.getfrontline.ai/docs/
-derived_from: openapi/frontline-openapi-original.yml
+derived_from: openapi/_original/frontline-openapi-original.yml
 authentication:
   style: Bearer API key
   header: 'Authorization: Bearer <API_KEY>'
@@ -42,6 +42,23 @@ rate_limit_signaling:
   see: rate-limits/frontline-rate-limits.yml
 success_envelope:
   shape: '{ ok: true, data: {...} }'
+events:
+  outbound: false
+  webhooks_out: false
+  asyncapi: false
+  note: >-
+    Frontline publishes NO outbound event surface. Its "Incoming Webhooks" are inbound-only HTTPS
+    endpoints external systems POST to, consumed by Workflow WEBHOOK trigger nodes. The docs state
+    this explicitly: "These are inbound only — they don't push notifications out to your systems.
+    (Outbound event delivery, if and when added, will be a separate concept.)" No Webhooks or
+    AsyncAPI pointer is emitted, and no asyncapi/ artifact is written — there is no event surface
+    to describe.
+  source: https://docs.getfrontline.ai/docs/concepts/incoming-webhooks.md
+  inbound:
+    create_operation: createIncomingWebhook
+    path: /public/v1/incoming-webhooks
+    auth: 64-character Bearer accessToken, returned only on create (useAuthentication=true default)
+    lifecycle_note: Only create is exposed on the Public API; list/rotate/revoke are dashboard-only.
 identifiers:
   note: >-
     Resource IDs are custom-prefixed cuid-style strings (e.g. clx123incomingwebhook); some

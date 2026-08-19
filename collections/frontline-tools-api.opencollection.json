@@ -1,0 +1,134 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Account Tools API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tools",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List tools",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/tools",
+            "params": [
+              {
+                "name": "filterText",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns API call tools associated with the account. WhatsApp template tools are not exposed in this public surface."
+        },
+        {
+          "info": {
+            "name": "Create a tool",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/tools",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates an API call tool. Requires a USER API key. WhatsApp template tools are not supported in the public API."
+        },
+        {
+          "info": {
+            "name": "Get tool details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/tools/:toolId",
+            "params": [
+              {
+                "name": "toolId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns an API call tool by ID."
+        },
+        {
+          "info": {
+            "name": "Update a tool",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://prod-api.getfrontline.ai/public/v1/tools/:toolId",
+            "params": [
+              {
+                "name": "toolId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates an API call tool. Requires a USER API key. The tool type cannot be changed."
+        },
+        {
+          "info": {
+            "name": "Delete a tool",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://prod-api.getfrontline.ai/public/v1/tools/:toolId",
+            "params": [
+              {
+                "name": "toolId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Soft deletes an API call tool. Requires a USER API key."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

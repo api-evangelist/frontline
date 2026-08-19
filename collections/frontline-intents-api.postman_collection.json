@@ -1,0 +1,941 @@
+{
+  "item": [
+    {
+      "id": "79d1e04f-2b60-4944-815e-345f73b34917",
+      "name": "Intents",
+      "description": {
+        "content": "Manage agent intents and training phrases",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c621117f-ddb0-4251-802b-843a0ce37791",
+          "name": "List intents",
+          "request": {
+            "name": "List intents",
+            "description": {
+              "content": "Lists agent intents. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "intents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filterText",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeUsedStatus",
+                  "value": "<boolean>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "393684d1-4977-4da5-a7c7-54938fa03ddf",
+              "name": "Paginated intents",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "intents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filterText",
+                      "value": "cancel"
+                    },
+                    {
+                      "key": "includeUsedStatus",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"pageSize\": 1,\n  \"results\": [\n    {\n      \"id\": 10,\n      \"name\": \"Cancel order\",\n      \"createdAt\": \"2024-01-01T12:00:00Z\",\n      \"updatedAt\": \"2024-01-01T12:00:00Z\",\n      \"status\": \"ACTIVE\",\n      \"assistantId\": \"550e8400-e29b-41d4-a716-446655440000\",\n      \"description\": \"example\",\n      \"phrases\": [\n        {\n          \"id\": 1,\n          \"phrase\": \"cancel my order\"\n        },\n        {\n          \"id\": 1,\n          \"phrase\": \"cancel my order\"\n        }\n      ],\n      \"flowId\": 1\n    },\n    {\n      \"id\": 10,\n      \"name\": \"Cancel order\",\n      \"createdAt\": \"2024-01-01T12:00:00Z\",\n      \"updatedAt\": \"2024-01-01T12:00:00Z\",\n      \"status\": \"ACTIVE\",\n      \"assistantId\": \"550e8400-e29b-41d4-a716-446655440000\",\n      \"description\": \"example\",\n      \"phrases\": [\n        {\n          \"id\": 1,\n          \"phrase\": \"cancel my order\"\n        },\n        {\n          \"id\": 1,\n          \"phrase\": \"cancel my order\"\n        }\n      ],\n      \"flowId\": 1\n    }\n  ],\n  \"count\": 1,\n  \"pageNum\": 1,\n  \"totalPages\": 1,\n  \"cursor\": 1,\n  \"paginationType\": \"offset\",\n  \"nextCursor\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "905b133a-94c6-4ad9-bbd1-76bf7bed61f6",
+          "name": "Create intent",
+          "request": {
+            "name": "Create intent",
+            "description": {
+              "content": "Creates an agent intent. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "intents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"phrases\": [\n    \"<string>\"\n  ],\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "724b7acf-f494-4c1a-a1a6-03c65ec6f389",
+              "name": "Created intent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "intents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Cancel order\",\n  \"phrases\": [\n    \"cancel my order\"\n  ],\n  \"description\": \"User wants to cancel\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 10,\n  \"name\": \"Cancel order\",\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"status\": \"ACTIVE\",\n  \"assistantId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"description\": \"example\",\n  \"phrases\": [\n    {\n      \"id\": 1,\n      \"phrase\": \"cancel my order\"\n    },\n    {\n      \"id\": 1,\n      \"phrase\": \"cancel my order\"\n    }\n  ],\n  \"flowId\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e0e83e4d-9680-46af-99b5-c8b6057a91a7",
+          "name": "List all intents",
+          "request": {
+            "name": "List all intents",
+            "description": {
+              "content": "Lists all agent intents. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "intents",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filterText",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "includeUsedStatus",
+                  "value": "<boolean>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b9b5d794-2811-48d6-b7d8-cd2b73341b62",
+              "name": "Intents",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "intents",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filterText",
+                      "value": "cancel"
+                    },
+                    {
+                      "key": "includeUsedStatus",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 10,\n    \"name\": \"Cancel order\",\n    \"createdAt\": \"2024-01-01T12:00:00Z\",\n    \"updatedAt\": \"2024-01-01T12:00:00Z\",\n    \"status\": \"ACTIVE\",\n    \"assistantId\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"description\": \"example\",\n    \"phrases\": [\n      {\n        \"id\": 1,\n        \"phrase\": \"cancel my order\"\n      },\n      {\n        \"id\": 1,\n        \"phrase\": \"cancel my order\"\n      }\n    ],\n    \"flowId\": 1\n  },\n  {\n    \"id\": 10,\n    \"name\": \"Cancel order\",\n    \"createdAt\": \"2024-01-01T12:00:00Z\",\n    \"updatedAt\": \"2024-01-01T12:00:00Z\",\n    \"status\": \"ACTIVE\",\n    \"assistantId\": \"550e8400-e29b-41d4-a716-446655440000\",\n    \"description\": \"example\",\n    \"phrases\": [\n      {\n        \"id\": 1,\n        \"phrase\": \"cancel my order\"\n      },\n      {\n        \"id\": 1,\n        \"phrase\": \"cancel my order\"\n      }\n    ],\n    \"flowId\": 1\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a9906161-8f81-4417-907f-59a16c2d2c60",
+          "name": "Generate intent phrases",
+          "request": {
+            "name": "Generate intent phrases",
+            "description": {
+              "content": "Generates suggested phrases for an intent. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "intents",
+                "generate-phrases"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"samples\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"amount\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0a3d8cea-724a-4030-b86c-1ad2f1723ab6",
+              "name": "Generated phrases",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "intents",
+                    "generate-phrases"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Cancel order\",\n  \"samples\": [\n    \"cancel my order\",\n    \"stop the order\"\n  ],\n  \"amount\": 10\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"phrases\": [\n    \"I want to cancel my order\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4639cf61-844a-43c0-9cd1-19bf03108104",
+          "name": "Get intent",
+          "request": {
+            "name": "Get intent",
+            "description": {
+              "content": "Manages a single intent. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "intents",
+                ":intentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "intentId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "657957df-019c-4bbd-ae33-f2a10fa515ae",
+              "name": "Intent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "intents",
+                    ":intentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "intentId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 10,\n  \"name\": \"Cancel order\",\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"status\": \"ACTIVE\",\n  \"assistantId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"description\": \"example\",\n  \"phrases\": [\n    {\n      \"id\": 1,\n      \"phrase\": \"cancel my order\"\n    },\n    {\n      \"id\": 1,\n      \"phrase\": \"cancel my order\"\n    }\n  ],\n  \"flowId\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7fa97741-9f2e-4a07-b337-47e726f4478b",
+          "name": "Update intent",
+          "request": {
+            "name": "Update intent",
+            "description": {
+              "content": "Manages a single intent. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "intents",
+                ":intentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "intentId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"phrases\": [\n    {\n      \"phrase\": \"<string>\",\n      \"id\": \"<number>\"\n    }\n  ],\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2d221026-0a12-4b42-b3ab-fbe9d95b3144",
+              "name": "Intent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "intents",
+                    ":intentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "intentId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Cancel order\",\n  \"phrases\": [\n    {\n      \"phrase\": \"cancel my order\",\n      \"id\": 1\n    }\n  ],\n  \"description\": \"User wants to cancel\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 10,\n  \"name\": \"Cancel order\",\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"status\": \"ACTIVE\",\n  \"assistantId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"description\": \"example\",\n  \"phrases\": [\n    {\n      \"id\": 1,\n      \"phrase\": \"cancel my order\"\n    },\n    {\n      \"id\": 1,\n      \"phrase\": \"cancel my order\"\n    }\n  ],\n  \"flowId\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5c52d22b-214e-4989-818b-7a9e99dfe31d",
+          "name": "Delete intent",
+          "request": {
+            "name": "Delete intent",
+            "description": {
+              "content": "Manages a single intent. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "intents",
+                ":intentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "intentId"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fa20d633-a62e-4b6c-9ffb-0c892f7a96ce",
+              "name": "Intent deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "intents",
+                    ":intentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "intentId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://prod-api.getfrontline.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "fff23bd0-90a9-4a72-8de2-aeb0fb8e9bec",
+    "name": "Public Account Intents API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public API for accessing agents, flows, and analytics.\n\n## Authentication\n\nThe Public API supports two API key types. Pass the key as a Bearer token:\n\n```\nAuthorization: Bearer <YOUR_API_KEY>\n```\n\n### Account API key (GENERAL)\n\nAccount-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.\n\n### User API key (USER)\n\nUser-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**\n\nEach operation documents which key type(s) it accepts in its **Security** section.",
+      "type": "text/plain"
+    }
+  }
+}

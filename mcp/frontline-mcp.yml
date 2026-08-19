@@ -1,9 +1,19 @@
-generated: '2026-07-19'
+generated: '2026-08-14'
 method: derived
 status: candidate
-source: openapi/frontline-openapi-original.yml
-note: No official hosted/remote MCP server was found for Frontline as of the generated date. This is a
-  candidate tool surface derived one-tool-per-operation from the public OpenAPI, to seed an MCP server.
+source: openapi/_original/frontline-openapi-original.yml
+note: >-
+  No official hosted/remote MCP server is published by Frontline as of 2026-08-14. Frontline is an
+  MCP CONSUMER, not an MCP provider: its "connected integrations" toolkits let agents call third-party
+  MCP tools (the OpenAPI enumerates e.g. GRANOLA_MCP as a connectable toolkit, and the Custom Tools
+  tag description distinguishes account tools from "connected-integration (MCP) tools"). That is
+  Frontline calling other people's MCP servers — it does not make an MCP surface an agent can call
+  ON Frontline. The list below is a candidate tool surface derived one-tool-per-operation from the
+  public OpenAPI, to seed an MCP server; it is not something Frontline ships.
+  Note the operation count below (188) reflects the refined per-tag specs; the re-harvested
+  _original spec now carries 271 operations across additional tags (Users, User Tasks, Knowledge
+  Bases, Agent Playbooks, Account Integrations, Guidance, Channels), so this derivation is due for
+  a refresh after the next refine pass.
 server:
   name: frontline
   transport: http
@@ -951,3 +961,17 @@ tools:
   method: GET
   path: /public/v1/workflows/{workflowId}/logs/{logId}
   source_operation: openapi/frontline-openapi-original.yml#getWorkflowLog
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: unknown
+  verified: probed
+  tools: 188
+  checked: '2026-08-14'
+  source: >-
+    Probed the docs host, the marketing site, the API host and npm. No hosted MCP endpoint and no
+    stdio MCP package exists; the docs index (llms.txt, 60 pages) contains no MCP server page, and
+    the only MCP references in the OpenAPI are third-party toolkits Frontline CONSUMES. Nobody
+    ships a server, so mode is none and endpoint/install are deliberately empty.

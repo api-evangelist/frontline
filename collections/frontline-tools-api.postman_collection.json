@@ -1,0 +1,862 @@
+{
+  "item": [
+    {
+      "id": "13890123-f181-4882-95c4-b602edafcbd0",
+      "name": "Tools",
+      "description": {
+        "content": "Manage reusable HTTP integrations callable from flows and workflows",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "234a0eca-6166-4e65-8eac-fc445c458301",
+          "name": "List tools",
+          "request": {
+            "name": "List tools",
+            "description": {
+              "content": "Returns API call tools associated with the account. WhatsApp template tools are not exposed in this public surface.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "tools"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filterText",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "22cb6791-a20b-489d-9672-2abccac41549",
+              "name": "A list of tools",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tools"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filterText",
+                      "value": "contact"
+                    },
+                    {
+                      "key": "status",
+                      "value": "ACTIVE"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"id\": 123,\n      \"name\": \"Fetch contact\",\n      \"description\": \"Fetches a contact from the external CRM\",\n      \"createdAt\": \"2024-01-01T12:00:00Z\",\n      \"updatedAt\": \"2024-01-01T12:00:00Z\",\n      \"type\": \"API_CALL\",\n      \"status\": \"ACTIVE\",\n      \"method\": \"GET\",\n      \"url\": \"https://api.example.com/contacts/123\",\n      \"body\": \"example\",\n      \"arguments\": [\n        {\n          \"name\": \"example\",\n          \"dataType\": \"STRING\",\n          \"description\": \"example\"\n        },\n        {\n          \"name\": \"example\",\n          \"dataType\": \"STRING\",\n          \"description\": \"example\"\n        }\n      ],\n      \"headers\": [\n        {\n          \"key\": \"Authorization\",\n          \"value\": \"Bearer {apiKey}\"\n        },\n        {\n          \"key\": \"Authorization\",\n          \"value\": \"Bearer {apiKey}\"\n        }\n      ],\n      \"queryParams\": [\n        {\n          \"key\": \"limit\",\n          \"value\": \"10\"\n        },\n        {\n          \"key\": \"limit\",\n          \"value\": \"10\"\n        }\n      ]\n    },\n    {\n      \"id\": 123,\n      \"name\": \"Fetch contact\",\n      \"description\": \"Fetches a contact from the external CRM\",\n      \"createdAt\": \"2024-01-01T12:00:00Z\",\n      \"updatedAt\": \"2024-01-01T12:00:00Z\",\n      \"type\": \"API_CALL\",\n      \"status\": \"ACTIVE\",\n      \"method\": \"GET\",\n      \"url\": \"https://api.example.com/contacts/123\",\n      \"body\": \"example\",\n      \"arguments\": [\n        {\n          \"name\": \"example\",\n          \"dataType\": \"STRING\",\n          \"description\": \"example\"\n        },\n        {\n          \"name\": \"example\",\n          \"dataType\": \"STRING\",\n          \"description\": \"example\"\n        }\n      ],\n      \"headers\": [\n        {\n          \"key\": \"Authorization\",\n          \"value\": \"Bearer {apiKey}\"\n        },\n        {\n          \"key\": \"Authorization\",\n          \"value\": \"Bearer {apiKey}\"\n        }\n      ],\n      \"queryParams\": [\n        {\n          \"key\": \"limit\",\n          \"value\": \"10\"\n        },\n        {\n          \"key\": \"limit\",\n          \"value\": \"10\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a2d0095-7bd1-4661-be18-1890335a08ba",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tools"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filterText",
+                      "value": "contact"
+                    },
+                    {
+                      "key": "status",
+                      "value": "ACTIVE"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2ce8b477-2d9b-4d3f-914f-44eba478136f",
+          "name": "Create a tool",
+          "request": {
+            "name": "Create a tool",
+            "description": {
+              "content": "Creates an API call tool. Requires a USER API key. WhatsApp template tools are not supported in the public API.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "tools"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"method\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"type\": \"API_CALL\",\n  \"body\": \"<string>\",\n  \"arguments\": [\n    {\n      \"name\": \"<string>\",\n      \"dataType\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"dataType\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"headers\": [\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ],\n  \"queryParams\": [\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a8fc10d8-2af5-4cfd-aadc-c7611cb7aa09",
+              "name": "Created tool",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tools"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Fetch contact\",\n  \"description\": \"Fetches a contact from the external CRM\",\n  \"method\": \"GET\",\n  \"url\": \"https://api.example.com/contacts/123\",\n  \"type\": \"API_CALL\",\n  \"body\": \"{\\\"name\\\":\\\"{contactName}\\\"}\",\n  \"arguments\": [\n    {\n      \"name\": \"contactId\",\n      \"dataType\": \"STRING\",\n      \"description\": \"The contact ID to fetch\"\n    },\n    {\n      \"name\": \"contactId\",\n      \"dataType\": \"STRING\",\n      \"description\": \"The contact ID to fetch\"\n    }\n  ],\n  \"headers\": [\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    },\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    }\n  ],\n  \"queryParams\": [\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    },\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 123,\n  \"name\": \"Fetch contact\",\n  \"description\": \"Fetches a contact from the external CRM\",\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"type\": \"API_CALL\",\n  \"status\": \"ACTIVE\",\n  \"method\": \"GET\",\n  \"url\": \"https://api.example.com/contacts/123\",\n  \"body\": \"example\",\n  \"arguments\": [\n    {\n      \"name\": \"example\",\n      \"dataType\": \"STRING\",\n      \"description\": \"example\"\n    },\n    {\n      \"name\": \"example\",\n      \"dataType\": \"STRING\",\n      \"description\": \"example\"\n    }\n  ],\n  \"headers\": [\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    },\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    }\n  ],\n  \"queryParams\": [\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    },\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ac0f28d-fd9f-493f-8a06-3b18a3fbf0af",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tools"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Fetch contact\",\n  \"description\": \"Fetches a contact from the external CRM\",\n  \"method\": \"GET\",\n  \"url\": \"https://api.example.com/contacts/123\",\n  \"type\": \"API_CALL\",\n  \"body\": \"{\\\"name\\\":\\\"{contactName}\\\"}\",\n  \"arguments\": [\n    {\n      \"name\": \"contactId\",\n      \"dataType\": \"STRING\",\n      \"description\": \"The contact ID to fetch\"\n    },\n    {\n      \"name\": \"contactId\",\n      \"dataType\": \"STRING\",\n      \"description\": \"The contact ID to fetch\"\n    }\n  ],\n  \"headers\": [\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    },\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    }\n  ],\n  \"queryParams\": [\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    },\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5c3ebeef-2918-4ca8-94a2-98c3ca5c0cda",
+          "name": "Get tool details",
+          "request": {
+            "name": "Get tool details",
+            "description": {
+              "content": "Returns an API call tool by ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "tools",
+                ":toolId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "toolId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "78d2267e-aec9-445e-9416-27369fe96e2b",
+              "name": "Tool details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tools",
+                    ":toolId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "toolId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 123,\n  \"name\": \"Fetch contact\",\n  \"description\": \"Fetches a contact from the external CRM\",\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"type\": \"API_CALL\",\n  \"status\": \"ACTIVE\",\n  \"method\": \"GET\",\n  \"url\": \"https://api.example.com/contacts/123\",\n  \"body\": \"example\",\n  \"arguments\": [\n    {\n      \"name\": \"example\",\n      \"dataType\": \"STRING\",\n      \"description\": \"example\"\n    },\n    {\n      \"name\": \"example\",\n      \"dataType\": \"STRING\",\n      \"description\": \"example\"\n    }\n  ],\n  \"headers\": [\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    },\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    }\n  ],\n  \"queryParams\": [\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    },\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e13b6b24-2773-4199-a66a-73e4fad40de6",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tools",
+                    ":toolId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "toolId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2bd1d29a-ffd8-4aab-83f5-4d171f1b525b",
+          "name": "Update a tool",
+          "request": {
+            "name": "Update a tool",
+            "description": {
+              "content": "Updates an API call tool. Requires a USER API key. The tool type cannot be changed.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "tools",
+                ":toolId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "toolId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"status\": \"<string>\",\n  \"method\": \"<string>\",\n  \"url\": \"<uri>\",\n  \"body\": \"<string>\",\n  \"arguments\": [\n    {\n      \"name\": \"<string>\",\n      \"dataType\": \"<string>\",\n      \"description\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"dataType\": \"<string>\",\n      \"description\": \"<string>\"\n    }\n  ],\n  \"headers\": [\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ],\n  \"queryParams\": [\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    },\n    {\n      \"key\": \"<string>\",\n      \"value\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "46c7730f-ae82-4fd8-bac5-c05b24aa47ee",
+              "name": "Updated tool",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tools",
+                    ":toolId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "toolId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Fetch contact\",\n  \"description\": \"Fetches a contact from the external CRM\",\n  \"status\": \"ACTIVE\",\n  \"method\": \"GET\",\n  \"url\": \"https://api.example.com/contacts/123\",\n  \"body\": \"{\\\"name\\\":\\\"{contactName}\\\"}\",\n  \"arguments\": [\n    {\n      \"name\": \"contactId\",\n      \"dataType\": \"STRING\",\n      \"description\": \"The contact ID to fetch\"\n    },\n    {\n      \"name\": \"contactId\",\n      \"dataType\": \"STRING\",\n      \"description\": \"The contact ID to fetch\"\n    }\n  ],\n  \"headers\": [\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    },\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    }\n  ],\n  \"queryParams\": [\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    },\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 123,\n  \"name\": \"Fetch contact\",\n  \"description\": \"Fetches a contact from the external CRM\",\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"type\": \"API_CALL\",\n  \"status\": \"ACTIVE\",\n  \"method\": \"GET\",\n  \"url\": \"https://api.example.com/contacts/123\",\n  \"body\": \"example\",\n  \"arguments\": [\n    {\n      \"name\": \"example\",\n      \"dataType\": \"STRING\",\n      \"description\": \"example\"\n    },\n    {\n      \"name\": \"example\",\n      \"dataType\": \"STRING\",\n      \"description\": \"example\"\n    }\n  ],\n  \"headers\": [\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    },\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    }\n  ],\n  \"queryParams\": [\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    },\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "361d1fce-00f9-466c-93b5-57570716b950",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tools",
+                    ":toolId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "toolId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Fetch contact\",\n  \"description\": \"Fetches a contact from the external CRM\",\n  \"status\": \"ACTIVE\",\n  \"method\": \"GET\",\n  \"url\": \"https://api.example.com/contacts/123\",\n  \"body\": \"{\\\"name\\\":\\\"{contactName}\\\"}\",\n  \"arguments\": [\n    {\n      \"name\": \"contactId\",\n      \"dataType\": \"STRING\",\n      \"description\": \"The contact ID to fetch\"\n    },\n    {\n      \"name\": \"contactId\",\n      \"dataType\": \"STRING\",\n      \"description\": \"The contact ID to fetch\"\n    }\n  ],\n  \"headers\": [\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    },\n    {\n      \"key\": \"Authorization\",\n      \"value\": \"Bearer {apiKey}\"\n    }\n  ],\n  \"queryParams\": [\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    },\n    {\n      \"key\": \"limit\",\n      \"value\": \"10\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "686f0591-db63-46d0-89b1-286d4bc575d0",
+          "name": "Delete a tool",
+          "request": {
+            "name": "Delete a tool",
+            "description": {
+              "content": "Soft deletes an API call tool. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "tools",
+                ":toolId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "toolId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "cc03ca9b-38b4-42ae-ab88-fbb38b973b71",
+              "name": "Tool deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tools",
+                    ":toolId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "toolId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e9f620cb-131f-4e1d-b071-8580801c8480",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "tools",
+                    ":toolId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "toolId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://prod-api.getfrontline.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0b91956e-9f7f-4590-bdf3-58c6d5e471ff",
+    "name": "Public Account Tools API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public API for accessing agents, flows, and analytics.\n\n## Authentication\n\nThe Public API supports two API key types. Pass the key as a Bearer token:\n\n```\nAuthorization: Bearer <YOUR_API_KEY>\n```\n\n### Account API key (GENERAL)\n\nAccount-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.\n\n### User API key (USER)\n\nUser-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**\n\nEach operation documents which key type(s) it accepts in its **Security** section.",
+      "type": "text/plain"
+    }
+  }
+}

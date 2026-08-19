@@ -1,15 +1,21 @@
-generated: '2026-07-19'
+generated: '2026-08-14'
 method: searched
 source: https://registry.npmjs.org/@getfrontline/cli
 note: >-
   Frontline publishes one first-party package: the unified CLI (@getfrontline/cli), which ships two
-  binaries (frontline, max). No separate server-side client SDK libraries were found on npm, PyPI,
-  Maven Central, NuGet, pkg.go.dev, RubyGems, Packagist, or crates.io as of the generated date.
+  binaries (frontline, max) and bundles 44 first-party Agent Skills (see skills/vendor/). No
+  separate server-side client SDK library was found on npm, PyPI, Maven Central, NuGet, pkg.go.dev,
+  RubyGems, Packagist, or crates.io as of the generated date — so no SDKs pointer is emitted; the
+  CLI is a command-line client, not an importable client library.
+package_count: 1
 packages:
 - language: javascript
   registry: npm
   name: '@getfrontline/cli'
-  version: 1.1.0
+  version: 1.2.1
+  published: '2026-08-05'
+  first_published: '2026-04-22'
+  release_count: 28
   url: https://www.npmjs.com/package/@getfrontline/cli
   install: npm install -g @getfrontline/cli
   official: true
@@ -18,6 +24,34 @@ packages:
   - frontline
   - max
   requires: Node 18+
+  bundles_agent_skills: 44
   description: >-
     Frontline CLI — Public API client (agents, workflows, billing, tables, objects) plus Max
-    chat/admin REST from the terminal.
+    chat/admin REST from the terminal, and `frontline setup --claude-skills` which installs the 44
+    bundled Agent Skills into ~/.claude/skills/.
+  currency_note: >-
+    Actively maintained — 28 releases since 2026-04-22, latest 1.2.1 on 2026-08-05, nine days
+    before this pass. No abandonment signal.
+  source_repository: null
+  source_repository_note: >-
+    The npm metadata carries no `repository` or `homepage` field, and no public Frontline GitHub
+    org could be confirmed (github.com/getfrontline describes itself as "getfrontline.xyz", an
+    unrelated project; github.com/Frontline-AI has zero public repos). The CLI is distributed as
+    compiled dist/ only.
+registries_checked:
+- registry: npm
+  result: 1 first-party package
+- registry: pypi
+  result: none
+- registry: maven-central
+  result: none
+- registry: nuget
+  result: none
+- registry: pkg.go.dev
+  result: none
+- registry: rubygems
+  result: none
+- registry: packagist
+  result: none
+- registry: crates.io
+  result: none

@@ -1,20 +1,224 @@
-generated: '2026-07-19'
-method: generated
-source: openapi/frontline-openapi-original.yml
+generated: '2026-08-14'
+method: searched
+source: https://registry.npmjs.org/@getfrontline/cli (v1.2.1, package/dist/skills/*/SKILL.md)
 note: >-
-  Agent Skills generated from the Frontline Public API OpenAPI; every operationId is verified in the
-  spec. Frontline's own CLI also ships a `frontline setup` command for Claude Code skills setup
-  (docs.getfrontline.ai/cli).
+  Frontline PUBLISHES its own Agent Skills. 44 SKILL.md files ship inside the first-party
+  @getfrontline/cli npm package (v1.2.1, published 2026-08-05) and are installed to
+  ~/.claude/skills/ by `frontline setup --claude-skills` (documented at
+  https://docs.getfrontline.ai/cli/frontline/setup.md). They are saved VERBATIM under
+  skills/vendor/<skill>/SKILL.md — unmodified provider content, not authored by API Evangelist.
+  The three API-Evangelist-generated flow skills below are retained alongside them; they are
+  grounded in verified operationIds from the Public API OpenAPI and cover multi-step flows the
+  vendor skills do not package as a single unit.
+vendor_skills:
+  count: 44
+  publisher: Frontline
+  distribution: npm @getfrontline/cli
+  version: 1.2.1
+  published: '2026-08-05'
+  install: frontline setup --claude-skills
+  format: Agent Skill (YAML frontmatter name/description/allowed-tools + markdown)
+  method: searched
+  skills:
+  - dir: agent-builder
+    file: vendor/agent-builder/SKILL.md
+    name: agent-builder
+    description: "Build and configure Frontline agents from the CLI, including creation, active context, deployment status, theme, agent settings, and channel settings."
+  - dir: agent-channels
+    file: vendor/agent-channels/SKILL.md
+    name: agent-channels
+    description: "View Frontline channel integrations (WhatsApp, Instagram, Messenger) from the CLI and bind a number/account/page to an agent. Use when the user wants to see which messaging channels are connected, change which agent answers a WhatsApp number / Instagram account / Messenger page, register or disconnect a WhatsApp number, or read a WhatsApp number's business profile. Distinct from `agents settings` channel config. Does NOT connect new channels (that needs the in-app OAuth flow)."
+  - dir: agent-playbooks
+    file: vendor/agent-playbooks/SKILL.md
+    name: agent-playbooks
+    description: "Create, list, inspect, update, and delete agent playbooks from the CLI, and see which playbooks are assigned to an agent. Agent playbooks are reusable instruction sets (SOPs) that steer how a Frontline agent handles a task. Use when managing playbooks for customer-facing agents."
+  - dir: agents-chat
+    file: vendor/agents-chat/SKILL.md
+    name: agents-chat
+    description: ">"
+  - dir: aggregations
+    file: vendor/aggregations/SKILL.md
+    name: aggregations
+    description: ">"
+  - dir: ai-models
+    file: vendor/ai-models/SKILL.md
+    name: ai-models
+    description: "List and inspect Frontline AI models from the CLI, and choose valid model IDs for agent settings."
+  - dir: auth-and-profiles
+    file: vendor/auth-and-profiles/SKILL.md
+    name: auth-and-profiles
+    description: "How to authenticate the Frontline CLI and manage named profiles for working with multiple environments. Covers getting an API key from the Frontline app, login/logout, switching profiles, per-call overrides, and config storage location."
+  - dir: crm-objects
+    file: vendor/crm-objects/SKILL.md
+    name: crm-objects
+    description: ">"
+  - dir: crm-setup
+    file: vendor/crm-setup/SKILL.md
+    name: crm-setup
+    description: ">"
+  - dir: crud-operations
+    file: vendor/crud-operations/SKILL.md
+    name: crud-operations
+    description: ">"
+  - dir: custom-tools
+    file: vendor/custom-tools/SKILL.md
+    name: custom-tools
+    description: "Create, list, inspect, update, delete, execute (test), and assign Frontline custom tools (API call tools created by the account) from the CLI. Use when the user asks about custom tools, API tools, headers, arguments, query params, testing/running a custom tool, or assigning custom tools to agents."
+  - dir: export-and-delete
+    file: vendor/export-and-delete/SKILL.md
+    name: export-and-delete
+    description: ">"
+  - dir: files
+    file: vendor/files/SKILL.md
+    name: files
+    description: ">"
+  - dir: filter-and-query
+    file: vendor/filter-and-query/SKILL.md
+    name: filter-and-query
+    description: ">"
+  - dir: flow-builder
+    file: vendor/flow-builder/SKILL.md
+    name: flow-builder
+    description: "Build valid Frontline assistant flows from CLI commands. Use when creating flow graphs, choosing conversation node payloads, connecting nodes, or validating flow structure before execution."
+  - dir: formulas
+    file: vendor/formulas/SKILL.md
+    name: formulas
+    description: ">"
+  - dir: frontline-agents
+    file: vendor/frontline-agents/SKILL.md
+    name: frontline-agents
+    description: "List, filter, inspect, run/test, and manage Frontline AI agents and their flows using the Frontline CLI. Use when the user asks about agents, running or testing an agent, flow CRUD, flow graph nodes/edges, status, conversations, or analytics."
+  - dir: frontline-api
+    file: vendor/frontline-api/SKILL.md
+    name: frontline-api
+    description: "Make raw HTTP requests to the Frontline Public API using the Frontline CLI. Use as an escape hatch when a specific endpoint does not have a dedicated CLI command, or when exploring the API."
+  - dir: frontline-billing
+    file: vendor/frontline-billing/SKILL.md
+    name: frontline-billing
+    description: "Query Frontline billing information using the Frontline CLI — Studio plan usage, credit consumption history, Max plan usage, and Max seat assignment. Use when the user asks about their billing, credits, plan, subscription, usage limits, or Max seats."
+  - dir: frontline-docs
+    file: vendor/frontline-docs/SKILL.md
+    name: frontline-docs
+    description: ">"
+  - dir: frontline-internals
+    file: vendor/frontline-internals/SKILL.md
+    name: frontline-internals
+    description: ">"
+  - dir: frontline-workflows
+    file: vendor/frontline-workflows/SKILL.md
+    name: frontline-workflows
+    description: "Create, edit, connect, inspect, and delete Frontline automation workflows using the Frontline CLI. Use when the user asks to build workflows, add nodes or edges, manage workflow context, inspect status, or view analytics."
+  - dir: guidance
+    file: vendor/guidance/SKILL.md
+    name: guidance
+    description: "Fetch authoritative builder reference data from the live backend using the `frontline guidance` CLI — valid icon keys/icon colors/select-option colors (`frontline guidance icons`), the field-type & metadata reference (`frontline guidance fields`), the workflow/flow node-type catalog (`frontline guidance nodes`), and per-node configuration guidance (`frontline guidance node <type>`). Use this whenever you need a current allowlist or reference instead of a hard-coded one: before setting an `emoji`/`icon_color`, choosing option colors, picking a field type/metadata, or building/configuring a flow/workflow graph. Values come straight from backend constants and editable prompts, so they never drift from what the API will accept."
+  - dir: incoming-webhooks
+    file: vendor/incoming-webhooks/SKILL.md
+    name: incoming-webhooks
+    description: "Manage Frontline incoming webhooks from the CLI — inbound HTTP endpoints that external systems POST to in order to trigger automation workflows. Covers the full lifecycle (create, list, get, update, regenerate token, delete), how to call the webhook URL with its bearer token, and how to inspect the delivery events and the workflows they triggered."
+  - dir: integrations
+    file: vendor/integrations/SKILL.md
+    name: integrations
+    description: "Manage account integrations (Studio connected accounts/toolkits — Gmail, Slack, Salesforce, etc.) and resolve trigger resource IDs using the `frontline integrations` CLI. Use this to list connected integrations and read the numeric `id` that becomes the `connectedAccountId` in workflow/flow triggers and tool nodes, to discover connectable toolkits and their tool slugs, to configure which tools an integration exposes (`integrations tools set`), and to turn human labels like \"my Q3 budget sheet\" into the IDs an event-trigger config needs. Requires a USER API key."
+  - dir: knowledge-bases
+    file: vendor/knowledge-bases/SKILL.md
+    name: knowledge-bases
+    description: "Manage Frontline knowledge bases from the CLI — create/list/update/delete KBs, add and resync sources (URLs and website crawls), inspect crawl sync history, run semantic search, and assign KBs to agents. Use when the user wants to feed documents/URLs into a knowledge base, search indexed content, or control which agent uses which KB. Does not handle file uploads."
+  - dir: max-auth
+    file: vendor/max-auth/SKILL.md
+    name: max-auth
+    description: "Manage Max CLI authentication — store per-user API key (synced with Frontline CLI), sign out, and inspect the active profile. Use when the user needs Max terminal auth, whoami, or clearing credentials."
+  - dir: max-chat
+    file: vendor/max-chat/SKILL.md
+    name: max-chat
+    description: "Send messages to the Max AI assistant and manage conversations from the terminal. Use when the user wants to chat with Max, send a quick question, start a new conversation, or open an interactive chat session."
+  - dir: max-integrations
+    file: vendor/max-integrations/SKILL.md
+    name: max-integrations
+    description: "Read your own Max connected integrations from the `max` CLI — the maxProfile-scoped accounts (Gmail, Outlook, Slack, HubSpot, Stripe, Google Workspace, etc.) that power Max chat, tasks, and playbooks. Read-only: list connection status / connected email / tool counts and get one integration's OAuth scopes + enabled tool slugs. Use to check what's connected and to discover the valid toolkit slugs for `--integrations` on `max tasks` / `max playbooks`. Connecting/disconnecting accounts and editing tool selection are done in the app, NOT here. NOT `frontline integrations` (those are account/Studio-scoped agent integrations)."
+  - dir: max-playbooks
+    file: vendor/max-playbooks/SKILL.md
+    name: max-playbooks
+    description: "Create, list, inspect, update, delete, and assign your own Max playbooks from the `max` CLI. Max playbooks are reusable instruction sets that steer the user's personal Max agent — Chat playbooks (workflows/SOPs) and Auto-Drafting playbooks (email tone/templates). Use when managing how Max itself behaves, not customer-facing agents."
+  - dir: max-settings
+    file: vendor/max-settings/SKILL.md
+    name: max-settings
+    description: "View and change how your Max assistant behaves — timezone, scheduling links, language, personality, global instructions, per-mailbox email drafting/follow-ups/labels, agent status, and the knowledge-base toggle. Use whenever the user asks to see or tune a Max preference (e.g. \"change my timezone\", \"make drafts more formal\", \"pause Max\"). All commands are `max settings <section> get|update` on the `max` binary. Related but different surfaces: `max integrations` reads account connections; `frontline agents agent-setting` configures Studio agents, not Max."
+  - dir: max-tasks
+    file: vendor/max-tasks/SKILL.md
+    name: max-tasks
+    description: "Create, list, inspect, update, enable/disable, delete, and run your own Max automated tasks from the `max` CLI. Max tasks are automations or routines that run inside the user's personal Max agent — either Scheduled (cron) or Event-based (fired by an integration trigger like a new email, a calendar event starting, or a deal stage change). Use when managing Max's own recurring/triggered work, NOT customer-facing agents, and NOT user to-dos (those are `frontline user-tasks` for the personal inbox or `frontline object task` for a record's \"To-do's\" tab — see the notes-and-tasks skill)."
+  - dir: notes-and-tasks
+    file: vendor/notes-and-tasks/SKILL.md
+    name: notes-and-tasks
+    description: ">"
+  - dir: pipeline-setup
+    file: vendor/pipeline-setup/SKILL.md
+    name: pipeline-setup
+    description: ">"
+  - dir: record-security
+    file: vendor/record-security/SKILL.md
+    name: record-security
+    description: ">"
+  - dir: record-type-management
+    file: vendor/record-type-management/SKILL.md
+    name: record-type-management
+    description: ">"
+  - dir: relations
+    file: vendor/relations/SKILL.md
+    name: relations
+    description: ">"
+  - dir: resource-creation
+    file: vendor/resource-creation/SKILL.md
+    name: resource-creation
+    description: ">"
+  - dir: schema-design
+    file: vendor/schema-design/SKILL.md
+    name: schema-design
+    description: ">"
+  - dir: sharing
+    file: vendor/sharing/SKILL.md
+    name: sharing
+    description: "Manage sharing permissions (Attio-style) for tables, workflows and agents from the CLI. Use when the user asks to share a table/workflow/agent, restrict who can view or edit a resource, set workspace/team/user access levels, or audit who has access. Covers resolving valid userIds/teamIds, the access levels per resource type, and get/set examples."
+  - dir: user-tasks
+    file: vendor/user-tasks/SKILL.md
+    name: user-tasks
+    description: "Create, list, inspect, update, complete, and delete user tasks (the account \"To-dos\" inbox) from the CLI. Use when the user asks about their to-dos, task inbox, follow-ups, reminders, or tasks assigned to a user — optionally linked to a CRM record. These are user tasks, distinct from Max tasks."
+  - dir: users
+    file: vendor/users/SKILL.md
+    name: users
+    description: "List the users in your Frontline account from the CLI. Use when you need to resolve a user's ID — for example to fill a user-relation field, assign a task or record, or look up who is on the account. Read this when you need a user ID and only have a name or email."
+  - dir: variables
+    file: vendor/variables/SKILL.md
+    name: variables
+    description: "Manage Frontline agent variables, workflow variables, and flow intents from the CLI, and explain variable interpolation in nodes and actions."
+  - dir: workflow-builder
+    file: vendor/workflow-builder/SKILL.md
+    name: workflow-builder
+    description: "Build valid Frontline automation workflows AND agent flows from the CLI. Covers trigger types, incoming webhooks, DYNAMIC_TABLES with object schema lookup, variable interpolation, and end-to-end automation patterns. Use when creating or editing any workflow or flow graph."
+generated_skills:
+  method: generated
+  source: openapi/frontline-openapi-original.yml
+  skills:
+  - file: frontline-build-and-deploy-agent.md
+    name: Build and deploy a Frontline AI agent
+    api: openapi/frontline-openapi-original.yml
+    operations: [listAiModels, createAgent, getAgent, updateAgentSetting, updateAgentTheme, updateAgentDeploymentStatus]
+  - file: frontline-crm-object-and-records.md
+    name: Create a Frontline CRM object and load records
+    api: openapi/frontline-openapi-original.yml
+    operations: [listObjects, createObject, getObjectSchema, createObjectRow, createObjectRowsBulk, listObjectRows, countObjectRows]
+  - file: frontline-workflow-with-webhook-trigger.md
+    name: Build a Frontline workflow triggered by an incoming webhook
+    api: openapi/frontline-openapi-original.yml
+    operations: [createIncomingWebhook, createWorkflow, getWorkflowGraph, createWorkflowNode, createWorkflowEdge, getWorkflowAnalytics]
 skills:
 - file: frontline-build-and-deploy-agent.md
   name: Build and deploy a Frontline AI agent
-  api: openapi/frontline-openapi-original.yml
-  operations: [listAiModels, createAgent, getAgent, updateAgentSetting, updateAgentTheme, updateAgentDeploymentStatus]
+  method: generated
 - file: frontline-crm-object-and-records.md
   name: Create a Frontline CRM object and load records
-  api: openapi/frontline-openapi-original.yml
-  operations: [listObjects, createObject, getObjectSchema, createObjectRow, createObjectRowsBulk, listObjectRows, countObjectRows]
+  method: generated
 - file: frontline-workflow-with-webhook-trigger.md
   name: Build a Frontline workflow triggered by an incoming webhook
-  api: openapi/frontline-openapi-original.yml
-  operations: [createIncomingWebhook, createWorkflow, getWorkflowGraph, createWorkflowNode, createWorkflowEdge, getWorkflowAnalytics]
+  method: generated

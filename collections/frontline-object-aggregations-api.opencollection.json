@@ -1,0 +1,155 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Account Object aggregations API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Object aggregations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List aggregations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/views/:viewId/aggregations",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "viewId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns aggregations configured for a view."
+        },
+        {
+          "info": {
+            "name": "Create aggregation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/views/:viewId/aggregations",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "viewId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates an aggregation on a column for the given view. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Update aggregation",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/views/:viewId/aggregations/:aggId",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "viewId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "aggId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Changes the operation of an aggregation. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Delete aggregation",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/views/:viewId/aggregations/:aggId",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "viewId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "aggId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Removes an aggregation from a view. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Compute aggregations",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/views/:viewId/aggregations/compute",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "viewId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Computes the configured aggregations for the rows matching the query."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

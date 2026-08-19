@@ -1,0 +1,2025 @@
+{
+  "item": [
+    {
+      "id": "7f0740de-ed7f-494c-95af-c1a1acb0bd24",
+      "name": "Object views",
+      "description": {
+        "content": "Saved view configurations on an object",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "082ca9bc-6dec-4cd6-b41d-356c03a7f7c5",
+          "name": "List views",
+          "request": {
+            "name": "List views",
+            "description": {
+              "content": "Returns the saved views configured on an object.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "objects",
+                ":name",
+                "views"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "0d6d8c65-5eb3-4728-9703-96fb2f87a4e5",
+              "name": "Views list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"example\",\n      \"type\": \"TABLE\",\n      \"is_default\": false,\n      \"is_private\": false,\n      \"record_type_id\": 1,\n      \"created_at\": \"example\",\n      \"updated_at\": \"example\",\n      \"column_order\": [\n        \"example\",\n        \"example\"\n      ],\n      \"hidden_columns\": [\n        \"example\",\n        \"example\"\n      ],\n      \"sticky_columns\": [\n        \"example\",\n        \"example\"\n      ],\n      \"grouping_field_id\": 1,\n      \"column_ordering\": {},\n      \"title_field_id\": 1,\n      \"display_field_ids\": [\n        1,\n        1\n      ]\n    },\n    {\n      \"id\": 1,\n      \"name\": \"example\",\n      \"type\": \"TABLE\",\n      \"is_default\": false,\n      \"is_private\": false,\n      \"record_type_id\": 1,\n      \"created_at\": \"example\",\n      \"updated_at\": \"example\",\n      \"column_order\": [\n        \"example\",\n        \"example\"\n      ],\n      \"hidden_columns\": [\n        \"example\",\n        \"example\"\n      ],\n      \"sticky_columns\": [\n        \"example\",\n        \"example\"\n      ],\n      \"grouping_field_id\": 1,\n      \"column_ordering\": {},\n      \"title_field_id\": 1,\n      \"display_field_ids\": [\n        1,\n        1\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5fd6a00f-69a1-4980-841a-b18d71c705d9",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1028c6ed-1cb1-46d8-a155-8375ee510a6a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f99e010-bee0-4c1b-805a-77fe47782f91",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "28d9b6f4-1068-4016-a63d-6c7f2d649832",
+          "name": "Create view",
+          "request": {
+            "name": "Create view",
+            "description": {
+              "content": "Creates a saved view on an object. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "objects",
+                ":name",
+                "views"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"type\": \"<string>\",\n  \"metadata\": {\n    \"grouping_field_id\": \"<number>\",\n    \"groupingColumnId\": \"<number>\",\n    \"column_order\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"columnOrder\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"hidden_columns\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"hiddenColumns\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dialog_field_order\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dialogFieldOrder\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"sticky_columns\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"stickyColumns\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"kanban_lane_size\": \"<string>\",\n    \"kanbanLaneSize\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fe363e98-c501-4869-bb77-e476558286ff",
+              "name": "Created view",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"type\": \"TABLE\",\n  \"metadata\": {\n    \"grouping_field_id\": 1,\n    \"groupingColumnId\": 1,\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"columnOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hiddenColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialogFieldOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"stickyColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"kanbanLaneSize\": \"THIN\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"example\",\n    \"type\": \"TABLE\",\n    \"is_default\": false,\n    \"is_private\": false,\n    \"record_type_id\": 1,\n    \"created_at\": \"example\",\n    \"updated_at\": \"example\",\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"grouping_field_id\": 1,\n    \"column_ordering\": {},\n    \"title_field_id\": 1,\n    \"display_field_ids\": [\n      1,\n      1\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "41eb2fcc-4dcb-42d6-a76a-029a1de7b748",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"type\": \"TABLE\",\n  \"metadata\": {\n    \"grouping_field_id\": 1,\n    \"groupingColumnId\": 1,\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"columnOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hiddenColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialogFieldOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"stickyColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"kanbanLaneSize\": \"THIN\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4cddcc6f-fbbd-4a87-989e-d43099c57e89",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"type\": \"TABLE\",\n  \"metadata\": {\n    \"grouping_field_id\": 1,\n    \"groupingColumnId\": 1,\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"columnOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hiddenColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialogFieldOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"stickyColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"kanbanLaneSize\": \"THIN\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7f14717-a539-418d-b07e-954b47f9fd7e",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"type\": \"TABLE\",\n  \"metadata\": {\n    \"grouping_field_id\": 1,\n    \"groupingColumnId\": 1,\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"columnOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hiddenColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialogFieldOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"stickyColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"kanbanLaneSize\": \"THIN\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d48df443-cadf-4f50-a218-8374e0b22d53",
+          "name": "Create record-type-scoped view",
+          "request": {
+            "name": "Create record-type-scoped view",
+            "description": {
+              "content": "Creates a saved view scoped to a record type. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "objects",
+                "record-types",
+                ":recordTypeId",
+                "views"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "recordTypeId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"type\": \"<string>\",\n  \"metadata\": {\n    \"grouping_field_id\": \"<number>\",\n    \"groupingColumnId\": \"<number>\",\n    \"column_order\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"columnOrder\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"hidden_columns\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"hiddenColumns\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dialog_field_order\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dialogFieldOrder\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"sticky_columns\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"stickyColumns\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"kanban_lane_size\": \"<string>\",\n    \"kanbanLaneSize\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4728f27d-5ab7-4e2f-b8fb-bfb696a2af71",
+              "name": "Created view",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    "record-types",
+                    ":recordTypeId",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "recordTypeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"type\": \"TABLE\",\n  \"metadata\": {\n    \"grouping_field_id\": 1,\n    \"groupingColumnId\": 1,\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"columnOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hiddenColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialogFieldOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"stickyColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"kanbanLaneSize\": \"THIN\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"example\",\n    \"type\": \"TABLE\",\n    \"is_default\": false,\n    \"is_private\": false,\n    \"record_type_id\": 1,\n    \"created_at\": \"example\",\n    \"updated_at\": \"example\",\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"grouping_field_id\": 1,\n    \"column_ordering\": {},\n    \"title_field_id\": 1,\n    \"display_field_ids\": [\n      1,\n      1\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "030df29e-e782-4ee8-bab5-54d766800f09",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    "record-types",
+                    ":recordTypeId",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "recordTypeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"type\": \"TABLE\",\n  \"metadata\": {\n    \"grouping_field_id\": 1,\n    \"groupingColumnId\": 1,\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"columnOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hiddenColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialogFieldOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"stickyColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"kanbanLaneSize\": \"THIN\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f287eadf-b62e-46b8-a83b-24420649b9ed",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    "record-types",
+                    ":recordTypeId",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "recordTypeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"type\": \"TABLE\",\n  \"metadata\": {\n    \"grouping_field_id\": 1,\n    \"groupingColumnId\": 1,\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"columnOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hiddenColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialogFieldOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"stickyColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"kanbanLaneSize\": \"THIN\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "88471527-394f-4aed-800f-57eab3190dca",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    "record-types",
+                    ":recordTypeId",
+                    "views"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "recordTypeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"type\": \"TABLE\",\n  \"metadata\": {\n    \"grouping_field_id\": 1,\n    \"groupingColumnId\": 1,\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"columnOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hiddenColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialogFieldOrder\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"stickyColumns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"kanbanLaneSize\": \"THIN\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b016a0f1-f4ae-4d96-81b7-334feadc7ba6",
+          "name": "Update view",
+          "request": {
+            "name": "Update view",
+            "description": {
+              "content": "Updates a saved view. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "objects",
+                ":name",
+                "views",
+                ":viewId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "viewId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"metadata\": {\n    \"column_order\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"hidden_columns\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dialog_field_order\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"sticky_columns\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"kanban_lane_size\": \"<string>\",\n    \"column_ordering\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b72a58c4-894c-4410-9611-9d3f519fe676",
+              "name": "Updated view",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"metadata\": {\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"column_ordering\": [\n      \"example\",\n      \"example\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"example\",\n    \"type\": \"TABLE\",\n    \"is_default\": false,\n    \"is_private\": false,\n    \"record_type_id\": 1,\n    \"created_at\": \"example\",\n    \"updated_at\": \"example\",\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"grouping_field_id\": 1,\n    \"column_ordering\": {},\n    \"title_field_id\": 1,\n    \"display_field_ids\": [\n      1,\n      1\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e3aec3c9-d4fa-49fa-9437-76eaf7445f7a",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"metadata\": {\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"column_ordering\": [\n      \"example\",\n      \"example\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "59a7dc85-cfb7-438c-a021-a5d97444be76",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"metadata\": {\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"column_ordering\": [\n      \"example\",\n      \"example\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c3dd4226-ce1f-4321-840d-6601c064d6a7",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"metadata\": {\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"column_ordering\": [\n      \"example\",\n      \"example\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "186b0d40-af7e-488d-be1b-8580396eefe2",
+          "name": "Delete view",
+          "request": {
+            "name": "Delete view",
+            "description": {
+              "content": "Deletes a saved view. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "objects",
+                ":name",
+                "views",
+                ":viewId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "viewId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE"
+          },
+          "response": [
+            {
+              "id": "d21afaa4-5c26-41ad-9810-baa7d0939889",
+              "name": "Deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"deleted\": true,\n    \"id\": \"example\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "60777b2c-395f-482a-8f2c-021ba3f49ae2",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a9ca8f89-6a4d-4b01-b0a6-f499c944125b",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "372b079c-66b7-4b84-a8f2-3c2147f343d8",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3c73bbfb-60c6-4ec8-91bc-9f707ef352d1",
+          "name": "Update record-type-scoped view",
+          "request": {
+            "name": "Update record-type-scoped view",
+            "description": {
+              "content": "Updates a saved view that is scoped to a record type. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "objects",
+                "record-types",
+                ":recordTypeId",
+                "views",
+                ":viewId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "recordTypeId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "viewId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"metadata\": {\n    \"column_order\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"hidden_columns\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"dialog_field_order\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"sticky_columns\": [\n      \"<string>\",\n      \"<string>\"\n    ],\n    \"kanban_lane_size\": \"<string>\",\n    \"column_ordering\": [\n      \"<string>\",\n      \"<string>\"\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e0280870-5642-4ff8-ab4a-b7755e9287fb",
+              "name": "Updated view",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    "record-types",
+                    ":recordTypeId",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "recordTypeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"metadata\": {\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"column_ordering\": [\n      \"example\",\n      \"example\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"example\",\n    \"type\": \"TABLE\",\n    \"is_default\": false,\n    \"is_private\": false,\n    \"record_type_id\": 1,\n    \"created_at\": \"example\",\n    \"updated_at\": \"example\",\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"grouping_field_id\": 1,\n    \"column_ordering\": {},\n    \"title_field_id\": 1,\n    \"display_field_ids\": [\n      1,\n      1\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "34c7f9e8-7c11-446f-bc5e-d2bdcb3078a0",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    "record-types",
+                    ":recordTypeId",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "recordTypeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"metadata\": {\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"column_ordering\": [\n      \"example\",\n      \"example\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b196d70-4f02-43f6-9d9b-6ebfbd10edf4",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    "record-types",
+                    ":recordTypeId",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "recordTypeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"metadata\": {\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"column_ordering\": [\n      \"example\",\n      \"example\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6d169b5-2d9b-4a1e-af35-a0da34ea26d7",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    "record-types",
+                    ":recordTypeId",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "recordTypeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"metadata\": {\n    \"column_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"hidden_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"dialog_field_order\": [\n      \"example\",\n      \"example\"\n    ],\n    \"sticky_columns\": [\n      \"example\",\n      \"example\"\n    ],\n    \"kanban_lane_size\": \"THIN\",\n    \"column_ordering\": [\n      \"example\",\n      \"example\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9c50f8bf-5468-4c65-8d64-9bd0c3e176e0",
+          "name": "Delete record-type-scoped view",
+          "request": {
+            "name": "Delete record-type-scoped view",
+            "description": {
+              "content": "Deletes a record-type-scoped view. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "objects",
+                "record-types",
+                ":recordTypeId",
+                "views",
+                ":viewId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "recordTypeId",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "viewId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE"
+          },
+          "response": [
+            {
+              "id": "8402cf7e-05bb-4e2e-bf3c-d6cbe343502f",
+              "name": "Deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    "record-types",
+                    ":recordTypeId",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "recordTypeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"deleted\": true,\n    \"id\": \"example\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "879b343b-7687-4438-ba05-da698b9087af",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    "record-types",
+                    ":recordTypeId",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "recordTypeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4314f3b2-fc76-4906-aa65-995bfc91bead",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    "record-types",
+                    ":recordTypeId",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "recordTypeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "77cd78ff-632b-42a7-93a4-8774a4d8453e",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    "record-types",
+                    ":recordTypeId",
+                    "views",
+                    ":viewId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "recordTypeId",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "viewId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://prod-api.getfrontline.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "b00a60bf-9bb6-47f2-abc1-f61407952c41",
+    "name": "Public Account Object views API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public API for accessing agents, flows, and analytics.\n\n## Authentication\n\nThe Public API supports two API key types. Pass the key as a Bearer token:\n\n```\nAuthorization: Bearer <YOUR_API_KEY>\n```\n\n### Account API key (GENERAL)\n\nAccount-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.\n\n### User API key (USER)\n\nUser-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**\n\nEach operation documents which key type(s) it accepts in its **Security** section.",
+      "type": "text/plain"
+    }
+  }
+}

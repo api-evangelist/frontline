@@ -1,0 +1,179 @@
+generated: '2026-08-14'
+method: searched
+source: https://www.getfrontline.ai/pricing
+currency: USD
+plan_count: 10
+note: >-
+  Frontline prices three separate product lines that are bought independently and stack:
+  "CRM & Max" (per user/month), "Studio" (per account/month, AI-credit metered) and "Meetings"
+  (per user/month, marked "Coming soon" on the pricing page as of the generated date). Annual
+  billing is discounted 20%. Every line has a $0 Free tier and a "contact us" Enterprise tier
+  except Meetings, which publishes only two paid tiers. Values below are transcribed verbatim
+  from the published pricing page; no quota was inferred.
+billing:
+  periods:
+  - monthly
+  - annual
+  annual_discount: 20%
+  free_tier: true
+  credit_card_required_for_free: false
+  custom_volume: Contact sales for custom volumes and enterprise pricing.
+product_lines:
+- name: CRM & Max
+  unit: per user/month
+  summary: Self-assembling CRM plus Max, the personal AI agent that keeps it updated.
+  positioning_replaces:
+  - Salesforce
+  - HubSpot
+  - Claude
+  - ChatGPT
+  plans:
+  - name: Free
+    price: 0
+    currency: USD
+    period: monthly
+    unit: account
+    included:
+      records: 10000
+    features:
+    - 10,000 Records Included
+    - Unlimited CRM Objects
+    - Customizable CRM Tables
+    - Full CLI & API Access
+  - name: Standard
+    price: 30
+    currency: USD
+    period: monthly
+    unit: per user
+    included:
+      records: 250000
+      scheduled_tasks: 5
+    features:
+    - Everything in Free
+    - 250,000 records included
+    - Max AI Agent
+    - Email & WhatsApp Sync
+    - AI email labeling and drafting
+    - 5 scheduled tasks
+  - name: Premium
+    price: 60
+    currency: USD
+    period: monthly
+    unit: per user
+    recommended: true
+    included:
+      records: 1000000
+      scheduled_tasks: 10
+    features:
+    - Everything in Standard
+    - 1M Records included
+    - Shared Knowledge Bases
+    - 10 scheduled tasks
+    - Priority support
+  - name: Enterprise
+    price: null
+    price_label: Custom
+    period: monthly
+    unit: per user
+    included:
+      scheduled_tasks: 15
+    features:
+    - Everything in Premium
+    - Custom CRM Records
+    - Payment by Invoice
+    - 15 scheduled tasks
+    - Dedicated support
+    contact: Talk to sales
+- name: Studio
+  unit: per account/month
+  summary: AI agents, workflows, access to leading AI models, and integrations.
+  positioning_replaces:
+  - n8n
+  - Make
+  - Zapier
+  plans:
+  - name: Free
+    price: 0
+    currency: USD
+    period: monthly
+    included:
+      ai_credits: 1000
+      ai_agents: 1
+      automations: 1
+      workflow_runs: 1000
+  - name: Standard
+    price: 199
+    currency: USD
+    period: monthly
+    included:
+      ai_credits: 10000
+      ai_agents: 2
+      automations: 10
+      workflow_runs: 20000
+  - name: Premium
+    price: 499
+    currency: USD
+    period: monthly
+    recommended: true
+    included:
+      ai_credits: 20000
+      ai_agents: 5
+      automations: 20
+      workflow_runs: 50000
+  - name: Enterprise
+    price: null
+    price_label: Custom
+    period: monthly
+    included:
+      ai_credits: 40000
+      ai_agents: 10
+      automations: unlimited
+      workflow_runs: 75000
+    contact: Talk to sales
+- name: Meetings
+  unit: per user/month
+  status: coming-soon
+  summary: Meeting notes, transcription, CRM logging and follow-ups by Max.
+  positioning_replaces:
+  - Fireflies
+  - Gong
+  - Diio
+  plans:
+  - name: Standard
+    price: 25
+    currency: USD
+    period: monthly
+    unit: per user
+    features:
+    - Meeting notes, summaries, and transcription
+    - Video recording and storage
+    - Playbooks for custom analysis
+    - Team reports
+    - Automatic CRM logging
+  - name: Advanced
+    price: 50
+    currency: USD
+    period: monthly
+    unit: per user
+    recommended: true
+    features:
+    - Everything in Standard
+    - Coaching and scorecards
+    - Extended storage
+    - Proactive alerts
+    - Topic and risk detection
+    - Priority support
+api_access:
+  note: >-
+    "Full CLI & API Access" is listed on the Free CRM & Max tier, so the Public API is not gated
+    behind a paid plan. Plan/credit state is readable at runtime via GET /public/v1/billing
+    (Frontline Billing API).
+  runtime_operation: getBillingPlan
+  runtime_path: /public/v1/billing
+overage:
+  published: false
+  note: No per-unit overage rate is published; the page directs overflow to the next tier or sales.
+x-evidence:
+- url: https://www.getfrontline.ai/pricing
+  http_status: 200
+  fetched: '2026-08-14'

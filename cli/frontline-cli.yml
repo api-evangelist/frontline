@@ -1,8 +1,10 @@
-generated: '2026-07-19'
+generated: '2026-08-14'
 method: searched
 source: https://docs.getfrontline.ai/cli.md
 name: Frontline CLI
 package: '@getfrontline/cli'
+version: 1.2.1
+published: '2026-08-05'
 requires: Node 18+
 install:
 - npm install -g @getfrontline/cli
@@ -22,24 +24,41 @@ output:
   flags:
   - '--pretty'
   - '--table'
+  - '--json'
   - '--profile <name>'
+  - '--api-key <key>'
+  - '--base-url <url>'
+  - '--debug'
+  errors: >-
+    Human-readable on stderr; structured JSON on stdout when invoked in the default (non-pretty)
+    mode.
+  env: FRONTLINE_API_KEY
 binaries:
 - name: frontline
   description: Public REST API client plus Claude Code skills setup.
   command_groups:
+  - agent-channels
+  - agents
   - ai-models
   - api
   - auth
   - billing
-  - agents
+  - channels
+  - custom-tools
+  - guidance
   - incoming-webhooks
   - integrations
-  - setup
+  - kb
   - object
+  - playbooks
+  - setup
+  - sharing
   - table
   - tools
-  - workflows
+  - user-tasks
+  - users
   - util
+  - workflows
 - name: max
   description: Max chat & admin client (send messages, manage conversations, interactive REPL).
   command_groups:
@@ -47,6 +66,34 @@ binaries:
   - chat
   - config-path
   - conversations
+  - integrations
+  - playbooks
+  - settings
+  - tasks
+agent_skills:
+  command: frontline setup --claude-skills
+  flags:
+  - '--claude-skills  Install Claude Code skills to ~/.claude/skills/'
+  - '--force          Overwrite existing skills'
+  count: 44
+  note: >-
+    The CLI bundles 44 first-party Agent Skills (package/dist/skills/*/SKILL.md) and installs them
+    into ~/.claude/skills/. Captured verbatim in skills/vendor/ — see skills/_index.yml.
+  docs: https://docs.getfrontline.ai/cli/frontline/setup.md
+escape_hatch:
+  command: frontline api raw get <path> [--query key=value]...
+  note: >-
+    Raw passthrough to any Public API path. GET only — any other method errors. Documented in the
+    vendor `frontline-api` skill.
+version_gate:
+  note: >-
+    The Public API enforces a minimum CLI version; outdated clients receive 400 cli_outdated with
+    details.minSupportedVersion. See lifecycle/frontline-lifecycle.yml.
 references:
+- https://docs.getfrontline.ai/cli.md
 - https://docs.getfrontline.ai/cli/getting-started.md
 - https://docs.getfrontline.ai/cli/authentication.md
+- https://docs.getfrontline.ai/cli/frontline/setup.md
+see:
+- packages/frontline-packages.yml
+- skills/_index.yml

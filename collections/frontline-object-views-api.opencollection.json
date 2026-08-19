@@ -1,0 +1,180 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Public Account Object views API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Object views",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List views",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/views",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Returns the saved views configured on an object."
+        },
+        {
+          "info": {
+            "name": "Create view",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/views",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a saved view on an object. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Create record-type-scoped view",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/record-types/:recordTypeId/views",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a saved view scoped to a record type. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Update view",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/views/:viewId",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "viewId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a saved view. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Delete view",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/:name/views/:viewId",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "viewId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a saved view. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Update record-type-scoped view",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/record-types/:recordTypeId/views/:viewId",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "viewId",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a saved view that is scoped to a record type. Requires a USER API key."
+        },
+        {
+          "info": {
+            "name": "Delete record-type-scoped view",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://prod-api.getfrontline.ai/public/v1/objects/record-types/:recordTypeId/views/:viewId",
+            "params": [
+              {
+                "name": "recordTypeId",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "viewId",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Deletes a record-type-scoped view. Requires a USER API key."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

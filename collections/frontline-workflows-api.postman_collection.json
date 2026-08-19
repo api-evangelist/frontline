@@ -1,0 +1,2390 @@
+{
+  "item": [
+    {
+      "id": "0c1e4c6d-cfd4-4e41-8819-bae67ccc4f4e",
+      "name": "Workflows",
+      "description": {
+        "content": "View and manage your workflows across your account",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c041dc4f-d6d6-4b1f-a58d-44725b893199",
+          "name": "List all workflows",
+          "request": {
+            "name": "List all workflows",
+            "description": {
+              "content": "Returns a list of workflows associated with the account. Nodes and logic are excluded.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9a0028cf-4f2a-4603-8e96-08a141b099e0",
+              "name": "A list of workflows",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "ACTIVE"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"id\": 501,\n      \"name\": \"Daily CRM Sync\",\n      \"description\": \"Syncs contacts to HubSpot\",\n      \"status\": \"ACTIVE\",\n      \"triggerType\": \"CONVERSATION_ENDED\",\n      \"createdAt\": \"2024-01-01T12:00:00Z\",\n      \"updatedAt\": \"2024-01-01T12:00:00Z\",\n      \"runsCount\": 1200,\n      \"runsFailedCount\": 5,\n      \"lastRunDate\": \"2024-01-01T12:00:00Z\"\n    },\n    {\n      \"id\": 501,\n      \"name\": \"Daily CRM Sync\",\n      \"description\": \"Syncs contacts to HubSpot\",\n      \"status\": \"ACTIVE\",\n      \"triggerType\": \"CONVERSATION_ENDED\",\n      \"createdAt\": \"2024-01-01T12:00:00Z\",\n      \"updatedAt\": \"2024-01-01T12:00:00Z\",\n      \"runsCount\": 1200,\n      \"runsFailedCount\": 5,\n      \"lastRunDate\": \"2024-01-01T12:00:00Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "97599193-7fcf-454f-b012-81b9fad543eb",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "ACTIVE"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2c5af86f-c23e-4c4c-bc2f-baaffc265b07",
+          "name": "Create a workflow",
+          "request": {
+            "name": "Create a workflow",
+            "description": {
+              "content": "Creates an automation workflow and an empty graph snapshot.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f64be52d-f61e-470a-a5c0-00910cb818a9",
+              "name": "Created workflow",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Daily CRM Sync\",\n  \"description\": \"Syncs contacts daily\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"description\": \"Syncs contacts to HubSpot\",\n  \"draftSnapshotId\": \"64f1c2e6a75f2d4a9a2f1234\",\n  \"id\": 501,\n  \"lastRunDate\": \"2024-01-01T12:00:00Z\",\n  \"liveSnapshotId\": \"64f1c2e6a75f2d4a9a2f1234\",\n  \"name\": \"Daily CRM Sync\",\n  \"runsCount\": 1200,\n  \"runsFailedCount\": 5,\n  \"status\": \"ACTIVE\",\n  \"triggerType\": \"CONVERSATION_ENDED\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7f2ed7c2-fb4e-4de7-b345-110248ec664e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Daily CRM Sync\",\n  \"description\": \"Syncs contacts daily\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "feece563-d1ea-42cd-b056-9a85c7d723bf",
+          "name": "Get workflow details",
+          "request": {
+            "name": "Get workflow details",
+            "description": {
+              "content": "Returns a workflow automation. Pass includeNodes=true to include graph nodes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows",
+                ":workflowId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "includeNodes",
+                  "value": "<boolean>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "workflowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fda86bdd-b846-4571-aa1b-d9c46c62c48a",
+              "name": "Workflow details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeNodes",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"description\": \"Syncs contacts to HubSpot\",\n  \"draftSnapshotId\": \"64f1c2e6a75f2d4a9a2f1234\",\n  \"id\": 501,\n  \"lastRunDate\": \"2024-01-01T12:00:00Z\",\n  \"liveSnapshotId\": \"64f1c2e6a75f2d4a9a2f1234\",\n  \"name\": \"Daily CRM Sync\",\n  \"runsCount\": 1200,\n  \"runsFailedCount\": 5,\n  \"status\": \"ACTIVE\",\n  \"triggerType\": \"CONVERSATION_ENDED\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4819f8c4-e7f9-4ef6-8eb8-7df5368e97f6",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeNodes",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "53a41f06-511c-4707-a50d-aee19b1713f7",
+          "name": "Update workflow",
+          "request": {
+            "name": "Update workflow",
+            "description": {
+              "content": "Updates workflow metadata or status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows",
+                ":workflowId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "workflowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"description\": \"<string>\",\n  \"status\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7b468c2b-92d4-4612-b693-a80ceaf1db9e",
+              "name": "Updated workflow",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Daily CRM Sync\",\n  \"description\": \"Syncs contacts daily\",\n  \"status\": \"ACTIVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"description\": \"Syncs contacts to HubSpot\",\n  \"draftSnapshotId\": \"64f1c2e6a75f2d4a9a2f1234\",\n  \"id\": 501,\n  \"lastRunDate\": \"2024-01-01T12:00:00Z\",\n  \"liveSnapshotId\": \"64f1c2e6a75f2d4a9a2f1234\",\n  \"name\": \"Daily CRM Sync\",\n  \"runsCount\": 1200,\n  \"runsFailedCount\": 5,\n  \"status\": \"ACTIVE\",\n  \"triggerType\": \"CONVERSATION_ENDED\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ddc5f854-3387-40e8-bbda-c12e1e4ac919",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Daily CRM Sync\",\n  \"description\": \"Syncs contacts daily\",\n  \"status\": \"ACTIVE\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "85132d31-9955-40cc-b3b2-ef0b0e5adbee",
+          "name": "Delete workflow",
+          "request": {
+            "name": "Delete workflow",
+            "description": {
+              "content": "Soft deletes a workflow automation and cleans up trigger side effects.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows",
+                ":workflowId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "workflowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "45ac395d-a8c0-4620-8bba-d3af92638f9b",
+              "name": "Workflow deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "121845ac-be31-48d8-9636-c6d4e7601d08",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5d6bf3b8-aa1f-4e6a-a029-8de5815e77b5",
+          "name": "Get workflow graph",
+          "request": {
+            "name": "Get workflow graph",
+            "description": {
+              "content": "Returns the workflow snapshot with nodes and edges.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows",
+                ":workflowId",
+                "graph"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "workflowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9c166947-2d50-46a2-a3f4-9d07ecb0f57e",
+              "name": "Workflow graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entityId\": 1,\n  \"type\": \"FLOW\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {},\n          \"key_1\": {},\n          \"key_2\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {},\n          \"key_1\": {},\n          \"key_2\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ],\n  \"createdAt\": \"example\",\n  \"id\": \"example\",\n  \"assistantId\": \"example\",\n  \"accountId\": 1,\n  \"updatedAt\": \"example\",\n  \"executed\": false,\n  \"breakingChangeAt\": \"example\",\n  \"breakingChangeReason\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3e4316d-954a-422a-9ea5-4f714054adf4",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "graph"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4b2929bb-ea10-4fe7-9016-bd4ce3bcb470",
+          "name": "Create workflow node",
+          "request": {
+            "name": "Create workflow node",
+            "description": {
+              "content": "Creates a node in an automation workflow graph.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows",
+                ":workflowId",
+                "nodes"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "workflowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"node\": {\n    \"nodeId\": \"<string>\",\n    \"position\": {\n      \"positionX\": \"<number>\",\n      \"positionY\": \"<number>\"\n    },\n    \"type\": \"<string>\",\n    \"alias\": \"<string>\",\n    \"name\": \"<string>\",\n    \"data\": {\n      \"type\": \"<string>\",\n      \"triggerType\": \"<string>\",\n      \"triggeredBy\": \"<string>\",\n      \"triggeredByAgentIds\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"triggerByWebhookIds\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"triggeredByTableId\": \"<number>\",\n      \"triggeredByRecordTypeId\": \"<number>\",\n      \"connectedAccountTriggerId\": \"<string>\",\n      \"triggerToolkit\": \"<string>\",\n      \"triggerSlug\": \"<string>\",\n      \"triggerConfig\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"triggerQueryConfig\": {\n        \"query\": \"<object>\"\n      },\n      \"connectedAccountId\": \"<number>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5224cd5f-bab2-49e8-8d3a-cb2eb71969d9",
+              "name": "Created node",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "nodes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"node\": {\n    \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n    \"position\": {\n      \"positionX\": 1,\n      \"positionY\": 1\n    },\n    \"type\": \"TRIGGER\",\n    \"alias\": \"Initial trigger\",\n    \"name\": \"Initial trigger\",\n    \"data\": {\n      \"type\": \"TRIGGER\",\n      \"triggerType\": \"CONVERSATION_ENDED\",\n      \"triggeredBy\": \"BOTH\",\n      \"triggeredByAgentIds\": [\n        \"example\",\n        \"example\"\n      ],\n      \"triggerByWebhookIds\": [\n        \"example\",\n        \"example\"\n      ],\n      \"triggeredByTableId\": 1,\n      \"triggeredByRecordTypeId\": 1,\n      \"connectedAccountTriggerId\": \"example\",\n      \"triggerToolkit\": \"example\",\n      \"triggerSlug\": \"example\",\n      \"triggerConfig\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"triggerQueryConfig\": {\n        \"query\": \"<object>\"\n      },\n      \"connectedAccountId\": 1\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n  \"position\": {\n    \"positionX\": 1,\n    \"positionY\": 1\n  },\n  \"type\": \"TRIGGER\",\n  \"alias\": \"Initial trigger\",\n  \"name\": \"Initial trigger\",\n  \"data\": {\n    \"type\": \"TRIGGER\",\n    \"triggerType\": \"CONVERSATION_ENDED\",\n    \"triggeredBy\": \"BOTH\",\n    \"triggeredByAgentIds\": [\n      \"example\",\n      \"example\"\n    ],\n    \"triggerByWebhookIds\": [\n      \"example\",\n      \"example\"\n    ],\n    \"triggeredByTableId\": 1,\n    \"triggeredByRecordTypeId\": 1,\n    \"connectedAccountTriggerId\": \"example\",\n    \"triggerToolkit\": \"example\",\n    \"triggerSlug\": \"example\",\n    \"triggerConfig\": {\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {}\n    },\n    \"triggerQueryConfig\": {\n      \"query\": {}\n    },\n    \"connectedAccountId\": 1\n  },\n  \"workflowId\": \"example\",\n  \"handles\": [\n    {\n      \"handleId\": \"example\",\n      \"sourceEdge\": {\n        \"from\": \"example\",\n        \"fromHandleId\": \"example\",\n        \"to\": \"example\",\n        \"toHandleId\": \"example\"\n      },\n      \"text\": \"example\"\n    },\n    {\n      \"handleId\": \"example\",\n      \"sourceEdge\": {\n        \"from\": \"example\",\n        \"fromHandleId\": \"example\",\n        \"to\": \"example\",\n        \"toHandleId\": \"example\"\n      },\n      \"text\": \"example\"\n    }\n  ],\n  \"targetEdges\": [\n    {\n      \"from\": \"example\",\n      \"fromHandleId\": \"example\",\n      \"to\": \"example\",\n      \"toHandleId\": \"example\"\n    },\n    {\n      \"from\": \"example\",\n      \"fromHandleId\": \"example\",\n      \"to\": \"example\",\n      \"toHandleId\": \"example\"\n    }\n  ],\n  \"createdAt\": \"example\",\n  \"updatedAt\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d80f1543-fa98-4a05-8986-ccbed3692878",
+              "name": "Conflict",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "nodes"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"node\": {\n    \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n    \"position\": {\n      \"positionX\": 1,\n      \"positionY\": 1\n    },\n    \"type\": \"TRIGGER\",\n    \"alias\": \"Initial trigger\",\n    \"name\": \"Initial trigger\",\n    \"data\": {\n      \"type\": \"TRIGGER\",\n      \"triggerType\": \"CONVERSATION_ENDED\",\n      \"triggeredBy\": \"BOTH\",\n      \"triggeredByAgentIds\": [\n        \"example\",\n        \"example\"\n      ],\n      \"triggerByWebhookIds\": [\n        \"example\",\n        \"example\"\n      ],\n      \"triggeredByTableId\": 1,\n      \"triggeredByRecordTypeId\": 1,\n      \"connectedAccountTriggerId\": \"example\",\n      \"triggerToolkit\": \"example\",\n      \"triggerSlug\": \"example\",\n      \"triggerConfig\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"triggerQueryConfig\": {\n        \"query\": \"<object>\"\n      },\n      \"connectedAccountId\": 1\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d448c264-cb79-458b-b961-7469aed024cc",
+          "name": "Update workflow node",
+          "request": {
+            "name": "Update workflow node",
+            "description": {
+              "content": "Updates a node and returns the updated workflow graph.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows",
+                ":workflowId",
+                "nodes",
+                ":nodeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "workflowId"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "nodeId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"node\": {\n    \"alias\": \"<string>\",\n    \"name\": \"<string>\",\n    \"position\": {\n      \"positionX\": \"<number>\",\n      \"positionY\": \"<number>\"\n    },\n    \"type\": \"<string>\",\n    \"data\": {\n      \"type\": \"<string>\",\n      \"triggerType\": \"<string>\",\n      \"triggeredBy\": \"<string>\",\n      \"triggeredByAgentIds\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"triggerByWebhookIds\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"triggeredByTableId\": \"<number>\",\n      \"triggeredByRecordTypeId\": \"<number>\",\n      \"connectedAccountTriggerId\": \"<string>\",\n      \"triggerToolkit\": \"<string>\",\n      \"triggerSlug\": \"<string>\",\n      \"triggerConfig\": {\n        \"key_0\": \"<object>\"\n      },\n      \"triggerQueryConfig\": {\n        \"query\": \"<object>\"\n      },\n      \"connectedAccountId\": \"<number>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fcf5766d-bec9-4be5-bca4-e1253ed0b03c",
+              "name": "Updated graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "nodes",
+                    ":nodeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "nodeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"node\": {\n    \"alias\": \"Initial trigger\",\n    \"name\": \"Initial trigger\",\n    \"position\": {\n      \"positionX\": 1,\n      \"positionY\": 1\n    },\n    \"type\": \"TRIGGER\",\n    \"data\": {\n      \"type\": \"TRIGGER\",\n      \"triggerType\": \"CONVERSATION_ENDED\",\n      \"triggeredBy\": \"BOTH\",\n      \"triggeredByAgentIds\": [\n        \"example\",\n        \"example\"\n      ],\n      \"triggerByWebhookIds\": [\n        \"example\",\n        \"example\"\n      ],\n      \"triggeredByTableId\": 1,\n      \"triggeredByRecordTypeId\": 1,\n      \"connectedAccountTriggerId\": \"example\",\n      \"triggerToolkit\": \"example\",\n      \"triggerSlug\": \"example\",\n      \"triggerConfig\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\",\n        \"key_2\": \"<object>\",\n        \"key_3\": \"<object>\"\n      },\n      \"triggerQueryConfig\": {\n        \"query\": \"<object>\"\n      },\n      \"connectedAccountId\": 1\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entityId\": 1,\n  \"type\": \"FLOW\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ],\n  \"createdAt\": \"example\",\n  \"id\": \"example\",\n  \"assistantId\": \"example\",\n  \"accountId\": 1,\n  \"updatedAt\": \"example\",\n  \"executed\": false,\n  \"breakingChangeAt\": \"example\",\n  \"breakingChangeReason\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6dffac80-1c87-4b79-b1ab-5641fdcd80e5",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "nodes",
+                    ":nodeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "nodeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"node\": {\n    \"alias\": \"Initial trigger\",\n    \"name\": \"Initial trigger\",\n    \"position\": {\n      \"positionX\": 1,\n      \"positionY\": 1\n    },\n    \"type\": \"TRIGGER\",\n    \"data\": {\n      \"type\": \"TRIGGER\",\n      \"triggerType\": \"CONVERSATION_ENDED\",\n      \"triggeredBy\": \"BOTH\",\n      \"triggeredByAgentIds\": [\n        \"example\",\n        \"example\"\n      ],\n      \"triggerByWebhookIds\": [\n        \"example\",\n        \"example\"\n      ],\n      \"triggeredByTableId\": 1,\n      \"triggeredByRecordTypeId\": 1,\n      \"connectedAccountTriggerId\": \"example\",\n      \"triggerToolkit\": \"example\",\n      \"triggerSlug\": \"example\",\n      \"triggerConfig\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\",\n        \"key_2\": \"<object>\",\n        \"key_3\": \"<object>\"\n      },\n      \"triggerQueryConfig\": {\n        \"query\": \"<object>\"\n      },\n      \"connectedAccountId\": 1\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "73e71152-b864-4281-a93a-4db31d8d579e",
+          "name": "Delete workflow node",
+          "request": {
+            "name": "Delete workflow node",
+            "description": {
+              "content": "Deletes a node and removes all incoming and outgoing edges.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows",
+                ":workflowId",
+                "nodes",
+                ":nodeId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "workflowId"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "nodeId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "5a2cb558-b20c-4644-81fb-e438aec9ee9f",
+              "name": "Updated graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "nodes",
+                    ":nodeId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "nodeId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entityId\": 1,\n  \"type\": \"FLOW\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ],\n  \"createdAt\": \"example\",\n  \"id\": \"example\",\n  \"assistantId\": \"example\",\n  \"accountId\": 1,\n  \"updatedAt\": \"example\",\n  \"executed\": false,\n  \"breakingChangeAt\": \"example\",\n  \"breakingChangeReason\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "59da4f7d-844d-40a0-b341-83cfd00511b5",
+          "name": "Create workflow edge",
+          "request": {
+            "name": "Create workflow edge",
+            "description": {
+              "content": "Adds or replaces the outgoing edge for a node.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows",
+                ":workflowId",
+                "edges"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "workflowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"edge\": {\n    \"source\": \"<string>\",\n    \"sourceHandle\": \"<string>\",\n    \"target\": \"<string>\",\n    \"targetHandle\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "91436093-7af4-4779-bbcc-ef13e7afaaa7",
+              "name": "Updated graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "edges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"edge\": {\n    \"source\": \"trigger_1\",\n    \"sourceHandle\": \"default\",\n    \"target\": \"api_1\",\n    \"targetHandle\": \"default\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entityId\": 1,\n  \"type\": \"FLOW\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ],\n  \"createdAt\": \"example\",\n  \"id\": \"example\",\n  \"assistantId\": \"example\",\n  \"accountId\": 1,\n  \"updatedAt\": \"example\",\n  \"executed\": false,\n  \"breakingChangeAt\": \"example\",\n  \"breakingChangeReason\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4aaeeb12-011b-4faa-b2ad-77da94686144",
+              "name": "Invalid graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "edges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"edge\": {\n    \"source\": \"trigger_1\",\n    \"sourceHandle\": \"default\",\n    \"target\": \"api_1\",\n    \"targetHandle\": \"default\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "18621d88-5e64-4208-bca3-bcd7d6eb8415",
+          "name": "Delete workflow edge",
+          "request": {
+            "name": "Delete workflow edge",
+            "description": {
+              "content": "Removes an edge from the workflow graph.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows",
+                ":workflowId",
+                "edges"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "workflowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"edge\": {\n    \"source\": \"<string>\",\n    \"sourceHandle\": \"<string>\",\n    \"target\": \"<string>\",\n    \"targetHandle\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f0e12652-9523-478f-bdbe-e3173938a847",
+              "name": "Updated graph",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "edges"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"edge\": {\n    \"source\": \"trigger_1\",\n    \"sourceHandle\": \"default\",\n    \"target\": \"api_1\",\n    \"targetHandle\": \"default\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entityId\": 1,\n  \"type\": \"FLOW\",\n  \"nodes\": [\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    },\n    {\n      \"nodeId\": \"node_550e8400-e29b-41d4-a716-446655440000\",\n      \"position\": {\n        \"positionX\": 1,\n        \"positionY\": 1\n      },\n      \"type\": \"TRIGGER\",\n      \"alias\": \"Initial trigger\",\n      \"name\": \"Initial trigger\",\n      \"data\": {\n        \"type\": \"TRIGGER\",\n        \"triggerType\": \"CONVERSATION_ENDED\",\n        \"triggeredBy\": \"BOTH\",\n        \"triggeredByAgentIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggerByWebhookIds\": [\n          \"example\",\n          \"example\"\n        ],\n        \"triggeredByTableId\": 1,\n        \"triggeredByRecordTypeId\": 1,\n        \"connectedAccountTriggerId\": \"example\",\n        \"triggerToolkit\": \"example\",\n        \"triggerSlug\": \"example\",\n        \"triggerConfig\": {\n          \"key_0\": {},\n          \"key_1\": {}\n        },\n        \"triggerQueryConfig\": {\n          \"query\": {}\n        },\n        \"connectedAccountId\": 1\n      },\n      \"workflowId\": \"example\",\n      \"handles\": [\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        },\n        {\n          \"handleId\": \"example\",\n          \"sourceEdge\": {\n            \"from\": \"example\",\n            \"fromHandleId\": \"example\",\n            \"to\": \"example\",\n            \"toHandleId\": \"example\"\n          },\n          \"text\": \"example\"\n        }\n      ],\n      \"targetEdges\": [\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        },\n        {\n          \"from\": \"example\",\n          \"fromHandleId\": \"example\",\n          \"to\": \"example\",\n          \"toHandleId\": \"example\"\n        }\n      ],\n      \"createdAt\": \"example\",\n      \"updatedAt\": \"example\"\n    }\n  ],\n  \"createdAt\": \"example\",\n  \"id\": \"example\",\n  \"assistantId\": \"example\",\n  \"accountId\": 1,\n  \"updatedAt\": \"example\",\n  \"executed\": false,\n  \"breakingChangeAt\": \"example\",\n  \"breakingChangeReason\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f92af2bc-8627-46a7-9e56-ddbdaaf859ed",
+          "name": "Get workflow analytics",
+          "request": {
+            "name": "Get workflow analytics",
+            "description": {
+              "content": "Returns analytics for a specific workflow, including runs by date and summary.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows",
+                ":workflowId",
+                "analytics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startDate",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "endDate",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "workflowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "53d8fccf-b977-4403-a2ca-5fc1086b40b3",
+              "name": "Workflow analytics data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "analytics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2024-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"runsByDate\": [\n    {\n      \"date\": \"2024-01-01\",\n      \"totalRuns\": 100,\n      \"completedRuns\": 95,\n      \"failedRuns\": 5,\n      \"pendingRuns\": 0,\n      \"totalCredits\": 250.5\n    },\n    {\n      \"date\": \"2024-01-01\",\n      \"totalRuns\": 100,\n      \"completedRuns\": 95,\n      \"failedRuns\": 5,\n      \"pendingRuns\": 0,\n      \"totalCredits\": 250.5\n    }\n  ],\n  \"summary\": {\n    \"totalRuns\": 1000,\n    \"completedRuns\": 950,\n    \"failedRuns\": 50,\n    \"pendingRuns\": 0,\n    \"totalCredits\": 2500,\n    \"averageCreditsPerRun\": 2.5,\n    \"nonExecutedRuns\": 10\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f69656c5-f8c0-4818-8762-729967f2b5e8",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "analytics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2024-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9a223772-c103-4573-945a-5fec39ca925e",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "analytics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2024-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8384ce7a-9d10-4df1-bb59-d9328c022bc9",
+          "name": "List workflow run logs",
+          "request": {
+            "name": "List workflow run logs",
+            "description": {
+              "content": "Lists the run history (executions) of a workflow. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows",
+                ":workflowId",
+                "logs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "workflowId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d9a2803d-aa3f-447b-a166-2fb6277fca07",
+              "name": "A list of runs",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "logs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "COMPLETED"
+                    },
+                    {
+                      "key": "start_date",
+                      "value": "2026-01-01"
+                    },
+                    {
+                      "key": "end_date",
+                      "value": "2026-12-31"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"id\": 501,\n      \"successful\": false,\n      \"started_at\": \"example\",\n      \"completed_at\": \"example\",\n      \"duration\": 1,\n      \"operations\": 1,\n      \"ai_credits\": 1,\n      \"error\": \"example\",\n      \"insufficient_credits\": false,\n      \"prevented_loop\": false\n    },\n    {\n      \"id\": 501,\n      \"successful\": false,\n      \"started_at\": \"example\",\n      \"completed_at\": \"example\",\n      \"duration\": 1,\n      \"operations\": 1,\n      \"ai_credits\": 1,\n      \"error\": \"example\",\n      \"insufficient_credits\": false,\n      \"prevented_loop\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7c37046e-8e28-4c54-aaa7-8152c00cb28d",
+          "name": "Get a workflow run log",
+          "request": {
+            "name": "Get a workflow run log",
+            "description": {
+              "content": "Returns one run with its per-node results. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "workflows",
+                ":workflowId",
+                "logs",
+                ":logId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "workflowId"
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<number>",
+                  "key": "logId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9a333ff6-74fb-42aa-a97d-8a20805ae4f4",
+              "name": "The run log with node results",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "workflows",
+                    ":workflowId",
+                    "logs",
+                    ":logId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "workflowId"
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<number>",
+                      "key": "logId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 501,\n  \"successful\": false,\n  \"started_at\": \"example\",\n  \"completed_at\": \"example\",\n  \"duration\": 1,\n  \"operations\": 1,\n  \"ai_credits\": 1,\n  \"error\": \"example\",\n  \"insufficient_credits\": false,\n  \"prevented_loop\": false,\n  \"node_results\": [\n    {\n      \"node_id\": \"example\",\n      \"success\": false,\n      \"created_at\": \"example\",\n      \"alias\": \"example\",\n      \"type\": \"example\",\n      \"error\": \"example\",\n      \"ai_credits\": 1\n    },\n    {\n      \"node_id\": \"example\",\n      \"success\": false,\n      \"created_at\": \"example\",\n      \"alias\": \"example\",\n      \"type\": \"example\",\n      \"error\": \"example\",\n      \"ai_credits\": 1\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://prod-api.getfrontline.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "c7daba80-5c9c-4bee-ae16-9401ed404ce3",
+    "name": "Public Account Workflows API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public API for accessing agents, flows, and analytics.\n\n## Authentication\n\nThe Public API supports two API key types. Pass the key as a Bearer token:\n\n```\nAuthorization: Bearer <YOUR_API_KEY>\n```\n\n### Account API key (GENERAL)\n\nAccount-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.\n\n### User API key (USER)\n\nUser-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**\n\nEach operation documents which key type(s) it accepts in its **Security** section.",
+      "type": "text/plain"
+    }
+  }
+}

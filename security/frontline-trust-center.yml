@@ -1,15 +1,67 @@
-generated: '2026-07-19'
+generated: '2026-08-14'
 method: searched
-probe: true
+probe: false
 source: https://trust.getfrontline.ai/
 url: https://trust.getfrontline.ai/
+platform: Comp AI
+published: true
+note: >-
+  CORRECTION (2026-08-14). Earlier rounds of this file, written by probe-security-programs.py,
+  credited Frontline with SOC 2, ISO 27001, ISO 27017, ISO 27018, PCI DSS, HIPAA, FedRAMP, GDPR and
+  CSA STAR. That was a keyword false positive: ISO 27017, ISO 27018, PCI DSS, HIPAA, FedRAMP and
+  CSA STAR appear on the page only inside the `complianceBadges` arrays of Frontline's EIGHT
+  SUBPROCESSORS (AWS, Azure, Anthropic, Cloudflare, Google Cloud, ...) — they are the
+  subprocessors' certifications, not Frontline's. Frontline's own trust center lists exactly four
+  frameworks, and only one of them is attained. Certifications below are read from the rendered
+  framework cards and their status badges.
+frameworks:
+- name: SOC 2 Type 1
+  status: Compliant
+  attained: true
+- name: SOC 2 Type 2
+  status: Started
+  attained: false
+- name: ISO 27001
+  status: Started
+  attained: false
+- name: GDPR
+  status: Started
+  attained: false
 certifications:
-- SOC 2
-- ISO 27001
-evidence:
-- source: https://trust.getfrontline.ai/
-  keywords:
-  - soc 2
-  - soc2
-  - iso 27001
-  - trust center
+- SOC 2 Type 1
+certifications_note: >-
+  Only SOC 2 Type 1 carries a "Compliant" badge. SOC 2 Type 2, ISO 27001 and GDPR are all badged
+  "Started" — in-progress programs, not attained certifications. Do not roll these up as held certs.
+program:
+  frameworks_active: 4
+  policies: 28
+  controls: 56
+  subprocessors: 8
+  documents: 0
+  security_questionnaire: available on request (Request Access)
+subprocessors:
+- Anthropic
+- AWS
+- Azure
+- Cloudflare
+- Google Cloud
+subprocessors_note: >-
+  8 subprocessors are listed on the trust center; the five above are the ones named in the summary
+  view.
+vulnerability_disclosure:
+  published: false
+  note: >-
+    No security.txt, responsible-disclosure page, bug-bounty program (HackerOne/Bugcrowd/Intigriti)
+    or security@ contact was found on the trust center, the marketing site, the privacy policy or
+    any /.well-known/ path. The only published contact is support@getfrontline.ai. No
+    VulnerabilityDisclosure or Security pointer is emitted.
+x-evidence:
+- url: https://trust.getfrontline.ai/
+  http_status: 200
+  fetched: '2026-08-14'
+  observed: >-
+    "4 Frameworks | 28 Policies | 8 Subprocessors | 0 Documents" and the framework cards
+    "SOC 2 Type 2 — Started", "SOC 2 Type 1 — Compliant", "ISO 27001 — Started", "GDPR — Started".
+- url: https://www.getfrontline.ai/security
+  http_status: 404
+  fetched: '2026-08-14'

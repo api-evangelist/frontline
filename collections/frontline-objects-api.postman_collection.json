@@ -1,0 +1,1337 @@
+{
+  "item": [
+    {
+      "id": "7b69527c-3c38-4fba-8c7c-42e58b53af8e",
+      "name": "Objects",
+      "description": {
+        "content": "Manage CRM objects (standard and custom)",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7d85eb6c-2c3e-4b41-9612-4ee1309a0eff",
+          "name": "List objects",
+          "request": {
+            "name": "List objects",
+            "description": {
+              "content": "Returns every object (standard + custom) for the authenticated account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "objects"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "ec8c0000-6005-44b0-9967-5c9e299122cd",
+              "name": "Objects list",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": [\n    {\n      \"id\": 1,\n      \"name\": \"example\",\n      \"display_name\": \"example\",\n      \"type\": \"table\",\n      \"custom\": false,\n      \"created_at\": \"example\",\n      \"updated_at\": \"example\",\n      \"description\": \"example\",\n      \"emoji\": \"example\",\n      \"icon_color\": \"example\",\n      \"field_count\": 1\n    },\n    {\n      \"id\": 1,\n      \"name\": \"example\",\n      \"display_name\": \"example\",\n      \"type\": \"table\",\n      \"custom\": false,\n      \"created_at\": \"example\",\n      \"updated_at\": \"example\",\n      \"description\": \"example\",\n      \"emoji\": \"example\",\n      \"icon_color\": \"example\",\n      \"field_count\": 1\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "115fdb95-d2c0-4fa1-8e42-7976e81c66f4",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cdf3e08c-6ef1-4ddd-94b8-5632f9e6db40",
+          "name": "Create object",
+          "request": {
+            "name": "Create object",
+            "description": {
+              "content": "Creates a custom object. At least one column is required. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "objects"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"displayName\": \"<string>\",\n  \"columns\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"metadata\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"record_type_id\": \"<integer>\",\n      \"recordTypeId\": \"<integer>\"\n    }\n  ],\n  \"emoji\": \"<string>\",\n  \"icon_color\": \"<string>\",\n  \"iconColor\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a4549670-ce86-4729-b543-cd4057315937",
+              "name": "Created object",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"displayName\": \"example\",\n  \"columns\": [\n    {\n      \"name\": \"example\",\n      \"type\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"record_type_id\": 1,\n      \"recordTypeId\": 1\n    }\n  ],\n  \"emoji\": \"example\",\n  \"icon_color\": \"example\",\n  \"iconColor\": \"example\",\n  \"description\": \"example\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"example\",\n    \"display_name\": \"example\",\n    \"type\": \"table\",\n    \"custom\": false,\n    \"created_at\": \"example\",\n    \"updated_at\": \"example\",\n    \"description\": \"example\",\n    \"emoji\": \"example\",\n    \"icon_color\": \"example\",\n    \"field_count\": 1,\n    \"fields\": [\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"key\": \"example\",\n        \"type\": \"example\",\n        \"editable\": false,\n        \"created_at\": \"example\",\n        \"updated_at\": \"example\",\n        \"read_only\": false,\n        \"required\": false,\n        \"unique\": false,\n        \"is_system\": false,\n        \"is_predefined\": false,\n        \"default_value\": {},\n        \"format\": \"example\",\n        \"mode\": \"singleSelect\",\n        \"timezone\": \"example\",\n        \"decimals\": 1,\n        \"currency\": \"example\",\n        \"time_format\": \"example\",\n        \"show_preview\": false,\n        \"allowed_file_types\": [\n          \"example\",\n          \"example\"\n        ],\n        \"max_file_size\": 1,\n        \"related_table_id\": 1,\n        \"display_field_id\": 1,\n        \"relation_mode\": \"example\",\n        \"include_activity\": false,\n        \"options\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"color\": \"example\",\n            \"order\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\"\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"color\": \"example\",\n            \"order\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\"\n          }\n        ],\n        \"expression\": {},\n        \"output_type\": \"example\",\n        \"apply_if\": {},\n        \"number_config\": {},\n        \"date_config\": {},\n        \"string_config\": {}\n      },\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"key\": \"example\",\n        \"type\": \"example\",\n        \"editable\": false,\n        \"created_at\": \"example\",\n        \"updated_at\": \"example\",\n        \"read_only\": false,\n        \"required\": false,\n        \"unique\": false,\n        \"is_system\": false,\n        \"is_predefined\": false,\n        \"default_value\": {},\n        \"format\": \"example\",\n        \"mode\": \"singleSelect\",\n        \"timezone\": \"example\",\n        \"decimals\": 1,\n        \"currency\": \"example\",\n        \"time_format\": \"example\",\n        \"show_preview\": false,\n        \"allowed_file_types\": [\n          \"example\",\n          \"example\"\n        ],\n        \"max_file_size\": 1,\n        \"related_table_id\": 1,\n        \"display_field_id\": 1,\n        \"relation_mode\": \"example\",\n        \"include_activity\": false,\n        \"options\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"color\": \"example\",\n            \"order\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\"\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"color\": \"example\",\n            \"order\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\"\n          }\n        ],\n        \"expression\": {},\n        \"output_type\": \"example\",\n        \"apply_if\": {},\n        \"number_config\": {},\n        \"date_config\": {},\n        \"string_config\": {}\n      }\n    ],\n    \"views\": [\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"type\": \"TABLE\",\n        \"is_default\": false,\n        \"is_private\": false,\n        \"record_type_id\": 1,\n        \"created_at\": \"example\",\n        \"updated_at\": \"example\",\n        \"column_order\": [\n          \"example\",\n          \"example\"\n        ],\n        \"hidden_columns\": [\n          \"example\",\n          \"example\"\n        ],\n        \"sticky_columns\": [\n          \"example\",\n          \"example\"\n        ],\n        \"grouping_field_id\": 1,\n        \"column_ordering\": {},\n        \"title_field_id\": 1,\n        \"display_field_ids\": [\n          1,\n          1\n        ]\n      },\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"type\": \"TABLE\",\n        \"is_default\": false,\n        \"is_private\": false,\n        \"record_type_id\": 1,\n        \"created_at\": \"example\",\n        \"updated_at\": \"example\",\n        \"column_order\": [\n          \"example\",\n          \"example\"\n        ],\n        \"hidden_columns\": [\n          \"example\",\n          \"example\"\n        ],\n        \"sticky_columns\": [\n          \"example\",\n          \"example\"\n        ],\n        \"grouping_field_id\": 1,\n        \"column_ordering\": {},\n        \"title_field_id\": 1,\n        \"display_field_ids\": [\n          1,\n          1\n        ]\n      }\n    ],\n    \"record_types\": [\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"display_name\": \"example\",\n        \"is_default\": false,\n        \"single_noun\": \"example\",\n        \"emoji\": \"example\",\n        \"icon_color\": \"example\",\n        \"disable_side_effects\": false,\n        \"field_ids\": [\n          1,\n          1\n        ],\n        \"views\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"type\": \"TABLE\",\n            \"is_default\": false,\n            \"is_private\": false,\n            \"record_type_id\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\",\n            \"column_order\": [\n              \"example\",\n              \"example\"\n            ],\n            \"hidden_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"sticky_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"grouping_field_id\": 1,\n            \"column_ordering\": {},\n            \"title_field_id\": 1,\n            \"display_field_ids\": [\n              1,\n              1\n            ]\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"type\": \"TABLE\",\n            \"is_default\": false,\n            \"is_private\": false,\n            \"record_type_id\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\",\n            \"column_order\": [\n              \"example\",\n              \"example\"\n            ],\n            \"hidden_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"sticky_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"grouping_field_id\": 1,\n            \"column_ordering\": {},\n            \"title_field_id\": 1,\n            \"display_field_ids\": [\n              1,\n              1\n            ]\n          }\n        ]\n      },\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"display_name\": \"example\",\n        \"is_default\": false,\n        \"single_noun\": \"example\",\n        \"emoji\": \"example\",\n        \"icon_color\": \"example\",\n        \"disable_side_effects\": false,\n        \"field_ids\": [\n          1,\n          1\n        ],\n        \"views\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"type\": \"TABLE\",\n            \"is_default\": false,\n            \"is_private\": false,\n            \"record_type_id\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\",\n            \"column_order\": [\n              \"example\",\n              \"example\"\n            ],\n            \"hidden_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"sticky_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"grouping_field_id\": 1,\n            \"column_ordering\": {},\n            \"title_field_id\": 1,\n            \"display_field_ids\": [\n              1,\n              1\n            ]\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"type\": \"TABLE\",\n            \"is_default\": false,\n            \"is_private\": false,\n            \"record_type_id\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\",\n            \"column_order\": [\n              \"example\",\n              \"example\"\n            ],\n            \"hidden_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"sticky_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"grouping_field_id\": 1,\n            \"column_ordering\": {},\n            \"title_field_id\": 1,\n            \"display_field_ids\": [\n              1,\n              1\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee0953eb-eeda-488b-9c23-7f91eaecbc59",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"displayName\": \"example\",\n  \"columns\": [\n    {\n      \"name\": \"example\",\n      \"type\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"record_type_id\": 1,\n      \"recordTypeId\": 1\n    }\n  ],\n  \"emoji\": \"example\",\n  \"icon_color\": \"example\",\n  \"iconColor\": \"example\",\n  \"description\": \"example\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8aa4652a-48f6-4cab-aada-93e4b6adc878",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"displayName\": \"example\",\n  \"columns\": [\n    {\n      \"name\": \"example\",\n      \"type\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"record_type_id\": 1,\n      \"recordTypeId\": 1\n    }\n  ],\n  \"emoji\": \"example\",\n  \"icon_color\": \"example\",\n  \"iconColor\": \"example\",\n  \"description\": \"example\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6af0a1cd-b7c7-4b18-be47-658f1b11bd19",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"example\",\n  \"displayName\": \"example\",\n  \"columns\": [\n    {\n      \"name\": \"example\",\n      \"type\": \"string\",\n      \"metadata\": {\n        \"key_0\": \"<object>\",\n        \"key_1\": \"<object>\"\n      },\n      \"record_type_id\": 1,\n      \"recordTypeId\": 1\n    }\n  ],\n  \"emoji\": \"example\",\n  \"icon_color\": \"example\",\n  \"iconColor\": \"example\",\n  \"description\": \"example\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e7541e92-bcaf-4a6e-818d-495f3a3d33d9",
+          "name": "Get object",
+          "request": {
+            "name": "Get object",
+            "description": {
+              "content": "Returns one object including fields, views, and record types.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "objects",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "cfe6ff01-e61b-455f-87b9-c44d909672a6",
+              "name": "Object detail",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"example\",\n    \"display_name\": \"example\",\n    \"type\": \"table\",\n    \"custom\": false,\n    \"created_at\": \"example\",\n    \"updated_at\": \"example\",\n    \"description\": \"example\",\n    \"emoji\": \"example\",\n    \"icon_color\": \"example\",\n    \"field_count\": 1,\n    \"fields\": [\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"key\": \"example\",\n        \"type\": \"example\",\n        \"editable\": false,\n        \"created_at\": \"example\",\n        \"updated_at\": \"example\",\n        \"read_only\": false,\n        \"required\": false,\n        \"unique\": false,\n        \"is_system\": false,\n        \"is_predefined\": false,\n        \"default_value\": {},\n        \"format\": \"example\",\n        \"mode\": \"singleSelect\",\n        \"timezone\": \"example\",\n        \"decimals\": 1,\n        \"currency\": \"example\",\n        \"time_format\": \"example\",\n        \"show_preview\": false,\n        \"allowed_file_types\": [\n          \"example\",\n          \"example\"\n        ],\n        \"max_file_size\": 1,\n        \"related_table_id\": 1,\n        \"display_field_id\": 1,\n        \"relation_mode\": \"example\",\n        \"include_activity\": false,\n        \"options\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"color\": \"example\",\n            \"order\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\"\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"color\": \"example\",\n            \"order\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\"\n          }\n        ],\n        \"expression\": {},\n        \"output_type\": \"example\",\n        \"apply_if\": {},\n        \"number_config\": {},\n        \"date_config\": {},\n        \"string_config\": {}\n      },\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"key\": \"example\",\n        \"type\": \"example\",\n        \"editable\": false,\n        \"created_at\": \"example\",\n        \"updated_at\": \"example\",\n        \"read_only\": false,\n        \"required\": false,\n        \"unique\": false,\n        \"is_system\": false,\n        \"is_predefined\": false,\n        \"default_value\": {},\n        \"format\": \"example\",\n        \"mode\": \"singleSelect\",\n        \"timezone\": \"example\",\n        \"decimals\": 1,\n        \"currency\": \"example\",\n        \"time_format\": \"example\",\n        \"show_preview\": false,\n        \"allowed_file_types\": [\n          \"example\",\n          \"example\"\n        ],\n        \"max_file_size\": 1,\n        \"related_table_id\": 1,\n        \"display_field_id\": 1,\n        \"relation_mode\": \"example\",\n        \"include_activity\": false,\n        \"options\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"color\": \"example\",\n            \"order\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\"\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"color\": \"example\",\n            \"order\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\"\n          }\n        ],\n        \"expression\": {},\n        \"output_type\": \"example\",\n        \"apply_if\": {},\n        \"number_config\": {},\n        \"date_config\": {},\n        \"string_config\": {}\n      }\n    ],\n    \"views\": [\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"type\": \"TABLE\",\n        \"is_default\": false,\n        \"is_private\": false,\n        \"record_type_id\": 1,\n        \"created_at\": \"example\",\n        \"updated_at\": \"example\",\n        \"column_order\": [\n          \"example\",\n          \"example\"\n        ],\n        \"hidden_columns\": [\n          \"example\",\n          \"example\"\n        ],\n        \"sticky_columns\": [\n          \"example\",\n          \"example\"\n        ],\n        \"grouping_field_id\": 1,\n        \"column_ordering\": {},\n        \"title_field_id\": 1,\n        \"display_field_ids\": [\n          1,\n          1\n        ]\n      },\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"type\": \"TABLE\",\n        \"is_default\": false,\n        \"is_private\": false,\n        \"record_type_id\": 1,\n        \"created_at\": \"example\",\n        \"updated_at\": \"example\",\n        \"column_order\": [\n          \"example\",\n          \"example\"\n        ],\n        \"hidden_columns\": [\n          \"example\",\n          \"example\"\n        ],\n        \"sticky_columns\": [\n          \"example\",\n          \"example\"\n        ],\n        \"grouping_field_id\": 1,\n        \"column_ordering\": {},\n        \"title_field_id\": 1,\n        \"display_field_ids\": [\n          1,\n          1\n        ]\n      }\n    ],\n    \"record_types\": [\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"display_name\": \"example\",\n        \"is_default\": false,\n        \"single_noun\": \"example\",\n        \"emoji\": \"example\",\n        \"icon_color\": \"example\",\n        \"disable_side_effects\": false,\n        \"field_ids\": [\n          1,\n          1\n        ],\n        \"views\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"type\": \"TABLE\",\n            \"is_default\": false,\n            \"is_private\": false,\n            \"record_type_id\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\",\n            \"column_order\": [\n              \"example\",\n              \"example\"\n            ],\n            \"hidden_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"sticky_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"grouping_field_id\": 1,\n            \"column_ordering\": {},\n            \"title_field_id\": 1,\n            \"display_field_ids\": [\n              1,\n              1\n            ]\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"type\": \"TABLE\",\n            \"is_default\": false,\n            \"is_private\": false,\n            \"record_type_id\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\",\n            \"column_order\": [\n              \"example\",\n              \"example\"\n            ],\n            \"hidden_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"sticky_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"grouping_field_id\": 1,\n            \"column_ordering\": {},\n            \"title_field_id\": 1,\n            \"display_field_ids\": [\n              1,\n              1\n            ]\n          }\n        ]\n      },\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"display_name\": \"example\",\n        \"is_default\": false,\n        \"single_noun\": \"example\",\n        \"emoji\": \"example\",\n        \"icon_color\": \"example\",\n        \"disable_side_effects\": false,\n        \"field_ids\": [\n          1,\n          1\n        ],\n        \"views\": [\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"type\": \"TABLE\",\n            \"is_default\": false,\n            \"is_private\": false,\n            \"record_type_id\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\",\n            \"column_order\": [\n              \"example\",\n              \"example\"\n            ],\n            \"hidden_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"sticky_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"grouping_field_id\": 1,\n            \"column_ordering\": {},\n            \"title_field_id\": 1,\n            \"display_field_ids\": [\n              1,\n              1\n            ]\n          },\n          {\n            \"id\": 1,\n            \"name\": \"example\",\n            \"type\": \"TABLE\",\n            \"is_default\": false,\n            \"is_private\": false,\n            \"record_type_id\": 1,\n            \"created_at\": \"example\",\n            \"updated_at\": \"example\",\n            \"column_order\": [\n              \"example\",\n              \"example\"\n            ],\n            \"hidden_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"sticky_columns\": [\n              \"example\",\n              \"example\"\n            ],\n            \"grouping_field_id\": 1,\n            \"column_ordering\": {},\n            \"title_field_id\": 1,\n            \"display_field_ids\": [\n              1,\n              1\n            ]\n          }\n        ]\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "73c3aa95-f10a-40ff-9b0a-ae54ce6bcaac",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7bc6ba8-a4e4-424c-961e-4467fcfb4c3c",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2eb2dc2a-be6b-48b7-9054-c9bffe1472f0",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5a56d955-f099-48b9-afed-785490da11ec",
+          "name": "Update object",
+          "request": {
+            "name": "Update object",
+            "description": {
+              "content": "Updates an object's display name, emoji, color, or description. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "objects",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayName\": \"<string>\",\n  \"emoji\": \"<string>\",\n  \"icon_color\": \"<string>\",\n  \"iconColor\": \"<string>\",\n  \"description\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a1b8f4b2-42ce-4adf-847f-b8534ce476b6",
+              "name": "Updated object",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"example\",\n  \"emoji\": \"example\",\n  \"icon_color\": \"example\",\n  \"iconColor\": \"example\",\n  \"description\": \"example\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"id\": 1,\n    \"name\": \"example\",\n    \"display_name\": \"example\",\n    \"type\": \"table\",\n    \"custom\": false,\n    \"created_at\": \"example\",\n    \"updated_at\": \"example\",\n    \"description\": \"example\",\n    \"emoji\": \"example\",\n    \"icon_color\": \"example\",\n    \"field_count\": 1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "699806b6-15da-40fd-9f87-8b2d10e70648",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"example\",\n  \"emoji\": \"example\",\n  \"icon_color\": \"example\",\n  \"iconColor\": \"example\",\n  \"description\": \"example\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7d151e98-afac-4e8d-812b-e7468c229418",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"example\",\n  \"emoji\": \"example\",\n  \"icon_color\": \"example\",\n  \"iconColor\": \"example\",\n  \"description\": \"example\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ea9ffb63-8d4a-484b-bd3b-14052d60c5cd",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"example\",\n  \"emoji\": \"example\",\n  \"icon_color\": \"example\",\n  \"iconColor\": \"example\",\n  \"description\": \"example\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9990aa5d-ef78-4de6-bcd2-485bc91a55fe",
+          "name": "Delete object",
+          "request": {
+            "name": "Delete object",
+            "description": {
+              "content": "Deletes a custom object. System objects cannot be deleted. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "objects",
+                ":name"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE"
+          },
+          "response": [
+            {
+              "id": "da055d6a-44cb-4ed0-9d20-b76fa61f36a9",
+              "name": "Deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"deleted\": true,\n    \"id\": \"example\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a91c660-0438-4beb-a5af-0b80093a7890",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0dca4298-5ca1-4bf8-acb1-2bf75a5e843c",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c5d22a9c-ec2b-4539-95b6-918ad463ce5c",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2d1d1fa7-8ab6-404c-a486-a5709d53ce28",
+          "name": "Get object schema",
+          "request": {
+            "name": "Get object schema",
+            "description": {
+              "content": "Returns only the schema (fields, types, formats) for an object.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "objects",
+                ":name",
+                "schema"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "name",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "ed979034-2c08-4474-bdb2-9690a5d5beb2",
+              "name": "Object schema",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": true,\n  \"data\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d80dd0a4-ff6d-4dde-8300-a1c29a2ae19a",
+              "name": "Bad Request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0cf87fba-2c30-4ed3-a4cf-c6763eabe51d",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a39526ba-1f5b-4c06-8e0e-ca8d5c50f2b8",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "objects",
+                    ":name",
+                    "schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "name",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://prod-api.getfrontline.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "beed9e99-81c2-4b1d-9e73-d2d871535c58",
+    "name": "Public Account Objects API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public API for accessing agents, flows, and analytics.\n\n## Authentication\n\nThe Public API supports two API key types. Pass the key as a Bearer token:\n\n```\nAuthorization: Bearer <YOUR_API_KEY>\n```\n\n### Account API key (GENERAL)\n\nAccount-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.\n\n### User API key (USER)\n\nUser-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**\n\nEach operation documents which key type(s) it accepts in its **Security** section.",
+      "type": "text/plain"
+    }
+  }
+}

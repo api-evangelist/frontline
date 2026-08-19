@@ -1,0 +1,2819 @@
+{
+  "item": [
+    {
+      "id": "74a45d55-b899-4a28-aa70-e623caf4228a",
+      "name": "Agent Builder",
+      "description": {
+        "content": "View and manage your AI agents across your account",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a4ac4c0e-5a11-4bc6-90cb-b3d3d84e9dd8",
+          "name": "List all agents",
+          "request": {
+            "name": "List all agents",
+            "description": {
+              "content": "Returns a list of agents associated with the account.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ac234e64-744e-40d5-be8f-f653e2fee546",
+              "name": "A list of agents",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "ACTIVE"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n      \"name\": \"Support Bot\",\n      \"description\": \"Main customer support agent\",\n      \"status\": \"ACTIVE\",\n      \"createdAt\": \"2024-01-01T12:00:00Z\",\n      \"updatedAt\": \"2024-01-01T12:00:00Z\"\n    },\n    {\n      \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n      \"name\": \"Support Bot\",\n      \"description\": \"Main customer support agent\",\n      \"status\": \"ACTIVE\",\n      \"createdAt\": \"2024-01-01T12:00:00Z\",\n      \"updatedAt\": \"2024-01-01T12:00:00Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fc6f9914-19af-4574-9474-74c6ea1e414f",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "status",
+                      "value": "ACTIVE"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "14b2dd92-10b4-423c-939c-934d5fbbfc46",
+          "name": "Create an agent",
+          "request": {
+            "name": "Create an agent",
+            "description": {
+              "content": "Creates an assistant with the internal defaults for theme, channels, settings, flow, and billing checks. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5f2b412a-5340-46c2-8efa-75f7d3de7afc",
+              "name": "Created agent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Support Agent\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountId\": 1,\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"description\": \"Main customer support agent\",\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"isOffline\": false,\n  \"name\": \"Support Bot\",\n  \"status\": \"ACTIVE\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"ownerId\": 1,\n  \"theme\": {\n    \"id\": 1,\n    \"avatar\": \"example\",\n    \"bubbleImage\": \"example\",\n    \"title\": \"example\",\n    \"initialMessage\": \"example\",\n    \"placeholder\": \"example\",\n    \"bubbleColor\": \"example\",\n    \"userMessageColor\": \"example\",\n    \"agentMessageColor\": \"example\",\n    \"bubbleAlignment\": \"RIGHT\",\n    \"progressIndicator\": \"STATIC\",\n    \"verticalPositionInPixels\": 1,\n    \"assistantId\": \"example\",\n    \"removePowerBy\": false,\n    \"updatedAt\": \"example\"\n  },\n  \"agentSetting\": {\n    \"id\": 1,\n    \"aiModelId\": 1,\n    \"aiModel\": {\n      \"id\": 1,\n      \"name\": \"example\",\n      \"description\": \"example\",\n      \"creditsPerMessage\": 1,\n      \"isDefault\": false,\n      \"order\": 1,\n      \"analyticsColor\": \"example\",\n      \"externalId\": \"example\",\n      \"aiVendor\": \"example\",\n      \"reasoningModel\": false,\n      \"type\": \"TEXT\"\n    },\n    \"model\": \"example\",\n    \"aiType\": \"ASSISTANT\",\n    \"temperature\": 1,\n    \"instructions\": \"example\",\n    \"agentRole\": \"NONE\",\n    \"toneOfVoice\": \"NONE\",\n    \"answerLength\": \"NONE\",\n    \"maxIterations\": 1,\n    \"agentType\": \"BASIC\",\n    \"customTools\": [\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"description\": \"example\",\n        \"status\": \"example\",\n        \"type\": \"example\"\n      },\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"description\": \"example\",\n        \"status\": \"example\",\n        \"type\": \"example\"\n      }\n    ],\n    \"systemToolsConfig\": {},\n    \"agentConnectedAccounts\": [\n      {\n        \"connectedAccountId\": 1,\n        \"useAllTools\": false,\n        \"selectedToolSlugs\": [\n          \"example\",\n          \"example\"\n        ],\n        \"connectedAccount\": {\n          \"id\": 1,\n          \"toolkit\": \"example\",\n          \"alias\": \"example\",\n          \"connectedEmail\": \"example\",\n          \"isConnected\": false\n        }\n      },\n      {\n        \"connectedAccountId\": 1,\n        \"useAllTools\": false,\n        \"selectedToolSlugs\": [\n          \"example\",\n          \"example\"\n        ],\n        \"connectedAccount\": {\n          \"id\": 1,\n          \"toolkit\": \"example\",\n          \"alias\": \"example\",\n          \"connectedEmail\": \"example\",\n          \"isConnected\": false\n        }\n      }\n    ],\n    \"agentPlaybooks\": [\n      {\n        \"playbookId\": 1,\n        \"assignedAt\": \"example\",\n        \"playbook\": {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"description\": \"example\"\n        }\n      },\n      {\n        \"playbookId\": 1,\n        \"assignedAt\": \"example\",\n        \"playbook\": {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"description\": \"example\"\n        }\n      }\n    ]\n  },\n  \"channel\": {\n    \"id\": 1,\n    \"channelLiveChat\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"collectFeedback\": false,\n      \"feedbackVisibility\": \"ON_HOVER\",\n      \"feedbackText\": \"example\",\n      \"collectFeedbackReason\": false,\n      \"includeOtherReason\": false,\n      \"openFeedbackText\": \"example\",\n      \"enableIdle\": false,\n      \"id\": 1,\n      \"feedbackReasons\": [\n        {\n          \"id\": 1,\n          \"reason\": \"example\",\n          \"order\": 1\n        },\n        {\n          \"id\": 1,\n          \"reason\": \"example\",\n          \"order\": 1\n        }\n      ],\n      \"enableDocumentProcessing\": false,\n      \"enableImageProcessing\": false,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      }\n    },\n    \"channelWhatsapp\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"enableIdle\": false,\n      \"sendCloseMessage\": false,\n      \"closeMessageType\": \"STATIC\",\n      \"id\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"enableDocumentProcessing\": false,\n      \"enableImageProcessing\": false,\n      \"debounce\": false,\n      \"debounceTime\": 0,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      },\n      \"conversationInterruptTimeout\": 0,\n      \"closeMessage\": \"example\",\n      \"closeInstruction\": \"example\",\n      \"autoReplyOnUninterrupt\": false\n    },\n    \"channelInstagram\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"enableIdle\": false,\n      \"sendCloseMessage\": false,\n      \"closeMessageType\": \"STATIC\",\n      \"id\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"enableImageProcessing\": false,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      },\n      \"conversationInterruptTimeout\": 0,\n      \"closeMessage\": \"example\",\n      \"closeInstruction\": \"example\",\n      \"autoReplyOnUninterrupt\": false\n    },\n    \"channelMessenger\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"enableIdle\": false,\n      \"sendCloseMessage\": false,\n      \"closeMessageType\": \"STATIC\",\n      \"id\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"enableImageProcessing\": false,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      },\n      \"conversationInterruptTimeout\": 0,\n      \"autoReplyOnUninterrupt\": false,\n      \"closeMessage\": \"example\",\n      \"closeInstruction\": \"example\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7ff9667-d450-4576-9b9d-ecf2d1db99ad",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Support Agent\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5e2cc049-f9a5-4baa-9869-37638395eac5",
+          "name": "Get agent details",
+          "request": {
+            "name": "Get agent details",
+            "description": {
+              "content": "Returns a safe agent detail without secret key or HMAC fields.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "56c42c28-198c-4ac5-9b55-dd94a4892291",
+              "name": "Agent details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountId\": 1,\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"description\": \"Main customer support agent\",\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"isOffline\": false,\n  \"name\": \"Support Bot\",\n  \"status\": \"ACTIVE\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"ownerId\": 1,\n  \"theme\": {\n    \"id\": 1,\n    \"avatar\": \"example\",\n    \"bubbleImage\": \"example\",\n    \"title\": \"example\",\n    \"initialMessage\": \"example\",\n    \"placeholder\": \"example\",\n    \"bubbleColor\": \"example\",\n    \"userMessageColor\": \"example\",\n    \"agentMessageColor\": \"example\",\n    \"bubbleAlignment\": \"RIGHT\",\n    \"progressIndicator\": \"STATIC\",\n    \"verticalPositionInPixels\": 1,\n    \"assistantId\": \"example\",\n    \"removePowerBy\": false,\n    \"updatedAt\": \"example\"\n  },\n  \"agentSetting\": {\n    \"id\": 1,\n    \"aiModelId\": 1,\n    \"aiModel\": {\n      \"id\": 1,\n      \"name\": \"example\",\n      \"description\": \"example\",\n      \"creditsPerMessage\": 1,\n      \"isDefault\": false,\n      \"order\": 1,\n      \"analyticsColor\": \"example\",\n      \"externalId\": \"example\",\n      \"aiVendor\": \"example\",\n      \"reasoningModel\": false,\n      \"type\": \"TEXT\"\n    },\n    \"model\": \"example\",\n    \"aiType\": \"ASSISTANT\",\n    \"temperature\": 1,\n    \"instructions\": \"example\",\n    \"agentRole\": \"NONE\",\n    \"toneOfVoice\": \"NONE\",\n    \"answerLength\": \"NONE\",\n    \"maxIterations\": 1,\n    \"agentType\": \"BASIC\",\n    \"customTools\": [\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"description\": \"example\",\n        \"status\": \"example\",\n        \"type\": \"example\"\n      },\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"description\": \"example\",\n        \"status\": \"example\",\n        \"type\": \"example\"\n      }\n    ],\n    \"systemToolsConfig\": {},\n    \"agentConnectedAccounts\": [\n      {\n        \"connectedAccountId\": 1,\n        \"useAllTools\": false,\n        \"selectedToolSlugs\": [\n          \"example\",\n          \"example\"\n        ],\n        \"connectedAccount\": {\n          \"id\": 1,\n          \"toolkit\": \"example\",\n          \"alias\": \"example\",\n          \"connectedEmail\": \"example\",\n          \"isConnected\": false\n        }\n      },\n      {\n        \"connectedAccountId\": 1,\n        \"useAllTools\": false,\n        \"selectedToolSlugs\": [\n          \"example\",\n          \"example\"\n        ],\n        \"connectedAccount\": {\n          \"id\": 1,\n          \"toolkit\": \"example\",\n          \"alias\": \"example\",\n          \"connectedEmail\": \"example\",\n          \"isConnected\": false\n        }\n      }\n    ],\n    \"agentPlaybooks\": [\n      {\n        \"playbookId\": 1,\n        \"assignedAt\": \"example\",\n        \"playbook\": {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"description\": \"example\"\n        }\n      },\n      {\n        \"playbookId\": 1,\n        \"assignedAt\": \"example\",\n        \"playbook\": {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"description\": \"example\"\n        }\n      }\n    ]\n  },\n  \"channel\": {\n    \"id\": 1,\n    \"channelLiveChat\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"collectFeedback\": false,\n      \"feedbackVisibility\": \"ON_HOVER\",\n      \"feedbackText\": \"example\",\n      \"collectFeedbackReason\": false,\n      \"includeOtherReason\": false,\n      \"openFeedbackText\": \"example\",\n      \"enableIdle\": false,\n      \"id\": 1,\n      \"feedbackReasons\": [\n        {\n          \"id\": 1,\n          \"reason\": \"example\",\n          \"order\": 1\n        },\n        {\n          \"id\": 1,\n          \"reason\": \"example\",\n          \"order\": 1\n        }\n      ],\n      \"enableDocumentProcessing\": false,\n      \"enableImageProcessing\": false,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      }\n    },\n    \"channelWhatsapp\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"enableIdle\": false,\n      \"sendCloseMessage\": false,\n      \"closeMessageType\": \"STATIC\",\n      \"id\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"enableDocumentProcessing\": false,\n      \"enableImageProcessing\": false,\n      \"debounce\": false,\n      \"debounceTime\": 0,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      },\n      \"conversationInterruptTimeout\": 0,\n      \"closeMessage\": \"example\",\n      \"closeInstruction\": \"example\",\n      \"autoReplyOnUninterrupt\": false\n    },\n    \"channelInstagram\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"enableIdle\": false,\n      \"sendCloseMessage\": false,\n      \"closeMessageType\": \"STATIC\",\n      \"id\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"enableImageProcessing\": false,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      },\n      \"conversationInterruptTimeout\": 0,\n      \"closeMessage\": \"example\",\n      \"closeInstruction\": \"example\",\n      \"autoReplyOnUninterrupt\": false\n    },\n    \"channelMessenger\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"enableIdle\": false,\n      \"sendCloseMessage\": false,\n      \"closeMessageType\": \"STATIC\",\n      \"id\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"enableImageProcessing\": false,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      },\n      \"conversationInterruptTimeout\": 0,\n      \"autoReplyOnUninterrupt\": false,\n      \"closeMessage\": \"example\",\n      \"closeInstruction\": \"example\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0c82d328-0309-4d2e-b6d9-21b02e5a5e69",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9e95a8ea-a129-412b-b66e-532027f1c1f0",
+          "name": "Update an agent",
+          "request": {
+            "name": "Update an agent",
+            "description": {
+              "content": "Updates basic agent metadata. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c2504d73-f6cd-46a2-8608-00c48441de40",
+              "name": "Updated agent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Support Agent\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountId\": 1,\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"description\": \"Main customer support agent\",\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"isOffline\": false,\n  \"name\": \"Support Bot\",\n  \"status\": \"ACTIVE\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"ownerId\": 1,\n  \"theme\": {\n    \"id\": 1,\n    \"avatar\": \"example\",\n    \"bubbleImage\": \"example\",\n    \"title\": \"example\",\n    \"initialMessage\": \"example\",\n    \"placeholder\": \"example\",\n    \"bubbleColor\": \"example\",\n    \"userMessageColor\": \"example\",\n    \"agentMessageColor\": \"example\",\n    \"bubbleAlignment\": \"RIGHT\",\n    \"progressIndicator\": \"STATIC\",\n    \"verticalPositionInPixels\": 1,\n    \"assistantId\": \"example\",\n    \"removePowerBy\": false,\n    \"updatedAt\": \"example\"\n  },\n  \"agentSetting\": {\n    \"id\": 1,\n    \"aiModelId\": 1,\n    \"aiModel\": {\n      \"id\": 1,\n      \"name\": \"example\",\n      \"description\": \"example\",\n      \"creditsPerMessage\": 1,\n      \"isDefault\": false,\n      \"order\": 1,\n      \"analyticsColor\": \"example\",\n      \"externalId\": \"example\",\n      \"aiVendor\": \"example\",\n      \"reasoningModel\": false,\n      \"type\": \"TEXT\"\n    },\n    \"model\": \"example\",\n    \"aiType\": \"ASSISTANT\",\n    \"temperature\": 1,\n    \"instructions\": \"example\",\n    \"agentRole\": \"NONE\",\n    \"toneOfVoice\": \"NONE\",\n    \"answerLength\": \"NONE\",\n    \"maxIterations\": 1,\n    \"agentType\": \"BASIC\",\n    \"customTools\": [\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"description\": \"example\",\n        \"status\": \"example\",\n        \"type\": \"example\"\n      },\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"description\": \"example\",\n        \"status\": \"example\",\n        \"type\": \"example\"\n      }\n    ],\n    \"systemToolsConfig\": {},\n    \"agentConnectedAccounts\": [\n      {\n        \"connectedAccountId\": 1,\n        \"useAllTools\": false,\n        \"selectedToolSlugs\": [\n          \"example\",\n          \"example\"\n        ],\n        \"connectedAccount\": {\n          \"id\": 1,\n          \"toolkit\": \"example\",\n          \"alias\": \"example\",\n          \"connectedEmail\": \"example\",\n          \"isConnected\": false\n        }\n      },\n      {\n        \"connectedAccountId\": 1,\n        \"useAllTools\": false,\n        \"selectedToolSlugs\": [\n          \"example\",\n          \"example\"\n        ],\n        \"connectedAccount\": {\n          \"id\": 1,\n          \"toolkit\": \"example\",\n          \"alias\": \"example\",\n          \"connectedEmail\": \"example\",\n          \"isConnected\": false\n        }\n      }\n    ],\n    \"agentPlaybooks\": [\n      {\n        \"playbookId\": 1,\n        \"assignedAt\": \"example\",\n        \"playbook\": {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"description\": \"example\"\n        }\n      },\n      {\n        \"playbookId\": 1,\n        \"assignedAt\": \"example\",\n        \"playbook\": {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"description\": \"example\"\n        }\n      }\n    ]\n  },\n  \"channel\": {\n    \"id\": 1,\n    \"channelLiveChat\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"collectFeedback\": false,\n      \"feedbackVisibility\": \"ON_HOVER\",\n      \"feedbackText\": \"example\",\n      \"collectFeedbackReason\": false,\n      \"includeOtherReason\": false,\n      \"openFeedbackText\": \"example\",\n      \"enableIdle\": false,\n      \"id\": 1,\n      \"feedbackReasons\": [\n        {\n          \"id\": 1,\n          \"reason\": \"example\",\n          \"order\": 1\n        },\n        {\n          \"id\": 1,\n          \"reason\": \"example\",\n          \"order\": 1\n        }\n      ],\n      \"enableDocumentProcessing\": false,\n      \"enableImageProcessing\": false,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      }\n    },\n    \"channelWhatsapp\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"enableIdle\": false,\n      \"sendCloseMessage\": false,\n      \"closeMessageType\": \"STATIC\",\n      \"id\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"enableDocumentProcessing\": false,\n      \"enableImageProcessing\": false,\n      \"debounce\": false,\n      \"debounceTime\": 0,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      },\n      \"conversationInterruptTimeout\": 0,\n      \"closeMessage\": \"example\",\n      \"closeInstruction\": \"example\",\n      \"autoReplyOnUninterrupt\": false\n    },\n    \"channelInstagram\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"enableIdle\": false,\n      \"sendCloseMessage\": false,\n      \"closeMessageType\": \"STATIC\",\n      \"id\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"enableImageProcessing\": false,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      },\n      \"conversationInterruptTimeout\": 0,\n      \"closeMessage\": \"example\",\n      \"closeInstruction\": \"example\",\n      \"autoReplyOnUninterrupt\": false\n    },\n    \"channelMessenger\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"enableIdle\": false,\n      \"sendCloseMessage\": false,\n      \"closeMessageType\": \"STATIC\",\n      \"id\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"enableImageProcessing\": false,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      },\n      \"conversationInterruptTimeout\": 0,\n      \"autoReplyOnUninterrupt\": false,\n      \"closeMessage\": \"example\",\n      \"closeInstruction\": \"example\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "487d1ac0-f97a-42b9-8319-20e2355ba032",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Support Agent\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "987b919b-8d49-4d67-ab97-df8dcc8d700e",
+          "name": "Delete an agent",
+          "request": {
+            "name": "Delete an agent",
+            "description": {
+              "content": "Soft deletes an agent using the assistant manager. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "953b6562-6a52-46a6-93c4-d6c88b652e63",
+              "name": "Agent deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "37d2c55d-d896-4f1e-bc79-4372296cb028",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "38e91240-d255-47a4-8072-9822fe68e16a",
+          "name": "Get agent setting",
+          "request": {
+            "name": "Get agent setting",
+            "description": {
+              "content": "Returns safe agent model, instruction, tool, playbook, and connected-account settings.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "agent-setting"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "91e505db-dd1b-4938-bd32-a21fe9c1bbe0",
+              "name": "Agent setting",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "agent-setting"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"aiModelId\": 1,\n  \"aiModel\": {\n    \"id\": 1,\n    \"name\": \"example\",\n    \"description\": \"example\",\n    \"creditsPerMessage\": 1,\n    \"isDefault\": false,\n    \"order\": 1,\n    \"analyticsColor\": \"example\",\n    \"externalId\": \"example\",\n    \"aiVendor\": \"example\",\n    \"reasoningModel\": false,\n    \"type\": \"TEXT\"\n  },\n  \"model\": \"example\",\n  \"aiType\": \"ASSISTANT\",\n  \"temperature\": 1,\n  \"instructions\": \"example\",\n  \"agentRole\": \"NONE\",\n  \"toneOfVoice\": \"NONE\",\n  \"answerLength\": \"NONE\",\n  \"maxIterations\": 1,\n  \"agentType\": \"BASIC\",\n  \"customTools\": [\n    {\n      \"id\": 1,\n      \"name\": \"example\",\n      \"description\": \"example\",\n      \"status\": \"example\",\n      \"type\": \"example\"\n    },\n    {\n      \"id\": 1,\n      \"name\": \"example\",\n      \"description\": \"example\",\n      \"status\": \"example\",\n      \"type\": \"example\"\n    }\n  ],\n  \"systemToolsConfig\": {},\n  \"agentConnectedAccounts\": [\n    {\n      \"connectedAccountId\": 1,\n      \"useAllTools\": false,\n      \"selectedToolSlugs\": [\n        \"example\",\n        \"example\"\n      ],\n      \"connectedAccount\": {\n        \"id\": 1,\n        \"toolkit\": \"example\",\n        \"alias\": \"example\",\n        \"connectedEmail\": \"example\",\n        \"isConnected\": false\n      }\n    },\n    {\n      \"connectedAccountId\": 1,\n      \"useAllTools\": false,\n      \"selectedToolSlugs\": [\n        \"example\",\n        \"example\"\n      ],\n      \"connectedAccount\": {\n        \"id\": 1,\n        \"toolkit\": \"example\",\n        \"alias\": \"example\",\n        \"connectedEmail\": \"example\",\n        \"isConnected\": false\n      }\n    }\n  ],\n  \"agentPlaybooks\": [\n    {\n      \"playbookId\": 1,\n      \"assignedAt\": \"example\",\n      \"playbook\": {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"description\": \"example\"\n      }\n    },\n    {\n      \"playbookId\": 1,\n      \"assignedAt\": \"example\",\n      \"playbook\": {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"description\": \"example\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "223546a2-2449-4dfa-9d80-0aa1d54e3392",
+          "name": "Update agent setting",
+          "request": {
+            "name": "Update agent setting",
+            "description": {
+              "content": "Updates instructions, model, tools, playbooks, connected accounts, and system tool settings. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "agent-setting"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"aiModelId\": \"<number>\",\n  \"temperature\": \"<number>\",\n  \"instructions\": \"<string>\",\n  \"maxIterations\": 10,\n  \"agentType\": \"BASIC\",\n  \"customToolIds\": [\n    \"<number>\",\n    \"<number>\"\n  ],\n  \"connectedAccountConfigs\": [\n    {\n      \"connectedAccountId\": \"<number>\",\n      \"useAllTools\": true,\n      \"selectedToolSlugs\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"connectedAccountId\": \"<number>\",\n      \"useAllTools\": true,\n      \"selectedToolSlugs\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ],\n  \"systemToolsConfig\": {\n    \"webSearchEnabled\": false,\n    \"urlScrapeEnabled\": false,\n    \"linkedinSearchEnabled\": false\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d2dbfed6-2b41-4d16-9f9e-3b6deb23a268",
+              "name": "Updated agent setting",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "agent-setting"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"aiModelId\": 1,\n  \"temperature\": 0,\n  \"instructions\": \"example\",\n  \"maxIterations\": 3,\n  \"agentType\": \"BASIC\",\n  \"customToolIds\": [\n    1,\n    1\n  ],\n  \"connectedAccountConfigs\": [\n    {\n      \"connectedAccountId\": 1,\n      \"useAllTools\": false,\n      \"selectedToolSlugs\": [\n        \"example\",\n        \"example\"\n      ]\n    },\n    {\n      \"connectedAccountId\": 1,\n      \"useAllTools\": false,\n      \"selectedToolSlugs\": [\n        \"example\",\n        \"example\"\n      ]\n    }\n  ],\n  \"systemToolsConfig\": {\n    \"webSearchEnabled\": false,\n    \"urlScrapeEnabled\": false,\n    \"linkedinSearchEnabled\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"aiModelId\": 1,\n  \"aiModel\": {\n    \"id\": 1,\n    \"name\": \"example\",\n    \"description\": \"example\",\n    \"creditsPerMessage\": 1,\n    \"isDefault\": false,\n    \"order\": 1,\n    \"analyticsColor\": \"example\",\n    \"externalId\": \"example\",\n    \"aiVendor\": \"example\",\n    \"reasoningModel\": false,\n    \"type\": \"TEXT\"\n  },\n  \"model\": \"example\",\n  \"aiType\": \"ASSISTANT\",\n  \"temperature\": 1,\n  \"instructions\": \"example\",\n  \"agentRole\": \"NONE\",\n  \"toneOfVoice\": \"NONE\",\n  \"answerLength\": \"NONE\",\n  \"maxIterations\": 1,\n  \"agentType\": \"BASIC\",\n  \"customTools\": [\n    {\n      \"id\": 1,\n      \"name\": \"example\",\n      \"description\": \"example\",\n      \"status\": \"example\",\n      \"type\": \"example\"\n    },\n    {\n      \"id\": 1,\n      \"name\": \"example\",\n      \"description\": \"example\",\n      \"status\": \"example\",\n      \"type\": \"example\"\n    }\n  ],\n  \"systemToolsConfig\": {},\n  \"agentConnectedAccounts\": [\n    {\n      \"connectedAccountId\": 1,\n      \"useAllTools\": false,\n      \"selectedToolSlugs\": [\n        \"example\",\n        \"example\"\n      ],\n      \"connectedAccount\": {\n        \"id\": 1,\n        \"toolkit\": \"example\",\n        \"alias\": \"example\",\n        \"connectedEmail\": \"example\",\n        \"isConnected\": false\n      }\n    },\n    {\n      \"connectedAccountId\": 1,\n      \"useAllTools\": false,\n      \"selectedToolSlugs\": [\n        \"example\",\n        \"example\"\n      ],\n      \"connectedAccount\": {\n        \"id\": 1,\n        \"toolkit\": \"example\",\n        \"alias\": \"example\",\n        \"connectedEmail\": \"example\",\n        \"isConnected\": false\n      }\n    }\n  ],\n  \"agentPlaybooks\": [\n    {\n      \"playbookId\": 1,\n      \"assignedAt\": \"example\",\n      \"playbook\": {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"description\": \"example\"\n      }\n    },\n    {\n      \"playbookId\": 1,\n      \"assignedAt\": \"example\",\n      \"playbook\": {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"description\": \"example\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b1556015-babc-4da4-894e-8c28733458b6",
+          "name": "Get agent theme",
+          "request": {
+            "name": "Get agent theme",
+            "description": {
+              "content": "Returns textual and color theme settings. Image uploads are not exposed in the public builder.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "theme"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "536cda5a-3a44-4611-a0c1-9bd419fe2a6e",
+              "name": "Agent theme",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "theme"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"avatar\": \"example\",\n  \"bubbleImage\": \"example\",\n  \"title\": \"example\",\n  \"initialMessage\": \"example\",\n  \"placeholder\": \"example\",\n  \"bubbleColor\": \"example\",\n  \"userMessageColor\": \"example\",\n  \"agentMessageColor\": \"example\",\n  \"bubbleAlignment\": \"RIGHT\",\n  \"progressIndicator\": \"STATIC\",\n  \"verticalPositionInPixels\": 1,\n  \"assistantId\": \"example\",\n  \"removePowerBy\": false,\n  \"updatedAt\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0a677c3b-611f-4726-aa83-d81c829b751f",
+          "name": "Update agent theme",
+          "request": {
+            "name": "Update agent theme",
+            "description": {
+              "content": "Updates textual and color theme settings. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "theme"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"avatar\": \"<string>\",\n  \"bubbleImage\": \"<string>\",\n  \"title\": \"<string>\",\n  \"initialMessage\": \"<string>\",\n  \"placeholder\": \"<string>\",\n  \"bubbleColor\": \"<string>\",\n  \"userMessageColor\": \"<string>\",\n  \"agentMessageColor\": \"<string>\",\n  \"bubbleAlignment\": \"<string>\",\n  \"progressIndicator\": \"<string>\",\n  \"verticalPositionInPixels\": \"<number>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1bf82430-fc6d-4713-b447-60e734735e45",
+              "name": "Updated agent theme",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "theme"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"avatar\": \"example\",\n  \"bubbleImage\": \"example\",\n  \"title\": \"example\",\n  \"initialMessage\": \"example\",\n  \"placeholder\": \"example\",\n  \"bubbleColor\": \"example\",\n  \"userMessageColor\": \"example\",\n  \"agentMessageColor\": \"example\",\n  \"bubbleAlignment\": \"RIGHT\",\n  \"progressIndicator\": \"STATIC\",\n  \"verticalPositionInPixels\": 1\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 1,\n  \"assistantId\": \"example\",\n  \"avatar\": \"example\",\n  \"bubbleImage\": \"example\",\n  \"title\": \"example\",\n  \"initialMessage\": \"example\",\n  \"placeholder\": \"example\",\n  \"bubbleColor\": \"example\",\n  \"userMessageColor\": \"example\",\n  \"agentMessageColor\": \"example\",\n  \"bubbleAlignment\": \"RIGHT\",\n  \"progressIndicator\": \"STATIC\",\n  \"verticalPositionInPixels\": 1,\n  \"updatedAt\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "54ffdd64-b94e-4d79-80c6-e42a8282e48f",
+          "name": "Update agent deployment status",
+          "request": {
+            "name": "Update agent deployment status",
+            "description": {
+              "content": "Publishes or pauses an agent by changing isOffline. Requires a USER API key and runs billing checks.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "deployment-status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isOffline\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2405ed47-b237-49f7-af1d-de40b3194c69",
+              "name": "Updated agent",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "deployment-status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"isOffline\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"accountId\": 1,\n  \"createdAt\": \"2024-01-01T12:00:00Z\",\n  \"description\": \"Main customer support agent\",\n  \"id\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"isOffline\": false,\n  \"name\": \"Support Bot\",\n  \"status\": \"ACTIVE\",\n  \"updatedAt\": \"2024-01-01T12:00:00Z\",\n  \"ownerId\": 1,\n  \"theme\": {\n    \"id\": 1,\n    \"avatar\": \"example\",\n    \"bubbleImage\": \"example\",\n    \"title\": \"example\",\n    \"initialMessage\": \"example\",\n    \"placeholder\": \"example\",\n    \"bubbleColor\": \"example\",\n    \"userMessageColor\": \"example\",\n    \"agentMessageColor\": \"example\",\n    \"bubbleAlignment\": \"RIGHT\",\n    \"progressIndicator\": \"STATIC\",\n    \"verticalPositionInPixels\": 1,\n    \"assistantId\": \"example\",\n    \"removePowerBy\": false,\n    \"updatedAt\": \"example\"\n  },\n  \"agentSetting\": {\n    \"id\": 1,\n    \"aiModelId\": 1,\n    \"aiModel\": {\n      \"id\": 1,\n      \"name\": \"example\",\n      \"description\": \"example\",\n      \"creditsPerMessage\": 1,\n      \"isDefault\": false,\n      \"order\": 1,\n      \"analyticsColor\": \"example\",\n      \"externalId\": \"example\",\n      \"aiVendor\": \"example\",\n      \"reasoningModel\": false,\n      \"type\": \"TEXT\"\n    },\n    \"model\": \"example\",\n    \"aiType\": \"ASSISTANT\",\n    \"temperature\": 1,\n    \"instructions\": \"example\",\n    \"agentRole\": \"NONE\",\n    \"toneOfVoice\": \"NONE\",\n    \"answerLength\": \"NONE\",\n    \"maxIterations\": 1,\n    \"agentType\": \"BASIC\",\n    \"customTools\": [\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"description\": \"example\",\n        \"status\": \"example\",\n        \"type\": \"example\"\n      },\n      {\n        \"id\": 1,\n        \"name\": \"example\",\n        \"description\": \"example\",\n        \"status\": \"example\",\n        \"type\": \"example\"\n      }\n    ],\n    \"systemToolsConfig\": {},\n    \"agentConnectedAccounts\": [\n      {\n        \"connectedAccountId\": 1,\n        \"useAllTools\": false,\n        \"selectedToolSlugs\": [\n          \"example\",\n          \"example\"\n        ],\n        \"connectedAccount\": {\n          \"id\": 1,\n          \"toolkit\": \"example\",\n          \"alias\": \"example\",\n          \"connectedEmail\": \"example\",\n          \"isConnected\": false\n        }\n      },\n      {\n        \"connectedAccountId\": 1,\n        \"useAllTools\": false,\n        \"selectedToolSlugs\": [\n          \"example\",\n          \"example\"\n        ],\n        \"connectedAccount\": {\n          \"id\": 1,\n          \"toolkit\": \"example\",\n          \"alias\": \"example\",\n          \"connectedEmail\": \"example\",\n          \"isConnected\": false\n        }\n      }\n    ],\n    \"agentPlaybooks\": [\n      {\n        \"playbookId\": 1,\n        \"assignedAt\": \"example\",\n        \"playbook\": {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"description\": \"example\"\n        }\n      },\n      {\n        \"playbookId\": 1,\n        \"assignedAt\": \"example\",\n        \"playbook\": {\n          \"id\": 1,\n          \"name\": \"example\",\n          \"description\": \"example\"\n        }\n      }\n    ]\n  },\n  \"channel\": {\n    \"id\": 1,\n    \"channelLiveChat\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"collectFeedback\": false,\n      \"feedbackVisibility\": \"ON_HOVER\",\n      \"feedbackText\": \"example\",\n      \"collectFeedbackReason\": false,\n      \"includeOtherReason\": false,\n      \"openFeedbackText\": \"example\",\n      \"enableIdle\": false,\n      \"id\": 1,\n      \"feedbackReasons\": [\n        {\n          \"id\": 1,\n          \"reason\": \"example\",\n          \"order\": 1\n        },\n        {\n          \"id\": 1,\n          \"reason\": \"example\",\n          \"order\": 1\n        }\n      ],\n      \"enableDocumentProcessing\": false,\n      \"enableImageProcessing\": false,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      }\n    },\n    \"channelWhatsapp\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"enableIdle\": false,\n      \"sendCloseMessage\": false,\n      \"closeMessageType\": \"STATIC\",\n      \"id\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"enableDocumentProcessing\": false,\n      \"enableImageProcessing\": false,\n      \"debounce\": false,\n      \"debounceTime\": 0,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      },\n      \"conversationInterruptTimeout\": 0,\n      \"closeMessage\": \"example\",\n      \"closeInstruction\": \"example\",\n      \"autoReplyOnUninterrupt\": false\n    },\n    \"channelInstagram\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"enableIdle\": false,\n      \"sendCloseMessage\": false,\n      \"closeMessageType\": \"STATIC\",\n      \"id\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"enableImageProcessing\": false,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      },\n      \"conversationInterruptTimeout\": 0,\n      \"closeMessage\": \"example\",\n      \"closeInstruction\": \"example\",\n      \"autoReplyOnUninterrupt\": false\n    },\n    \"channelMessenger\": {\n      \"splitMessages\": false,\n      \"splitCharacterLimit\": 1,\n      \"enableIdle\": false,\n      \"sendCloseMessage\": false,\n      \"closeMessageType\": \"STATIC\",\n      \"id\": 1,\n      \"closeAfter\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"conversationClose\": \"NEVER\",\n      \"enableImageProcessing\": false,\n      \"idleSettings\": {\n        \"after\": 1,\n        \"timeUnit\": \"MINUTES\",\n        \"resetsLimit\": 1,\n        \"id\": 1\n      },\n      \"conversationInterruptTimeout\": 0,\n      \"autoReplyOnUninterrupt\": false,\n      \"closeMessage\": \"example\",\n      \"closeInstruction\": \"example\"\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3ae740ef-14ba-4a06-b5b1-5a8f5419513a",
+          "name": "Get all agent channel settings",
+          "request": {
+            "name": "Get all agent channel settings",
+            "description": {
+              "content": "Returns livechat, WhatsApp, Instagram, and Messenger channel settings.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a6f8674c-20fa-4429-84d0-95850bedf975",
+              "name": "Channel settings",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"liveChat\": {\n    \"splitMessages\": false,\n    \"splitCharacterLimit\": 1,\n    \"closeAfter\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"conversationClose\": \"NEVER\",\n    \"collectFeedback\": false,\n    \"feedbackVisibility\": \"ON_HOVER\",\n    \"feedbackText\": \"example\",\n    \"collectFeedbackReason\": false,\n    \"includeOtherReason\": false,\n    \"openFeedbackText\": \"example\",\n    \"enableIdle\": false,\n    \"feedbackReasons\": [\n      {\n        \"id\": 1,\n        \"reason\": \"example\",\n        \"order\": 1\n      },\n      {\n        \"id\": 1,\n        \"reason\": \"example\",\n        \"order\": 1\n      }\n    ],\n    \"enableDocumentProcessing\": false,\n    \"enableImageProcessing\": false,\n    \"idleSettings\": {\n      \"after\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"resetsLimit\": 1,\n      \"id\": 1\n    }\n  },\n  \"whatsApp\": {\n    \"splitMessages\": false,\n    \"splitCharacterLimit\": 1,\n    \"enableIdle\": false,\n    \"sendCloseMessage\": false,\n    \"closeMessageType\": \"STATIC\",\n    \"closeAfter\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"conversationClose\": \"NEVER\",\n    \"enableDocumentProcessing\": false,\n    \"enableImageProcessing\": false,\n    \"debounce\": false,\n    \"debounceTime\": 0,\n    \"idleSettings\": {\n      \"after\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"resetsLimit\": 1,\n      \"id\": 1\n    },\n    \"conversationInterruptTimeout\": 0,\n    \"closeMessage\": \"example\",\n    \"closeInstruction\": \"example\",\n    \"autoReplyOnUninterrupt\": false\n  },\n  \"instagram\": {\n    \"splitMessages\": false,\n    \"splitCharacterLimit\": 1,\n    \"enableIdle\": false,\n    \"sendCloseMessage\": false,\n    \"closeMessageType\": \"STATIC\",\n    \"closeAfter\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"conversationClose\": \"NEVER\",\n    \"enableImageProcessing\": false,\n    \"idleSettings\": {\n      \"after\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"resetsLimit\": 1,\n      \"id\": 1\n    },\n    \"conversationInterruptTimeout\": 0,\n    \"closeMessage\": \"example\",\n    \"closeInstruction\": \"example\",\n    \"autoReplyOnUninterrupt\": false\n  },\n  \"messenger\": {\n    \"splitMessages\": false,\n    \"splitCharacterLimit\": 1,\n    \"enableIdle\": false,\n    \"sendCloseMessage\": false,\n    \"closeMessageType\": \"STATIC\",\n    \"closeAfter\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"conversationClose\": \"NEVER\",\n    \"enableImageProcessing\": false,\n    \"idleSettings\": {\n      \"after\": 1,\n      \"timeUnit\": \"MINUTES\",\n      \"resetsLimit\": 1,\n      \"id\": 1\n    },\n    \"conversationInterruptTimeout\": 0,\n    \"autoReplyOnUninterrupt\": false,\n    \"closeMessage\": \"example\",\n    \"closeInstruction\": \"example\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "92415d5e-8e72-4f21-9545-fc24290c20bd",
+          "name": "Get livechat settings",
+          "request": {
+            "name": "Get livechat settings",
+            "description": {
+              "content": "Returns livechat channel settings for an agent.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "settings",
+                "livechat"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "b04f8b73-94cd-41a9-b587-d508c2cfa53a",
+              "name": "Channel settings",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "settings",
+                    "livechat"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"splitMessages\": false,\n  \"splitCharacterLimit\": 1,\n  \"closeAfter\": 1,\n  \"timeUnit\": \"MINUTES\",\n  \"conversationClose\": \"NEVER\",\n  \"collectFeedback\": false,\n  \"feedbackVisibility\": \"ON_HOVER\",\n  \"feedbackText\": \"example\",\n  \"collectFeedbackReason\": false,\n  \"includeOtherReason\": false,\n  \"openFeedbackText\": \"example\",\n  \"enableIdle\": false,\n  \"feedbackReasons\": [\n    {\n      \"id\": 1,\n      \"reason\": \"example\",\n      \"order\": 1\n    },\n    {\n      \"id\": 1,\n      \"reason\": \"example\",\n      \"order\": 1\n    }\n  ],\n  \"enableDocumentProcessing\": false,\n  \"enableImageProcessing\": false,\n  \"idleSettings\": {\n    \"after\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"resetsLimit\": 1,\n    \"id\": 1\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2ed6499b-d10c-488b-aab2-61eac0916c30",
+          "name": "Update livechat settings",
+          "request": {
+            "name": "Update livechat settings",
+            "description": {
+              "content": "Updates livechat channel settings. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "settings",
+                "livechat"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"splitMessages\": \"<boolean>\",\n  \"splitCharacterLimit\": \"<integer>\",\n  \"conversationClose\": \"<string>\",\n  \"closeAfter\": \"<integer>\",\n  \"timeUnit\": \"<string>\",\n  \"collectFeedback\": \"<boolean>\",\n  \"feedbackText\": \"<string>\",\n  \"collectFeedbackReason\": \"<boolean>\",\n  \"includeOtherReason\": \"<boolean>\",\n  \"feedbackReasons\": [\n    {\n      \"reason\": \"<string>\",\n      \"id\": \"<number>\",\n      \"order\": \"<integer>\"\n    },\n    {\n      \"reason\": \"<string>\",\n      \"id\": \"<number>\",\n      \"order\": \"<integer>\"\n    }\n  ],\n  \"feedbackVisibility\": \"<string>\",\n  \"openFeedbackText\": \"<string>\",\n  \"enableDocumentProcessing\": \"<boolean>\",\n  \"enableImageProcessing\": \"<boolean>\",\n  \"enableIdle\": \"<boolean>\",\n  \"idleSettings\": {\n    \"after\": \"<integer>\",\n    \"timeUnit\": \"<string>\",\n    \"resetsLimit\": \"<integer>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4ef3a660-10aa-44d5-a9a0-05a73daeddf4",
+              "name": "Updated channel settings",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "settings",
+                    "livechat"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"splitMessages\": false,\n  \"splitCharacterLimit\": 1,\n  \"conversationClose\": \"NEVER\",\n  \"closeAfter\": 1,\n  \"timeUnit\": \"MINUTES\",\n  \"collectFeedback\": false,\n  \"feedbackText\": \"example\",\n  \"collectFeedbackReason\": false,\n  \"includeOtherReason\": false,\n  \"feedbackReasons\": [\n    {\n      \"reason\": \"example\",\n      \"id\": 1,\n      \"order\": 0\n    },\n    {\n      \"reason\": \"example\",\n      \"id\": 1,\n      \"order\": 0\n    }\n  ],\n  \"feedbackVisibility\": \"ON_HOVER\",\n  \"openFeedbackText\": \"example\",\n  \"enableDocumentProcessing\": false,\n  \"enableImageProcessing\": false,\n  \"enableIdle\": false,\n  \"idleSettings\": {\n    \"after\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"resetsLimit\": 1\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"splitMessages\": false,\n  \"splitCharacterLimit\": 1,\n  \"conversationClose\": \"NEVER\",\n  \"closeAfter\": 1,\n  \"timeUnit\": \"MINUTES\",\n  \"collectFeedback\": false,\n  \"feedbackVisibility\": \"ON_HOVER\",\n  \"feedbackText\": \"example\",\n  \"collectFeedbackReason\": false,\n  \"includeOtherReason\": false,\n  \"openFeedbackText\": \"example\",\n  \"enableIdle\": false,\n  \"feedbackReasons\": [\n    {\n      \"id\": 1,\n      \"reason\": \"example\",\n      \"order\": 1\n    },\n    {\n      \"id\": 1,\n      \"reason\": \"example\",\n      \"order\": 1\n    }\n  ],\n  \"enableDocumentProcessing\": false,\n  \"enableImageProcessing\": false,\n  \"idleSettings\": {\n    \"after\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"resetsLimit\": 1,\n    \"id\": 1\n  },\n  \"conversationInterruptTimeout\": 0\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "57eb35e2-9cba-4820-a652-874c383701e9",
+          "name": "Get whatsapp settings",
+          "request": {
+            "name": "Get whatsapp settings",
+            "description": {
+              "content": "Returns whatsapp channel settings for an agent.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "settings",
+                "whatsapp"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d1735b2e-f8f7-4053-ba6c-7082953cbcfc",
+              "name": "Channel settings",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "settings",
+                    "whatsapp"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"splitMessages\": false,\n  \"splitCharacterLimit\": 1,\n  \"enableIdle\": false,\n  \"sendCloseMessage\": false,\n  \"closeMessageType\": \"STATIC\",\n  \"closeAfter\": 1,\n  \"timeUnit\": \"MINUTES\",\n  \"conversationClose\": \"NEVER\",\n  \"enableDocumentProcessing\": false,\n  \"enableImageProcessing\": false,\n  \"debounce\": false,\n  \"debounceTime\": 0,\n  \"idleSettings\": {\n    \"after\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"resetsLimit\": 1,\n    \"id\": 1\n  },\n  \"conversationInterruptTimeout\": 0,\n  \"closeMessage\": \"example\",\n  \"closeInstruction\": \"example\",\n  \"autoReplyOnUninterrupt\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e8f44f51-81b8-4fe0-bde6-c13acdafc39d",
+          "name": "Update whatsapp settings",
+          "request": {
+            "name": "Update whatsapp settings",
+            "description": {
+              "content": "Updates whatsapp channel settings. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "settings",
+                "whatsapp"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"splitMessages\": \"<boolean>\",\n  \"splitCharacterLimit\": \"<integer>\",\n  \"conversationClose\": \"<string>\",\n  \"closeAfter\": \"<integer>\",\n  \"timeUnit\": \"<string>\",\n  \"enableDocumentProcessing\": \"<boolean>\",\n  \"enableImageProcessing\": \"<boolean>\",\n  \"debounce\": \"<boolean>\",\n  \"debounceTime\": \"<integer>\",\n  \"enableIdle\": \"<boolean>\",\n  \"idleSettings\": {\n    \"after\": \"<integer>\",\n    \"timeUnit\": \"<string>\",\n    \"resetsLimit\": \"<integer>\"\n  },\n  \"conversationInterruptTimeout\": \"<integer>\",\n  \"sendCloseMessage\": \"<boolean>\",\n  \"closeMessageType\": \"<string>\",\n  \"closeMessage\": \"<string>\",\n  \"closeInstruction\": \"<string>\",\n  \"autoReplyOnUninterrupt\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "6c4f473b-0e45-4591-94f5-9295de2d9e94",
+              "name": "Updated channel settings",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "settings",
+                    "whatsapp"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"splitMessages\": false,\n  \"splitCharacterLimit\": 1,\n  \"conversationClose\": \"NEVER\",\n  \"closeAfter\": 1,\n  \"timeUnit\": \"MINUTES\",\n  \"enableDocumentProcessing\": false,\n  \"enableImageProcessing\": false,\n  \"debounce\": false,\n  \"debounceTime\": 0,\n  \"enableIdle\": false,\n  \"idleSettings\": {\n    \"after\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"resetsLimit\": 1\n  },\n  \"conversationInterruptTimeout\": 0,\n  \"sendCloseMessage\": false,\n  \"closeMessageType\": \"STATIC\",\n  \"closeMessage\": \"example\",\n  \"closeInstruction\": \"example\",\n  \"autoReplyOnUninterrupt\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"splitMessages\": false,\n  \"splitCharacterLimit\": 1,\n  \"conversationClose\": \"NEVER\",\n  \"closeAfter\": 1,\n  \"timeUnit\": \"MINUTES\",\n  \"enableIdle\": false,\n  \"sendCloseMessage\": false,\n  \"closeMessageType\": \"STATIC\",\n  \"enableDocumentProcessing\": false,\n  \"enableImageProcessing\": false,\n  \"debounce\": false,\n  \"debounceTime\": 0,\n  \"idleSettings\": {\n    \"after\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"resetsLimit\": 1,\n    \"id\": 1\n  },\n  \"conversationInterruptTimeout\": 0,\n  \"closeMessage\": \"example\",\n  \"closeInstruction\": \"example\",\n  \"autoReplyOnUninterrupt\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8336326c-e600-4b47-a180-a252244dcc8b",
+          "name": "Get instagram settings",
+          "request": {
+            "name": "Get instagram settings",
+            "description": {
+              "content": "Returns instagram channel settings for an agent.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "settings",
+                "instagram"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "89436c4c-3a6e-464b-9d25-5e2b849d0286",
+              "name": "Channel settings",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "settings",
+                    "instagram"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"splitMessages\": false,\n  \"splitCharacterLimit\": 1,\n  \"enableIdle\": false,\n  \"sendCloseMessage\": false,\n  \"closeMessageType\": \"STATIC\",\n  \"closeAfter\": 1,\n  \"timeUnit\": \"MINUTES\",\n  \"conversationClose\": \"NEVER\",\n  \"enableImageProcessing\": false,\n  \"idleSettings\": {\n    \"after\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"resetsLimit\": 1,\n    \"id\": 1\n  },\n  \"conversationInterruptTimeout\": 0,\n  \"closeMessage\": \"example\",\n  \"closeInstruction\": \"example\",\n  \"autoReplyOnUninterrupt\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "63fbd0f2-5103-4ec1-9ea0-c74492a3ff1e",
+          "name": "Update instagram settings",
+          "request": {
+            "name": "Update instagram settings",
+            "description": {
+              "content": "Updates instagram channel settings. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "settings",
+                "instagram"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"splitMessages\": \"<boolean>\",\n  \"splitCharacterLimit\": \"<integer>\",\n  \"conversationClose\": \"<string>\",\n  \"closeAfter\": \"<integer>\",\n  \"timeUnit\": \"<string>\",\n  \"enableImageProcessing\": \"<boolean>\",\n  \"enableIdle\": \"<boolean>\",\n  \"idleSettings\": {\n    \"after\": \"<integer>\",\n    \"timeUnit\": \"<string>\",\n    \"resetsLimit\": \"<integer>\"\n  },\n  \"conversationInterruptTimeout\": \"<integer>\",\n  \"sendCloseMessage\": \"<boolean>\",\n  \"closeMessageType\": \"<string>\",\n  \"closeMessage\": \"<string>\",\n  \"closeInstruction\": \"<string>\",\n  \"autoReplyOnUninterrupt\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "62cb8cff-32ee-472c-95d9-eb9c0463021d",
+              "name": "Updated channel settings",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "settings",
+                    "instagram"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"splitMessages\": false,\n  \"splitCharacterLimit\": 1,\n  \"conversationClose\": \"NEVER\",\n  \"closeAfter\": 1,\n  \"timeUnit\": \"MINUTES\",\n  \"enableImageProcessing\": false,\n  \"enableIdle\": false,\n  \"idleSettings\": {\n    \"after\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"resetsLimit\": 1\n  },\n  \"conversationInterruptTimeout\": 0,\n  \"sendCloseMessage\": false,\n  \"closeMessageType\": \"STATIC\",\n  \"closeMessage\": \"example\",\n  \"closeInstruction\": \"example\",\n  \"autoReplyOnUninterrupt\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"splitMessages\": false,\n  \"splitCharacterLimit\": 1,\n  \"conversationClose\": \"NEVER\",\n  \"closeAfter\": 1,\n  \"timeUnit\": \"MINUTES\",\n  \"enableIdle\": false,\n  \"sendCloseMessage\": false,\n  \"closeMessageType\": \"STATIC\",\n  \"enableImageProcessing\": false,\n  \"idleSettings\": {\n    \"after\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"resetsLimit\": 1,\n    \"id\": 1\n  },\n  \"conversationInterruptTimeout\": 0,\n  \"closeMessage\": \"example\",\n  \"closeInstruction\": \"example\",\n  \"autoReplyOnUninterrupt\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "12f91b35-76e0-46b6-8dc6-50e5fee448d0",
+          "name": "Get messenger settings",
+          "request": {
+            "name": "Get messenger settings",
+            "description": {
+              "content": "Returns messenger channel settings for an agent.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "settings",
+                "messenger"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "da5e0289-0b93-4e0d-b70a-eb07a8e36679",
+              "name": "Channel settings",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "settings",
+                    "messenger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"splitMessages\": false,\n  \"splitCharacterLimit\": 1,\n  \"enableIdle\": false,\n  \"sendCloseMessage\": false,\n  \"closeMessageType\": \"STATIC\",\n  \"closeAfter\": 1,\n  \"timeUnit\": \"MINUTES\",\n  \"conversationClose\": \"NEVER\",\n  \"enableImageProcessing\": false,\n  \"idleSettings\": {\n    \"after\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"resetsLimit\": 1,\n    \"id\": 1\n  },\n  \"conversationInterruptTimeout\": 0,\n  \"autoReplyOnUninterrupt\": false,\n  \"closeMessage\": \"example\",\n  \"closeInstruction\": \"example\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c753586d-f38b-4d93-bb8f-4d374fd9491b",
+          "name": "Update messenger settings",
+          "request": {
+            "name": "Update messenger settings",
+            "description": {
+              "content": "Updates messenger channel settings. Requires a USER API key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "settings",
+                "messenger"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"splitMessages\": \"<boolean>\",\n  \"splitCharacterLimit\": \"<integer>\",\n  \"conversationClose\": \"<string>\",\n  \"closeAfter\": \"<integer>\",\n  \"timeUnit\": \"<string>\",\n  \"enableImageProcessing\": \"<boolean>\",\n  \"enableIdle\": \"<boolean>\",\n  \"idleSettings\": {\n    \"after\": \"<integer>\",\n    \"timeUnit\": \"<string>\",\n    \"resetsLimit\": \"<integer>\"\n  },\n  \"conversationInterruptTimeout\": \"<integer>\",\n  \"sendCloseMessage\": \"<boolean>\",\n  \"closeMessageType\": \"<string>\",\n  \"closeMessage\": \"<string>\",\n  \"closeInstruction\": \"<string>\",\n  \"autoReplyOnUninterrupt\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "82a6b406-81d1-4f96-a0e6-21f6ec9bc5b5",
+              "name": "Updated channel settings",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "settings",
+                    "messenger"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"splitMessages\": false,\n  \"splitCharacterLimit\": 1,\n  \"conversationClose\": \"NEVER\",\n  \"closeAfter\": 1,\n  \"timeUnit\": \"MINUTES\",\n  \"enableImageProcessing\": false,\n  \"enableIdle\": false,\n  \"idleSettings\": {\n    \"after\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"resetsLimit\": 1\n  },\n  \"conversationInterruptTimeout\": 0,\n  \"sendCloseMessage\": false,\n  \"closeMessageType\": \"STATIC\",\n  \"closeMessage\": \"example\",\n  \"closeInstruction\": \"example\",\n  \"autoReplyOnUninterrupt\": false\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"splitMessages\": false,\n  \"splitCharacterLimit\": 1,\n  \"conversationClose\": \"NEVER\",\n  \"closeAfter\": 1,\n  \"timeUnit\": \"MINUTES\",\n  \"enableIdle\": false,\n  \"sendCloseMessage\": false,\n  \"closeMessageType\": \"STATIC\",\n  \"enableImageProcessing\": false,\n  \"idleSettings\": {\n    \"after\": 1,\n    \"timeUnit\": \"MINUTES\",\n    \"resetsLimit\": 1,\n    \"id\": 1\n  },\n  \"conversationInterruptTimeout\": 0,\n  \"closeMessage\": \"example\",\n  \"closeInstruction\": \"example\",\n  \"autoReplyOnUninterrupt\": false\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "55e7164d-eb5a-44c4-8af2-74a697c356e2",
+          "name": "Get agent analytics",
+          "request": {
+            "name": "Get agent analytics",
+            "description": {
+              "content": "Returns credit usage, conversation counts, and conversations breakdown by channel for a specific agent.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "public",
+                "v1",
+                "agents",
+                ":agentId",
+                "analytics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "startDate",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "endDate",
+                  "value": "<string>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "agentId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "436655d4-6188-482f-b6f2-6377355c55ee",
+              "name": "Agent analytics data",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "analytics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2024-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"summary\": {\n    \"totalCredits\": 500.25,\n    \"totalConversations\": 150\n  },\n  \"creditsByDate\": [\n    {\n      \"date\": \"2024-01-01\",\n      \"totalCredits\": 25.5,\n      \"conversationCount\": 10\n    },\n    {\n      \"date\": \"2024-01-01\",\n      \"totalCredits\": 25.5,\n      \"conversationCount\": 10\n    }\n  ],\n  \"conversationsByChannel\": [\n    {\n      \"date\": \"2024-01-15\",\n      \"channel\": \"WHATSAPP\",\n      \"count\": 12\n    },\n    {\n      \"date\": \"2024-01-15\",\n      \"channel\": \"WHATSAPP\",\n      \"count\": 12\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4f99244-f6b6-45ee-a2d6-ac1b0939977a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "analytics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2024-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "74a4edc9-1660-4f3e-862c-bedc505f453a",
+              "name": "Not Found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "public",
+                    "v1",
+                    "agents",
+                    ":agentId",
+                    "analytics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "startDate",
+                      "value": "2024-01-01"
+                    },
+                    {
+                      "key": "endDate",
+                      "value": "2024-01-01"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "agentId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"error\": {\n    \"code\": \"unauthorized\",\n    \"message\": \"Detailed error message\",\n    \"details\": {\n      \"issues\": [\n        {\n          \"path\": [\n            \"name\"\n          ],\n          \"message\": \"String must contain at least 1 character(s)\",\n          \"code\": \"too_small\"\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://prod-api.getfrontline.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "9a440dd0-3580-4b17-b6e2-20061984dbb7",
+    "name": "Public Account Agent Builder API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Public API for accessing agents, flows, and analytics.\n\n## Authentication\n\nThe Public API supports two API key types. Pass the key as a Bearer token:\n\n```\nAuthorization: Bearer <YOUR_API_KEY>\n```\n\n### Account API key (GENERAL)\n\nAccount-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.\n\n### User API key (USER)\n\nUser-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**\n\nEach operation documents which key type(s) it accepts in its **Security** section.",
+      "type": "text/plain"
+    }
+  }
+}
