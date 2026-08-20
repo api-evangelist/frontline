@@ -36,6 +36,14 @@ tags:
 - CRM
 - AI Agents
 - Sales Automation
+- Customer-Support
+- Workflows
+- Conversational AI
+tags_raw:
+- Company
+- CRM
+- AI Agents
+- Sales Automation
 - Customer Support
 - Workflows
 - Conversational AI
@@ -483,6 +491,8 @@ apis:
   humanURL: https://docs.getfrontline.ai/reference/openapi
   baseURL: https://prod-api.getfrontline.ai/public/v1
   tags:
+  - Table Rows
+  tags_raw:
   - Table rows
   properties:
   - type: OpenAPI
