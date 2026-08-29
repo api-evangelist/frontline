@@ -1,0 +1,683 @@
+openapi: 3.2.0
+info:
+  title: Public Integrations API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Integrations
+  description: OAuth/API connected accounts for toolkits like Google Sheets, Gmail, and Slack
+paths:
+  /public/v1/integrations:
+    get:
+      summary: List connected account integrations
+      operationId: listConnectedAccounts
+      description: Read-only list of OAuth/API connected accounts for this account (for example Google Sheets, Gmail, Slack). Use the returned id as connectedAccountId in agent settings, flows, and workflows. Requires a USER API key. Private integrations are only visible to their creator; shared integrations are visible to all account users.
+      security:
+      - userApiKey: []
+      tags:
+      - Integrations
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - GMAIL
+          - GOOGLECALENDAR
+          - SLACK
+          - CALENDLY
+          - GOOGLEDOCS
+          - GOOGLESHEETS
+          - NOTION
+          - GOOGLEDRIVE
+          - GRANOLA_MCP
+          - GOOGLEMEET
+          - ZOOM
+          - GAMMA
+          - STRIPE
+          - POSTHOG
+          - LINKEDIN
+          - FACEBOOK
+          - GOOGLE_ANALYTICS
+          - GOOGLE_SEARCH_CONSOLE
+          - MAILCHIMP
+          - SEMRUSH
+          - GOOGLEADS
+          - INSTAGRAM
+          - ADYNTEL
+          - GOOGLETASKS
+          - LINEAR
+          - JIRA
+          - ASANA
+          - SHARE_POINT
+          - ONE_DRIVE
+          - EXCEL
+          - TIKTOK
+          - TWITTER
+          - YOUTUBE
+          - GOOGLE_MAPS
+          - METAADS
+          - SHOPIFY
+          - AIRTABLE
+          - MONDAY
+          - TRELLO
+          - GOOGLESLIDES
+          - BUILTWITH
+          - HUBSPOT
+          - PIPEDRIVE
+          - ATTIO
+          - ZENDESK
+          - SALESFORCE
+          - SALESFORCE_SERVICE_CLOUD
+          - INTERCOM
+          - WEBFLOW
+          - FIGMA
+          - APOLLO
+          - OUTLOOK
+          - FRESHDESK
+          - ZOHO_DESK
+          - ZOHO_INVOICE
+          - ZOHO
+          - BREX
+        required: false
+        name: toolkit
+        in: query
+      - schema:
+          type: string
+          minLength: 1
+        required: false
+        name: filterText
+        in: query
+      - schema:
+          anyOf:
+          - type: boolean
+          - type: string
+        required: false
+        name: isConnected
+        in: query
+      - schema:
+          type: string
+          enum:
+          - PRIVATE
+          - SHARED
+        required: false
+        name: visibility
+        in: query
+      responses:
+        '200':
+          description: Connected accounts for this account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIntegrationsListResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/integrations/trigger-types:
+    get:
+      summary: List integration trigger types
+      operationId: listIntegrationTriggerTypes
+      description: 'Catalog of the third-party events that can start an automation. Use `slug` as data.triggerSlug and `toolkit` as data.triggerToolkit on a TRIGGER node with triggerType COMPOSIO_TRIGGER. `configFields` describes the triggerConfig each event accepts: `required` fields must be sent, fields with `userConfigurable: false` are managed by the platform and ignored, and a non-null `resourceType` means GET /public/v1/integrations/trigger-resources lists the valid values. The catalog is static, so an Account or User API key both work.'
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Integrations
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - GMAIL
+          - GOOGLECALENDAR
+          - SLACK
+          - CALENDLY
+          - GOOGLEDOCS
+          - GOOGLESHEETS
+          - NOTION
+          - GOOGLEDRIVE
+          - GRANOLA_MCP
+          - GOOGLEMEET
+          - ZOOM
+          - GAMMA
+          - STRIPE
+          - POSTHOG
+          - LINKEDIN
+          - FACEBOOK
+          - GOOGLE_ANALYTICS
+          - GOOGLE_SEARCH_CONSOLE
+          - MAILCHIMP
+          - SEMRUSH
+          - GOOGLEADS
+          - INSTAGRAM
+          - ADYNTEL
+          - GOOGLETASKS
+          - LINEAR
+          - JIRA
+          - ASANA
+          - SHARE_POINT
+          - ONE_DRIVE
+          - EXCEL
+          - TIKTOK
+          - TWITTER
+          - YOUTUBE
+          - GOOGLE_MAPS
+          - METAADS
+          - SHOPIFY
+          - AIRTABLE
+          - MONDAY
+          - TRELLO
+          - GOOGLESLIDES
+          - BUILTWITH
+          - HUBSPOT
+          - PIPEDRIVE
+          - ATTIO
+          - ZENDESK
+          - SALESFORCE
+          - SALESFORCE_SERVICE_CLOUD
+          - INTERCOM
+          - WEBFLOW
+          - FIGMA
+          - APOLLO
+          - OUTLOOK
+          - FRESHDESK
+          - ZOHO_DESK
+          - ZOHO_INVOICE
+          - ZOHO
+          - BREX
+        required: false
+        name: toolkit
+        in: query
+      responses:
+        '200':
+          description: Supported integration trigger types
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicTriggerTypesListResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/integrations/trigger-resources:
+    get:
+      summary: List values for a trigger config field
+      operationId: listIntegrationTriggerResources
+      description: 'Resolves the ids a triggerConfig needs (Drive folders, Sheets spreadsheets and tabs, Asana workspaces and projects, Salesforce sobjects and fields, Gmail labels, Outlook folders and calendars, OneDrive folders). Take `resourceType` from a trigger type''s configFields, and send each result''s `id` as the value of that config field. `parent` is required when browsing inside another resource: spreadsheetId for googlesheets_sheets, workspaceGid for asana_projects, sobjectName for salesforce_sobject_fields, and an optional folder path for onedrive_folders. The connected account must belong to your account and match the resource''s toolkit. Requires a USER API key.'
+      security:
+      - userApiKey: []
+      tags:
+      - Integrations
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - gmail_labels
+          - googlesheets_spreadsheets
+          - googlesheets_sheets
+          - googledocs_documents
+          - googledrive_folders
+          - googledrive_shared_drives
+          - onedrive_folders
+          - asana_workspaces
+          - asana_projects
+          - salesforce_sobjects
+          - salesforce_sobject_fields
+          - outlook_folders
+          - outlook_calendars
+        required: true
+        name: resourceType
+        in: query
+      - schema:
+          type: integer
+          exclusiveMinimum: 0
+        required: true
+        name: connectedAccountId
+        in: query
+      - schema:
+          type: string
+          minLength: 1
+        required: false
+        name: parent
+        in: query
+      - schema:
+          type: string
+          minLength: 1
+        required: false
+        name: query
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 50
+        required: false
+        name: limit
+        in: query
+      responses:
+        '200':
+          description: Values available for the requested resource type
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicTriggerResourcesListResponse'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Connected account not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    PublicConnectedAccount:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Connected account ID. Use as connectedAccountId in agent settings, flows, and workflows.
+        toolkit:
+          type: string
+          example: googlesheets
+        alias:
+          type:
+          - string
+          - 'null'
+        visibility:
+          type: string
+          enum:
+          - PRIVATE
+          - SHARED
+        isConnected:
+          type: boolean
+        isExpired:
+          type: boolean
+        connectedEmail:
+          type:
+          - string
+          - 'null'
+        connectedAt:
+          type:
+          - string
+          - 'null'
+        availableToolsCount:
+          type:
+          - number
+          - 'null'
+        enabledToolsCount:
+          type:
+          - number
+          - 'null'
+        createdAt:
+          type:
+          - string
+          - 'null'
+        updatedAt:
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - toolkit
+      - visibility
+      - isConnected
+      - isExpired
+      - createdAt
+      - updatedAt
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicTriggerConfigField:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Key to send inside triggerConfig on the TRIGGER node.
+          example: folder_id
+        type:
+          type: string
+          example: string
+        description:
+          type: string
+        required:
+          type: boolean
+          description: When true, the trigger cannot be created without this config field.
+        userConfigurable:
+          type: boolean
+          description: When false the value is managed by the platform and is ignored if you send it.
+        resourceType:
+          type:
+          - string
+          - 'null'
+          enum:
+          - gmail_labels
+          - googlesheets_spreadsheets
+          - googlesheets_sheets
+          - googledocs_documents
+          - googledrive_folders
+          - googledrive_shared_drives
+          - onedrive_folders
+          - asana_workspaces
+          - asana_projects
+          - salesforce_sobjects
+          - salesforce_sobject_fields
+          - outlook_folders
+          - outlook_calendars
+          description: Picker that lists valid values for this field. Call GET /public/v1/integrations/trigger-resources with this resourceType. Null when the value is free text.
+          example: googledrive_folders
+      required:
+      - name
+      - type
+      - description
+      - required
+      - userConfigurable
+      - resourceType
+    PublicTriggerType:
+      type: object
+      properties:
+        slug:
+          type: string
+          description: Send as data.triggerSlug on a COMPOSIO_TRIGGER node.
+          example: GOOGLEDRIVE_FILE_CREATED_TRIGGER
+        toolkit:
+          type: string
+          enum:
+          - GMAIL
+          - GOOGLECALENDAR
+          - SLACK
+          - CALENDLY
+          - GOOGLEDOCS
+          - GOOGLESHEETS
+          - NOTION
+          - GOOGLEDRIVE
+          - GRANOLA_MCP
+          - GOOGLEMEET
+          - ZOOM
+          - GAMMA
+          - STRIPE
+          - POSTHOG
+          - LINKEDIN
+          - FACEBOOK
+          - GOOGLE_ANALYTICS
+          - GOOGLE_SEARCH_CONSOLE
+          - MAILCHIMP
+          - SEMRUSH
+          - GOOGLEADS
+          - INSTAGRAM
+          - ADYNTEL
+          - GOOGLETASKS
+          - LINEAR
+          - JIRA
+          - ASANA
+          - SHARE_POINT
+          - ONE_DRIVE
+          - EXCEL
+          - TIKTOK
+          - TWITTER
+          - YOUTUBE
+          - GOOGLE_MAPS
+          - METAADS
+          - SHOPIFY
+          - AIRTABLE
+          - MONDAY
+          - TRELLO
+          - GOOGLESLIDES
+          - BUILTWITH
+          - HUBSPOT
+          - PIPEDRIVE
+          - ATTIO
+          - ZENDESK
+          - SALESFORCE
+          - SALESFORCE_SERVICE_CLOUD
+          - INTERCOM
+          - WEBFLOW
+          - FIGMA
+          - APOLLO
+          - OUTLOOK
+          - FRESHDESK
+          - ZOHO_DESK
+          - ZOHO_INVOICE
+          - ZOHO
+          - BREX
+          description: Send as data.triggerToolkit on a COMPOSIO_TRIGGER node.
+          example: GOOGLEDRIVE
+        name:
+          type: string
+          example: File Created
+        description:
+          type: string
+        deliveryType:
+          type: string
+          enum:
+          - POLL
+          - WEBHOOK
+          description: POLL triggers are checked on an interval; WEBHOOK triggers are pushed.
+        configFields:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicTriggerConfigField'
+      required:
+      - slug
+      - toolkit
+      - name
+      - description
+      - deliveryType
+      - configFields
+    PublicTriggerTypesListResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicTriggerType'
+      required:
+      - results
+    PublicIntegrationsListResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnectedAccount'
+      required:
+      - results
+    PublicTriggerResource:
+      type: object
+      properties:
+        id:
+          type: string
+          description: Value to send in triggerConfig for the matching field.
+        name:
+          type: string
+      required:
+      - id
+      - name
+    PublicTriggerResourcesListResponse:
+      type: object
+      properties:
+        resourceType:
+          type: string
+          enum:
+          - gmail_labels
+          - googlesheets_spreadsheets
+          - googlesheets_sheets
+          - googledocs_documents
+          - googledrive_folders
+          - googledrive_shared_drives
+          - onedrive_folders
+          - asana_workspaces
+          - asana_projects
+          - salesforce_sobjects
+          - salesforce_sobject_fields
+          - outlook_folders
+          - outlook_calendars
+        parent:
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicTriggerResource'
+        total:
+          type: number
+      required:
+      - resourceType
+      - parent
+      - results
+      - total
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

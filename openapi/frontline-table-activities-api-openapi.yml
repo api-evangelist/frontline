@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Public Account Table activities API
+  title: Public Table activities API
   version: 1.0.0
   description: 'Public API for accessing agents, flows, and analytics.
 
@@ -75,7 +75,6 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: array
                     items:
@@ -83,10 +82,8 @@ paths:
                       properties:
                         id:
                           type: number
-                          example: 1
                         row_id:
                           type: string
-                          example: example
                         type:
                           type: string
                           enum:
@@ -96,28 +93,25 @@ paths:
                           - MEETING
                           - WHATSAPP
                           description: NOTE | EMAIL | PHONE_CALL | MEETING | WHATSAPP
-                          example: NOTE
                         content:
                           type: string
-                          example: example
                         activity_date:
-                          type: string
-                          nullable: true
-                          example: example
+                          type:
+                          - string
+                          - 'null'
                         additional_data:
-                          type: object
-                          nullable: true
-                          additionalProperties:
-                            nullable: true
-                            type: object
+                          type:
+                          - object
+                          - 'null'
+                          additionalProperties: {}
                         related_table_id:
-                          type: number
-                          nullable: true
-                          example: 1
+                          type:
+                          - number
+                          - 'null'
                         related_row_id:
-                          type: string
-                          nullable: true
-                          example: example
+                          type:
+                          - string
+                          - 'null'
                         users:
                           type: array
                           items:
@@ -125,25 +119,23 @@ paths:
                             properties:
                               id:
                                 type: number
-                                example: 1
                               email:
                                 type: string
-                                example: example
                             required:
                             - id
                             - email
                         created_by:
-                          type: number
-                          nullable: true
-                          example: 1
+                          type:
+                          - number
+                          - 'null'
                         created_at:
-                          type: string
-                          nullable: true
-                          example: example
+                          type:
+                          - string
+                          - 'null'
                         updated_at:
-                          type: string
-                          nullable: true
-                          example: example
+                          type:
+                          - string
+                          - 'null'
                       required:
                       - id
                       - row_id
@@ -203,7 +195,6 @@ paths:
                 content:
                   type: string
                   minLength: 1
-                  example: example
                 type:
                   type: string
                   enum:
@@ -213,32 +204,25 @@ paths:
                   - MEETING
                   - WHATSAPP
                   default: NOTE
-                  example: NOTE
                 activityDate:
-                  type: string
-                  nullable: true
-                  example: example
+                  type:
+                  - string
+                  - 'null'
                 additionalData:
-                  type: object
-                  nullable: true
-                  additionalProperties:
-                    nullable: true
-                    type: object
+                  type:
+                  - object
+                  - 'null'
+                  additionalProperties: {}
                 userIds:
                   type: array
                   items:
                     type: integer
-                    minimum: 0
-                    exclusiveMinimum: true
-                    example: 1
+                    exclusiveMinimum: 0
                 relatedTableId:
                   type: integer
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
+                  exclusiveMinimum: 0
                 relatedRowId:
                   type: string
-                  example: example
               required:
               - content
       responses:
@@ -253,16 +237,13 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       row_id:
                         type: string
-                        example: example
                       type:
                         type: string
                         enum:
@@ -272,28 +253,25 @@ paths:
                         - MEETING
                         - WHATSAPP
                         description: NOTE | EMAIL | PHONE_CALL | MEETING | WHATSAPP
-                        example: NOTE
                       content:
                         type: string
-                        example: example
                       activity_date:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       additional_data:
-                        type: object
-                        nullable: true
-                        additionalProperties:
-                          nullable: true
-                          type: object
+                        type:
+                        - object
+                        - 'null'
+                        additionalProperties: {}
                       related_table_id:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       related_row_id:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       users:
                         type: array
                         items:
@@ -301,25 +279,23 @@ paths:
                           properties:
                             id:
                               type: number
-                              example: 1
                             email:
                               type: string
-                              example: example
                           required:
                           - id
                           - email
                       created_by:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                     required:
                     - id
                     - row_id
@@ -367,9 +343,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 100
+          exclusiveMinimum: 0
         required: true
         name: id
         in: path
@@ -385,16 +360,13 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       row_id:
                         type: string
-                        example: example
                       type:
                         type: string
                         enum:
@@ -404,28 +376,25 @@ paths:
                         - MEETING
                         - WHATSAPP
                         description: NOTE | EMAIL | PHONE_CALL | MEETING | WHATSAPP
-                        example: NOTE
                       content:
                         type: string
-                        example: example
                       activity_date:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       additional_data:
-                        type: object
-                        nullable: true
-                        additionalProperties:
-                          nullable: true
-                          type: object
+                        type:
+                        - object
+                        - 'null'
+                        additionalProperties: {}
                       related_table_id:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       related_row_id:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       users:
                         type: array
                         items:
@@ -433,25 +402,23 @@ paths:
                           properties:
                             id:
                               type: number
-                              example: 1
                             email:
                               type: string
-                              example: example
                           required:
                           - id
                           - email
                       created_by:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                     required:
                     - id
                     - row_id
@@ -498,9 +465,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 100
+          exclusiveMinimum: 0
         required: true
         name: id
         in: path
@@ -513,34 +479,29 @@ paths:
                 content:
                   type: string
                   minLength: 1
-                  example: example
                 activityDate:
-                  type: string
-                  nullable: true
-                  example: example
+                  type:
+                  - string
+                  - 'null'
                 additionalData:
-                  type: object
-                  nullable: true
-                  additionalProperties:
-                    nullable: true
-                    type: object
+                  type:
+                  - object
+                  - 'null'
+                  additionalProperties: {}
                 userIds:
                   type: array
                   items:
                     type: integer
-                    minimum: 0
-                    exclusiveMinimum: true
-                    example: 1
+                    exclusiveMinimum: 0
                 relatedTableId:
-                  type: integer
-                  nullable: true
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
+                  type:
+                  - integer
+                  - 'null'
+                  exclusiveMinimum: 0
                 relatedRowId:
-                  type: string
-                  nullable: true
-                  example: example
+                  type:
+                  - string
+                  - 'null'
       responses:
         '200':
           description: Updated activity
@@ -553,16 +514,13 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       row_id:
                         type: string
-                        example: example
                       type:
                         type: string
                         enum:
@@ -572,28 +530,25 @@ paths:
                         - MEETING
                         - WHATSAPP
                         description: NOTE | EMAIL | PHONE_CALL | MEETING | WHATSAPP
-                        example: NOTE
                       content:
                         type: string
-                        example: example
                       activity_date:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       additional_data:
-                        type: object
-                        nullable: true
-                        additionalProperties:
-                          nullable: true
-                          type: object
+                        type:
+                        - object
+                        - 'null'
+                        additionalProperties: {}
                       related_table_id:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       related_row_id:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       users:
                         type: array
                         items:
@@ -601,25 +556,23 @@ paths:
                           properties:
                             id:
                               type: number
-                              example: 1
                             email:
                               type: string
-                              example: example
                           required:
                           - id
                           - email
                       created_by:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                     required:
                     - id
                     - row_id
@@ -666,9 +619,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 100
+          exclusiveMinimum: 0
         required: true
         name: id
         in: path
@@ -684,7 +636,6 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
@@ -692,13 +643,10 @@ paths:
                         type: boolean
                         enum:
                         - true
-                        example: true
                       id:
                         anyOf:
                         - type: string
-                          example: example
                         - type: number
-                          example: 1
                     required:
                     - deleted
                 required:
@@ -724,19 +672,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
     ErrorBody:
       type: object
       properties:
@@ -766,6 +701,19 @@ components:
       required:
       - code
       - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
   securitySchemes:
     accountApiKey:
       type: http
@@ -785,6 +733,7 @@ x-tagGroups:
   - Flow Variables
   - Intents
   - Agents
+  - Agent Playbooks
 - name: Workflows
   tags:
   - Workflows
@@ -814,12 +763,24 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
+- name: Channels
+  tags:
+  - Channels
 - name: Integrations
   tags:
-  - Tools
+  - Custom Tools
   - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
 - name: Core
   tags:
   - Account
   - AI Models
   - Billing
+  - Users
+  - User Tasks
+  - Guidance

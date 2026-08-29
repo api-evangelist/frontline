@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Public Account Agents API
+  title: Public Agents API
   version: 1.0.0
   description: 'Public API for accessing agents, flows, and analytics.
 
@@ -40,11 +40,66 @@ tags:
 - name: Agents
   description: 'Agent runtime data: conversations and transcripts'
 paths:
+  /public/v1/agents/{agentId}/messages:
+    post:
+      summary: Run an agent (send a message)
+      operationId: runAgent
+      description: Sends a message to an agent and returns its reply — the same way the in-app Overview/Playground tests an agent and its flow (runs over the OVERVIEW channel, against the active OR draft flow). Omit `message` on a new conversation to just open it and run the Start flow; pass `conversation_id` + `message` to continue. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agents
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAgentMessageInput'
+      responses:
+        '201':
+          description: The agent's reply messages and the conversation id
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAgentRunOutput'
+  /public/v1/agents/{agentId}/conversations/{conversationId}/close:
+    post:
+      summary: Close an agent conversation
+      operationId: closeAgentConversation
+      description: Closes a conversation (e.g. one started via the run endpoint). Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agents
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 42
+        required: false
+        name: conversationId
+        in: path
+      responses:
+        '200':
+          description: The conversation was closed
   /public/v1/agents/{agentId}/conversations:
     get:
       summary: List agent conversations
       operationId: listAgentConversations
-      description: Lists conversations for an agent (basic fields). Requires a USER API key.
+      description: Lists conversations for an agent, including the latest rolling summary and linked CRM contact. Supports full-text search (`search`), channel and feedback filters, and date ranges. Requires a USER API key.
       security:
       - userApiKey: []
       tags:
@@ -61,23 +116,47 @@ paths:
           enum:
           - 'true'
           - 'false'
-          example: 'true'
         required: false
         name: is_closed
         in: query
       - schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: '2026-01-01'
         required: false
         name: start_date
         in: query
       - schema:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: '2026-12-31'
         required: false
         name: end_date
+        in: query
+      - schema:
+          type: string
+          description: Full-text search over message content and conversation name.
+          example: refund policy
+        required: false
+        name: search
+        in: query
+      - schema:
+          type: string
+          description: 'Comma-separated channels to filter by. Valid values: LIVE_CHAT, SHARED, OVERVIEW, API, WHATSAPP, INSTAGRAM, MESSENGER, SLACK, MAX_EXTENSION, MAX_WEB, MAX_API.'
+          example: WHATSAPP,API
+        required: false
+        name: channels
+        in: query
+      - schema:
+          type: string
+          enum:
+          - POSITIVE
+          - NEGATIVE
+          description: 'Only conversations containing a message with this feedback rating. Valid values: POSITIVE, NEGATIVE.'
+        required: false
+        name: feedback
         in: query
       responses:
         '200':
@@ -98,7 +177,7 @@ paths:
     get:
       summary: Get a conversation transcript
       operationId: getAgentConversation
-      description: Returns a conversation with its message transcript (basic fields). Requires a USER API key.
+      description: Returns a conversation with its message transcript, latest summary, and linked CRM contact. By default the transcript is clean (user-facing messages only); pass `include_events=true` for a debug view that adds non-message events (flow enter/exit, triggered intents, tool calls, errors) — each carrying `audit_log_id` for trace drill-down. Requires a USER API key.
       security:
       - userApiKey: []
       tags:
@@ -111,12 +190,22 @@ paths:
         name: agentId
         in: path
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 42
         required: false
         name: conversationId
         in: path
+      - schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          description: When true, the transcript includes non-message events (flow enter/exit, triggered intents, tool calls, errors, etc.) alongside conversational messages. Each item carries `audit_log_id` for drill-down. Default false returns only user-facing messages.
+        required: false
+        name: include_events
+        in: query
       responses:
         '200':
           description: The conversation transcript
@@ -124,32 +213,250 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/PublicConversationTranscript'
+  /public/v1/agents/{agentId}/conversations/{conversationId}/messages/{messageId}/trace:
+    get:
+      summary: Get a message's execution trace
+      operationId: getAgentMessageTrace
+      description: Returns the full LLM/tool execution trace (audit log) for a single message. Look up audit_log_id from the conversation transcript. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agents
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 42
+        required: false
+        name: conversationId
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 1001
+        required: false
+        name: messageId
+        in: path
+      responses:
+        '200':
+          description: The message execution trace
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicExecutionTrace'
 components:
   schemas:
-    PublicConversationMessage:
+    PublicConversation:
       type: object
       properties:
         id:
           type: number
-          nullable: true
-          example: 1
+          example: 42
+        name:
+          type:
+          - string
+          - 'null'
+          example: Anonymous Visitor
+        channel:
+          type: string
+          example: API
+        is_closed:
+          type: boolean
+        contact_id:
+          type:
+          - string
+          - 'null'
+        summary:
+          type:
+          - string
+          - 'null'
+          description: Latest rolling summary of the conversation, if one has been generated.
+        contact:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: The linked CRM contact (People record), if any.
+        created_at:
+          type: string
+        updated_at:
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - channel
+      - is_closed
+      - created_at
+    PublicAgentMessageInput:
+      type: object
+      properties:
+        message:
+          type: string
+          minLength: 1
+          description: The message to send. Omit on a NEW conversation to just open it and run the agent's Start flow (like the Overview/Playground). Required when continuing an existing conversation (conversation_id present).
+          example: Hi, I need help with my order
+        conversation_id:
+          type: integer
+          description: Continue an existing conversation. Omit to start a new one.
+          example: 42
+          exclusiveMinimum: 0
+        contact_id:
+          type: string
+          description: Link the conversation to a People (contact) record.
+        initial_variables:
+          type: object
+          additionalProperties: {}
+          description: Variables to seed the conversation with when starting a new one (HMAC is computed server-side).
+    PublicAgentRunOutput:
+      type: object
+      properties:
+        conversation_id:
+          type:
+          - number
+          - 'null'
+          example: 42
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicAgentRunMessage'
+      required:
+      - messages
+    PublicAgentRunMessage:
+      type: object
+      properties:
+        id:
+          type:
+          - number
+          - 'null'
         role:
           type: string
-          example: USER
+          enum:
+          - USER
+          - ASSISTANT
+          - SYSTEM
+          example: ASSISTANT
         type:
           type: string
+          enum:
+          - MESSAGE
+          - TRIGGER_INTENT
+          - RESPONSE_AI
+          - SAY_AI
+          - API
+          - ENTER_FLOW
+          - EXIT_FLOW
+          - ERROR_MESSAGE
+          - SET_VARIABLES
+          - OFF_TOPIC
+          - CONVERSATION_ENDED
+          - CONVERSATION_IDLE
+          - CONDITIONAL_ROUTING
+          - PROCESSED_MEDIA_WITH_AI
+          - AGENT_TOOL
+          - START_CONVERSATION
+          - WHATSAPP_TEMPLATE_MESSAGE
+          - WHATSAPP_FLOW_COMPLETED
+          - MESSAGE_REACTION
+          - CHANNEL_CONTEXT
+          - ABORTED_MESSAGE
+          - MAX_PLAN_PROPOSED
+          - MAX_PLAN_STARTED
+          - MAX_PLAN_COMPLETED
+          - MAX_PLAN_CANCELLED
+          - MAX_PLAN_QUESTIONS_PROPOSED
+          - MAX_PLAN_QUESTIONS_RESOLVED
           example: MESSAGE
         text:
           type: string
-          nullable: true
-          example: example
+          example: Hi! How can I help?
+        created_at:
+          type:
+          - string
+          - 'null'
+      required:
+      - role
+      - type
+      - text
+    PublicConversationMessage:
+      type: object
+      properties:
+        id:
+          type:
+          - number
+          - 'null'
+        role:
+          type: string
+          enum:
+          - USER
+          - ASSISTANT
+          - SYSTEM
+          example: USER
+        type:
+          type: string
+          enum:
+          - MESSAGE
+          - TRIGGER_INTENT
+          - RESPONSE_AI
+          - SAY_AI
+          - API
+          - ENTER_FLOW
+          - EXIT_FLOW
+          - ERROR_MESSAGE
+          - SET_VARIABLES
+          - OFF_TOPIC
+          - CONVERSATION_ENDED
+          - CONVERSATION_IDLE
+          - CONDITIONAL_ROUTING
+          - PROCESSED_MEDIA_WITH_AI
+          - AGENT_TOOL
+          - START_CONVERSATION
+          - WHATSAPP_TEMPLATE_MESSAGE
+          - WHATSAPP_FLOW_COMPLETED
+          - MESSAGE_REACTION
+          - CHANNEL_CONTEXT
+          - ABORTED_MESSAGE
+          - MAX_PLAN_PROPOSED
+          - MAX_PLAN_STARTED
+          - MAX_PLAN_COMPLETED
+          - MAX_PLAN_CANCELLED
+          - MAX_PLAN_QUESTIONS_PROPOSED
+          - MAX_PLAN_QUESTIONS_RESOLVED
+          example: MESSAGE
+        text:
+          type:
+          - string
+          - 'null'
         created_at:
           type: string
-          example: example
+        audit_log_id:
+          type:
+          - string
+          - 'null'
+          description: Pointer to the message's full LLM trace. Fetch via the message trace endpoint.
       required:
       - role
       - type
       - created_at
+    PublicExecutionTrace:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
     PublicConversationTranscript:
       allOf:
       - $ref: '#/components/schemas/PublicConversation'
@@ -161,38 +468,6 @@ components:
               $ref: '#/components/schemas/PublicConversationMessage'
         required:
         - messages
-    PublicConversation:
-      type: object
-      properties:
-        id:
-          type: number
-          example: 42
-        name:
-          type: string
-          nullable: true
-          example: Anonymous Visitor
-        channel:
-          type: string
-          example: API
-        is_closed:
-          type: boolean
-          example: false
-        contact_id:
-          type: string
-          nullable: true
-          example: example
-        created_at:
-          type: string
-          example: example
-        updated_at:
-          type: string
-          nullable: true
-          example: example
-      required:
-      - id
-      - channel
-      - is_closed
-      - created_at
   securitySchemes:
     accountApiKey:
       type: http
@@ -212,6 +487,7 @@ x-tagGroups:
   - Flow Variables
   - Intents
   - Agents
+  - Agent Playbooks
 - name: Workflows
   tags:
   - Workflows
@@ -241,12 +517,24 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
+- name: Channels
+  tags:
+  - Channels
 - name: Integrations
   tags:
-  - Tools
+  - Custom Tools
   - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
 - name: Core
   tags:
   - Account
   - AI Models
   - Billing
+  - Users
+  - User Tasks
+  - Guidance

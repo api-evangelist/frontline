@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Public Account Flows API
+  title: Public Flows API
   version: 1.0.0
   description: 'Public API for accessing agents, flows, and analytics.
 
@@ -146,8 +146,9 @@ paths:
         name: agentId
         in: path
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 101
         required: false
         name: flowId
@@ -155,18 +156,14 @@ paths:
       - schema:
           anyOf:
           - type: boolean
-            example: false
           - type: string
-            example: example
         required: false
         name: includeNodes
         in: query
       - schema:
           anyOf:
           - type: boolean
-            example: false
           - type: string
-            example: example
         required: false
         name: draft
         in: query
@@ -199,8 +196,9 @@ paths:
         name: agentId
         in: path
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 101
         required: false
         name: flowId
@@ -239,8 +237,9 @@ paths:
         name: agentId
         in: path
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 101
         required: false
         name: flowId
@@ -272,8 +271,9 @@ paths:
         name: agentId
         in: path
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 101
         required: false
         name: flowId
@@ -295,7 +295,7 @@ paths:
     post:
       summary: Create flow node
       operationId: createAgentFlowNode
-      description: Creates a node in a flow graph.
+      description: Creates a node in a flow graph. The server assigns `nodeId` and `alias`; use the 201 response when adding edges or updates.
       security:
       - userApiKey: []
       tags:
@@ -308,8 +308,9 @@ paths:
         name: agentId
         in: path
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 101
         required: false
         name: flowId
@@ -325,7 +326,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PublicFlowNode'
+                $ref: '#/components/schemas/PublicFlowNodeCreated'
         '409':
           description: Conflict
           content:
@@ -349,8 +350,9 @@ paths:
         name: agentId
         in: path
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 101
         required: false
         name: flowId
@@ -395,8 +397,9 @@ paths:
         name: agentId
         in: path
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 101
         required: false
         name: flowId
@@ -431,8 +434,9 @@ paths:
         name: agentId
         in: path
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 101
         required: false
         name: flowId
@@ -471,8 +475,9 @@ paths:
         name: agentId
         in: path
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 101
         required: false
         name: flowId
@@ -491,6 +496,16 @@ paths:
                 $ref: '#/components/schemas/FlowGraph'
 components:
   schemas:
+    PublicFlowNodeCreated:
+      allOf:
+      - $ref: '#/components/schemas/PublicFlowNode'
+      - type: object
+        properties:
+          alias:
+            type: string
+            example: Say
+        required:
+        - alias
     ErrorBody:
       type: object
       properties:
@@ -520,50 +535,64 @@ components:
       required:
       - code
       - message
-    PublicFlowEdgeInput:
+    DynamicTablesQuery:
+      anyOf:
+      - $ref: '#/components/schemas/DynamicTablesQueryCondition'
+      - $ref: '#/components/schemas/DynamicTablesQueryGroup'
+      - {}
+    FlowGraph:
       type: object
       properties:
-        edge:
-          type: object
-          properties:
-            source:
-              type: string
-              example: trigger_1
-            sourceHandle:
-              type: string
-              example: default
-            target:
-              type: string
-              example: api_1
-            targetHandle:
-              type: string
-              example: default
-          required:
-          - source
-          - sourceHandle
-          - target
-          - targetHandle
+        id:
+          type: string
+        assistantId:
+          type:
+          - string
+          - 'null'
+        accountId:
+          type:
+          - number
+          - 'null'
+        entityId:
+          type: number
+        type:
+          type: string
+          enum:
+          - FLOW
+          - AUTOMATION
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicFlowNode'
+        createdAt:
+          type: string
+        updatedAt:
+          type:
+          - string
+          - 'null'
+        executed:
+          type: boolean
+          default: false
+        breakingChangeAt:
+          type:
+          - string
+          - 'null'
+        breakingChangeReason:
+          type:
+          - string
+          - 'null'
       required:
-      - edge
-    DynamicTablesQueryCondition:
+      - entityId
+      - type
+      - nodes
+      - createdAt
+    PublicFlowNodeUpdateInput:
       type: object
       properties:
-        path:
-          type: string
-          description: Field path in format [Field] or [Relation].[Field]
-          example: '[Status]'
-        operator:
-          type: string
-          example: equals
-        value:
-          nullable: true
-          type: object
-        valueType:
-          nullable: true
-          type: object
+        node:
+          $ref: '#/components/schemas/PublicFlowNodePatch'
       required:
-      - path
-      - operator
+      - node
     PublicFlowUpdateInput:
       type: object
       properties:
@@ -572,8 +601,9 @@ components:
           minLength: 1
           example: Order Routing
         description:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: Routes order conversations
         status:
           type: string
@@ -585,1390 +615,29 @@ components:
           example: ACTIVE
       required:
       - name
-    FlowGraph:
+    DynamicTablesQueryCondition:
       type: object
       properties:
-        id:
+        path:
           type: string
-          example: example
-        assistantId:
+          description: Field path in format [Field] or [Relation].[Field]
+          example: '[Status]'
+        operator:
           type: string
-          nullable: true
-          example: example
-        accountId:
-          type: number
-          nullable: true
-          example: 1
-        entityId:
-          type: number
-          example: 1
-        type:
-          type: string
-          enum:
-          - FLOW
-          - AUTOMATION
-          example: FLOW
-        nodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicFlowNode'
-        createdAt:
-          type: string
-          example: example
-        updatedAt:
-          type: string
-          nullable: true
-          example: example
-        executed:
-          type: boolean
-          default: false
-          example: false
-        breakingChangeAt:
-          type: string
-          nullable: true
-          example: example
-        breakingChangeReason:
-          type: string
-          nullable: true
-          example: example
+          example: equals
+        value: {}
+        valueType: {}
       required:
-      - entityId
-      - type
-      - nodes
-      - createdAt
-    PublicFlowNode:
-      type: object
-      properties:
-        nodeId:
-          type: string
-          pattern: node_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}
-          example: node_550e8400-e29b-41d4-a716-446655440000
-        alias:
-          type: string
-          nullable: true
-          example: Start
-        name:
-          type: string
-          example: Start
-        position:
-          type: object
-          properties:
-            positionX:
-              type: number
-              example: 1
-            positionY:
-              type: number
-              example: 1
-          required:
-          - positionX
-          - positionY
-        type:
-          type: string
-          enum:
-          - START
-          - TRIGGER_INTENT
-          - SAY_AI
-          - RESPONSE_AI
-          - TOOLS_AI
-          - API
-          - CONDITIONAL_ROUTING
-          - DYNAMIC_TABLES
-          example: START
-        data:
-          oneOf:
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - TRIGGER_INTENT
-                example: TRIGGER_INTENT
-              agenticRouting:
-                type: string
-                nullable: true
-                example: example
-              intentIds:
-                type: array
-                nullable: true
-                items:
-                  type: number
-                  example: 1
-              intents:
-                type: array
-                nullable: true
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: number
-                      example: 1
-                    name:
-                      type: string
-                      example: example
-                    description:
-                      type: string
-                      nullable: true
-                      example: example
-                    createdAt:
-                      type: string
-                      nullable: true
-                      example: example
-                    updatedAt:
-                      type: string
-                      nullable: true
-                      example: example
-                    status:
-                      type: string
-                      enum:
-                      - ACTIVE
-                      - DELETED
-                      example: ACTIVE
-                    assistantId:
-                      type: string
-                      example: example
-                    phrases:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          id:
-                            type: number
-                            example: 1
-                          phrase:
-                            type: string
-                            example: example
-                        required:
-                        - id
-                        - phrase
-                    flowId:
-                      type: number
-                      nullable: true
-                      example: 1
-                  required:
-                  - id
-                  - name
-                  - createdAt
-                  - updatedAt
-                  - status
-                  - assistantId
-            required:
-            - type
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - SAY_AI
-                example: SAY_AI
-              message:
-                type: string
-                nullable: true
-                example: example
-              temperature:
-                type: number
-                default: 0.7
-                example: 1
-              prompt:
-                type: string
-                nullable: true
-                example: example
-              aiModelId:
-                type: number
-                nullable: true
-                example: 1
-              model:
-                type: string
-                nullable: true
-                example: example
-              aiVendor:
-                type: string
-                nullable: true
-                enum:
-                - OPENAI
-                - ANTHROPIC
-                - GOOGLE
-                - AZURE
-                - DEEPSEEK
-                - LLAMA
-                example: OPENAI
-              sayWithAi:
-                type: boolean
-                example: false
-            required:
-            - type
-            - sayWithAi
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - RESPONSE_AI
-                example: RESPONSE_AI
-              assistantId:
-                type: string
-                format: uuid
-                description: Owning assistant UUID. Validated against the account on save.
-                example: 550e8400-e29b-41d4-a716-446655440000
-              aiModelId:
-                type: number
-                nullable: true
-                example: 1
-              model:
-                type: string
-                example: example
-              aiVendor:
-                type: string
-                enum:
-                - OPENAI
-                - ANTHROPIC
-                - GOOGLE
-                - AZURE
-                - DEEPSEEK
-                - LLAMA
-                example: OPENAI
-              instructions:
-                type: string
-                nullable: true
-                example: example
-              temperature:
-                type: number
-                example: 1
-              captureVariables:
-                type: array
-                items:
-                  nullable: true
-                  type: object
-              exitNodeWhen:
-                type: string
-                enum:
-                - ALL_VARIABLES
-                - FLOW_TRIGGERED
-                - ANY_VARIABLES
-                example: ALL_VARIABLES
-              knowledgeBaseMode:
-                type: string
-                enum:
-                - DEFAULT
-                - CUSTOM
-                - DISABLED
-                default: DEFAULT
-                example: DEFAULT
-              knowledgeBaseIds:
-                type: array
-                nullable: true
-                items:
-                  type: integer
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
-            required:
-            - type
-            - assistantId
-            - model
-            - aiVendor
-            - instructions
-            - temperature
-            - captureVariables
-            - exitNodeWhen
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - TOOLS_AI
-                example: TOOLS_AI
-              conditions:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    handleId:
-                      type: string
-                      example: example
-                    expression:
-                      type: string
-                      example: example
-                  required:
-                  - handleId
-                  - expression
-              temperature:
-                type: number
-                example: 1
-              model:
-                type: string
-                example: example
-              aiVendor:
-                type: string
-                enum:
-                - OPENAI
-                - ANTHROPIC
-                - GOOGLE
-                - AZURE
-                - DEEPSEEK
-                - LLAMA
-                example: OPENAI
-              instructions:
-                type: string
-                nullable: true
-                example: example
-              prompt:
-                type: string
-                nullable: true
-                example: example
-              customToolIds:
-                type: array
-                nullable: true
-                items:
-                  type: number
-                  example: 1
-              maxIterations:
-                type: number
-                minimum: 1
-                maximum: 30
-                default: 10
-                example: 1
-              agentType:
-                type: string
-                enum:
-                - BASIC
-                - ADVANCED
-                default: BASIC
-                example: BASIC
-              captureVariables:
-                type: array
-                nullable: true
-                items:
-                  nullable: true
-                  type: object
-              knowledgeBaseMode:
-                type: string
-                enum:
-                - DEFAULT
-                - CUSTOM
-                - DISABLED
-                default: DEFAULT
-                example: DEFAULT
-              knowledgeBaseIds:
-                type: array
-                nullable: true
-                items:
-                  type: integer
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
-              selectedRecordTypes:
-                type: array
-                nullable: true
-                items:
-                  type: object
-                  properties:
-                    recordTypeId:
-                      type: number
-                      example: 1
-                    read:
-                      type: boolean
-                      example: false
-                    create:
-                      type: boolean
-                      example: false
-                    update:
-                      type: boolean
-                      example: false
-                    delete:
-                      type: boolean
-                      example: false
-                    createActivity:
-                      type: boolean
-                      example: false
-                  required:
-                  - recordTypeId
-              systemToolsConfig:
-                type: object
-                nullable: true
-                properties:
-                  webSearchEnabled:
-                    type: boolean
-                    default: false
-                    example: false
-                  urlScrapeEnabled:
-                    type: boolean
-                    default: false
-                    example: false
-                  linkedinSearchEnabled:
-                    type: boolean
-                    default: false
-                    example: false
-              connectedAccountConfigs:
-                type: array
-                nullable: true
-                items:
-                  type: object
-                  properties:
-                    connectedAccountId:
-                      type: number
-                      example: 1
-                    useAllTools:
-                      type: boolean
-                      default: true
-                      example: false
-                    selectedToolSlugs:
-                      type: array
-                      nullable: true
-                      items:
-                        type: string
-                        example: example
-                  required:
-                  - connectedAccountId
-              playbookIds:
-                type: array
-                nullable: true
-                items:
-                  type: integer
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
-            required:
-            - type
-            - conditions
-            - instructions
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - API
-                example: API
-              url:
-                type: string
-                format: uri
-                example: https://api.example.com/hook
-              method:
-                type: string
-                enum:
-                - GET
-                - POST
-                - PUT
-                - DELETE
-                - PATCH
-                example: GET
-              headers:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    key:
-                      type: string
-                      example: example
-                    value:
-                      type: string
-                      example: example
-                  required:
-                  - key
-                  - value
-              body:
-                type: string
-                nullable: true
-                example: example
-              response:
-                type: string
-                nullable: true
-                example: example
-              parameters:
-                type: array
-                nullable: true
-                items:
-                  type: object
-                  properties:
-                    key:
-                      type: string
-                      example: example
-                    value:
-                      type: string
-                      example: example
-                  required:
-                  - key
-                  - value
-              variables:
-                type: array
-                nullable: true
-                items:
-                  type: object
-                  properties:
-                    key:
-                      type: string
-                      example: example
-                    value:
-                      type: string
-                      example: example
-                    fullResponse:
-                      type: boolean
-                      default: false
-                      example: false
-                  required:
-                  - key
-                  - value
-            required:
-            - type
-            - url
-            - method
-            - headers
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - CONDITIONAL_ROUTING
-                example: CONDITIONAL_ROUTING
-              routingType:
-                type: string
-                enum:
-                - CONDITIONAL_AI
-                - DYNAMIC
-                example: CONDITIONAL_AI
-              conditions:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    handleId:
-                      type: string
-                      example: example
-                    expression:
-                      type: string
-                      example: example
-                  required:
-                  - handleId
-                  - expression
-              temperature:
-                type: number
-                example: 1
-              model:
-                type: string
-                example: example
-              aiVendor:
-                type: string
-                enum:
-                - OPENAI
-                - ANTHROPIC
-                - GOOGLE
-                - AZURE
-                - DEEPSEEK
-                - LLAMA
-                example: OPENAI
-            required:
-            - type
-            - routingType
-            - conditions
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - DYNAMIC_TABLES
-                example: DYNAMIC_TABLES
-              tableId:
-                type: number
-                nullable: true
-                example: 1
-              recordTypeId:
-                type: number
-                nullable: true
-                example: 1
-              targetRecordTypeId:
-                type: number
-                nullable: true
-                description: Destination record type id. Required when actionType is CHANGE_RECORD_TYPE.
-                example: 12
-              actionType:
-                type: string
-                nullable: true
-                enum:
-                - CREATE
-                - UPDATE
-                - DELETE
-                - SEARCH
-                - SEARCH_BY_ID
-                - CHANGE_RECORD_TYPE
-                description: 'Operation to run. Required-field rules per action: CREATE → rowData; UPDATE → rowId + rowData; DELETE / SEARCH_BY_ID → rowId; CHANGE_RECORD_TYPE → rowId + targetRecordTypeId.'
-                example: CREATE
-              rowData:
-                type: object
-                nullable: true
-                additionalProperties:
-                  nullable: true
-                  type: object
-              inputModeByField:
-                type: object
-                nullable: true
-                additionalProperties:
-                  type: string
-                  enum:
-                  - INPUT
-                  - VARIABLE
-                  - EMPTY
-                  example: INPUT
-              rowId:
-                type: string
-                nullable: true
-                example: example
-              search:
-                type: string
-                nullable: true
-                example: example
-              pageNum:
-                type: number
-                nullable: true
-                example: 1
-              pageSize:
-                type: number
-                nullable: true
-                example: 1
-              sort:
-                type: array
-                nullable: true
-                items:
-                  type: object
-                  properties:
-                    path:
-                      type: string
-                      example: example
-                    type:
-                      type: string
-                      enum:
-                      - asc
-                      - desc
-                      example: asc
-                  required:
-                  - path
-                  - type
-              query:
-                $ref: '#/components/schemas/DynamicTablesQuery'
-            required:
-            - type
-          - nullable: true
-            type: object
-        workflowId:
-          type: string
-          example: example
-        handles:
-          type: array
-          items:
-            type: object
-            properties:
-              handleId:
-                type: string
-                example: example
-              sourceEdge:
-                type: object
-                properties:
-                  from:
-                    type: string
-                    example: example
-                  fromHandleId:
-                    type: string
-                    example: example
-                  to:
-                    type: string
-                    example: example
-                  toHandleId:
-                    type: string
-                    example: example
-                required:
-                - from
-                - fromHandleId
-                - to
-                - toHandleId
-              text:
-                type: string
-                example: example
-            required:
-            - handleId
-            - sourceEdge
-            - text
-        targetEdges:
-          type: array
-          items:
-            type: object
-            properties:
-              from:
-                type: string
-                example: example
-              fromHandleId:
-                type: string
-                example: example
-              to:
-                type: string
-                example: example
-              toHandleId:
-                type: string
-                example: example
-            required:
-            - from
-            - fromHandleId
-            - to
-            - toHandleId
-        createdAt:
-          type: string
-          nullable: true
-          example: example
-        updatedAt:
-          type: string
-          nullable: true
-          example: example
-      required:
-      - nodeId
-      - position
-      - type
-    PublicFlowNodeInput:
-      type: object
-      properties:
-        nodeId:
-          type: string
-          pattern: node_[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}
-          example: node_550e8400-e29b-41d4-a716-446655440000
-        alias:
-          type: string
-          nullable: true
-          example: Start
-        name:
-          type: string
-          example: Start
-        position:
-          type: object
-          properties:
-            positionX:
-              type: number
-              example: 1
-            positionY:
-              type: number
-              example: 1
-          required:
-          - positionX
-          - positionY
-        type:
-          type: string
-          enum:
-          - START
-          - TRIGGER_INTENT
-          - SAY_AI
-          - RESPONSE_AI
-          - TOOLS_AI
-          - API
-          - CONDITIONAL_ROUTING
-          - DYNAMIC_TABLES
-          example: START
-        data:
-          oneOf:
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - TRIGGER_INTENT
-                example: TRIGGER_INTENT
-              agenticRouting:
-                type: string
-                nullable: true
-                example: example
-              intentIds:
-                type: array
-                nullable: true
-                items:
-                  type: number
-                  example: 1
-              intents:
-                type: array
-                nullable: true
-                items:
-                  type: object
-                  properties:
-                    id:
-                      type: number
-                      example: 1
-                    name:
-                      type: string
-                      example: example
-                    description:
-                      type: string
-                      nullable: true
-                      example: example
-                    createdAt:
-                      type: string
-                      nullable: true
-                      example: example
-                    updatedAt:
-                      type: string
-                      nullable: true
-                      example: example
-                    status:
-                      type: string
-                      enum:
-                      - ACTIVE
-                      - DELETED
-                      example: ACTIVE
-                    assistantId:
-                      type: string
-                      example: example
-                    phrases:
-                      type: array
-                      items:
-                        type: object
-                        properties:
-                          id:
-                            type: number
-                            example: 1
-                          phrase:
-                            type: string
-                            example: example
-                        required:
-                        - id
-                        - phrase
-                    flowId:
-                      type: number
-                      nullable: true
-                      example: 1
-                  required:
-                  - id
-                  - name
-                  - createdAt
-                  - updatedAt
-                  - status
-                  - assistantId
-            required:
-            - type
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - SAY_AI
-                example: SAY_AI
-              message:
-                type: string
-                nullable: true
-                example: example
-              temperature:
-                type: number
-                default: 0.7
-                example: 1
-              prompt:
-                type: string
-                nullable: true
-                example: example
-              aiModelId:
-                type: number
-                nullable: true
-                example: 1
-              model:
-                type: string
-                nullable: true
-                example: example
-              aiVendor:
-                type: string
-                nullable: true
-                enum:
-                - OPENAI
-                - ANTHROPIC
-                - GOOGLE
-                - AZURE
-                - DEEPSEEK
-                - LLAMA
-                example: OPENAI
-              sayWithAi:
-                type: boolean
-                example: false
-            required:
-            - type
-            - sayWithAi
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - RESPONSE_AI
-                example: RESPONSE_AI
-              assistantId:
-                type: string
-                format: uuid
-                description: Owning assistant UUID. Validated against the account on save.
-                example: 550e8400-e29b-41d4-a716-446655440000
-              aiModelId:
-                type: number
-                nullable: true
-                example: 1
-              model:
-                type: string
-                example: example
-              aiVendor:
-                type: string
-                enum:
-                - OPENAI
-                - ANTHROPIC
-                - GOOGLE
-                - AZURE
-                - DEEPSEEK
-                - LLAMA
-                example: OPENAI
-              instructions:
-                type: string
-                nullable: true
-                example: example
-              temperature:
-                type: number
-                example: 1
-              captureVariables:
-                type: array
-                items:
-                  nullable: true
-                  type: object
-              exitNodeWhen:
-                type: string
-                enum:
-                - ALL_VARIABLES
-                - FLOW_TRIGGERED
-                - ANY_VARIABLES
-                example: ALL_VARIABLES
-              knowledgeBaseMode:
-                type: string
-                enum:
-                - DEFAULT
-                - CUSTOM
-                - DISABLED
-                default: DEFAULT
-                example: DEFAULT
-              knowledgeBaseIds:
-                type: array
-                nullable: true
-                items:
-                  type: integer
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
-            required:
-            - type
-            - assistantId
-            - model
-            - aiVendor
-            - instructions
-            - temperature
-            - captureVariables
-            - exitNodeWhen
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - TOOLS_AI
-                example: TOOLS_AI
-              conditions:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    handleId:
-                      type: string
-                      example: example
-                    expression:
-                      type: string
-                      example: example
-                  required:
-                  - handleId
-                  - expression
-              temperature:
-                type: number
-                example: 1
-              model:
-                type: string
-                example: example
-              aiVendor:
-                type: string
-                enum:
-                - OPENAI
-                - ANTHROPIC
-                - GOOGLE
-                - AZURE
-                - DEEPSEEK
-                - LLAMA
-                example: OPENAI
-              instructions:
-                type: string
-                nullable: true
-                example: example
-              prompt:
-                type: string
-                nullable: true
-                example: example
-              customToolIds:
-                type: array
-                nullable: true
-                items:
-                  type: number
-                  example: 1
-              maxIterations:
-                type: number
-                minimum: 1
-                maximum: 30
-                default: 10
-                example: 1
-              agentType:
-                type: string
-                enum:
-                - BASIC
-                - ADVANCED
-                default: BASIC
-                example: BASIC
-              captureVariables:
-                type: array
-                nullable: true
-                items:
-                  nullable: true
-                  type: object
-              knowledgeBaseMode:
-                type: string
-                enum:
-                - DEFAULT
-                - CUSTOM
-                - DISABLED
-                default: DEFAULT
-                example: DEFAULT
-              knowledgeBaseIds:
-                type: array
-                nullable: true
-                items:
-                  type: integer
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
-              selectedRecordTypes:
-                type: array
-                nullable: true
-                items:
-                  type: object
-                  properties:
-                    recordTypeId:
-                      type: number
-                      example: 1
-                    read:
-                      type: boolean
-                      example: false
-                    create:
-                      type: boolean
-                      example: false
-                    update:
-                      type: boolean
-                      example: false
-                    delete:
-                      type: boolean
-                      example: false
-                    createActivity:
-                      type: boolean
-                      example: false
-                  required:
-                  - recordTypeId
-              systemToolsConfig:
-                type: object
-                nullable: true
-                properties:
-                  webSearchEnabled:
-                    type: boolean
-                    default: false
-                    example: false
-                  urlScrapeEnabled:
-                    type: boolean
-                    default: false
-                    example: false
-                  linkedinSearchEnabled:
-                    type: boolean
-                    default: false
-                    example: false
-              connectedAccountConfigs:
-                type: array
-                nullable: true
-                items:
-                  type: object
-                  properties:
-                    connectedAccountId:
-                      type: number
-                      example: 1
-                    useAllTools:
-                      type: boolean
-                      default: true
-                      example: false
-                    selectedToolSlugs:
-                      type: array
-                      nullable: true
-                      items:
-                        type: string
-                        example: example
-                  required:
-                  - connectedAccountId
-              playbookIds:
-                type: array
-                nullable: true
-                items:
-                  type: integer
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
-            required:
-            - type
-            - conditions
-            - instructions
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - API
-                example: API
-              url:
-                type: string
-                format: uri
-                example: https://api.example.com/hook
-              method:
-                type: string
-                enum:
-                - GET
-                - POST
-                - PUT
-                - DELETE
-                - PATCH
-                example: GET
-              headers:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    key:
-                      type: string
-                      example: example
-                    value:
-                      type: string
-                      example: example
-                  required:
-                  - key
-                  - value
-              body:
-                type: string
-                nullable: true
-                example: example
-              response:
-                type: string
-                nullable: true
-                example: example
-              parameters:
-                type: array
-                nullable: true
-                items:
-                  type: object
-                  properties:
-                    key:
-                      type: string
-                      example: example
-                    value:
-                      type: string
-                      example: example
-                  required:
-                  - key
-                  - value
-              variables:
-                type: array
-                nullable: true
-                items:
-                  type: object
-                  properties:
-                    key:
-                      type: string
-                      example: example
-                    value:
-                      type: string
-                      example: example
-                    fullResponse:
-                      type: boolean
-                      default: false
-                      example: false
-                  required:
-                  - key
-                  - value
-            required:
-            - type
-            - url
-            - method
-            - headers
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - CONDITIONAL_ROUTING
-                example: CONDITIONAL_ROUTING
-              routingType:
-                type: string
-                enum:
-                - CONDITIONAL_AI
-                - DYNAMIC
-                example: CONDITIONAL_AI
-              conditions:
-                type: array
-                items:
-                  type: object
-                  properties:
-                    handleId:
-                      type: string
-                      example: example
-                    expression:
-                      type: string
-                      example: example
-                  required:
-                  - handleId
-                  - expression
-              temperature:
-                type: number
-                example: 1
-              model:
-                type: string
-                example: example
-              aiVendor:
-                type: string
-                enum:
-                - OPENAI
-                - ANTHROPIC
-                - GOOGLE
-                - AZURE
-                - DEEPSEEK
-                - LLAMA
-                example: OPENAI
-            required:
-            - type
-            - routingType
-            - conditions
-          - type: object
-            properties:
-              type:
-                type: string
-                enum:
-                - DYNAMIC_TABLES
-                example: DYNAMIC_TABLES
-              tableId:
-                type: number
-                nullable: true
-                example: 1
-              recordTypeId:
-                type: number
-                nullable: true
-                example: 1
-              targetRecordTypeId:
-                type: number
-                nullable: true
-                description: Destination record type id. Required when actionType is CHANGE_RECORD_TYPE.
-                example: 12
-              actionType:
-                type: string
-                nullable: true
-                enum:
-                - CREATE
-                - UPDATE
-                - DELETE
-                - SEARCH
-                - SEARCH_BY_ID
-                - CHANGE_RECORD_TYPE
-                description: 'Operation to run. Required-field rules per action: CREATE → rowData; UPDATE → rowId + rowData; DELETE / SEARCH_BY_ID → rowId; CHANGE_RECORD_TYPE → rowId + targetRecordTypeId.'
-                example: CREATE
-              rowData:
-                type: object
-                nullable: true
-                additionalProperties:
-                  nullable: true
-                  type: object
-              inputModeByField:
-                type: object
-                nullable: true
-                additionalProperties:
-                  type: string
-                  enum:
-                  - INPUT
-                  - VARIABLE
-                  - EMPTY
-                  example: INPUT
-              rowId:
-                type: string
-                nullable: true
-                example: example
-              search:
-                type: string
-                nullable: true
-                example: example
-              pageNum:
-                type: number
-                nullable: true
-                example: 1
-              pageSize:
-                type: number
-                nullable: true
-                example: 1
-              sort:
-                type: array
-                nullable: true
-                items:
-                  type: object
-                  properties:
-                    path:
-                      type: string
-                      example: example
-                    type:
-                      type: string
-                      enum:
-                      - asc
-                      - desc
-                      example: asc
-                  required:
-                  - path
-                  - type
-              query:
-                $ref: '#/components/schemas/DynamicTablesQuery'
-            required:
-            - type
-          - nullable: true
-            type: object
-      required:
-      - nodeId
-      - position
-      - type
-    FlowDetail:
-      allOf:
-      - $ref: '#/components/schemas/Flow'
-      - type: object
-        properties:
-          assistantId:
-            type: string
-            example: 550e8400-e29b-41d4-a716-446655440000
-          isDefault:
-            type: boolean
-            example: false
-          liveSnapshotId:
-            type: string
-            nullable: true
-            example: 64f1c2e6a75f2d4a9a2f1234
-          draftSnapshotId:
-            type: string
-            nullable: true
-            example: 64f1c2e6a75f2d4a9a2f1234
-          nodes:
-            type: array
-            items:
-              $ref: '#/components/schemas/PublicFlowNode'
-        required:
-        - assistantId
-        - isDefault
-        - liveSnapshotId
-        - draftSnapshotId
+      - path
+      - operator
     PublicFlowNodePatch:
       type: object
       properties:
         alias:
-          type: string
-          nullable: true
-          example: Start
+          type:
+          - string
+          - 'null'
+          example: Greeting
         name:
           type: string
           example: Start
@@ -1977,10 +646,8 @@ components:
           properties:
             positionX:
               type: number
-              example: 1
             positionY:
               type: number
-              example: 1
           required:
           - positionX
           - positionY
@@ -2004,50 +671,46 @@ components:
                 type: string
                 enum:
                 - TRIGGER_INTENT
-                example: TRIGGER_INTENT
               agenticRouting:
-                type: string
-                nullable: true
-                example: example
+                type:
+                - string
+                - 'null'
               intentIds:
-                type: array
-                nullable: true
+                type:
+                - array
+                - 'null'
                 items:
                   type: number
-                  example: 1
               intents:
-                type: array
-                nullable: true
+                type:
+                - array
+                - 'null'
                 items:
                   type: object
                   properties:
                     id:
                       type: number
-                      example: 1
                     name:
                       type: string
-                      example: example
                     description:
-                      type: string
-                      nullable: true
-                      example: example
+                      type:
+                      - string
+                      - 'null'
                     createdAt:
-                      type: string
-                      nullable: true
-                      example: example
+                      type:
+                      - string
+                      - 'null'
                     updatedAt:
-                      type: string
-                      nullable: true
-                      example: example
+                      type:
+                      - string
+                      - 'null'
                     status:
                       type: string
                       enum:
                       - ACTIVE
                       - DELETED
-                      example: ACTIVE
                     assistantId:
                       type: string
-                      example: example
                     phrases:
                       type: array
                       items:
@@ -2055,17 +718,15 @@ components:
                         properties:
                           id:
                             type: number
-                            example: 1
                           phrase:
                             type: string
-                            example: example
                         required:
                         - id
                         - phrase
                     flowId:
-                      type: number
-                      nullable: true
-                      example: 1
+                      type:
+                      - number
+                      - 'null'
                   required:
                   - id
                   - name
@@ -2081,30 +742,29 @@ components:
                 type: string
                 enum:
                 - SAY_AI
-                example: SAY_AI
               message:
-                type: string
-                nullable: true
-                example: example
+                type:
+                - string
+                - 'null'
               temperature:
                 type: number
                 default: 0.7
-                example: 1
               prompt:
-                type: string
-                nullable: true
-                example: example
+                type:
+                - string
+                - 'null'
               aiModelId:
-                type: number
-                nullable: true
-                example: 1
+                type:
+                - number
+                - 'null'
               model:
-                type: string
-                nullable: true
-                example: example
+                type:
+                - string
+                - 'null'
               aiVendor:
-                type: string
-                nullable: true
+                type:
+                - string
+                - 'null'
                 enum:
                 - OPENAI
                 - ANTHROPIC
@@ -2112,10 +772,8 @@ components:
                 - AZURE
                 - DEEPSEEK
                 - LLAMA
-                example: OPENAI
               sayWithAi:
                 type: boolean
-                example: false
             required:
             - type
             - sayWithAi
@@ -2125,19 +783,17 @@ components:
                 type: string
                 enum:
                 - RESPONSE_AI
-                example: RESPONSE_AI
               assistantId:
                 type: string
-                format: uuid
-                description: Owning assistant UUID. Validated against the account on save.
+                pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|agent-[0-9a-zA-Z-]+'
+                description: Owning assistant ID or UUID (e.g. agent-xxx or standard UUID). Validated against the account on save.
                 example: 550e8400-e29b-41d4-a716-446655440000
               aiModelId:
-                type: number
-                nullable: true
-                example: 1
+                type:
+                - number
+                - 'null'
               model:
                 type: string
-                example: example
               aiVendor:
                 type: string
                 enum:
@@ -2147,26 +803,21 @@ components:
                 - AZURE
                 - DEEPSEEK
                 - LLAMA
-                example: OPENAI
               instructions:
-                type: string
-                nullable: true
-                example: example
+                type:
+                - string
+                - 'null'
               temperature:
                 type: number
-                example: 1
               captureVariables:
                 type: array
-                items:
-                  nullable: true
-                  type: object
+                items: {}
               exitNodeWhen:
                 type: string
                 enum:
                 - ALL_VARIABLES
                 - FLOW_TRIGGERED
                 - ANY_VARIABLES
-                example: ALL_VARIABLES
               knowledgeBaseMode:
                 type: string
                 enum:
@@ -2174,15 +825,13 @@ components:
                 - CUSTOM
                 - DISABLED
                 default: DEFAULT
-                example: DEFAULT
               knowledgeBaseIds:
-                type: array
-                nullable: true
+                type:
+                - array
+                - 'null'
                 items:
                   type: integer
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
+                  exclusiveMinimum: 0
             required:
             - type
             - assistantId
@@ -2198,7 +847,6 @@ components:
                 type: string
                 enum:
                 - TOOLS_AI
-                example: TOOLS_AI
               conditions:
                 type: array
                 items:
@@ -2206,19 +854,15 @@ components:
                   properties:
                     handleId:
                       type: string
-                      example: example
                     expression:
                       type: string
-                      example: example
                   required:
                   - handleId
                   - expression
               temperature:
                 type: number
-                example: 1
               model:
                 type: string
-                example: example
               aiVendor:
                 type: string
                 enum:
@@ -2228,40 +872,36 @@ components:
                 - AZURE
                 - DEEPSEEK
                 - LLAMA
-                example: OPENAI
               instructions:
-                type: string
-                nullable: true
-                example: example
+                type:
+                - string
+                - 'null'
               prompt:
-                type: string
-                nullable: true
-                example: example
+                type:
+                - string
+                - 'null'
               customToolIds:
-                type: array
-                nullable: true
+                type:
+                - array
+                - 'null'
                 items:
                   type: number
-                  example: 1
               maxIterations:
                 type: number
                 minimum: 1
                 maximum: 30
                 default: 10
-                example: 1
               agentType:
                 type: string
                 enum:
                 - BASIC
                 - ADVANCED
                 default: BASIC
-                example: BASIC
               captureVariables:
-                type: array
-                nullable: true
-                items:
-                  nullable: true
-                  type: object
+                type:
+                - array
+                - 'null'
+                items: {}
               knowledgeBaseMode:
                 type: string
                 enum:
@@ -2269,86 +909,79 @@ components:
                 - CUSTOM
                 - DISABLED
                 default: DEFAULT
-                example: DEFAULT
               knowledgeBaseIds:
-                type: array
-                nullable: true
+                type:
+                - array
+                - 'null'
                 items:
                   type: integer
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
+                  exclusiveMinimum: 0
               selectedRecordTypes:
-                type: array
-                nullable: true
+                type:
+                - array
+                - 'null'
                 items:
                   type: object
                   properties:
                     recordTypeId:
                       type: number
-                      example: 1
                     read:
                       type: boolean
-                      example: false
                     create:
                       type: boolean
-                      example: false
                     update:
                       type: boolean
-                      example: false
                     delete:
                       type: boolean
-                      example: false
                     createActivity:
                       type: boolean
-                      example: false
                   required:
                   - recordTypeId
               systemToolsConfig:
-                type: object
-                nullable: true
+                type:
+                - object
+                - 'null'
                 properties:
                   webSearchEnabled:
                     type: boolean
                     default: false
-                    example: false
                   urlScrapeEnabled:
                     type: boolean
                     default: false
-                    example: false
                   linkedinSearchEnabled:
                     type: boolean
                     default: false
-                    example: false
               connectedAccountConfigs:
-                type: array
-                nullable: true
+                type:
+                - array
+                - 'null'
                 items:
                   type: object
                   properties:
                     connectedAccountId:
                       type: number
-                      example: 1
                     useAllTools:
                       type: boolean
                       default: true
-                      example: false
                     selectedToolSlugs:
-                      type: array
-                      nullable: true
+                      type:
+                      - array
+                      - 'null'
                       items:
                         type: string
-                        example: example
                   required:
                   - connectedAccountId
               playbookIds:
-                type: array
-                nullable: true
+                type:
+                - array
+                - 'null'
                 items:
                   type: integer
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
+                  exclusiveMinimum: 0
+              aiModelId:
+                type:
+                - integer
+                - 'null'
             required:
             - type
             - conditions
@@ -2359,10 +992,8 @@ components:
                 type: string
                 enum:
                 - API
-                example: API
               url:
                 type: string
-                format: uri
                 example: https://api.example.com/hook
               method:
                 type: string
@@ -2372,7 +1003,6 @@ components:
                 - PUT
                 - DELETE
                 - PATCH
-                example: GET
               headers:
                 type: array
                 items:
@@ -2380,52 +1010,47 @@ components:
                   properties:
                     key:
                       type: string
-                      example: example
                     value:
                       type: string
-                      example: example
                   required:
                   - key
                   - value
               body:
-                type: string
-                nullable: true
-                example: example
+                type:
+                - string
+                - 'null'
               response:
-                type: string
-                nullable: true
-                example: example
+                type:
+                - string
+                - 'null'
               parameters:
-                type: array
-                nullable: true
+                type:
+                - array
+                - 'null'
                 items:
                   type: object
                   properties:
                     key:
                       type: string
-                      example: example
                     value:
                       type: string
-                      example: example
                   required:
                   - key
                   - value
               variables:
-                type: array
-                nullable: true
+                type:
+                - array
+                - 'null'
                 items:
                   type: object
                   properties:
                     key:
                       type: string
-                      example: example
                     value:
                       type: string
-                      example: example
                     fullResponse:
                       type: boolean
                       default: false
-                      example: false
                   required:
                   - key
                   - value
@@ -2440,13 +1065,11 @@ components:
                 type: string
                 enum:
                 - CONDITIONAL_ROUTING
-                example: CONDITIONAL_ROUTING
               routingType:
                 type: string
                 enum:
                 - CONDITIONAL_AI
                 - DYNAMIC
-                example: CONDITIONAL_AI
               conditions:
                 type: array
                 items:
@@ -2454,19 +1077,15 @@ components:
                   properties:
                     handleId:
                       type: string
-                      example: example
                     expression:
                       type: string
-                      example: example
                   required:
                   - handleId
                   - expression
               temperature:
                 type: number
-                example: 1
               model:
                 type: string
-                example: example
               aiVendor:
                 type: string
                 enum:
@@ -2476,7 +1095,10 @@ components:
                 - AZURE
                 - DEEPSEEK
                 - LLAMA
-                example: OPENAI
+              aiModelId:
+                type:
+                - integer
+                - 'null'
             required:
             - type
             - routingType
@@ -2487,23 +1109,24 @@ components:
                 type: string
                 enum:
                 - DYNAMIC_TABLES
-                example: DYNAMIC_TABLES
               tableId:
-                type: number
-                nullable: true
-                example: 1
+                type:
+                - number
+                - 'null'
               recordTypeId:
-                type: number
-                nullable: true
-                example: 1
+                type:
+                - number
+                - 'null'
               targetRecordTypeId:
-                type: number
-                nullable: true
+                type:
+                - number
+                - 'null'
                 description: Destination record type id. Required when actionType is CHANGE_RECORD_TYPE.
                 example: 12
               actionType:
-                type: string
-                nullable: true
+                type:
+                - string
+                - 'null'
                 enum:
                 - CREATE
                 - UPDATE
@@ -2514,52 +1137,68 @@ components:
                 description: 'Operation to run. Required-field rules per action: CREATE → rowData; UPDATE → rowId + rowData; DELETE / SEARCH_BY_ID → rowId; CHANGE_RECORD_TYPE → rowId + targetRecordTypeId.'
                 example: CREATE
               rowData:
-                type: object
-                nullable: true
-                additionalProperties:
-                  nullable: true
-                  type: object
+                type:
+                - object
+                - 'null'
+                additionalProperties: {}
               inputModeByField:
-                type: object
-                nullable: true
+                type:
+                - object
+                - 'null'
                 additionalProperties:
                   type: string
                   enum:
                   - INPUT
                   - VARIABLE
                   - EMPTY
-                  example: INPUT
               rowId:
-                type: string
-                nullable: true
-                example: example
+                type:
+                - string
+                - 'null'
               search:
-                type: string
-                nullable: true
-                example: example
+                type:
+                - string
+                - 'null'
               pageNum:
-                type: number
-                nullable: true
-                example: 1
+                anyOf:
+                - type: number
+                - type: string
+                - {}
               pageSize:
-                type: number
-                nullable: true
-                example: 1
+                anyOf:
+                - type: number
+                - type: string
+                - {}
+              pageNumMode:
+                type:
+                - string
+                - 'null'
+                enum:
+                - INPUT
+                - VARIABLE
+                - EMPTY
+              pageSizeMode:
+                type:
+                - string
+                - 'null'
+                enum:
+                - INPUT
+                - VARIABLE
+                - EMPTY
               sort:
-                type: array
-                nullable: true
+                type:
+                - array
+                - 'null'
                 items:
                   type: object
                   properties:
                     path:
                       type: string
-                      example: example
                     type:
                       type: string
                       enum:
                       - asc
                       - desc
-                      example: asc
                   required:
                   - path
                   - type
@@ -2567,21 +1206,7 @@ components:
                 $ref: '#/components/schemas/DynamicTablesQuery'
             required:
             - type
-          - nullable: true
-            type: object
-    PublicFlowCreateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: Order Routing
-        description:
-          type: string
-          nullable: true
-          example: Routes order conversations
-      required:
-      - name
+          - {}
     PublicFlowEdgeDeleteInput:
       type: object
       properties:
@@ -2607,32 +1232,21 @@ components:
           - targetHandle
       required:
       - edge
-    DynamicTablesQuery:
-      anyOf:
-      - $ref: '#/components/schemas/DynamicTablesQueryCondition'
-      - $ref: '#/components/schemas/DynamicTablesQueryGroup'
-      - nullable: true
-        type: object
-    PublicFlowNodeUpdateInput:
+    DynamicTablesQueryGroup:
       type: object
       properties:
-        node:
-          $ref: '#/components/schemas/PublicFlowNodePatch'
-      required:
-      - node
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
+        operator:
+          type: string
           enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+          - and
+          - or
+        conditions:
+          type: array
+          items: {}
+          description: Nested filter conditions or AND/OR groups
       required:
-      - ok
-      - error
+      - operator
+      - conditions
     Flow:
       type: object
       properties:
@@ -2643,8 +1257,9 @@ components:
           type: string
           example: Order Retrieval
         description:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: Extracts order info from DB
         status:
           type: string
@@ -2671,31 +1286,1312 @@ components:
       - createdAt
       - updatedAt
       - runCount
+    PublicFlowNode:
+      type: object
+      properties:
+        nodeId:
+          type: string
+          pattern: node[_-][0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}
+          example: node_550e8400-e29b-41d4-a716-446655440000
+        alias:
+          type:
+          - string
+          - 'null'
+          example: Start
+        name:
+          type: string
+          example: Start
+        position:
+          type: object
+          properties:
+            positionX:
+              type: number
+            positionY:
+              type: number
+          required:
+          - positionX
+          - positionY
+        type:
+          type: string
+          enum:
+          - START
+          - TRIGGER_INTENT
+          - SAY_AI
+          - RESPONSE_AI
+          - TOOLS_AI
+          - API
+          - CONDITIONAL_ROUTING
+          - DYNAMIC_TABLES
+          example: START
+        data:
+          oneOf:
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TRIGGER_INTENT
+              agenticRouting:
+                type:
+                - string
+                - 'null'
+              intentIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: number
+              intents:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    name:
+                      type: string
+                    description:
+                      type:
+                      - string
+                      - 'null'
+                    createdAt:
+                      type:
+                      - string
+                      - 'null'
+                    updatedAt:
+                      type:
+                      - string
+                      - 'null'
+                    status:
+                      type: string
+                      enum:
+                      - ACTIVE
+                      - DELETED
+                    assistantId:
+                      type: string
+                    phrases:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          phrase:
+                            type: string
+                        required:
+                        - id
+                        - phrase
+                    flowId:
+                      type:
+                      - number
+                      - 'null'
+                  required:
+                  - id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - status
+                  - assistantId
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - SAY_AI
+              message:
+                type:
+                - string
+                - 'null'
+              temperature:
+                type: number
+                default: 0.7
+              prompt:
+                type:
+                - string
+                - 'null'
+              aiModelId:
+                type:
+                - number
+                - 'null'
+              model:
+                type:
+                - string
+                - 'null'
+              aiVendor:
+                type:
+                - string
+                - 'null'
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+              sayWithAi:
+                type: boolean
+            required:
+            - type
+            - sayWithAi
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - RESPONSE_AI
+              assistantId:
+                type: string
+                pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|agent-[0-9a-zA-Z-]+'
+                description: Owning assistant ID or UUID (e.g. agent-xxx or standard UUID). Validated against the account on save.
+                example: 550e8400-e29b-41d4-a716-446655440000
+              aiModelId:
+                type:
+                - number
+                - 'null'
+              model:
+                type: string
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+              instructions:
+                type:
+                - string
+                - 'null'
+              temperature:
+                type: number
+              captureVariables:
+                type: array
+                items: {}
+              exitNodeWhen:
+                type: string
+                enum:
+                - ALL_VARIABLES
+                - FLOW_TRIGGERED
+                - ANY_VARIABLES
+              knowledgeBaseMode:
+                type: string
+                enum:
+                - DEFAULT
+                - CUSTOM
+                - DISABLED
+                default: DEFAULT
+              knowledgeBaseIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: integer
+                  exclusiveMinimum: 0
+            required:
+            - type
+            - assistantId
+            - model
+            - aiVendor
+            - instructions
+            - temperature
+            - captureVariables
+            - exitNodeWhen
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TOOLS_AI
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    handleId:
+                      type: string
+                    expression:
+                      type: string
+                  required:
+                  - handleId
+                  - expression
+              temperature:
+                type: number
+              model:
+                type: string
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+              instructions:
+                type:
+                - string
+                - 'null'
+              prompt:
+                type:
+                - string
+                - 'null'
+              customToolIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: number
+              maxIterations:
+                type: number
+                minimum: 1
+                maximum: 30
+                default: 10
+              agentType:
+                type: string
+                enum:
+                - BASIC
+                - ADVANCED
+                default: BASIC
+              captureVariables:
+                type:
+                - array
+                - 'null'
+                items: {}
+              knowledgeBaseMode:
+                type: string
+                enum:
+                - DEFAULT
+                - CUSTOM
+                - DISABLED
+                default: DEFAULT
+              knowledgeBaseIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: integer
+                  exclusiveMinimum: 0
+              selectedRecordTypes:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    recordTypeId:
+                      type: number
+                    read:
+                      type: boolean
+                    create:
+                      type: boolean
+                    update:
+                      type: boolean
+                    delete:
+                      type: boolean
+                    createActivity:
+                      type: boolean
+                  required:
+                  - recordTypeId
+              systemToolsConfig:
+                type:
+                - object
+                - 'null'
+                properties:
+                  webSearchEnabled:
+                    type: boolean
+                    default: false
+                  urlScrapeEnabled:
+                    type: boolean
+                    default: false
+                  linkedinSearchEnabled:
+                    type: boolean
+                    default: false
+              connectedAccountConfigs:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    connectedAccountId:
+                      type: number
+                    useAllTools:
+                      type: boolean
+                      default: true
+                    selectedToolSlugs:
+                      type:
+                      - array
+                      - 'null'
+                      items:
+                        type: string
+                  required:
+                  - connectedAccountId
+              playbookIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: integer
+                  exclusiveMinimum: 0
+              aiModelId:
+                type:
+                - integer
+                - 'null'
+            required:
+            - type
+            - conditions
+            - instructions
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - API
+              url:
+                type: string
+                example: https://api.example.com/hook
+              method:
+                type: string
+                enum:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - PATCH
+              headers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                  required:
+                  - key
+                  - value
+              body:
+                type:
+                - string
+                - 'null'
+              response:
+                type:
+                - string
+                - 'null'
+              parameters:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                  required:
+                  - key
+                  - value
+              variables:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                    fullResponse:
+                      type: boolean
+                      default: false
+                  required:
+                  - key
+                  - value
+            required:
+            - type
+            - url
+            - method
+            - headers
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - CONDITIONAL_ROUTING
+              routingType:
+                type: string
+                enum:
+                - CONDITIONAL_AI
+                - DYNAMIC
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    handleId:
+                      type: string
+                    expression:
+                      type: string
+                  required:
+                  - handleId
+                  - expression
+              temperature:
+                type: number
+              model:
+                type: string
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+              aiModelId:
+                type:
+                - integer
+                - 'null'
+            required:
+            - type
+            - routingType
+            - conditions
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - DYNAMIC_TABLES
+              tableId:
+                type:
+                - number
+                - 'null'
+              recordTypeId:
+                type:
+                - number
+                - 'null'
+              targetRecordTypeId:
+                type:
+                - number
+                - 'null'
+                description: Destination record type id. Required when actionType is CHANGE_RECORD_TYPE.
+                example: 12
+              actionType:
+                type:
+                - string
+                - 'null'
+                enum:
+                - CREATE
+                - UPDATE
+                - DELETE
+                - SEARCH
+                - SEARCH_BY_ID
+                - CHANGE_RECORD_TYPE
+                description: 'Operation to run. Required-field rules per action: CREATE → rowData; UPDATE → rowId + rowData; DELETE / SEARCH_BY_ID → rowId; CHANGE_RECORD_TYPE → rowId + targetRecordTypeId.'
+                example: CREATE
+              rowData:
+                type:
+                - object
+                - 'null'
+                additionalProperties: {}
+              inputModeByField:
+                type:
+                - object
+                - 'null'
+                additionalProperties:
+                  type: string
+                  enum:
+                  - INPUT
+                  - VARIABLE
+                  - EMPTY
+              rowId:
+                type:
+                - string
+                - 'null'
+              search:
+                type:
+                - string
+                - 'null'
+              pageNum:
+                anyOf:
+                - type: number
+                - type: string
+                - {}
+              pageSize:
+                anyOf:
+                - type: number
+                - type: string
+                - {}
+              pageNumMode:
+                type:
+                - string
+                - 'null'
+                enum:
+                - INPUT
+                - VARIABLE
+                - EMPTY
+              pageSizeMode:
+                type:
+                - string
+                - 'null'
+                enum:
+                - INPUT
+                - VARIABLE
+                - EMPTY
+              sort:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    path:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - asc
+                      - desc
+                  required:
+                  - path
+                  - type
+              query:
+                $ref: '#/components/schemas/DynamicTablesQuery'
+            required:
+            - type
+          - {}
+        workflowId:
+          type: string
+        handles:
+          type: array
+          items:
+            type: object
+            properties:
+              handleId:
+                type: string
+              sourceEdge:
+                type: object
+                properties:
+                  from:
+                    type: string
+                  fromHandleId:
+                    type: string
+                  to:
+                    type: string
+                  toHandleId:
+                    type: string
+                required:
+                - from
+                - fromHandleId
+                - to
+                - toHandleId
+              text:
+                type: string
+            required:
+            - handleId
+            - sourceEdge
+            - text
+        targetEdges:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              from:
+                type: string
+              fromHandleId:
+                type: string
+              to:
+                type: string
+              toHandleId:
+                type: string
+            required:
+            - from
+            - fromHandleId
+            - to
+            - toHandleId
+        createdAt:
+          type:
+          - string
+          - 'null'
+        updatedAt:
+          type:
+          - string
+          - 'null'
+      required:
+      - nodeId
+      - position
+      - type
     PublicFlowNodeCreateInput:
       type: object
       properties:
         node:
-          $ref: '#/components/schemas/PublicFlowNodeInput'
+          type: object
+          properties:
+            name:
+              type: string
+              example: Start
+            position:
+              type: object
+              properties:
+                positionX:
+                  type: number
+                positionY:
+                  type: number
+              required:
+              - positionX
+              - positionY
+            type:
+              type: string
+              enum:
+              - START
+              - TRIGGER_INTENT
+              - SAY_AI
+              - RESPONSE_AI
+              - TOOLS_AI
+              - API
+              - CONDITIONAL_ROUTING
+              - DYNAMIC_TABLES
+              example: START
+            data:
+              oneOf:
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - TRIGGER_INTENT
+                  agenticRouting:
+                    type:
+                    - string
+                    - 'null'
+                  intentIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: number
+                  intents:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        name:
+                          type: string
+                        description:
+                          type:
+                          - string
+                          - 'null'
+                        createdAt:
+                          type:
+                          - string
+                          - 'null'
+                        updatedAt:
+                          type:
+                          - string
+                          - 'null'
+                        status:
+                          type: string
+                          enum:
+                          - ACTIVE
+                          - DELETED
+                        assistantId:
+                          type: string
+                        phrases:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: number
+                              phrase:
+                                type: string
+                            required:
+                            - id
+                            - phrase
+                        flowId:
+                          type:
+                          - number
+                          - 'null'
+                      required:
+                      - id
+                      - name
+                      - createdAt
+                      - updatedAt
+                      - status
+                      - assistantId
+                required:
+                - type
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - SAY_AI
+                  message:
+                    type:
+                    - string
+                    - 'null'
+                  temperature:
+                    type: number
+                    default: 0.7
+                  prompt:
+                    type:
+                    - string
+                    - 'null'
+                  aiModelId:
+                    type:
+                    - number
+                    - 'null'
+                  model:
+                    type:
+                    - string
+                    - 'null'
+                  aiVendor:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  sayWithAi:
+                    type: boolean
+                required:
+                - type
+                - sayWithAi
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - RESPONSE_AI
+                  assistantId:
+                    type: string
+                    pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|agent-[0-9a-zA-Z-]+'
+                    description: Owning assistant ID or UUID (e.g. agent-xxx or standard UUID). Validated against the account on save.
+                    example: 550e8400-e29b-41d4-a716-446655440000
+                  aiModelId:
+                    type:
+                    - number
+                    - 'null'
+                  model:
+                    type: string
+                  aiVendor:
+                    type: string
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  instructions:
+                    type:
+                    - string
+                    - 'null'
+                  temperature:
+                    type: number
+                  captureVariables:
+                    type: array
+                    items: {}
+                  exitNodeWhen:
+                    type: string
+                    enum:
+                    - ALL_VARIABLES
+                    - FLOW_TRIGGERED
+                    - ANY_VARIABLES
+                  knowledgeBaseMode:
+                    type: string
+                    enum:
+                    - DEFAULT
+                    - CUSTOM
+                    - DISABLED
+                    default: DEFAULT
+                  knowledgeBaseIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: integer
+                      exclusiveMinimum: 0
+                required:
+                - type
+                - assistantId
+                - model
+                - aiVendor
+                - instructions
+                - temperature
+                - captureVariables
+                - exitNodeWhen
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - TOOLS_AI
+                  conditions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        handleId:
+                          type: string
+                        expression:
+                          type: string
+                      required:
+                      - handleId
+                      - expression
+                  temperature:
+                    type: number
+                  model:
+                    type: string
+                  aiVendor:
+                    type: string
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  instructions:
+                    type:
+                    - string
+                    - 'null'
+                  prompt:
+                    type:
+                    - string
+                    - 'null'
+                  customToolIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: number
+                  maxIterations:
+                    type: number
+                    minimum: 1
+                    maximum: 30
+                    default: 10
+                  agentType:
+                    type: string
+                    enum:
+                    - BASIC
+                    - ADVANCED
+                    default: BASIC
+                  captureVariables:
+                    type:
+                    - array
+                    - 'null'
+                    items: {}
+                  knowledgeBaseMode:
+                    type: string
+                    enum:
+                    - DEFAULT
+                    - CUSTOM
+                    - DISABLED
+                    default: DEFAULT
+                  knowledgeBaseIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: integer
+                      exclusiveMinimum: 0
+                  selectedRecordTypes:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        recordTypeId:
+                          type: number
+                        read:
+                          type: boolean
+                        create:
+                          type: boolean
+                        update:
+                          type: boolean
+                        delete:
+                          type: boolean
+                        createActivity:
+                          type: boolean
+                      required:
+                      - recordTypeId
+                  systemToolsConfig:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      webSearchEnabled:
+                        type: boolean
+                        default: false
+                      urlScrapeEnabled:
+                        type: boolean
+                        default: false
+                      linkedinSearchEnabled:
+                        type: boolean
+                        default: false
+                  connectedAccountConfigs:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        connectedAccountId:
+                          type: number
+                        useAllTools:
+                          type: boolean
+                          default: true
+                        selectedToolSlugs:
+                          type:
+                          - array
+                          - 'null'
+                          items:
+                            type: string
+                      required:
+                      - connectedAccountId
+                  playbookIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: integer
+                      exclusiveMinimum: 0
+                  aiModelId:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - type
+                - conditions
+                - instructions
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - API
+                  url:
+                    type: string
+                    example: https://api.example.com/hook
+                  method:
+                    type: string
+                    enum:
+                    - GET
+                    - POST
+                    - PUT
+                    - DELETE
+                    - PATCH
+                  headers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                      - key
+                      - value
+                  body:
+                    type:
+                    - string
+                    - 'null'
+                  response:
+                    type:
+                    - string
+                    - 'null'
+                  parameters:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                      - key
+                      - value
+                  variables:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                        fullResponse:
+                          type: boolean
+                          default: false
+                      required:
+                      - key
+                      - value
+                required:
+                - type
+                - url
+                - method
+                - headers
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - CONDITIONAL_ROUTING
+                  routingType:
+                    type: string
+                    enum:
+                    - CONDITIONAL_AI
+                    - DYNAMIC
+                  conditions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        handleId:
+                          type: string
+                        expression:
+                          type: string
+                      required:
+                      - handleId
+                      - expression
+                  temperature:
+                    type: number
+                  model:
+                    type: string
+                  aiVendor:
+                    type: string
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  aiModelId:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - type
+                - routingType
+                - conditions
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - DYNAMIC_TABLES
+                  tableId:
+                    type:
+                    - number
+                    - 'null'
+                  recordTypeId:
+                    type:
+                    - number
+                    - 'null'
+                  targetRecordTypeId:
+                    type:
+                    - number
+                    - 'null'
+                    description: Destination record type id. Required when actionType is CHANGE_RECORD_TYPE.
+                    example: 12
+                  actionType:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - CREATE
+                    - UPDATE
+                    - DELETE
+                    - SEARCH
+                    - SEARCH_BY_ID
+                    - CHANGE_RECORD_TYPE
+                    description: 'Operation to run. Required-field rules per action: CREATE → rowData; UPDATE → rowId + rowData; DELETE / SEARCH_BY_ID → rowId; CHANGE_RECORD_TYPE → rowId + targetRecordTypeId.'
+                    example: CREATE
+                  rowData:
+                    type:
+                    - object
+                    - 'null'
+                    additionalProperties: {}
+                  inputModeByField:
+                    type:
+                    - object
+                    - 'null'
+                    additionalProperties:
+                      type: string
+                      enum:
+                      - INPUT
+                      - VARIABLE
+                      - EMPTY
+                  rowId:
+                    type:
+                    - string
+                    - 'null'
+                  search:
+                    type:
+                    - string
+                    - 'null'
+                  pageNum:
+                    anyOf:
+                    - type: number
+                    - type: string
+                    - {}
+                  pageSize:
+                    anyOf:
+                    - type: number
+                    - type: string
+                    - {}
+                  pageNumMode:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - INPUT
+                    - VARIABLE
+                    - EMPTY
+                  pageSizeMode:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - INPUT
+                    - VARIABLE
+                    - EMPTY
+                  sort:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        path:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - asc
+                          - desc
+                      required:
+                      - path
+                      - type
+                  query:
+                    $ref: '#/components/schemas/DynamicTablesQuery'
+                required:
+                - type
+              - {}
+          required:
+          - position
+          - type
       required:
       - node
-    DynamicTablesQueryGroup:
+    PublicFlowEdgeInput:
       type: object
       properties:
-        operator:
-          type: string
-          enum:
-          - and
-          - or
-          example: and
-        conditions:
-          type: array
-          items:
-            nullable: true
-            type: object
-          description: Nested filter conditions or AND/OR groups
+        edge:
+          type: object
+          properties:
+            source:
+              type: string
+              example: trigger_1
+            sourceHandle:
+              type: string
+              example: default
+            target:
+              type: string
+              example: api_1
+            targetHandle:
+              type: string
+              example: default
+          required:
+          - source
+          - sourceHandle
+          - target
+          - targetHandle
       required:
-      - operator
-      - conditions
+      - edge
+    FlowDetail:
+      allOf:
+      - $ref: '#/components/schemas/Flow'
+      - type: object
+        properties:
+          assistantId:
+            type: string
+            example: 550e8400-e29b-41d4-a716-446655440000
+          isDefault:
+            type: boolean
+            example: false
+          liveSnapshotId:
+            type:
+            - string
+            - 'null'
+            example: 64f1c2e6a75f2d4a9a2f1234
+          draftSnapshotId:
+            type:
+            - string
+            - 'null'
+            example: 64f1c2e6a75f2d4a9a2f1234
+          nodes:
+            type: array
+            items:
+              $ref: '#/components/schemas/PublicFlowNode'
+        required:
+        - assistantId
+        - isDefault
+        - liveSnapshotId
+        - draftSnapshotId
+    PublicFlowCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Order Routing
+        description:
+          type:
+          - string
+          - 'null'
+          example: Routes order conversations
+      required:
+      - name
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
   securitySchemes:
     accountApiKey:
       type: http
@@ -2715,6 +2611,7 @@ x-tagGroups:
   - Flow Variables
   - Intents
   - Agents
+  - Agent Playbooks
 - name: Workflows
   tags:
   - Workflows
@@ -2744,12 +2641,24 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
+- name: Channels
+  tags:
+  - Channels
 - name: Integrations
   tags:
-  - Tools
+  - Custom Tools
   - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
 - name: Core
   tags:
   - Account
   - AI Models
   - Billing
+  - Users
+  - User Tasks
+  - Guidance

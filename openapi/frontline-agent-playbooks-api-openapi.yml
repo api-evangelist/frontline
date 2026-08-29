@@ -1,0 +1,843 @@
+openapi: 3.2.0
+info:
+  title: Public Agent Playbooks API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Agent Playbooks
+  description: Manage reusable instruction sets assigned to agents
+paths:
+  /public/v1/playbooks:
+    get:
+      summary: List agent playbooks
+      operationId: listAgentPlaybooks
+      description: Lists reusable agent playbooks (instruction sets) visible to the caller. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Playbooks
+      parameters:
+      - schema:
+          type: boolean
+        required: false
+        name: isActive
+        in: query
+      - schema:
+          type: string
+        required: false
+        name: filterText
+        in: query
+      - schema:
+          type: string
+          enum:
+          - PRIVATE
+          - ACCOUNT
+        required: false
+        name: visibility
+        in: query
+      responses:
+        '200':
+          description: Paginated playbooks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAgentPlaybookList'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create agent playbook
+      operationId: createAgentPlaybook
+      description: Creates a reusable agent playbook. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Playbooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAgentPlaybookCreateInput'
+      responses:
+        '201':
+          description: Created playbook
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAgentPlaybook'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/playbooks/{playbookId}:
+    get:
+      summary: Get agent playbook details
+      operationId: getAgentPlaybook
+      description: Returns an agent playbook by ID. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Playbooks
+      parameters:
+      - schema:
+          type: integer
+          example: 42
+          exclusiveMinimum: 0
+        required: true
+        name: playbookId
+        in: path
+      responses:
+        '200':
+          description: Playbook details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAgentPlaybook'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update agent playbook
+      operationId: updateAgentPlaybook
+      description: Updates an agent playbook. Only the creator (or an OWNER/ADMIN) can update it. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Playbooks
+      parameters:
+      - schema:
+          type: integer
+          example: 42
+          exclusiveMinimum: 0
+        required: true
+        name: playbookId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAgentPlaybookUpdateInput'
+      responses:
+        '200':
+          description: Updated playbook
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAgentPlaybook'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete agent playbook
+      operationId: deleteAgentPlaybook
+      description: Deletes an agent playbook. Only the creator can delete it. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Playbooks
+      parameters:
+      - schema:
+          type: integer
+          example: 42
+          exclusiveMinimum: 0
+        required: true
+        name: playbookId
+        in: path
+      responses:
+        '200':
+          description: Playbook deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAgentPlaybookDeleteResult'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/agents/{agentId}/playbooks:
+    get:
+      summary: List playbooks assigned to an agent
+      operationId: listAssignedAgentPlaybooks
+      description: Lists playbooks assigned to a specific agent. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Agent Playbooks
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type: boolean
+        required: false
+        name: isActive
+        in: query
+      - schema:
+          type: string
+        required: false
+        name: filterText
+        in: query
+      - schema:
+          type: string
+          enum:
+          - PRIVATE
+          - ACCOUNT
+        required: false
+        name: visibility
+        in: query
+      responses:
+        '200':
+          description: Paginated assigned playbooks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAgentPlaybookList'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    PublicAgentPlaybookCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          minLength: 10
+          maxLength: 750
+        instructions:
+          type: string
+          minLength: 10
+          maxLength: 10000
+        tools:
+          type: array
+          items:
+            type: string
+          maxItems: 20
+          default: []
+        visibility:
+          type: string
+          enum:
+          - PRIVATE
+          - ACCOUNT
+          default: ACCOUNT
+        isActive:
+          type: boolean
+          default: true
+        connectedAccountConfigs:
+          type: array
+          items:
+            type: object
+            properties:
+              connectedAccountId:
+                type: number
+              useAllTools:
+                type: boolean
+                default: true
+              selectedToolSlugs:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: string
+            required:
+            - connectedAccountId
+        selectedRecordTypes:
+          type: array
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: number
+              read:
+                type: boolean
+              create:
+                type: boolean
+              update:
+                type: boolean
+              delete:
+                type: boolean
+              createActivity:
+                type: boolean
+            required:
+            - recordTypeId
+        selectedCustomTools:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                exclusiveMinimum: 0
+              enabled:
+                type: boolean
+                default: true
+            required:
+            - id
+      required:
+      - name
+      - description
+      - instructions
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicAgentPlaybookUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          minLength: 10
+          maxLength: 750
+        instructions:
+          type: string
+          minLength: 10
+          maxLength: 10000
+        tools:
+          type: array
+          items:
+            type: string
+          maxItems: 20
+        visibility:
+          type: string
+          enum:
+          - PRIVATE
+          - ACCOUNT
+        isActive:
+          type: boolean
+        connectedAccountConfigs:
+          type: array
+          items:
+            type: object
+            properties:
+              connectedAccountId:
+                type: number
+              useAllTools:
+                type: boolean
+                default: true
+              selectedToolSlugs:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: string
+            required:
+            - connectedAccountId
+        selectedRecordTypes:
+          type: array
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: number
+              read:
+                type: boolean
+              create:
+                type: boolean
+              update:
+                type: boolean
+              delete:
+                type: boolean
+              createActivity:
+                type: boolean
+            required:
+            - recordTypeId
+        selectedCustomTools:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                exclusiveMinimum: 0
+              enabled:
+                type: boolean
+                default: true
+            required:
+            - id
+    PublicAgentPlaybook:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+        isActive:
+          type: boolean
+        instructions:
+          type: string
+        tools:
+          type: array
+          items:
+            type: string
+        accountId:
+          type: number
+        createdByUserId:
+          type:
+          - number
+          - 'null'
+        createdBy:
+          type: object
+          properties:
+            id:
+              type: number
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+            avatar:
+              type:
+              - string
+              - 'null'
+          required:
+          - id
+          - firstName
+          - lastName
+          - email
+          - avatar
+        visibility:
+          type: string
+          enum:
+          - PRIVATE
+          - ACCOUNT
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        playbookConnectedAccounts:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+              connectedAccountId:
+                type: number
+              useAllTools:
+                type: boolean
+              selectedToolSlugs:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: string
+              connectedAccount:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  toolkit:
+                    type: string
+                  connectedEmail:
+                    type:
+                    - string
+                    - 'null'
+                  alias:
+                    type:
+                    - string
+                    - 'null'
+                  isConnected:
+                    type: boolean
+                required:
+                - id
+                - toolkit
+                - connectedEmail
+                - alias
+                - isConnected
+            required:
+            - id
+            - connectedAccountId
+            - useAllTools
+            - selectedToolSlugs
+        selectedRecordTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: number
+              read:
+                type: boolean
+              create:
+                type: boolean
+              update:
+                type: boolean
+              delete:
+                type: boolean
+              createActivity:
+                type: boolean
+            required:
+            - recordTypeId
+        selectedCustomTools:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                exclusiveMinimum: 0
+              enabled:
+                type: boolean
+                default: true
+            required:
+            - id
+      required:
+      - id
+      - name
+      - description
+      - isActive
+      - instructions
+      - tools
+      - accountId
+      - createdByUserId
+      - visibility
+      - createdAt
+      - updatedAt
+    PublicAgentPlaybookList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+              name:
+                type: string
+              description:
+                type: string
+              isActive:
+                type: boolean
+              instructions:
+                type: string
+              tools:
+                type: array
+                items:
+                  type: string
+              accountId:
+                type: number
+              createdByUserId:
+                type:
+                - number
+                - 'null'
+              createdBy:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  firstName:
+                    type: string
+                  lastName:
+                    type: string
+                  email:
+                    type: string
+                  avatar:
+                    type:
+                    - string
+                    - 'null'
+                required:
+                - id
+                - firstName
+                - lastName
+                - email
+                - avatar
+              visibility:
+                type: string
+                enum:
+                - PRIVATE
+                - ACCOUNT
+              createdAt:
+                type: string
+              updatedAt:
+                type: string
+              playbookConnectedAccounts:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    connectedAccountId:
+                      type: number
+                    useAllTools:
+                      type: boolean
+                    selectedToolSlugs:
+                      type:
+                      - array
+                      - 'null'
+                      items:
+                        type: string
+                    connectedAccount:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        toolkit:
+                          type: string
+                        connectedEmail:
+                          type:
+                          - string
+                          - 'null'
+                        alias:
+                          type:
+                          - string
+                          - 'null'
+                        isConnected:
+                          type: boolean
+                      required:
+                      - id
+                      - toolkit
+                      - connectedEmail
+                      - alias
+                      - isConnected
+                  required:
+                  - id
+                  - connectedAccountId
+                  - useAllTools
+                  - selectedToolSlugs
+              selectedRecordTypes:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    recordTypeId:
+                      type: number
+                    read:
+                      type: boolean
+                    create:
+                      type: boolean
+                    update:
+                      type: boolean
+                    delete:
+                      type: boolean
+                    createActivity:
+                      type: boolean
+                  required:
+                  - recordTypeId
+              selectedCustomTools:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      exclusiveMinimum: 0
+                    enabled:
+                      type: boolean
+                      default: true
+                  required:
+                  - id
+            required:
+            - id
+            - name
+            - description
+            - isActive
+            - instructions
+            - tools
+            - accountId
+            - createdByUserId
+            - visibility
+            - createdAt
+            - updatedAt
+        total:
+          type: number
+        page:
+          type: number
+        pageSize:
+          type: number
+        totalPages:
+          type: number
+      required:
+      - results
+      - total
+      - page
+      - pageSize
+      - totalPages
+    PublicAgentPlaybookDeleteResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+      required:
+      - success
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

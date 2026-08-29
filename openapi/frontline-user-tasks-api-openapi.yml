@@ -1,0 +1,583 @@
+openapi: 3.2.0
+info:
+  title: Public User Tasks API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: User Tasks
+  description: 'User tasks — the account ''To-dos'' inbox: create, list, update, complete, and delete tasks, optionally linked to an object record. Distinct from object-row tasks (Object tasks) and from Max tasks.'
+paths:
+  /public/v1/tasks:
+    get:
+      summary: List user tasks
+      operationId: listTasks
+      description: Lists user tasks — the account 'To-dos' inbox. Filter by `assigned_to_me`, `completed`, `object_name` (tasks linked to an object), or `people_ids`/`team_ids`. Each task includes assignees and the linked object record (if any). Requires a USER API key. Distinct from object-row tasks (`/objects/{object}/rows/{rowId}/tasks`) and from Max tasks.
+      security:
+      - userApiKey: []
+      tags:
+      - User Tasks
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          description: Only tasks assigned to the calling user.
+          example: 'true'
+        required: false
+        name: assigned_to_me
+        in: query
+      - schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+          description: Filter by completion state.
+          example: 'false'
+        required: false
+        name: completed
+        in: query
+      - schema:
+          type: string
+          minLength: 1
+          description: Only tasks linked to this object.
+          example: companies
+        required: false
+        name: object_name
+        in: query
+      - schema:
+          type: string
+          description: CSV of People record IDs linked to the task.
+          example: 12,15
+        required: false
+        name: people_ids
+        in: query
+      - schema:
+          type: string
+          description: CSV of team IDs the task is shared with.
+          example: '3'
+        required: false
+        name: team_ids
+        in: query
+      responses:
+        '200':
+          description: A list of tasks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/PublicUserTask'
+                required:
+                - results
+                description: Standard list response
+    post:
+      summary: Create a user task
+      operationId: createTask
+      description: Creates a user task (to-do). Optionally link it to an object record by passing `object_name` + `row_id` together. `assignee_ids` are user IDs (see GET /users). Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - User Tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicUserTaskCreateInput'
+      responses:
+        '201':
+          description: Created task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicUserTask'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tasks/{taskId}:
+    get:
+      summary: Get a user task
+      operationId: getTask
+      description: Returns a single user task by ID. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - User Tasks
+      parameters:
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: taskId
+        in: path
+      responses:
+        '200':
+          description: Task details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicUserTask'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update a user task
+      operationId: updateTask
+      description: 'Updates a task. Send only the fields to change. Pass `due_date: null` to clear the due date, or `object_name: null` + `row_id: null` to unlink the related object record. Requires a USER API key.'
+      security:
+      - userApiKey: []
+      tags:
+      - User Tasks
+      parameters:
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: taskId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicUserTaskUpdateInput'
+      responses:
+        '200':
+          description: Updated task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicUserTask'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a user task
+      operationId: deleteTask
+      description: Permanently deletes a user task. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - User Tasks
+      parameters:
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: taskId
+        in: path
+      responses:
+        '200':
+          description: Deletion result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  id:
+                    type: number
+                required:
+                - success
+                - id
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tasks/{taskId}/complete:
+    post:
+      summary: Complete a user task
+      operationId: completeTask
+      description: Marks a task as completed. Only a user assigned to the task can complete it. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - User Tasks
+      parameters:
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: taskId
+        in: path
+      responses:
+        '200':
+          description: Completed task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicUserTask'
+        '400':
+          description: Bad Request (not an assignee, or already completed)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tasks/{taskId}/uncomplete:
+    post:
+      summary: Uncomplete a user task
+      operationId: uncompleteTask
+      description: Clears the completed state of a task. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - User Tasks
+      parameters:
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: taskId
+        in: path
+      responses:
+        '200':
+          description: Reopened task
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicUserTask'
+components:
+  schemas:
+    PublicUserTaskUpdateInput:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+        due_date:
+          type:
+          - string
+          - 'null'
+          description: Pass null to clear the due date.
+        assignee_ids:
+          type: array
+          items:
+            type: number
+        object_name:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          description: Pass null (with row_id null) to unlink the object record.
+        row_id:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicUserTaskCreateInput:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+          example: Email David Booth about Q3 renewal
+        due_date:
+          type:
+          - string
+          - 'null'
+          example: '2026-06-25'
+        assignee_ids:
+          type: array
+          items:
+            type: number
+          description: User IDs (see GET /users).
+          example:
+          - 42
+        object_name:
+          type: string
+          minLength: 1
+          description: Link the task to an object record (requires row_id too).
+          example: companies
+        row_id:
+          type: string
+          minLength: 1
+          example: abc123
+      required:
+      - content
+    PublicUserTask:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 101
+        content:
+          type: string
+          example: Email David Booth about Q3 renewal
+        due_date:
+          type:
+          - string
+          - 'null'
+          example: '2026-06-25T00:00:00Z'
+        completed:
+          type: boolean
+          example: false
+        completed_at:
+          type:
+          - string
+          - 'null'
+          example: null
+        created_at:
+          type: string
+          example: '2026-06-01T12:00:00Z'
+        updated_at:
+          type: string
+          example: '2026-06-01T12:00:00Z'
+        created_by:
+          type:
+          - object
+          - 'null'
+          properties:
+            id:
+              type: number
+              example: 42
+            name:
+              type:
+              - string
+              - 'null'
+              example: Alvaro Vargas
+            email:
+              type:
+              - string
+              - 'null'
+              example: alvaro@example.com
+          required:
+          - id
+        completed_by:
+          type:
+          - object
+          - 'null'
+          properties:
+            id:
+              type: number
+              example: 42
+            name:
+              type:
+              - string
+              - 'null'
+              example: Alvaro Vargas
+            email:
+              type:
+              - string
+              - 'null'
+              example: alvaro@example.com
+          required:
+          - id
+        assignees:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                example: 42
+              name:
+                type:
+                - string
+                - 'null'
+                example: Alvaro Vargas
+              email:
+                type:
+                - string
+                - 'null'
+                example: alvaro@example.com
+            required:
+            - id
+          description: Assigned users
+        related:
+          type:
+          - object
+          - 'null'
+          properties:
+            object_name:
+              type:
+              - string
+              - 'null'
+              description: Object the task is linked to (the slug used in /objects commands).
+              example: companies
+            object_label:
+              type:
+              - string
+              - 'null'
+              example: Companies
+            row_id:
+              type:
+              - string
+              - 'null'
+              example: abc123
+          description: Linked object record, if the task is attached to one (else null).
+      required:
+      - id
+      - content
+      - completed
+      - created_at
+      - updated_at
+      - assignees
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

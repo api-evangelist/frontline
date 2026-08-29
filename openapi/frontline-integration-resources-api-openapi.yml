@@ -1,0 +1,806 @@
+openapi: 3.2.0
+info:
+  title: Public Integration Resources API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Integration Resources
+  description: Resolve resource IDs (spreadsheets, docs, drive folders, Asana projects, Salesforce SObjects, Gmail labels, Outlook folders/calendars) needed to configure event triggers. Requires a USER API key.
+paths:
+  /public/v1/integrations/resources/gmail/labels:
+    get:
+      summary: List Gmail labels
+      operationId: listGmailLabelResources
+      description: Lists Gmail labels for the connected account, to resolve label IDs used in Gmail trigger configs. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Integration Resources
+      parameters:
+      - schema:
+          type:
+          - number
+          - 'null'
+        required: false
+        name: connectedAccountId
+        in: query
+      responses:
+        '200':
+          description: Gmail labels
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  labels:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - system
+                          - user
+                      required:
+                      - id
+                      - name
+                      - type
+                  total:
+                    type: number
+                required:
+                - labels
+                - total
+  /public/v1/integrations/resources/googlesheets/spreadsheets:
+    get:
+      summary: List Google spreadsheets
+      operationId: listGoogleSpreadsheetResources
+      description: Lists Google spreadsheets for the connected account, to resolve a spreadsheet_id for Google Sheets trigger configs. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Integration Resources
+      parameters:
+      - schema:
+          type: string
+          description: Optional search query to filter spreadsheets by name
+        required: false
+        description: Optional search query to filter spreadsheets by name
+        name: query
+        in: query
+      - schema:
+          type: number
+          minimum: 1
+          maximum: 100
+          default: 50
+        required: false
+        name: limit
+        in: query
+      - schema:
+          type:
+          - number
+          - 'null'
+        required: false
+        name: connectedAccountId
+        in: query
+      responses:
+        '200':
+          description: Spreadsheets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  spreadsheets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        url:
+                          type:
+                          - string
+                          - 'null'
+                        createdTime:
+                          type:
+                          - string
+                          - 'null'
+                        modifiedTime:
+                          type:
+                          - string
+                          - 'null'
+                      required:
+                      - id
+                      - name
+                  total:
+                    type: number
+                required:
+                - spreadsheets
+                - total
+  /public/v1/integrations/resources/googlesheets/spreadsheets/{spreadsheetId}/sheets:
+    get:
+      summary: List sheets (tabs) in a spreadsheet
+      operationId: listGoogleSpreadsheetSheetResources
+      description: Lists the sheets (tabs) within a spreadsheet, to resolve a sheet_name for Google Sheets trigger configs. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Integration Resources
+      parameters:
+      - schema:
+          type: string
+          example: 1AbC...
+        required: true
+        name: spreadsheetId
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+        required: false
+        name: connectedAccountId
+        in: query
+      responses:
+        '200':
+          description: Sheets
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  spreadsheetId:
+                    type: string
+                  spreadsheetName:
+                    type:
+                    - string
+                    - 'null'
+                  sheets:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sheetId:
+                          type: number
+                        title:
+                          type: string
+                        index:
+                          type: number
+                      required:
+                      - sheetId
+                      - title
+                      - index
+                required:
+                - spreadsheetId
+                - sheets
+  /public/v1/integrations/resources/googledocs/documents:
+    get:
+      summary: List Google Docs documents
+      operationId: listGoogleDocumentResources
+      description: Lists Google Docs documents for the connected account, to resolve a document_id for Google Docs trigger configs. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Integration Resources
+      parameters:
+      - schema:
+          type: string
+          description: Optional search query to filter documents by name
+        required: false
+        description: Optional search query to filter documents by name
+        name: query
+        in: query
+      - schema:
+          type: number
+          minimum: 1
+          maximum: 100
+          default: 50
+        required: false
+        name: limit
+        in: query
+      - schema:
+          type:
+          - number
+          - 'null'
+        required: false
+        name: connectedAccountId
+        in: query
+      responses:
+        '200':
+          description: Documents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  documents:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        url:
+                          type:
+                          - string
+                          - 'null'
+                        createdTime:
+                          type:
+                          - string
+                          - 'null'
+                        modifiedTime:
+                          type:
+                          - string
+                          - 'null'
+                      required:
+                      - id
+                      - name
+                  total:
+                    type: number
+                required:
+                - documents
+                - total
+  /public/v1/integrations/resources/googledrive/shared-drives:
+    get:
+      summary: List Google Drive shared drives
+      operationId: listGoogleSharedDriveResources
+      description: Lists Google Drive shared drives for the connected account, to resolve a drive_id for Google Drive trigger configs. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Integration Resources
+      parameters:
+      - schema:
+          type: string
+          description: Optional search query to filter shared drives by name
+        required: false
+        description: Optional search query to filter shared drives by name
+        name: query
+        in: query
+      - schema:
+          type: number
+          minimum: 1
+          maximum: 100
+          default: 50
+        required: false
+        name: limit
+        in: query
+      - schema:
+          type:
+          - number
+          - 'null'
+        required: false
+        name: connectedAccountId
+        in: query
+      responses:
+        '200':
+          description: Shared drives
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  drives:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        createdTime:
+                          type:
+                          - string
+                          - 'null'
+                      required:
+                      - id
+                      - name
+                  total:
+                    type: number
+                required:
+                - drives
+                - total
+  /public/v1/integrations/resources/googledrive/folders:
+    get:
+      summary: List Google Drive folders
+      operationId: listGoogleDriveFolderResources
+      description: Lists Google Drive folders for the connected account, to resolve a folder_id for Google Drive trigger configs. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Integration Resources
+      parameters:
+      - schema:
+          type: string
+          description: Optional search query to filter folders by name
+        required: false
+        description: Optional search query to filter folders by name
+        name: query
+        in: query
+      - schema:
+          type: number
+          minimum: 1
+          maximum: 100
+          default: 50
+        required: false
+        name: limit
+        in: query
+      - schema:
+          type:
+          - number
+          - 'null'
+        required: false
+        name: connectedAccountId
+        in: query
+      responses:
+        '200':
+          description: Folders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  folders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        createdTime:
+                          type:
+                          - string
+                          - 'null'
+                        modifiedTime:
+                          type:
+                          - string
+                          - 'null'
+                        webViewLink:
+                          type:
+                          - string
+                          - 'null'
+                      required:
+                      - id
+                      - name
+                  total:
+                    type: number
+                required:
+                - folders
+                - total
+  /public/v1/integrations/resources/asana/workspaces:
+    get:
+      summary: List Asana workspaces
+      operationId: listAsanaWorkspaceResources
+      description: Lists Asana workspaces for the connected account, to resolve a workspace_gid for Asana trigger configs. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Integration Resources
+      parameters:
+      - schema:
+          type:
+          - number
+          - 'null'
+        required: false
+        name: connectedAccountId
+        in: query
+      responses:
+        '200':
+          description: Workspaces
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  workspaces:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        gid:
+                          type: string
+                        name:
+                          type: string
+                      required:
+                      - gid
+                      - name
+                  total:
+                    type: number
+                required:
+                - workspaces
+                - total
+  /public/v1/integrations/resources/asana/workspaces/{workspaceGid}/projects:
+    get:
+      summary: List Asana projects in a workspace
+      operationId: listAsanaProjectResources
+      description: Lists Asana projects within a workspace, to resolve a project_gid for Asana trigger configs. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Integration Resources
+      parameters:
+      - schema:
+          type: string
+          example: '1200000000000001'
+        required: true
+        name: workspaceGid
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+        required: false
+        name: connectedAccountId
+        in: query
+      responses:
+        '200':
+          description: Projects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  projects:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        gid:
+                          type: string
+                        name:
+                          type: string
+                        archived:
+                          type:
+                          - boolean
+                          - 'null'
+                      required:
+                      - gid
+                      - name
+                  total:
+                    type: number
+                required:
+                - projects
+                - total
+  /public/v1/integrations/resources/salesforce/sobjects:
+    get:
+      summary: List Salesforce SObjects
+      operationId: listSalesforceSObjectResources
+      description: Lists Salesforce SObjects for the connected account, to resolve an sobject_name for Salesforce trigger configs. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Integration Resources
+      parameters:
+      - schema:
+          type:
+          - number
+          - 'null'
+        required: false
+        name: connectedAccountId
+        in: query
+      responses:
+        '200':
+          description: SObjects
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sobjects:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        label:
+                          type: string
+                        custom:
+                          type: boolean
+                        queryable:
+                          type: boolean
+                      required:
+                      - name
+                      - label
+                      - custom
+                      - queryable
+                  total:
+                    type: number
+                required:
+                - sobjects
+                - total
+  /public/v1/integrations/resources/salesforce/sobjects/{sobjectName}/fields:
+    get:
+      summary: List Salesforce SObject fields
+      operationId: listSalesforceSObjectFieldResources
+      description: Lists the fields of a Salesforce SObject, to resolve field names for Salesforce trigger configs. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Integration Resources
+      parameters:
+      - schema:
+          type: string
+          example: Opportunity
+        required: true
+        name: sobjectName
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+        required: false
+        name: connectedAccountId
+        in: query
+      responses:
+        '200':
+          description: Fields
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  sobjectName:
+                    type: string
+                  fields:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        label:
+                          type: string
+                        type:
+                          type: string
+                        custom:
+                          type: boolean
+                        updateable:
+                          type: boolean
+                        filterable:
+                          type: boolean
+                      required:
+                      - name
+                      - label
+                      - type
+                      - custom
+                      - updateable
+                      - filterable
+                  total:
+                    type: number
+                required:
+                - sobjectName
+                - fields
+                - total
+  /public/v1/integrations/resources/outlook/folders:
+    get:
+      summary: List Outlook mail folders
+      operationId: listOutlookFolderResources
+      description: Lists Outlook mail folders for the connected account, to resolve a folderId for Outlook message trigger configs. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Integration Resources
+      parameters:
+      - schema:
+          type:
+          - number
+          - 'null'
+        required: false
+        name: connectedAccountId
+        in: query
+      responses:
+        '200':
+          description: Folders
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  folders:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        displayName:
+                          type: string
+                        totalItemCount:
+                          type: number
+                        unreadItemCount:
+                          type: number
+                        childFolderCount:
+                          type: number
+                        isHidden:
+                          type: boolean
+                      required:
+                      - id
+                      - displayName
+                      - totalItemCount
+                      - unreadItemCount
+                      - childFolderCount
+                      - isHidden
+                  total:
+                    type: number
+                required:
+                - folders
+                - total
+  /public/v1/integrations/resources/outlook/calendars:
+    get:
+      summary: List Outlook calendars
+      operationId: listOutlookCalendarResources
+      description: Lists Outlook calendars for the connected account, to resolve a calendarId for Outlook event trigger configs. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Integration Resources
+      parameters:
+      - schema:
+          type:
+          - number
+          - 'null'
+        required: false
+        name: connectedAccountId
+        in: query
+      responses:
+        '200':
+          description: Calendars
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  calendars:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        name:
+                          type: string
+                        color:
+                          type:
+                          - string
+                          - 'null'
+                        isDefaultCalendar:
+                          type: boolean
+                        canEdit:
+                          type: boolean
+                        owner:
+                          type:
+                          - object
+                          - 'null'
+                          properties:
+                            name:
+                              type: string
+                            address:
+                              type: string
+                      required:
+                      - id
+                      - name
+                      - color
+                      - isDefaultCalendar
+                      - canEdit
+                      - owner
+                  total:
+                    type: number
+                required:
+                - calendars
+                - total
+components:
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

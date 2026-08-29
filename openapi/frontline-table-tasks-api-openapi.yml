@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Public Account Table tasks API
+  title: Public Table tasks API
   version: 1.0.0
   description: 'Public API for accessing agents, flows, and analytics.
 
@@ -75,7 +75,6 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: array
                     items:
@@ -83,41 +82,36 @@ paths:
                       properties:
                         id:
                           type: number
-                          example: 1
                         row_id:
                           type: string
-                          example: example
                         content:
                           type: string
-                          example: example
                         due_date:
-                          type: string
-                          nullable: true
-                          example: example
+                          type:
+                          - string
+                          - 'null'
                         assignee_ids:
                           type: array
                           items:
                             type: number
-                            example: 1
                         completed:
                           type: boolean
-                          example: false
                         completed_at:
-                          type: string
-                          nullable: true
-                          example: example
+                          type:
+                          - string
+                          - 'null'
                         created_by:
-                          type: number
-                          nullable: true
-                          example: 1
+                          type:
+                          - number
+                          - 'null'
                         created_at:
-                          type: string
-                          nullable: true
-                          example: example
+                          type:
+                          - string
+                          - 'null'
                         updated_at:
-                          type: string
-                          nullable: true
-                          example: example
+                          type:
+                          - string
+                          - 'null'
                       required:
                       - id
                       - row_id
@@ -177,16 +171,14 @@ paths:
                 content:
                   type: string
                   minLength: 1
-                  example: example
                 dueDate:
-                  type: string
-                  nullable: true
-                  example: example
+                  type:
+                  - string
+                  - 'null'
                 assigneeIds:
                   type: array
                   items:
                     type: number
-                    example: 1
               required:
               - content
       responses:
@@ -201,47 +193,41 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       row_id:
                         type: string
-                        example: example
                       content:
                         type: string
-                        example: example
                       due_date:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       assignee_ids:
                         type: array
                         items:
                           type: number
-                          example: 1
                       completed:
                         type: boolean
-                        example: false
                       completed_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       created_by:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                     required:
                     - id
                     - row_id
@@ -289,9 +275,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 100
+          exclusiveMinimum: 0
         required: true
         name: id
         in: path
@@ -307,47 +292,41 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       row_id:
                         type: string
-                        example: example
                       content:
                         type: string
-                        example: example
                       due_date:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       assignee_ids:
                         type: array
                         items:
                           type: number
-                          example: 1
                       completed:
                         type: boolean
-                        example: false
                       completed_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       created_by:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                     required:
                     - id
                     - row_id
@@ -394,9 +373,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 100
+          exclusiveMinimum: 0
         required: true
         name: id
         in: path
@@ -409,16 +387,14 @@ paths:
                 content:
                   type: string
                   minLength: 1
-                  example: example
                 dueDate:
-                  type: string
-                  nullable: true
-                  example: example
+                  type:
+                  - string
+                  - 'null'
                 assigneeIds:
                   type: array
                   items:
                     type: number
-                    example: 1
       responses:
         '200':
           description: Updated task
@@ -431,47 +407,41 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       row_id:
                         type: string
-                        example: example
                       content:
                         type: string
-                        example: example
                       due_date:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       assignee_ids:
                         type: array
                         items:
                           type: number
-                          example: 1
                       completed:
                         type: boolean
-                        example: false
                       completed_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       created_by:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                     required:
                     - id
                     - row_id
@@ -518,9 +488,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 100
+          exclusiveMinimum: 0
         required: true
         name: id
         in: path
@@ -536,7 +505,6 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
@@ -544,13 +512,10 @@ paths:
                         type: boolean
                         enum:
                         - true
-                        example: true
                       id:
                         anyOf:
                         - type: string
-                          example: example
                         - type: number
-                          example: 1
                     required:
                     - deleted
                 required:
@@ -593,9 +558,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 100
+          exclusiveMinimum: 0
         required: true
         name: id
         in: path
@@ -611,47 +575,41 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       row_id:
                         type: string
-                        example: example
                       content:
                         type: string
-                        example: example
                       due_date:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       assignee_ids:
                         type: array
                         items:
                           type: number
-                          example: 1
                       completed:
                         type: boolean
-                        example: false
                       completed_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       created_by:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                     required:
                     - id
                     - row_id
@@ -699,9 +657,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 100
+          exclusiveMinimum: 0
         required: true
         name: id
         in: path
@@ -717,47 +674,41 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       row_id:
                         type: string
-                        example: example
                       content:
                         type: string
-                        example: example
                       due_date:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       assignee_ids:
                         type: array
                         items:
                           type: number
-                          example: 1
                       completed:
                         type: boolean
-                        example: false
                       completed_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       created_by:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                     required:
                     - id
                     - row_id
@@ -788,19 +739,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
     ErrorBody:
       type: object
       properties:
@@ -830,6 +768,19 @@ components:
       required:
       - code
       - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
   securitySchemes:
     accountApiKey:
       type: http
@@ -849,6 +800,7 @@ x-tagGroups:
   - Flow Variables
   - Intents
   - Agents
+  - Agent Playbooks
 - name: Workflows
   tags:
   - Workflows
@@ -878,12 +830,24 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
+- name: Channels
+  tags:
+  - Channels
 - name: Integrations
   tags:
-  - Tools
+  - Custom Tools
   - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
 - name: Core
   tags:
   - Account
   - AI Models
   - Billing
+  - Users
+  - User Tasks
+  - Guidance

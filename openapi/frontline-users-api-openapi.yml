@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Public Account API
+  title: Public Users API
   version: 1.0.0
   description: 'Public API for accessing agents, flows, and analytics.
 
@@ -37,125 +37,79 @@ info:
 servers:
 - url: https://prod-api.getfrontline.ai
 tags:
-- name: Account
-  description: Inspect the identity attached to the current API key
+- name: Users
+  description: List account users to resolve IDs for relations and assignment
 paths:
-  /public/v1/me:
+  /public/v1/users:
     get:
-      summary: Get current identity
-      operationId: getMe
-      description: Returns the account and (for USER keys) user attached to the API key. Use this to validate a key and inspect the calling identity.
+      summary: List account users
+      operationId: listUsers
+      description: Lists the users in your account. Use to resolve user IDs for user-relation fields and task assignment. Requires a USER API key.
       security:
-      - bearerAuth: []
+      - userApiKey: []
       tags:
-      - Account
+      - Users
       responses:
         '200':
-          description: Identity attached to the API key
+          description: A list of users
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Me'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/PublicUserList'
 components:
   schemas:
-    ErrorBody:
+    PublicUser:
       type: object
       properties:
-        code:
+        id:
+          type: number
+          example: 12
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        full_name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        avatar:
+          type:
+          - string
+          - 'null'
+        role:
           type: string
           enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
+          - OWNER
+          - ADMIN
+          - USER
+        status:
           type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
+          enum:
+          - ACTIVE
+          - DELETED
+          - INVITED
+          - ONBOARDING
       required:
-      - code
-      - message
-    Me:
+      - id
+      - role
+      - status
+    PublicUserList:
       type: object
       properties:
-        ok:
-          type: boolean
-          enum:
-          - true
-          example: true
-        data:
-          type: object
-          properties:
-            account:
-              type:
-              - object
-              - 'null'
-              properties:
-                id:
-                  type: number
-                  example: 1234
-                name:
-                  type: string
-                  example: Acme Inc.
-                namespace:
-                  type: string
-                  example: acme
-              required:
-              - id
-              - name
-              - namespace
-            user:
-              type:
-              - object
-              - 'null'
-              properties:
-                id:
-                  type: number
-                  example: 56
-                email:
-                  type: string
-                  example: you@acme.com
-              required:
-              - id
-              - email
-              description: Null for GENERAL API keys; populated for USER keys.
-          required:
-          - account
-          - user
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicUser'
       required:
-      - ok
-      - data
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
+      - results
   securitySchemes:
     accountApiKey:
       type: http

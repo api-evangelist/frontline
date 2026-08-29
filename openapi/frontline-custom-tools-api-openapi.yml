@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Public Account Tools API
+  title: Public Custom Tools API
   version: 1.0.0
   description: 'Public API for accessing agents, flows, and analytics.
 
@@ -37,19 +37,19 @@ info:
 servers:
 - url: https://prod-api.getfrontline.ai
 tags:
-- name: Tools
-  description: Manage reusable HTTP integrations callable from flows and workflows
+- name: Custom Tools
+  description: Manage custom tools — reusable HTTP/API-call integrations the account creates and assigns to agents, flows, and workflows. Distinct from built-in system tools and connected-integration (MCP) tools.
 paths:
   /public/v1/tools:
     get:
-      summary: List tools
+      summary: List custom tools
       operationId: listTools
-      description: Returns API call tools associated with the account. WhatsApp template tools are not exposed in this public surface.
+      description: Returns the account's custom tools (API call tools created by the account). WhatsApp template tools are not exposed in this public surface.
       security:
       - accountApiKey: []
       - userApiKey: []
       tags:
-      - Tools
+      - Custom Tools
       parameters:
       - schema:
           type: string
@@ -77,7 +77,7 @@ paths:
                   results:
                     type: array
                     items:
-                      $ref: '#/components/schemas/Tool'
+                      $ref: '#/components/schemas/CustomTool'
                 required:
                 - results
                 description: Standard list response
@@ -88,13 +88,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     post:
-      summary: Create a tool
+      summary: Create a custom tool
       operationId: createTool
-      description: Creates an API call tool. Requires a USER API key. WhatsApp template tools are not supported in the public API.
+      description: Creates a custom tool (an API call tool). Requires a USER API key. WhatsApp template tools are not supported in the public API.
       security:
       - userApiKey: []
       tags:
-      - Tools
+      - Custom Tools
       requestBody:
         content:
           application/json:
@@ -106,7 +106,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Tool'
+                $ref: '#/components/schemas/CustomTool'
         '401':
           description: Unauthorized
           content:
@@ -115,18 +115,19 @@ paths:
                 $ref: '#/components/schemas/Error'
   /public/v1/tools/{toolId}:
     get:
-      summary: Get tool details
+      summary: Get custom tool details
       operationId: getTool
-      description: Returns an API call tool by ID.
+      description: Returns a custom tool (API call tool) by ID.
       security:
       - accountApiKey: []
       - userApiKey: []
       tags:
-      - Tools
+      - Custom Tools
       parameters:
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 123
         required: false
         name: toolId
@@ -137,7 +138,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Tool'
+                $ref: '#/components/schemas/CustomTool'
         '404':
           description: Not Found
           content:
@@ -145,17 +146,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     put:
-      summary: Update a tool
+      summary: Update a custom tool
       operationId: updateTool
-      description: Updates an API call tool. Requires a USER API key. The tool type cannot be changed.
+      description: Updates a custom tool (API call tool). Requires a USER API key. The tool type cannot be changed.
       security:
       - userApiKey: []
       tags:
-      - Tools
+      - Custom Tools
       parameters:
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 123
         required: false
         name: toolId
@@ -171,7 +173,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Tool'
+                $ref: '#/components/schemas/CustomTool'
         '404':
           description: Not Found
           content:
@@ -179,17 +181,18 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
     delete:
-      summary: Delete a tool
+      summary: Delete a custom tool
       operationId: deleteTool
-      description: Soft deletes an API call tool. Requires a USER API key.
+      description: Soft deletes a custom tool (API call tool). Requires a USER API key.
       security:
       - userApiKey: []
       tags:
-      - Tools
+      - Custom Tools
       parameters:
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 123
         required: false
         name: toolId
@@ -203,229 +206,50 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /public/v1/tools/{toolId}/test:
+    post:
+      summary: Test a tool
+      operationId: testTool
+      description: Executes a persisted API call tool with the provided argument values and returns the HTTP response. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Custom Tools
+      parameters:
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 123
+        required: false
+        name: toolId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicToolTestInput'
+      responses:
+        '200':
+          description: Tool test result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicToolTestOutput'
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicToolCreateInput:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - API_CALL
-          default: API_CALL
-          example: API_CALL
-        name:
-          type: string
-          minLength: 1
-          maxLength: 256
-          example: Fetch contact
-        description:
-          type: string
-          maxLength: 1000
-          example: Fetches a contact from the external CRM
-        method:
-          type: string
-          enum:
-          - GET
-          - POST
-          - PUT
-          - PATCH
-          - DELETE
-          example: GET
-        url:
-          type: string
-          format: uri
-          example: https://api.example.com/contacts/123
-        body:
-          type: string
-          description: Raw request body template (typically a JSON string). Interpolate argument values with single braces, e.g. {contactName} (not double braces).
-          example: '{"name":"{contactName}"}'
-        arguments:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                minLength: 1
-                example: contactId
-              description:
-                type: string
-                minLength: 1
-                example: The contact ID to fetch
-              dataType:
-                type: string
-                enum:
-                - STRING
-                - NUMBER
-                - DECIMAL
-                - BOOLEAN
-                description: Argument type. Use STRING, NUMBER (covers decimals), or BOOLEAN. DECIMAL is accepted but not shown in the app UI — prefer NUMBER.
-                example: STRING
-            required:
-            - name
-            - dataType
-        headers:
-          type: array
-          items:
-            type: object
-            properties:
-              key:
-                type: string
-                minLength: 1
-                example: Authorization
-              value:
-                type: string
-                example: Bearer {apiKey}
-            required:
-            - key
-            - value
-        queryParams:
-          type: array
-          items:
-            type: object
-            properties:
-              key:
-                type: string
-                minLength: 1
-                example: limit
-              value:
-                type: string
-                example: '10'
-            required:
-            - key
-            - value
-      required:
-      - name
-      - description
-      - method
-      - url
-    Tool:
-      type: object
-      properties:
-        id:
-          type: number
-          example: 123
-        name:
-          type: string
-          example: Fetch contact
-        description:
-          type: string
-          example: Fetches a contact from the external CRM
-        createdAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
-        updatedAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
-        status:
-          type: string
-          nullable: true
-          enum:
-          - PAUSED
-          - ACTIVE
-          - DELETED
-          example: ACTIVE
-        method:
-          type: string
-          nullable: true
-          enum:
-          - GET
-          - POST
-          - PUT
-          - PATCH
-          - DELETE
-          example: GET
-        url:
-          type: string
-          nullable: true
-          example: https://api.example.com/contacts/123
-        body:
-          type: string
-          nullable: true
-          example: example
-        arguments:
-          type: array
-          nullable: true
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                example: example
-              description:
-                type: string
-                nullable: true
-                example: example
-              dataType:
-                type: string
-                enum:
-                - STRING
-                - NUMBER
-                - DECIMAL
-                - BOOLEAN
-                example: STRING
-            required:
-            - name
-            - dataType
-        headers:
-          type: array
-          nullable: true
-          items:
-            type: object
-            properties:
-              key:
-                type: string
-                minLength: 1
-                example: Authorization
-              value:
-                type: string
-                example: Bearer {apiKey}
-            required:
-            - key
-            - value
-        queryParams:
-          type: array
-          nullable: true
-          items:
-            type: object
-            properties:
-              key:
-                type: string
-                minLength: 1
-                example: limit
-              value:
-                type: string
-                example: '10'
-            required:
-            - key
-            - value
-        type:
-          type: string
-          enum:
-          - API_CALL
-          - WHATSAPP_TEMPLATE_MESSAGE
-          example: API_CALL
-      required:
-      - id
-      - name
-      - description
-      - createdAt
-      - updatedAt
-      - type
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
     PublicToolUpdateInput:
       type: object
       properties:
@@ -483,6 +307,15 @@ components:
                 - BOOLEAN
                 description: Argument type. Use STRING, NUMBER (covers decimals), or BOOLEAN. DECIMAL is accepted but not shown in the app UI — prefer NUMBER.
                 example: STRING
+              required:
+                type: boolean
+                default: true
+                description: Whether the caller must provide this argument. Defaults to true.
+                example: true
+              defaultValue:
+                type: string
+                description: Fallback value (as a string, coerced to dataType) used when the argument is omitted.
+                example: normal
             required:
             - name
             - dataType
@@ -545,6 +378,284 @@ components:
       required:
       - code
       - message
+    PublicToolTestOutput:
+      type: object
+      properties:
+        status:
+          type: number
+          example: 200
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            content-type: application/json
+        data: {}
+        duration:
+          type: number
+          description: Request duration in milliseconds
+          example: 245
+        contentLength:
+          type:
+          - number
+          - 'null'
+          example: 128
+      required:
+      - status
+      - headers
+      - duration
+    PublicToolTestInput:
+      type: object
+      properties:
+        values:
+          type: object
+          additionalProperties: {}
+          default: {}
+          description: Argument values keyed by argument name. Every declared tool argument must be present.
+          example:
+            contactId: '42'
+    CustomTool:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 123
+        name:
+          type: string
+          example: Fetch contact
+        description:
+          type: string
+          example: Fetches a contact from the external CRM
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        status:
+          type:
+          - string
+          - 'null'
+          enum:
+          - PAUSED
+          - ACTIVE
+          - DELETED
+          example: ACTIVE
+        method:
+          type:
+          - string
+          - 'null'
+          enum:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          example: GET
+        url:
+          type:
+          - string
+          - 'null'
+          example: https://api.example.com/contacts/123
+        body:
+          type:
+          - string
+          - 'null'
+        arguments:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              description:
+                type:
+                - string
+                - 'null'
+              dataType:
+                type: string
+                enum:
+                - STRING
+                - NUMBER
+                - DECIMAL
+                - BOOLEAN
+              required:
+                type:
+                - boolean
+                - 'null'
+              defaultValue:
+                type:
+                - string
+                - 'null'
+            required:
+            - name
+            - dataType
+        headers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: Authorization
+              value:
+                type: string
+                example: Bearer {apiKey}
+            required:
+            - key
+            - value
+        queryParams:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: limit
+              value:
+                type: string
+                example: '10'
+            required:
+            - key
+            - value
+        type:
+          type: string
+          enum:
+          - API_CALL
+          - WHATSAPP_TEMPLATE_MESSAGE
+          example: API_CALL
+      required:
+      - id
+      - name
+      - description
+      - createdAt
+      - updatedAt
+      - type
+    PublicToolCreateInput:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - API_CALL
+          default: API_CALL
+          example: API_CALL
+        name:
+          type: string
+          minLength: 1
+          maxLength: 256
+          example: Fetch contact
+        description:
+          type: string
+          maxLength: 1000
+          example: Fetches a contact from the external CRM
+        method:
+          type: string
+          enum:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          example: GET
+        url:
+          type: string
+          format: uri
+          example: https://api.example.com/contacts/123
+        body:
+          type: string
+          description: Raw request body template (typically a JSON string). Interpolate argument values with single braces, e.g. {contactName} (not double braces).
+          example: '{"name":"{contactName}"}'
+        arguments:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                minLength: 1
+                example: contactId
+              description:
+                type: string
+                minLength: 1
+                example: The contact ID to fetch
+              dataType:
+                type: string
+                enum:
+                - STRING
+                - NUMBER
+                - DECIMAL
+                - BOOLEAN
+                description: Argument type. Use STRING, NUMBER (covers decimals), or BOOLEAN. DECIMAL is accepted but not shown in the app UI — prefer NUMBER.
+                example: STRING
+              required:
+                type: boolean
+                default: true
+                description: Whether the caller must provide this argument. Defaults to true.
+                example: true
+              defaultValue:
+                type: string
+                description: Fallback value (as a string, coerced to dataType) used when the argument is omitted.
+                example: normal
+            required:
+            - name
+            - dataType
+        headers:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: Authorization
+              value:
+                type: string
+                example: Bearer {apiKey}
+            required:
+            - key
+            - value
+        queryParams:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: limit
+              value:
+                type: string
+                example: '10'
+            required:
+            - key
+            - value
+      required:
+      - name
+      - description
+      - method
+      - url
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
   securitySchemes:
     accountApiKey:
       type: http
@@ -564,6 +675,7 @@ x-tagGroups:
   - Flow Variables
   - Intents
   - Agents
+  - Agent Playbooks
 - name: Workflows
   tags:
   - Workflows
@@ -593,12 +705,24 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
+- name: Channels
+  tags:
+  - Channels
 - name: Integrations
   tags:
-  - Tools
+  - Custom Tools
   - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
 - name: Core
   tags:
   - Account
   - AI Models
   - Billing
+  - Users
+  - User Tasks
+  - Guidance

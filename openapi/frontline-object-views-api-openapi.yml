@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Public Account Object views API
+  title: Public Object views API
   version: 1.0.0
   description: 'Public API for accessing agents, flows, and analytics.
 
@@ -44,7 +44,7 @@ paths:
     get:
       summary: List views
       operationId: listObjectViews
-      description: Returns the saved views configured on an object.
+      description: Returns the saved views configured on an object. Optionally filter by record_type_id and shared (shared=true returns only shared/system views).
       security:
       - bearerAuth: []
       tags:
@@ -57,6 +57,35 @@ paths:
         required: true
         name: name
         in: path
+      - schema:
+          type: integer
+          exclusiveMinimum: 0
+        required: false
+        name: record_type_id
+        in: query
+      - schema:
+          type: integer
+          exclusiveMinimum: 0
+        required: false
+        name: recordTypeId
+        in: query
+      - schema:
+          anyOf:
+          - type: boolean
+            enum:
+            - true
+          - type: boolean
+            enum:
+            - false
+          - type: string
+            enum:
+            - 'true'
+          - type: string
+            enum:
+            - 'false'
+        required: false
+        name: shared
+        in: query
       responses:
         '200':
           description: Views list
@@ -69,7 +98,6 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: array
                     items:
@@ -77,64 +105,51 @@ paths:
                       properties:
                         id:
                           type: number
-                          example: 1
                         name:
                           type: string
-                          example: example
                         type:
                           type: string
                           enum:
                           - TABLE
                           - KANBAN
                           - RECORD
-                          example: TABLE
                         is_default:
                           type: boolean
-                          example: false
                         is_private:
                           type: boolean
-                          example: false
                         record_type_id:
-                          type: number
-                          nullable: true
-                          example: 1
+                          type:
+                          - number
+                          - 'null'
                         created_at:
-                          type: string
-                          nullable: true
-                          example: example
+                          type:
+                          - string
+                          - 'null'
                         updated_at:
-                          type: string
-                          nullable: true
-                          example: example
+                          type:
+                          - string
+                          - 'null'
                         column_order:
                           type: array
                           items:
                             type: string
-                            example: example
                         hidden_columns:
                           type: array
                           items:
                             type: string
-                            example: example
                         sticky_columns:
                           type: array
                           items:
                             type: string
-                            example: example
                         grouping_field_id:
                           type: number
-                          example: 1
-                        column_ordering:
-                          nullable: true
-                          type: object
+                        column_ordering: {}
                         title_field_id:
                           type: number
-                          example: 1
                         display_field_ids:
                           type: array
                           items:
                             type: number
-                            example: 1
                       required:
                       - id
                       - name
@@ -190,80 +205,64 @@ paths:
                 name:
                   type: string
                   minLength: 1
-                  example: example
                 type:
                   type: string
                   enum:
                   - TABLE
                   - KANBAN
                   - RECORD
-                  example: TABLE
                 metadata:
                   type: object
                   properties:
                     grouping_field_id:
                       type: number
-                      example: 1
                     groupingColumnId:
                       type: number
-                      example: 1
                     column_order:
                       type: array
                       items:
                         type: string
-                        example: example
                     columnOrder:
                       type: array
                       items:
                         type: string
-                        example: example
                     hidden_columns:
                       type: array
                       items:
                         type: string
-                        example: example
                     hiddenColumns:
                       type: array
                       items:
                         type: string
-                        example: example
                     dialog_field_order:
                       type: array
                       items:
                         type: string
-                        example: example
                     dialogFieldOrder:
                       type: array
                       items:
                         type: string
-                        example: example
                     sticky_columns:
                       type: array
                       items:
                         type: string
-                        example: example
                     stickyColumns:
                       type: array
                       items:
                         type: string
-                        example: example
                     kanban_lane_size:
                       type: string
                       enum:
                       - THIN
                       - MEDIUM
                       - WIDE
-                      example: THIN
                     kanbanLaneSize:
                       type: string
                       enum:
                       - THIN
                       - MEDIUM
                       - WIDE
-                      example: THIN
-                  additionalProperties:
-                    nullable: true
-                    type: object
+                  additionalProperties: {}
               required:
               - name
               - type
@@ -279,70 +278,56 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       name:
                         type: string
-                        example: example
                       type:
                         type: string
                         enum:
                         - TABLE
                         - KANBAN
                         - RECORD
-                        example: TABLE
                       is_default:
                         type: boolean
-                        example: false
                       is_private:
                         type: boolean
-                        example: false
                       record_type_id:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       column_order:
                         type: array
                         items:
                           type: string
-                          example: example
                       hidden_columns:
                         type: array
                         items:
                           type: string
-                          example: example
                       sticky_columns:
                         type: array
                         items:
                           type: string
-                          example: example
                       grouping_field_id:
                         type: number
-                        example: 1
-                      column_ordering:
-                        nullable: true
-                        type: object
+                      column_ordering: {}
                       title_field_id:
                         type: number
-                        example: 1
                       display_field_ids:
                         type: array
                         items:
                           type: number
-                          example: 1
                     required:
                     - id
                     - name
@@ -385,9 +370,8 @@ paths:
       parameters:
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 3
+          exclusiveMinimum: 0
         required: true
         name: recordTypeId
         in: path
@@ -400,80 +384,64 @@ paths:
                 name:
                   type: string
                   minLength: 1
-                  example: example
                 type:
                   type: string
                   enum:
                   - TABLE
                   - KANBAN
                   - RECORD
-                  example: TABLE
                 metadata:
                   type: object
                   properties:
                     grouping_field_id:
                       type: number
-                      example: 1
                     groupingColumnId:
                       type: number
-                      example: 1
                     column_order:
                       type: array
                       items:
                         type: string
-                        example: example
                     columnOrder:
                       type: array
                       items:
                         type: string
-                        example: example
                     hidden_columns:
                       type: array
                       items:
                         type: string
-                        example: example
                     hiddenColumns:
                       type: array
                       items:
                         type: string
-                        example: example
                     dialog_field_order:
                       type: array
                       items:
                         type: string
-                        example: example
                     dialogFieldOrder:
                       type: array
                       items:
                         type: string
-                        example: example
                     sticky_columns:
                       type: array
                       items:
                         type: string
-                        example: example
                     stickyColumns:
                       type: array
                       items:
                         type: string
-                        example: example
                     kanban_lane_size:
                       type: string
                       enum:
                       - THIN
                       - MEDIUM
                       - WIDE
-                      example: THIN
                     kanbanLaneSize:
                       type: string
                       enum:
                       - THIN
                       - MEDIUM
                       - WIDE
-                      example: THIN
-                  additionalProperties:
-                    nullable: true
-                    type: object
+                  additionalProperties: {}
               required:
               - name
               - type
@@ -489,70 +457,56 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       name:
                         type: string
-                        example: example
                       type:
                         type: string
                         enum:
                         - TABLE
                         - KANBAN
                         - RECORD
-                        example: TABLE
                       is_default:
                         type: boolean
-                        example: false
                       is_private:
                         type: boolean
-                        example: false
                       record_type_id:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       column_order:
                         type: array
                         items:
                           type: string
-                          example: example
                       hidden_columns:
                         type: array
                         items:
                           type: string
-                          example: example
                       sticky_columns:
                         type: array
                         items:
                           type: string
-                          example: example
                       grouping_field_id:
                         type: number
-                        example: 1
-                      column_ordering:
-                        nullable: true
-                        type: object
+                      column_ordering: {}
                       title_field_id:
                         type: number
-                        example: 1
                       display_field_ids:
                         type: array
                         items:
                           type: number
-                          example: 1
                     required:
                     - id
                     - name
@@ -602,9 +556,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 11
+          exclusiveMinimum: 0
         required: true
         name: viewId
         in: path
@@ -617,7 +570,6 @@ paths:
                 name:
                   type: string
                   minLength: 1
-                  example: example
                 metadata:
                   type: object
                   properties:
@@ -625,37 +577,30 @@ paths:
                       type: array
                       items:
                         type: string
-                        example: example
                     hidden_columns:
                       type: array
                       items:
                         type: string
-                        example: example
                     dialog_field_order:
                       type: array
                       items:
                         type: string
-                        example: example
                     sticky_columns:
                       type: array
                       items:
                         type: string
-                        example: example
                     kanban_lane_size:
                       type: string
                       enum:
                       - THIN
                       - MEDIUM
                       - WIDE
-                      example: THIN
                     column_ordering:
                       type: array
                       items:
                         anyOf:
                         - type: string
-                          example: example
                         - type: number
-                          example: 1
       responses:
         '200':
           description: Updated view
@@ -668,70 +613,56 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       name:
                         type: string
-                        example: example
                       type:
                         type: string
                         enum:
                         - TABLE
                         - KANBAN
                         - RECORD
-                        example: TABLE
                       is_default:
                         type: boolean
-                        example: false
                       is_private:
                         type: boolean
-                        example: false
                       record_type_id:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       column_order:
                         type: array
                         items:
                           type: string
-                          example: example
                       hidden_columns:
                         type: array
                         items:
                           type: string
-                          example: example
                       sticky_columns:
                         type: array
                         items:
                           type: string
-                          example: example
                       grouping_field_id:
                         type: number
-                        example: 1
-                      column_ordering:
-                        nullable: true
-                        type: object
+                      column_ordering: {}
                       title_field_id:
                         type: number
-                        example: 1
                       display_field_ids:
                         type: array
                         items:
                           type: number
-                          example: 1
                     required:
                     - id
                     - name
@@ -780,9 +711,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 11
+          exclusiveMinimum: 0
         required: true
         name: viewId
         in: path
@@ -798,7 +728,6 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
@@ -806,13 +735,10 @@ paths:
                         type: boolean
                         enum:
                         - true
-                        example: true
                       id:
                         anyOf:
                         - type: string
-                          example: example
                         - type: number
-                          example: 1
                     required:
                     - deleted
                 required:
@@ -848,17 +774,15 @@ paths:
       parameters:
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 3
+          exclusiveMinimum: 0
         required: true
         name: recordTypeId
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 11
+          exclusiveMinimum: 0
         required: true
         name: viewId
         in: path
@@ -871,7 +795,6 @@ paths:
                 name:
                   type: string
                   minLength: 1
-                  example: example
                 metadata:
                   type: object
                   properties:
@@ -879,37 +802,30 @@ paths:
                       type: array
                       items:
                         type: string
-                        example: example
                     hidden_columns:
                       type: array
                       items:
                         type: string
-                        example: example
                     dialog_field_order:
                       type: array
                       items:
                         type: string
-                        example: example
                     sticky_columns:
                       type: array
                       items:
                         type: string
-                        example: example
                     kanban_lane_size:
                       type: string
                       enum:
                       - THIN
                       - MEDIUM
                       - WIDE
-                      example: THIN
                     column_ordering:
                       type: array
                       items:
                         anyOf:
                         - type: string
-                          example: example
                         - type: number
-                          example: 1
       responses:
         '200':
           description: Updated view
@@ -922,70 +838,56 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       name:
                         type: string
-                        example: example
                       type:
                         type: string
                         enum:
                         - TABLE
                         - KANBAN
                         - RECORD
-                        example: TABLE
                       is_default:
                         type: boolean
-                        example: false
                       is_private:
                         type: boolean
-                        example: false
                       record_type_id:
-                        type: number
-                        nullable: true
-                        example: 1
+                        type:
+                        - number
+                        - 'null'
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       column_order:
                         type: array
                         items:
                           type: string
-                          example: example
                       hidden_columns:
                         type: array
                         items:
                           type: string
-                          example: example
                       sticky_columns:
                         type: array
                         items:
                           type: string
-                          example: example
                       grouping_field_id:
                         type: number
-                        example: 1
-                      column_ordering:
-                        nullable: true
-                        type: object
+                      column_ordering: {}
                       title_field_id:
                         type: number
-                        example: 1
                       display_field_ids:
                         type: array
                         items:
                           type: number
-                          example: 1
                     required:
                     - id
                     - name
@@ -1027,17 +929,15 @@ paths:
       parameters:
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 3
+          exclusiveMinimum: 0
         required: true
         name: recordTypeId
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 11
+          exclusiveMinimum: 0
         required: true
         name: viewId
         in: path
@@ -1053,7 +953,6 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
@@ -1061,13 +960,10 @@ paths:
                         type: boolean
                         enum:
                         - true
-                        example: true
                       id:
                         anyOf:
                         - type: string
-                          example: example
                         - type: number
-                          example: 1
                     required:
                     - deleted
                 required:
@@ -1093,19 +989,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
     ErrorBody:
       type: object
       properties:
@@ -1135,6 +1018,19 @@ components:
       required:
       - code
       - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
   securitySchemes:
     accountApiKey:
       type: http
@@ -1154,6 +1050,7 @@ x-tagGroups:
   - Flow Variables
   - Intents
   - Agents
+  - Agent Playbooks
 - name: Workflows
   tags:
   - Workflows
@@ -1183,12 +1080,24 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
+- name: Channels
+  tags:
+  - Channels
 - name: Integrations
   tags:
-  - Tools
+  - Custom Tools
   - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
 - name: Core
   tags:
   - Account
   - AI Models
   - Billing
+  - Users
+  - User Tasks
+  - Guidance

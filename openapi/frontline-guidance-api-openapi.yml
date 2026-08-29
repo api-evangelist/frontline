@@ -1,0 +1,391 @@
+openapi: 3.2.0
+info:
+  title: Public Guidance API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Guidance
+  description: 'Builder reference data sourced live from backend constants: valid icons, colors, and formats for objects/tables/fields, plus the workflow/flow node-type catalog. Use these instead of hard-coding allowlists.'
+paths:
+  /public/v1/guidance/visual-options:
+    get:
+      summary: List valid icons and colors
+      operationId: getVisualOptions
+      description: 'Returns the allowlists used when creating objects, tables, fields, and select options: valid icon keys, icon colors, option colors, and tag/relation modes. Sourced live from backend constants, so values never drift from validation. Accepts any valid API key.'
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Guidance
+      responses:
+        '200':
+          description: Visual option allowlists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicVisualOptions'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/guidance/fields:
+    get:
+      summary: Field type & metadata reference
+      operationId: getFieldGuidance
+      description: Returns a markdown reference for every field/column type (string, number, boolean, date, dateOnly, select, relation), its metadata shape (formats, currency, decimals, modes), and best practices. Generated from the same constants the create/update schemas validate against. Accepts any valid API key.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Guidance
+      responses:
+        '200':
+          description: Field type guidance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicFieldGuidance'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/guidance/nodes:
+    get:
+      summary: List workflow/flow node types
+      operationId: listNodeTypes
+      description: Returns every node type with flags for where it is valid (agent flow vs automation workflow) and whether it may have multiple outgoing edges. Use this to pick valid node types before building a flow or workflow graph. Accepts any valid API key.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Guidance
+      responses:
+        '200':
+          description: Node type catalog
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicNodeTypeList'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/guidance/nodes/{nodeType}:
+    get:
+      summary: Get configuration guidance for a node type
+      operationId: getNodeGuidance
+      description: Returns markdown guidance for configuring a single node type (e.g. TOOLS_AI, API, CONDITIONAL_ROUTING). Content is published per node type and editable without a deploy; returns empty guidance when none is published. Accepts any valid API key.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Guidance
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - TRIGGER_INTENT
+          - TRIGGER
+          - SCHEDULED_TRIGGER
+          - WEBHOOK
+          - THINK
+          - RESPONSE_AI
+          - SAY_AI
+          - API
+          - START
+          - CONDITIONAL_ROUTING
+          - TOOLS_AI
+          - AI_CAPTURE
+          - DATA_TRANSFORMER
+          - DYNAMIC_TABLES
+          - ITERATION
+          - BREAK
+          - AUTOMATION_STATUS
+          - SEND_MESSAGE
+          - SEND_WHATSAPP_MESSAGE
+          - TRANSCRIPTION
+          - FILE_ANALYSIS
+          - CREATE_RECORD_ACTIVITY
+          example: TOOLS_AI
+        required: true
+        name: nodeType
+        in: path
+      responses:
+        '200':
+          description: Node configuration guidance
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicNodeGuidance'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicNodeGuidance:
+      type: object
+      properties:
+        nodeType:
+          type: string
+          example: TOOLS_AI
+        guidance:
+          type: string
+          description: Markdown guidance for configuring this node type. Empty when no guidance is published for the type.
+      required:
+      - nodeType
+      - guidance
+    PublicNodeTypeList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                example: TOOLS_AI
+              validInFlow:
+                type: boolean
+                description: Usable in an agent flow (WorkflowType.FLOW).
+                example: true
+              validInAutomation:
+                type: boolean
+                description: Usable in an automation workflow (WorkflowType.AUTOMATION).
+                example: true
+              allowsMultipleOutgoingHandles:
+                type: boolean
+                description: May fan out to more than one outgoing edge.
+                example: true
+            required:
+            - type
+            - validInFlow
+            - validInAutomation
+            - allowsMultipleOutgoingHandles
+      required:
+      - results
+    PublicVisualOptions:
+      type: object
+      properties:
+        iconKeys:
+          type: array
+          items:
+            type: string
+          description: Valid icon keys for the `icon`/`emoji` field on objects and record types (the IconPicker set).
+          example:
+          - home
+          - users
+          - briefcase
+          - rocket
+        iconColors:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: blue
+              value:
+                type: string
+                example: '#60a5fa'
+            required:
+            - name
+            - value
+          description: Valid colors for an object/record-type/field `iconColor`.
+        optionColors:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                example: blue
+              value:
+                type: string
+                example: '#60a5fa'
+            required:
+            - name
+            - value
+          description: 'Valid preset colors for tag/select option `color` (note: a different palette from iconColor).'
+        tagModes:
+          type: array
+          items:
+            type: string
+          example:
+          - singleSelect
+          - multiSelect
+        relationModes:
+          type: array
+          items:
+            type: string
+          example:
+          - single
+          - multi
+      required:
+      - iconKeys
+      - iconColors
+      - optionColors
+      - tagModes
+      - relationModes
+    PublicFieldGuidance:
+      type: object
+      properties:
+        guidance:
+          type: string
+          description: Markdown reference covering every field/column type, its metadata shape, and best practices — generated from the same constants the create/update schemas validate against.
+      required:
+      - guidance
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

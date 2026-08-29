@@ -1,0 +1,1619 @@
+openapi: 3.2.0
+info:
+  title: Public Knowledge Bases API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Knowledge Bases
+  description: Manage knowledge bases, their sources (URLs, website crawls), search, and agent assignment
+paths:
+  /public/v1/knowledge-bases:
+    get:
+      summary: List knowledge bases
+      operationId: listKnowledgeBases
+      description: Lists knowledge bases for the account. Filter by shared/private and search text. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - 'true'
+          - 'false'
+        required: false
+        name: isShared
+        in: query
+      - schema:
+          type: string
+        required: false
+        name: searchText
+        in: query
+      responses:
+        '200':
+          description: Paginated knowledge bases
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKnowledgeBaseList'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create knowledge base
+      operationId: createKnowledgeBase
+      description: Creates a knowledge base. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicKnowledgeBaseCreateInput'
+      responses:
+        '201':
+          description: Created knowledge base
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKnowledgeBase'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/knowledge-bases/{knowledgeBaseId}:
+    get:
+      summary: Get knowledge base details
+      operationId: getKnowledgeBase
+      description: Returns a knowledge base by ID. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: integer
+          example: 12
+          exclusiveMinimum: 0
+        required: true
+        name: knowledgeBaseId
+        in: path
+      responses:
+        '200':
+          description: Knowledge base details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKnowledgeBase'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update knowledge base
+      operationId: updateKnowledgeBase
+      description: Updates a knowledge base's name or description. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: integer
+          example: 12
+          exclusiveMinimum: 0
+        required: true
+        name: knowledgeBaseId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicKnowledgeBaseUpdateInput'
+      responses:
+        '200':
+          description: Updated knowledge base
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKnowledgeBase'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete knowledge base
+      operationId: deleteKnowledgeBase
+      description: Deletes a knowledge base and all of its sources. Default knowledge bases cannot be deleted. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: integer
+          example: 12
+          exclusiveMinimum: 0
+        required: true
+        name: knowledgeBaseId
+        in: path
+      responses:
+        '204':
+          description: Knowledge base deleted
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/knowledge-bases/{knowledgeBaseId}/search:
+    post:
+      summary: Search a knowledge base
+      operationId: searchKnowledgeBase
+      description: Semantic search over a knowledge base's indexed content. Returns matching chunks with similarity scores. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: integer
+          example: 12
+          exclusiveMinimum: 0
+        required: true
+        name: knowledgeBaseId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicKnowledgeSearchInput'
+      responses:
+        '200':
+          description: Search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKnowledgeSearchResult'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/knowledge-bases/{knowledgeBaseId}/sources:
+    get:
+      summary: List knowledge base sources
+      operationId: listKnowledgeSources
+      description: Lists all sources (files, URLs, web pages) in a knowledge base. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: integer
+          example: 12
+          exclusiveMinimum: 0
+        required: true
+        name: knowledgeBaseId
+        in: path
+      - schema:
+          type: string
+        required: false
+        name: filterText
+        in: query
+      - schema:
+          type: string
+          enum:
+          - NONE
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+          - DELETING
+          - DELETED
+          - SYNCING
+          - REJECTED
+        required: false
+        name: status
+        in: query
+      - schema:
+          type: string
+          enum:
+          - UNKNOWN
+          - FILE
+          - URL
+          - ARTICLE
+          - QNA
+          - WEBPAGE
+          - FOLDER
+        required: false
+        name: sourceType
+        in: query
+      - schema:
+          type: string
+        required: false
+        name: fileTypes
+        in: query
+      responses:
+        '200':
+          description: Paginated sources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKnowledgeSourceList'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Remove knowledge sources
+      operationId: removeKnowledgeSources
+      description: Removes the given sources from a knowledge base. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: integer
+          example: 12
+          exclusiveMinimum: 0
+        required: true
+        name: knowledgeBaseId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicKnowledgeSourceRemoveInput'
+      responses:
+        '204':
+          description: Sources removed
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/knowledge-bases/{knowledgeBaseId}/sources/{sourceId}:
+    get:
+      summary: Get knowledge source details
+      operationId: getKnowledgeSource
+      description: Returns a single knowledge source by ID. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: integer
+          example: 12
+          exclusiveMinimum: 0
+        required: true
+        name: knowledgeBaseId
+        in: path
+      - schema:
+          type: integer
+          example: 340
+          exclusiveMinimum: 0
+        required: true
+        name: sourceId
+        in: path
+      responses:
+        '200':
+          description: Source details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKnowledgeSource'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/knowledge-bases/{knowledgeBaseId}/sources/urls:
+    post:
+      summary: Add URL sources
+      operationId: addKnowledgeUrlSource
+      description: Adds one or more URL sources to a knowledge base. The URLs are fetched and indexed asynchronously. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: integer
+          example: 12
+          exclusiveMinimum: 0
+        required: true
+        name: knowledgeBaseId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicKnowledgeUrlSourceInput'
+      responses:
+        '201':
+          description: Created sources
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PublicKnowledgeSource'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/knowledge-bases/{knowledgeBaseId}/website-crawls:
+    post:
+      summary: Add a website crawl source
+      operationId: addKnowledgeWebsiteCrawl
+      description: Starts a website crawl that discovers and indexes pages under the given URL. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: integer
+          example: 12
+          exclusiveMinimum: 0
+        required: true
+        name: knowledgeBaseId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicKnowledgeWebsiteCrawlInput'
+      responses:
+        '201':
+          description: Created website crawl source
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKnowledgeWebsiteCrawl'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/knowledge-bases/{knowledgeBaseId}/sources/resync:
+    post:
+      summary: Resync knowledge sources
+      operationId: resyncKnowledgeSources
+      description: Re-fetches and re-indexes the given URL/web-page sources. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: integer
+          example: 12
+          exclusiveMinimum: 0
+        required: true
+        name: knowledgeBaseId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicKnowledgeSourceResyncInput'
+      responses:
+        '200':
+          description: Resync result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKnowledgeSourceResyncResult'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/knowledge-bases/{knowledgeBaseId}/website-crawls/{websiteSourceId}/resync:
+    post:
+      summary: Resync a website crawl
+      operationId: resyncKnowledgeWebsiteCrawl
+      description: Re-crawls a website source, optionally overriding crawl configuration. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: integer
+          example: 12
+          exclusiveMinimum: 0
+        required: true
+        name: knowledgeBaseId
+        in: path
+      - schema:
+          type: integer
+          example: 88
+          exclusiveMinimum: 0
+        required: true
+        name: websiteSourceId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicKnowledgeWebsiteResyncInput'
+      responses:
+        '204':
+          description: Resync queued
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/knowledge-bases/{knowledgeBaseId}/website-crawls/{websiteSourceId}/sync-history:
+    get:
+      summary: Get website crawl sync history
+      operationId: getKnowledgeWebsiteSyncHistory
+      description: Lists sync summaries (crawl runs) for a website source. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: integer
+          example: 12
+          exclusiveMinimum: 0
+        required: true
+        name: knowledgeBaseId
+        in: path
+      - schema:
+          type: integer
+          example: 88
+          exclusiveMinimum: 0
+        required: true
+        name: websiteSourceId
+        in: path
+      - schema:
+          type: string
+          enum:
+          - INITIAL_SYNC
+          - MANUAL_RESYNC
+          - AUTO_RESYNC
+        required: false
+        name: syncType
+        in: query
+      - schema:
+          type: string
+          enum:
+          - PROCESSING
+          - SYNCING
+          - COMPLETED
+          - FAILED
+          - DELETING
+          - DELETED
+        required: false
+        name: status
+        in: query
+      - schema:
+          type: number
+          default: 20
+        required: false
+        name: pageSize
+        in: query
+      - schema:
+          type: number
+          default: 1
+        required: false
+        name: pageNum
+        in: query
+      - schema:
+          anyOf:
+          - type:
+            - number
+            - 'null'
+          - type: string
+          - {}
+        required: false
+        name: cursor
+        in: query
+      responses:
+        '200':
+          description: Paginated sync summaries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKnowledgeSyncSummaryList'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/agents/{agentId}/knowledge-bases:
+    get:
+      summary: List knowledge bases assigned to an agent
+      operationId: listAssignedKnowledgeBases
+      description: Lists knowledge bases assigned to a specific agent. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: string
+          example: asst_123
+        required: true
+        name: agentId
+        in: path
+      responses:
+        '200':
+          description: Assigned knowledge bases
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKnowledgeBaseAssignmentList'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Assign knowledge bases to an agent
+      operationId: assignKnowledgeBases
+      description: Sets the full list of shared knowledge bases assigned to an agent (replaces existing assignments). Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Knowledge Bases
+      parameters:
+      - schema:
+          type: string
+          example: asst_123
+        required: true
+        name: agentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicKnowledgeBaseAssignInput'
+      responses:
+        '200':
+          description: Updated assignments
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicKnowledgeBaseAssignmentList'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    PublicKnowledgeSource:
+      type: object
+      properties:
+        id:
+          type: number
+        externalId:
+          type:
+          - string
+          - 'null'
+        knowledgeBaseId:
+          type: number
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        url:
+          type:
+          - string
+          - 'null'
+        sourceType:
+          type: string
+          enum:
+          - UNKNOWN
+          - FILE
+          - URL
+          - ARTICLE
+          - QNA
+          - WEBPAGE
+          - FOLDER
+        websiteSourceId:
+          type:
+          - number
+          - 'null'
+        autoSyncFrequency:
+          type: string
+          enum:
+          - NONE
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+        status:
+          type: string
+          enum:
+          - NONE
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+          - DELETING
+          - DELETED
+          - SYNCING
+          - REJECTED
+        charactersCount:
+          type: number
+        ingestJobRunId:
+          type:
+          - string
+          - 'null'
+        fileExtensionType:
+          type:
+          - string
+          - 'null'
+          enum:
+          - UNKNOWN
+          - PDF
+          - DOC
+          - DOCX
+          - TXT
+          - CSV
+          - JSON
+          - MD
+          - HTML
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        lastSyncedAt:
+          type:
+          - string
+          - 'null'
+        folderId:
+          type:
+          - number
+          - 'null'
+        parsedTextFileUrl:
+          type:
+          - string
+          - 'null'
+        parsedText:
+          type:
+          - string
+          - 'null'
+        websiteSource:
+          type:
+          - object
+          - 'null'
+          properties:
+            id:
+              type: number
+            name:
+              type: string
+            sourceUrl:
+              type: string
+            websiteType:
+              type: string
+              enum:
+              - WEBSITE_CRAWL
+              - SITEMAP
+            status:
+              type: string
+              enum:
+              - PROCESSING
+              - SYNCING
+              - COMPLETED
+              - FAILED
+              - DELETING
+              - DELETED
+            autoSyncFrequency:
+              type: string
+              enum:
+              - NONE
+              - DAILY
+              - WEEKLY
+              - MONTHLY
+            lastSyncedAt:
+              type:
+              - string
+              - 'null'
+            webPages:
+              type:
+              - number
+              - 'null'
+            _count:
+              type:
+              - object
+              - 'null'
+              properties:
+                webPages:
+                  type:
+                  - number
+                  - 'null'
+          required:
+          - id
+          - name
+          - sourceUrl
+          - websiteType
+          - status
+          - autoSyncFrequency
+          - lastSyncedAt
+        addedByUser:
+          type:
+          - object
+          - 'null'
+          properties:
+            id:
+              type: number
+            firstName:
+              type: string
+            lastName:
+              type: string
+            avatar:
+              type:
+              - string
+              - 'null'
+          required:
+          - id
+          - firstName
+          - lastName
+        scrapeOptions:
+          type:
+          - object
+          - 'null'
+          properties:
+            includeSelectors:
+              type: array
+              items:
+                type: string
+            excludeSelectors:
+              type: array
+              items:
+                type: string
+      required:
+      - id
+      - externalId
+      - knowledgeBaseId
+      - name
+      - description
+      - url
+      - sourceType
+      - websiteSourceId
+      - autoSyncFrequency
+      - status
+      - charactersCount
+      - ingestJobRunId
+      - fileExtensionType
+      - createdAt
+      - updatedAt
+      - lastSyncedAt
+      - folderId
+      - parsedTextFileUrl
+      - addedByUser
+    PublicKnowledgeBaseAssignmentList:
+      type: array
+      items:
+        $ref: '#/components/schemas/PublicKnowledgeBaseAssignment'
+    PublicKnowledgeSourceResyncResult:
+      type: object
+      properties:
+        itemsQueued:
+          type: number
+        itemsSkipped:
+          type: number
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              sourceId:
+                type: number
+              status:
+                type: string
+              error:
+                type:
+                - string
+                - 'null'
+            required:
+            - sourceId
+            - status
+            - error
+      required:
+      - itemsQueued
+      - itemsSkipped
+      - details
+    PublicKnowledgeSyncSummary:
+      type: object
+      properties:
+        id:
+          type: number
+        syncType:
+          type: string
+          enum:
+          - INITIAL_SYNC
+          - MANUAL_RESYNC
+          - AUTO_RESYNC
+        status:
+          type: string
+          enum:
+          - PROCESSING
+          - SYNCING
+          - COMPLETED
+          - FAILED
+          - DELETING
+          - DELETED
+        startedAt:
+          type: string
+        finishedAt:
+          type:
+          - string
+          - 'null'
+        duration:
+          type:
+          - number
+          - 'null'
+        syncedPages:
+          type: number
+        failedPages:
+          type: number
+        rejectedPages:
+          type: number
+        removedPages:
+          type: number
+        totalPages:
+          type: number
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        ingestJobRunId:
+          type:
+          - string
+          - 'null'
+        websiteSourceId:
+          type: number
+        knowledgeBaseId:
+          type: number
+        triggeredByUserId:
+          type:
+          - number
+          - 'null'
+        websiteSource:
+          type: object
+          properties:
+            id:
+              type: number
+            name:
+              type: string
+            sourceUrl:
+              type: string
+            websiteType:
+              type: string
+              enum:
+              - WEBSITE_CRAWL
+              - SITEMAP
+          required:
+          - id
+          - name
+          - sourceUrl
+          - websiteType
+        triggeredByUser:
+          type:
+          - object
+          - 'null'
+          properties:
+            id:
+              type: number
+            firstName:
+              type: string
+            lastName:
+              type: string
+            avatar:
+              type:
+              - string
+              - 'null'
+          required:
+          - id
+          - firstName
+          - lastName
+          - avatar
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+      - id
+      - syncType
+      - status
+      - startedAt
+      - finishedAt
+      - duration
+      - syncedPages
+      - failedPages
+      - rejectedPages
+      - removedPages
+      - totalPages
+      - errorMessage
+      - ingestJobRunId
+      - websiteSourceId
+      - knowledgeBaseId
+      - triggeredByUserId
+      - websiteSource
+      - triggeredByUser
+      - createdAt
+      - updatedAt
+    PublicKnowledgeSourceRemoveInput:
+      type: object
+      properties:
+        sourceIds:
+          type: array
+          items:
+            type: integer
+            exclusiveMinimum: 0
+          minItems: 1
+          maxItems: 100
+      required:
+      - sourceIds
+    PublicKnowledgeSearchInput:
+      type: object
+      properties:
+        query:
+          type: string
+          minLength: 1
+          example: refund policy
+        limit:
+          type: integer
+          maximum: 50
+          example: 10
+          exclusiveMinimum: 0
+      required:
+      - query
+    PublicKnowledgeBaseAssignInput:
+      type: object
+      properties:
+        knowledgeBaseIds:
+          type: array
+          items:
+            type: integer
+            exclusiveMinimum: 0
+          example:
+          - 12
+          - 13
+      required:
+      - knowledgeBaseIds
+    PublicKnowledgeBaseUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        description:
+          type:
+          - string
+          - 'null'
+    PublicKnowledgeBaseAssignment:
+      type: object
+      properties:
+        id:
+          type: number
+        knowledgeBaseId:
+          type: number
+        assistantId:
+          type: string
+        maxUserProfileId:
+          type: number
+        assignedAt:
+          type: string
+        knowledgeBase:
+          type: object
+          properties:
+            id:
+              type: number
+            name:
+              type: string
+            description:
+              type:
+              - string
+              - 'null'
+            namespace:
+              type:
+              - string
+              - 'null'
+            isShared:
+              type: boolean
+            isDefault:
+              type: boolean
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+          required:
+          - id
+          - name
+          - description
+          - namespace
+          - isShared
+          - isDefault
+          - createdAt
+          - updatedAt
+      required:
+      - id
+      - knowledgeBaseId
+      - assignedAt
+      - knowledgeBase
+    PublicKnowledgeSyncSummaryList:
+      type: object
+      properties:
+        count:
+          type: number
+        pageSize:
+          type: number
+        pageNum:
+          type: number
+        totalPages:
+          type: number
+        cursor:
+          type: number
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicKnowledgeSyncSummary'
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: number
+          - {}
+      required:
+      - pageSize
+      - results
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicKnowledgeSourceResyncInput:
+      type: object
+      properties:
+        sourceIds:
+          type: array
+          items:
+            type: integer
+            exclusiveMinimum: 0
+          minItems: 1
+          maxItems: 50
+      required:
+      - sourceIds
+    PublicKnowledgeWebsiteResyncInput:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 1000
+        maxDepth:
+          type: integer
+          minimum: 1
+          maximum: 5
+        maxLinks:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        includePaths:
+          type: array
+          items:
+            type: string
+        excludePaths:
+          type: array
+          items:
+            type: string
+        scrapeOptions:
+          type: object
+          properties:
+            includeSelectors:
+              type: array
+              items:
+                type: string
+            excludeSelectors:
+              type: array
+              items:
+                type: string
+        autoSyncFrequency:
+          type: string
+          enum:
+          - NONE
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+    PublicKnowledgeSourceList:
+      type: object
+      properties:
+        count:
+          type: number
+        pageSize:
+          type: number
+        pageNum:
+          type: number
+        totalPages:
+          type: number
+        cursor:
+          type: number
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicKnowledgeSource'
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: number
+          - {}
+      required:
+      - pageSize
+      - results
+    PublicKnowledgeBase:
+      type: object
+      properties:
+        id:
+          type: number
+        accountId:
+          type: number
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        namespace:
+          type:
+          - string
+          - 'null'
+        isShared:
+          type: boolean
+        isDefault:
+          type: boolean
+        vectorStoreId:
+          type:
+          - string
+          - 'null'
+        createdBy:
+          type:
+          - object
+          - 'null'
+          properties:
+            id:
+              type: number
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+              format: email
+            avatar:
+              type:
+              - string
+              - 'null'
+          required:
+          - id
+          - firstName
+          - lastName
+          - email
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+      - id
+      - accountId
+      - name
+      - description
+      - namespace
+      - isShared
+      - isDefault
+      - vectorStoreId
+      - createdAt
+      - updatedAt
+    PublicKnowledgeWebsiteCrawlInput:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 1000
+        sourceUrl:
+          type: string
+          format: uri
+        websiteType:
+          type: string
+          enum:
+          - WEBSITE_CRAWL
+          - SITEMAP
+        maxDepth:
+          type: integer
+          minimum: 1
+          maximum: 5
+        maxLinks:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        includePaths:
+          type: array
+          items:
+            type: string
+        excludePaths:
+          type: array
+          items:
+            type: string
+        scrapeOptions:
+          type: object
+          properties:
+            includeSelectors:
+              type: array
+              items:
+                type: string
+            excludeSelectors:
+              type: array
+              items:
+                type: string
+        autoSyncFrequency:
+          type: string
+          enum:
+          - NONE
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+      required:
+      - sourceUrl
+      - websiteType
+      - maxLinks
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicKnowledgeBaseCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        description:
+          type:
+          - string
+          - 'null'
+        isShared:
+          type: boolean
+          default: true
+      required:
+      - name
+    PublicKnowledgeSearchResult:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              content:
+                type: string
+              score:
+                type: number
+              metadata:
+                type:
+                - object
+                - 'null'
+                additionalProperties: {}
+            required:
+            - content
+            - score
+      required:
+      - results
+    PublicKnowledgeUrlSourceInput:
+      type: object
+      properties:
+        urls:
+          type: array
+          items:
+            type: string
+            format: uri
+          minItems: 1
+          maxItems: 10
+        description:
+          type: string
+          maxLength: 1000
+        type:
+          type: string
+          enum:
+          - UNKNOWN
+          - FILE
+          - URL
+          - ARTICLE
+          - QNA
+          - WEBPAGE
+          - FOLDER
+          default: URL
+        autoSyncFrequency:
+          type: string
+          enum:
+          - NONE
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+          default: NONE
+        scrapeOptions:
+          type: object
+          properties:
+            includeSelectors:
+              type: array
+              items:
+                type: string
+            excludeSelectors:
+              type: array
+              items:
+                type: string
+      required:
+      - urls
+    PublicKnowledgeWebsiteCrawl:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type: string
+          maxLength: 1000
+        sourceUrl:
+          type: string
+          format: uri
+        websiteType:
+          type: string
+          enum:
+          - WEBSITE_CRAWL
+          - SITEMAP
+        maxDepth:
+          type: integer
+          minimum: 1
+          maximum: 10
+        maxLinks:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        includePaths:
+          type: array
+          items:
+            type: string
+        excludePaths:
+          type: array
+          items:
+            type: string
+        scrapeOptions:
+          type:
+          - object
+          - 'null'
+          properties:
+            includeSelectors:
+              type: array
+              items:
+                type: string
+            excludeSelectors:
+              type: array
+              items:
+                type: string
+          default: null
+        autoSyncFrequency:
+          type: string
+          enum:
+          - NONE
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+      required:
+      - id
+      - name
+      - sourceUrl
+      - websiteType
+      - maxLinks
+    PublicKnowledgeBaseList:
+      type: object
+      properties:
+        count:
+          type: number
+        pageSize:
+          type: number
+        pageNum:
+          type: number
+        totalPages:
+          type: number
+        cursor:
+          type: number
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicKnowledgeBase'
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: number
+          - {}
+      required:
+      - pageSize
+      - results
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

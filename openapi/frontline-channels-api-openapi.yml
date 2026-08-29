@@ -1,6 +1,6 @@
 openapi: 3.2.0
 info:
-  title: Public Object export API
+  title: Public Channels API
   version: 1.0.0
   description: 'Public API for accessing agents, flows, and analytics.
 
@@ -37,58 +37,26 @@ info:
 servers:
 - url: https://prod-api.getfrontline.ai
 tags:
-- name: Object export
-  description: Export object data as XLSX or CSV
+- name: Channels
+  description: Communication channels connected to this account (WhatsApp, Instagram, Messenger)
 paths:
-  /public/v1/objects/{name}/export/xlsx:
-    post:
-      summary: Export as XLSX
-      operationId: exportObjectXlsx
-      description: Exports rows matching the query as an XLSX file.
+  /public/v1/channels/whatsapp/templates:
+    get:
+      summary: List approved WhatsApp templates
+      operationId: listChannelWhatsappTemplates
+      description: Read-only list of APPROVED WhatsApp message templates from Meta for this account's WhatsApp Business channel. Use template.name in SEND_WHATSAPP_MESSAGE nodes and map parameters into templateVariables.
       security:
-      - bearerAuth: []
+      - accountApiKey: []
+      - userApiKey: []
       tags:
-      - Object export
-      parameters:
-      - schema:
-          type: string
-          minLength: 1
-          example: deals
-        required: true
-        name: name
-        in: path
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                query:
-                  type: object
-                  description: 'Dynamic-table query. Either a single `{ path, operator, value }` condition, or a nested group `{ operator: ''and'' | ''or'', conditions: [...] }`.'
-                search:
-                  type:
-                  - string
-                  - 'null'
-                sort:
-                  type:
-                  - array
-                  - 'null'
-                  items:
-                    type: object
-                    additionalProperties: {}
+      - Channels
       responses:
         '200':
-          description: XLSX binary
-          content:
-            application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
-              schema: {}
-        '400':
-          description: Bad Request
+          description: Approved WhatsApp templates
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
+                $ref: '#/components/schemas/PublicWhatsAppTemplatesOutput'
         '401':
           description: Unauthorized
           content:
@@ -96,68 +64,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
         '404':
-          description: Not Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /public/v1/objects/{name}/export/csv:
-    post:
-      summary: Export as CSV
-      operationId: exportObjectCsv
-      description: Exports rows matching the query as CSV.
-      security:
-      - bearerAuth: []
-      tags:
-      - Object export
-      parameters:
-      - schema:
-          type: string
-          minLength: 1
-          example: deals
-        required: true
-        name: name
-        in: path
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                query:
-                  type: object
-                  description: 'Dynamic-table query. Either a single `{ path, operator, value }` condition, or a nested group `{ operator: ''and'' | ''or'', conditions: [...] }`.'
-                search:
-                  type:
-                  - string
-                  - 'null'
-                sort:
-                  type:
-                  - array
-                  - 'null'
-                  items:
-                    type: object
-                    additionalProperties: {}
-      responses:
-        '200':
-          description: CSV body
-          content:
-            text/csv:
-              schema: {}
-        '400':
-          description: Bad Request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '401':
-          description: Unauthorized
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '404':
-          description: Not Found
+          description: WhatsApp channel not configured
           content:
             application/json:
               schema:
@@ -193,6 +100,62 @@ components:
       required:
       - code
       - message
+    PublicWhatsAppTemplateParameters:
+      type: object
+      properties:
+        HEADER:
+          type: array
+          items:
+            type: string
+        BODY:
+          type: array
+          items:
+            type: string
+        FOOTER:
+          type: array
+          items:
+            type: string
+        BUTTONS:
+          type: array
+          items:
+            type: string
+        BUTTONS_URL:
+          type: array
+          items:
+            type: string
+    PublicWhatsAppTemplatesOutput:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicWhatsAppTemplate'
+      required:
+      - results
+    PublicWhatsAppTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          description: Template name to use in SEND_WHATSAPP_MESSAGE nodes.
+          example: hello_world
+        language:
+          type: string
+        status:
+          type: string
+        category:
+          type: string
+        components:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        parameters:
+          $ref: '#/components/schemas/PublicWhatsAppTemplateParameters'
+      required:
+      - name
     Error:
       type: object
       properties:

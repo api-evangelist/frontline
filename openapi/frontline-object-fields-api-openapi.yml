@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Public Account Object fields API
+  title: Public Object fields API
   version: 1.0.0
   description: 'Public API for accessing agents, flows, and analytics.
 
@@ -69,7 +69,6 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: array
                     items:
@@ -77,48 +76,35 @@ paths:
                       properties:
                         id:
                           type: number
-                          example: 1
                         name:
                           type: string
-                          example: example
                         key:
                           type: string
-                          example: example
                         type:
                           type: string
-                          example: example
                         editable:
                           type: boolean
-                          example: false
                         created_at:
-                          type: string
-                          nullable: true
-                          example: example
+                          type:
+                          - string
+                          - 'null'
                         updated_at:
-                          type: string
-                          nullable: true
-                          example: example
+                          type:
+                          - string
+                          - 'null'
                         read_only:
                           type: boolean
-                          example: false
                         required:
                           type: boolean
-                          example: false
                         unique:
                           type: boolean
-                          example: false
                         is_system:
                           type: boolean
-                          example: false
                         is_predefined:
                           type: boolean
-                          example: false
-                        default_value:
-                          nullable: true
-                          type: object
+                        default_value: {}
                         format:
                           type: string
-                          example: example
                         mode:
                           type: string
                           enum:
@@ -126,42 +112,47 @@ paths:
                           - multiSelect
                           - single
                           - multi
-                          example: singleSelect
                         timezone:
                           type: string
-                          example: example
                         decimals:
                           type: number
-                          example: 1
                         currency:
                           type: string
-                          example: example
+                        min:
+                          type:
+                          - number
+                          - 'null'
+                        max:
+                          type:
+                          - number
+                          - 'null'
                         time_format:
                           type: string
-                          example: example
                         show_preview:
                           type: boolean
-                          example: false
                         allowed_file_types:
                           type: array
                           items:
                             type: string
-                            example: example
                         max_file_size:
                           type: number
-                          example: 1
                         related_table_id:
                           type: number
-                          example: 1
+                        related_record_type_ids:
+                          type:
+                          - array
+                          - 'null'
+                          items:
+                            type: number
                         display_field_id:
                           type: number
-                          example: 1
                         relation_mode:
                           type: string
-                          example: example
                         include_activity:
                           type: boolean
-                          example: false
+                        metadata:
+                          type: object
+                          additionalProperties: {}
                         options:
                           type: array
                           items:
@@ -169,24 +160,20 @@ paths:
                             properties:
                               id:
                                 type: number
-                                example: 1
                               name:
                                 type: string
-                                example: example
                               color:
                                 type: string
-                                example: example
                               order:
                                 type: number
-                                example: 1
                               created_at:
-                                type: string
-                                nullable: true
-                                example: example
+                                type:
+                                - string
+                                - 'null'
                               updated_at:
-                                type: string
-                                nullable: true
-                                example: example
+                                type:
+                                - string
+                                - 'null'
                             required:
                             - id
                             - name
@@ -194,24 +181,13 @@ paths:
                             - order
                             - created_at
                             - updated_at
-                        expression:
-                          nullable: true
-                          type: object
+                        expression: {}
                         output_type:
                           type: string
-                          example: example
-                        apply_if:
-                          nullable: true
-                          type: object
-                        number_config:
-                          nullable: true
-                          type: object
-                        date_config:
-                          nullable: true
-                          type: object
-                        string_config:
-                          nullable: true
-                          type: object
+                        apply_if: {}
+                        number_config: {}
+                        date_config: {}
+                        string_config: {}
                       required:
                       - id
                       - name
@@ -244,7 +220,7 @@ paths:
     post:
       summary: Create object field
       operationId: createObjectField
-      description: Creates a column on an object. Requires a USER API key.
+      description: Creates a column on an object. Requires a USER API key with ADMIN or OWNER role.
       security:
       - bearerAuth: []
       tags:
@@ -266,7 +242,6 @@ paths:
                 name:
                   type: string
                   minLength: 1
-                  example: example
                 type:
                   anyOf:
                   - type: string
@@ -283,27 +258,20 @@ paths:
                     - kanbanViewOrder
                     - file
                     - avatar
+                    - permissions
                     - formula
-                    example: string
                   - type: string
                     enum:
                     - select
-                    example: select
                 metadata:
                   type: object
-                  additionalProperties:
-                    nullable: true
-                    type: object
+                  additionalProperties: {}
                 record_type_id:
                   type: integer
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
+                  exclusiveMinimum: 0
                 recordTypeId:
                   type: integer
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
+                  exclusiveMinimum: 0
               required:
               - name
               - type
@@ -320,54 +288,40 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       name:
                         type: string
-                        example: example
                       key:
                         type: string
-                        example: example
                       type:
                         type: string
-                        example: example
                       editable:
                         type: boolean
-                        example: false
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       read_only:
                         type: boolean
-                        example: false
                       required:
                         type: boolean
-                        example: false
                       unique:
                         type: boolean
-                        example: false
                       is_system:
                         type: boolean
-                        example: false
                       is_predefined:
                         type: boolean
-                        example: false
-                      default_value:
-                        nullable: true
-                        type: object
+                      default_value: {}
                       format:
                         type: string
-                        example: example
                       mode:
                         type: string
                         enum:
@@ -375,42 +329,47 @@ paths:
                         - multiSelect
                         - single
                         - multi
-                        example: singleSelect
                       timezone:
                         type: string
-                        example: example
                       decimals:
                         type: number
-                        example: 1
                       currency:
                         type: string
-                        example: example
+                      min:
+                        type:
+                        - number
+                        - 'null'
+                      max:
+                        type:
+                        - number
+                        - 'null'
                       time_format:
                         type: string
-                        example: example
                       show_preview:
                         type: boolean
-                        example: false
                       allowed_file_types:
                         type: array
                         items:
                           type: string
-                          example: example
                       max_file_size:
                         type: number
-                        example: 1
                       related_table_id:
                         type: number
-                        example: 1
+                      related_record_type_ids:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: number
                       display_field_id:
                         type: number
-                        example: 1
                       relation_mode:
                         type: string
-                        example: example
                       include_activity:
                         type: boolean
-                        example: false
+                      metadata:
+                        type: object
+                        additionalProperties: {}
                       options:
                         type: array
                         items:
@@ -418,24 +377,20 @@ paths:
                           properties:
                             id:
                               type: number
-                              example: 1
                             name:
                               type: string
-                              example: example
                             color:
                               type: string
-                              example: example
                             order:
                               type: number
-                              example: 1
                             created_at:
-                              type: string
-                              nullable: true
-                              example: example
+                              type:
+                              - string
+                              - 'null'
                             updated_at:
-                              type: string
-                              nullable: true
-                              example: example
+                              type:
+                              - string
+                              - 'null'
                           required:
                           - id
                           - name
@@ -443,24 +398,13 @@ paths:
                           - order
                           - created_at
                           - updated_at
-                      expression:
-                        nullable: true
-                        type: object
+                      expression: {}
                       output_type:
                         type: string
-                        example: example
-                      apply_if:
-                        nullable: true
-                        type: object
-                      number_config:
-                        nullable: true
-                        type: object
-                      date_config:
-                        nullable: true
-                        type: object
-                      string_config:
-                        nullable: true
-                        type: object
+                      apply_if: {}
+                      number_config: {}
+                      date_config: {}
+                      string_config: {}
                     required:
                     - id
                     - name
@@ -494,7 +438,7 @@ paths:
     patch:
       summary: Update object field
       operationId: updateObjectField
-      description: Updates a field's metadata, defaults, or ordering. Requires a USER API key.
+      description: Updates a field's metadata, defaults, or ordering. Requires a USER API key with ADMIN or OWNER role.
       security:
       - bearerAuth: []
       tags:
@@ -509,9 +453,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 42
+          exclusiveMinimum: 0
         required: true
         name: fieldId
         in: path
@@ -524,7 +467,6 @@ paths:
                 name:
                   type: string
                   minLength: 1
-                  example: example
                 type:
                   anyOf:
                   - type: string
@@ -541,36 +483,26 @@ paths:
                     - kanbanViewOrder
                     - file
                     - avatar
+                    - permissions
                     - formula
-                    example: string
                   - type: string
                     enum:
                     - select
-                    example: select
                 metadata:
                   type: object
-                  additionalProperties:
-                    nullable: true
-                    type: object
+                  additionalProperties: {}
                 order:
                   type: integer
-                  example: 1
                 required:
                   type: boolean
-                  example: false
                 unique:
                   type: boolean
-                  example: false
                 tags:
                   type: array
                   items:
                     type: object
-                    additionalProperties:
-                      nullable: true
-                      type: object
-                defaultValue:
-                  nullable: true
-                  type: object
+                    additionalProperties: {}
+                defaultValue: {}
               additionalProperties: false
       responses:
         '200':
@@ -584,54 +516,40 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       name:
                         type: string
-                        example: example
                       key:
                         type: string
-                        example: example
                       type:
                         type: string
-                        example: example
                       editable:
                         type: boolean
-                        example: false
                       created_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       updated_at:
-                        type: string
-                        nullable: true
-                        example: example
+                        type:
+                        - string
+                        - 'null'
                       read_only:
                         type: boolean
-                        example: false
                       required:
                         type: boolean
-                        example: false
                       unique:
                         type: boolean
-                        example: false
                       is_system:
                         type: boolean
-                        example: false
                       is_predefined:
                         type: boolean
-                        example: false
-                      default_value:
-                        nullable: true
-                        type: object
+                      default_value: {}
                       format:
                         type: string
-                        example: example
                       mode:
                         type: string
                         enum:
@@ -639,42 +557,47 @@ paths:
                         - multiSelect
                         - single
                         - multi
-                        example: singleSelect
                       timezone:
                         type: string
-                        example: example
                       decimals:
                         type: number
-                        example: 1
                       currency:
                         type: string
-                        example: example
+                      min:
+                        type:
+                        - number
+                        - 'null'
+                      max:
+                        type:
+                        - number
+                        - 'null'
                       time_format:
                         type: string
-                        example: example
                       show_preview:
                         type: boolean
-                        example: false
                       allowed_file_types:
                         type: array
                         items:
                           type: string
-                          example: example
                       max_file_size:
                         type: number
-                        example: 1
                       related_table_id:
                         type: number
-                        example: 1
+                      related_record_type_ids:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: number
                       display_field_id:
                         type: number
-                        example: 1
                       relation_mode:
                         type: string
-                        example: example
                       include_activity:
                         type: boolean
-                        example: false
+                      metadata:
+                        type: object
+                        additionalProperties: {}
                       options:
                         type: array
                         items:
@@ -682,24 +605,20 @@ paths:
                           properties:
                             id:
                               type: number
-                              example: 1
                             name:
                               type: string
-                              example: example
                             color:
                               type: string
-                              example: example
                             order:
                               type: number
-                              example: 1
                             created_at:
-                              type: string
-                              nullable: true
-                              example: example
+                              type:
+                              - string
+                              - 'null'
                             updated_at:
-                              type: string
-                              nullable: true
-                              example: example
+                              type:
+                              - string
+                              - 'null'
                           required:
                           - id
                           - name
@@ -707,24 +626,13 @@ paths:
                           - order
                           - created_at
                           - updated_at
-                      expression:
-                        nullable: true
-                        type: object
+                      expression: {}
                       output_type:
                         type: string
-                        example: example
-                      apply_if:
-                        nullable: true
-                        type: object
-                      number_config:
-                        nullable: true
-                        type: object
-                      date_config:
-                        nullable: true
-                        type: object
-                      string_config:
-                        nullable: true
-                        type: object
+                      apply_if: {}
+                      number_config: {}
+                      date_config: {}
+                      string_config: {}
                     required:
                     - id
                     - name
@@ -757,7 +665,7 @@ paths:
     delete:
       summary: Delete object field
       operationId: deleteObjectField
-      description: Deletes a column from an object. Requires a USER API key.
+      description: Deletes a column from an object. Requires a USER API key with ADMIN or OWNER role.
       security:
       - bearerAuth: []
       tags:
@@ -772,9 +680,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 42
+          exclusiveMinimum: 0
         required: true
         name: fieldId
         in: path
@@ -790,7 +697,6 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
@@ -798,13 +704,10 @@ paths:
                         type: boolean
                         enum:
                         - true
-                        example: true
                       id:
                         anyOf:
                         - type: string
-                          example: example
                         - type: number
-                          example: 1
                     required:
                     - deleted
                 required:
@@ -832,7 +735,7 @@ paths:
     get:
       summary: Get object field formula dependencies
       operationId: getObjectFieldFormulaDependencies
-      description: Returns the formula dependencies for a specific field.
+      description: Returns the formula dependencies for a specific field. Requires a USER API key with ADMIN or OWNER role.
       security:
       - bearerAuth: []
       tags:
@@ -847,9 +750,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 42
+          exclusiveMinimum: 0
         required: true
         name: fieldId
         in: path
@@ -865,14 +767,12 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     additionalProperties:
                       type: array
                       items:
                         type: number
-                        example: 1
                 required:
                 - ok
                 - data
@@ -898,7 +798,7 @@ paths:
     post:
       summary: Preview formula evaluation
       operationId: previewObjectFormula
-      description: Previews formula evaluation on existing data. Requires a USER API key.
+      description: Previews formula evaluation on existing data. Requires a USER API key with ADMIN or OWNER role.
       security:
       - bearerAuth: []
       tags:
@@ -925,15 +825,13 @@ paths:
                       description: Query preconditions filter
                     expression:
                       type: object
-                      description: Formula expression AST
+                      description: Formula expression AST. Maximum AST depth is 5 (root-to-leaf node count; root node is depth 1).
                 previewFilter:
                   type: object
                   description: Filter for preview rows
                 limit:
                   type: integer
-                  minimum: 0
-                  exclusiveMinimum: true
-                  example: 1
+                  exclusiveMinimum: 0
               required:
               - formulaMetadata
       responses:
@@ -948,7 +846,6 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
@@ -959,31 +856,24 @@ paths:
                           properties:
                             rowId:
                               type: string
-                              example: example
                             rowName:
                               type: string
-                              example: example
                             previewState:
                               type: object
                               properties:
-                                value:
-                                  nullable: true
-                                  type: object
+                                value: {}
                                 isValid:
                                   type: boolean
-                                  example: false
                                 error:
-                                  type: string
-                                  nullable: true
-                                  example: example
+                                  type:
+                                  - string
+                                  - 'null'
                               required:
                               - isValid
                               - error
                             row:
                               type: object
-                              additionalProperties:
-                                nullable: true
-                                type: object
+                              additionalProperties: {}
                           required:
                           - rowId
                           - rowName
@@ -991,7 +881,6 @@ paths:
                           - row
                       inferredOutputType:
                         type: string
-                        example: example
                     required:
                     - results
                     - inferredOutputType
@@ -1018,19 +907,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
     ErrorBody:
       type: object
       properties:
@@ -1060,6 +936,19 @@ components:
       required:
       - code
       - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
   securitySchemes:
     accountApiKey:
       type: http
@@ -1079,6 +968,7 @@ x-tagGroups:
   - Flow Variables
   - Intents
   - Agents
+  - Agent Playbooks
 - name: Workflows
   tags:
   - Workflows
@@ -1108,12 +998,24 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
+- name: Channels
+  tags:
+  - Channels
 - name: Integrations
   tags:
-  - Tools
+  - Custom Tools
   - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
 - name: Core
   tags:
   - Account
   - AI Models
   - Billing
+  - Users
+  - User Tasks
+  - Guidance

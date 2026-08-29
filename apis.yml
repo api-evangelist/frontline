@@ -547,22 +547,6 @@ apis:
     url: https://frontline-public-api.redocly.app/
   - type: GettingStarted
     url: https://docs.getfrontline.ai/docs/getting-started
-- aid: frontline:frontline-tools-api
-  name: Frontline Tools API
-  description: Manage reusable HTTP integrations callable from flows and workflows
-  humanURL: https://docs.getfrontline.ai/reference/openapi
-  baseURL: https://prod-api.getfrontline.ai/public/v1
-  tags:
-  - Tools
-  properties:
-  - type: OpenAPI
-    url: openapi/frontline-tools-api-openapi.yml
-  - type: Documentation
-    url: https://docs.getfrontline.ai/
-  - type: APIReference
-    url: https://frontline-public-api.redocly.app/
-  - type: GettingStarted
-    url: https://docs.getfrontline.ai/docs/getting-started
 - aid: frontline:frontline-workflow-variables-api
   name: Frontline Workflow Variables API
   description: Manage variables scoped to an automation workflow
@@ -589,6 +573,196 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/frontline-workflows-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-account-integrations-api
+  name: Frontline Account Integrations API
+  description: >-
+    View account-scoped (Studio) connected integrations, discover connectable toolkits, and configure
+    which tools each integration exposes to agents, flows, and workflows. These are used for workflows
+    and agents, separate from Max integrations.
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Account Integrations
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-account-integrations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-agent-channels-api
+  name: Frontline Agent Channels API
+  description: >-
+    View connected channel integrations (WhatsApp, Instagram, Messenger) and bind numbers/accounts/pages
+    to agents
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Agent Channels
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-agent-channels-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-agent-playbooks-api
+  name: Frontline Agent Playbooks API
+  description: Manage reusable instruction sets assigned to agents
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Agent Playbooks
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-agent-playbooks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-channels-api
+  name: Frontline Channels API
+  description: Communication channels connected to this account (WhatsApp, Instagram, Messenger)
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Channels
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-channels-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-custom-tools-api
+  name: Frontline Custom Tools API
+  description: >-
+    Manage custom tools — reusable HTTP/API-call integrations the account creates and assigns to agents,
+    flows, and workflows. Distinct from built-in system tools and connected-integration (MCP) tools.
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Custom Tools
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-custom-tools-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-guidance-api
+  name: Frontline Guidance API
+  description: >-
+    Builder reference data sourced live from backend constants: valid icons, colors, and formats for objects/tables/fields,
+    plus the workflow/flow node-type catalog. Use these instead of hard-coding allowlists.
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Guidance
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-guidance-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-integration-resources-api
+  name: Frontline Integration Resources API
+  description: >-
+    Resolve resource IDs (spreadsheets, docs, drive folders, Asana projects, Salesforce SObjects, Gmail
+    labels, Outlook folders/calendars) needed to configure event triggers. Requires a USER API key.
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Integration Resources
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-integration-resources-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-integrations-api
+  name: Frontline Integrations API
+  description: OAuth/API connected accounts for toolkits like Google Sheets, Gmail, and Slack
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Integrations
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-integrations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-knowledge-bases-api
+  name: Frontline Knowledge Bases API
+  description: >-
+    Manage knowledge bases, their sources (URLs, website crawls), search, and agent assignment
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Knowledge Bases
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-knowledge-bases-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-user-tasks-api
+  name: Frontline User Tasks API
+  description: >-
+    User tasks — the account 'To-dos' inbox: create, list, update, complete, and delete tasks, optionally
+    linked to an object record. Distinct from object-row tasks (Object tasks) and from Max tasks.
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - User Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-user-tasks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-users-api
+  name: Frontline Users API
+  description: List account users to resolve IDs for relations and assignment
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Users
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-users-api-openapi.yml
   - type: Documentation
     url: https://docs.getfrontline.ai/
   - type: APIReference

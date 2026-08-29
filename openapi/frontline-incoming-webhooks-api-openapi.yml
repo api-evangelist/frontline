@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Public Account Incoming Webhooks API
+  title: Public Incoming Webhooks API
   version: 1.0.0
   description: 'Public API for accessing agents, flows, and analytics.
 
@@ -41,6 +41,55 @@ tags:
   description: Inbound HTTPS endpoints that external systems can post events to
 paths:
   /public/v1/incoming-webhooks:
+    get:
+      summary: List incoming webhooks
+      operationId: listIncomingWebhooks
+      description: Lists incoming webhooks for the authenticated account. Filter by search text and active status. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Incoming Webhooks
+      parameters:
+      - schema:
+          type: string
+          example: CRM
+        required: false
+        name: search
+        in: query
+      - schema:
+          type: boolean
+          example: true
+        required: false
+        name: isActive
+        in: query
+      responses:
+        '200':
+          description: Paginated incoming webhooks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/IncomingWebhookCreateOutput'
+                  count:
+                    type: number
+                    example: 1
+                  pageSize:
+                    type: number
+                    example: 20
+                required:
+                - results
+                - count
+                - pageSize
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
     post:
       summary: Create an incoming webhook
       operationId: createIncomingWebhook
@@ -67,82 +116,217 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-components:
-  schemas:
-    IncomingWebhookCreateOutput:
-      type: object
-      properties:
-        id:
+  /public/v1/incoming-webhooks/{webhookId}:
+    get:
+      summary: Get incoming webhook details
+      operationId: getIncomingWebhook
+      description: Returns an incoming webhook by ID. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Incoming Webhooks
+      parameters:
+      - schema:
           type: string
           example: clx123incomingwebhook
-        name:
+        required: true
+        name: webhookId
+        in: path
+      responses:
+        '200':
+          description: Incoming webhook details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIncomingWebhook'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update incoming webhook
+      operationId: updateIncomingWebhook
+      description: Updates an incoming webhook's name, description, active state, or authentication toggle. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Incoming Webhooks
+      parameters:
+      - schema:
           type: string
-          example: External CRM event
-        description:
+          example: clx123incomingwebhook
+        required: true
+        name: webhookId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicIncomingWebhookUpdateInput'
+      responses:
+        '200':
+          description: Updated incoming webhook
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIncomingWebhook'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete incoming webhook
+      operationId: deleteIncomingWebhook
+      description: Deletes an incoming webhook. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Incoming Webhooks
+      parameters:
+      - schema:
           type: string
-          nullable: true
-          example: Receives events from the external CRM
-        url:
+          example: clx123incomingwebhook
+        required: true
+        name: webhookId
+        in: path
+      responses:
+        '204':
+          description: Incoming webhook deleted
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/incoming-webhooks/{webhookId}/regenerate-access-token:
+    post:
+      summary: Regenerate incoming webhook access token
+      operationId: regenerateIncomingWebhookAccessToken
+      description: Generates a new bearer access token for the webhook, invalidating the previous one. The new token is returned in the response. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Incoming Webhooks
+      parameters:
+      - schema:
           type: string
-          example: https://hooks.example.com/webhook/clx123incomingwebhook
-        isActive:
-          type: boolean
-          example: true
-        useAuthentication:
-          type: boolean
-          example: true
-        createdAt:
+          example: clx123incomingwebhook
+        required: true
+        name: webhookId
+        in: path
+      responses:
+        '200':
+          description: Incoming webhook with the regenerated access token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIncomingWebhook'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/incoming-webhooks/{webhookId}/events:
+    get:
+      summary: List incoming webhook events
+      operationId: listIncomingWebhookEvents
+      description: Lists received events (deliveries) for an incoming webhook. Filter by date range, status, and search. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Incoming Webhooks
+      parameters:
+      - schema:
           type: string
-          example: '2024-01-01T12:00:00Z'
-        updatedAt:
+          example: clx123incomingwebhook
+        required: true
+        name: webhookId
+        in: path
+      - schema:
+          type:
+          - string
+          - 'null'
+        required: false
+        name: startDate
+        in: query
+      - schema:
+          type:
+          - string
+          - 'null'
+        required: false
+        name: endDate
+        in: query
+      - schema:
           type: string
-          example: '2024-01-01T12:00:00Z'
-        accessToken:
+        required: false
+        name: search
+        in: query
+      - schema:
           type: string
-          nullable: true
-          example: 64-character-access-token
-      required:
-      - id
-      - name
-      - url
-      - isActive
-      - useAuthentication
-      - createdAt
-      - updatedAt
-    PublicIncomingWebhookCreateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: External CRM event
-        description:
-          type: string
-          nullable: true
-          example: Receives events from the external CRM
-        isActive:
-          type: boolean
-          default: true
-          example: true
-        useAuthentication:
-          type: boolean
-          default: true
-          example: true
-      required:
-      - name
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
           enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
+          - RECEIVED
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+          - TIMEOUT
+        required: false
+        name: status
+        in: query
+      responses:
+        '200':
+          description: Paginated incoming webhook events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIncomingWebhookEventList'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/incoming-webhooks/{webhookId}/events/{eventId}:
+    get:
+      summary: Get incoming webhook event details
+      operationId: getIncomingWebhookEvent
+      description: Returns a single webhook event, including the automations it triggered. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Incoming Webhooks
+      parameters:
+      - schema:
+          type: string
+          example: clx123incomingwebhook
+        required: true
+        name: webhookId
+        in: path
+      - schema:
+          type: string
+          example: clx987event
+        required: true
+        name: eventId
+        in: path
+      responses:
+        '200':
+          description: Incoming webhook event details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIncomingWebhookEventDetail'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
     ErrorBody:
       type: object
       properties:
@@ -172,6 +356,241 @@ components:
       required:
       - code
       - message
+    PublicIncomingWebhookUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: External CRM event
+        description:
+          type:
+          - string
+          - 'null'
+          example: Receives events from the external CRM
+        isActive:
+          type: boolean
+          example: true
+        useAuthentication:
+          type: boolean
+          example: true
+    PublicIncomingWebhookEventDetail:
+      allOf:
+      - $ref: '#/components/schemas/PublicIncomingWebhookEvent'
+      - type: object
+        properties:
+          automations:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 42
+                name:
+                  type: string
+                  example: Notify sales channel
+                status:
+                  type:
+                  - string
+                  - 'null'
+                  example: ACTIVE
+              required:
+              - id
+              - name
+    PublicIncomingWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          example: clx123incomingwebhook
+        name:
+          type: string
+          example: External CRM event
+        description:
+          type:
+          - string
+          - 'null'
+          example: Receives events from the external CRM
+        url:
+          type: string
+          example: https://hooks.example.com/webhook/clx123incomingwebhook
+        isActive:
+          type: boolean
+          example: true
+        useAuthentication:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        accessToken:
+          type:
+          - string
+          - 'null'
+          example: 64-character-access-token
+      required:
+      - id
+      - name
+      - url
+      - isActive
+      - useAuthentication
+      - createdAt
+      - updatedAt
+    PublicIncomingWebhookCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: External CRM event
+        description:
+          type:
+          - string
+          - 'null'
+          example: Receives events from the external CRM
+        isActive:
+          type: boolean
+          default: true
+          example: true
+        useAuthentication:
+          type: boolean
+          default: true
+          example: true
+      required:
+      - name
+    PublicIncomingWebhookEventList:
+      type: object
+      properties:
+        count:
+          type: number
+        pageSize:
+          type: number
+        pageNum:
+          type: number
+        totalPages:
+          type: number
+        cursor:
+          type: number
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIncomingWebhookEvent'
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: number
+          - {}
+      required:
+      - pageSize
+      - results
+    IncomingWebhookCreateOutput:
+      type: object
+      properties:
+        id:
+          type: string
+          example: clx123incomingwebhook
+        name:
+          type: string
+          example: External CRM event
+        description:
+          type:
+          - string
+          - 'null'
+          example: Receives events from the external CRM
+        url:
+          type: string
+          example: https://hooks.example.com/webhook/clx123incomingwebhook
+        isActive:
+          type: boolean
+          example: true
+        useAuthentication:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        accessToken:
+          type:
+          - string
+          - 'null'
+          example: 64-character-access-token
+      required:
+      - id
+      - name
+      - url
+      - isActive
+      - useAuthentication
+      - createdAt
+      - updatedAt
+    PublicIncomingWebhookEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          example: clx987event
+        status:
+          type: string
+          enum:
+          - RECEIVED
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+          - TIMEOUT
+          example: COMPLETED
+        payload:
+          description: Raw JSON payload received
+        payloadSize:
+          type:
+          - number
+          - 'null'
+          example: 512
+        ipAddress:
+          type:
+          - string
+          - 'null'
+          example: 203.0.113.10
+        userAgent:
+          type:
+          - string
+          - 'null'
+          example: curl/8.4.0
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+      required:
+      - id
+      - status
+      - createdAt
+      - updatedAt
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
   securitySchemes:
     accountApiKey:
       type: http
@@ -191,6 +610,7 @@ x-tagGroups:
   - Flow Variables
   - Intents
   - Agents
+  - Agent Playbooks
 - name: Workflows
   tags:
   - Workflows
@@ -220,12 +640,24 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
+- name: Channels
+  tags:
+  - Channels
 - name: Integrations
   tags:
-  - Tools
+  - Custom Tools
   - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
 - name: Core
   tags:
   - Account
   - AI Models
   - Billing
+  - Users
+  - User Tasks
+  - Guidance

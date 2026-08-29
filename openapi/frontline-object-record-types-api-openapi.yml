@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Public Account Object record types API
+  title: Public Object record types API
   version: 1.0.0
   description: 'Public API for accessing agents, flows, and analytics.
 
@@ -69,7 +69,6 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: array
                     items:
@@ -77,33 +76,28 @@ paths:
                       properties:
                         id:
                           type: number
-                          example: 1
                         name:
                           type: string
-                          example: example
                         display_name:
                           type: string
-                          example: example
                         is_default:
                           type: boolean
-                          example: false
                         single_noun:
                           type: string
-                          example: example
                         emoji:
                           type: string
-                          example: example
                         icon_color:
                           type: string
-                          example: example
                         disable_side_effects:
                           type: boolean
-                          example: false
+                        disable_relation_logging:
+                          type: boolean
+                        default_view_id:
+                          type: number
                         field_ids:
                           type: array
                           items:
                             type: number
-                            example: 1
                         views:
                           type: array
                           items:
@@ -111,64 +105,51 @@ paths:
                             properties:
                               id:
                                 type: number
-                                example: 1
                               name:
                                 type: string
-                                example: example
                               type:
                                 type: string
                                 enum:
                                 - TABLE
                                 - KANBAN
                                 - RECORD
-                                example: TABLE
                               is_default:
                                 type: boolean
-                                example: false
                               is_private:
                                 type: boolean
-                                example: false
                               record_type_id:
-                                type: number
-                                nullable: true
-                                example: 1
+                                type:
+                                - number
+                                - 'null'
                               created_at:
-                                type: string
-                                nullable: true
-                                example: example
+                                type:
+                                - string
+                                - 'null'
                               updated_at:
-                                type: string
-                                nullable: true
-                                example: example
+                                type:
+                                - string
+                                - 'null'
                               column_order:
                                 type: array
                                 items:
                                   type: string
-                                  example: example
                               hidden_columns:
                                 type: array
                                 items:
                                   type: string
-                                  example: example
                               sticky_columns:
                                 type: array
                                 items:
                                   type: string
-                                  example: example
                               grouping_field_id:
                                 type: number
-                                example: 1
-                              column_ordering:
-                                nullable: true
-                                type: object
+                              column_ordering: {}
                               title_field_id:
                                 type: number
-                                example: 1
                               display_field_ids:
                                 type: array
                                 items:
                                   type: number
-                                  example: 1
                             required:
                             - id
                             - name
@@ -207,7 +188,7 @@ paths:
     post:
       summary: Create record type
       operationId: createObjectRecordType
-      description: Creates a record type on an object. Requires a USER API key.
+      description: Creates a record type on an object. Record types are an object-only feature; tables always keep the single implicit record type they are created with. Requires a USER API key with ADMIN or OWNER role.
       security:
       - bearerAuth: []
       tags:
@@ -229,39 +210,48 @@ paths:
                 name:
                   type: string
                   minLength: 1
-                  example: example
                 displayName:
                   type: string
                   minLength: 1
-                  example: example
+                display_name:
+                  type: string
+                  minLength: 1
                 singularNoun:
                   type: string
-                  example: example
+                singleNoun:
+                  type: string
+                singular_noun:
+                  type: string
                 emoji:
                   type: string
-                  example: example
                 icon_color:
                   type: string
-                  example: example
                 iconColor:
                   type: string
-                  example: example
                 fieldNames:
                   type: array
                   items:
                     type: string
-                    example: example
                 columnIds:
                   type: array
                   items:
                     type: number
-                    example: 1
+                fieldIds:
+                  type: array
+                  items:
+                    type: number
+                field_ids:
+                  type: array
+                  items:
+                    type: number
                 disableSideEffects:
                   type: boolean
-                  example: false
+                disableRelationLogging:
+                  type: boolean
+                disable_relation_logging:
+                  type: boolean
               required:
               - name
-              - displayName
       responses:
         '201':
           description: Created record type
@@ -274,39 +264,33 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       name:
                         type: string
-                        example: example
                       display_name:
                         type: string
-                        example: example
                       is_default:
                         type: boolean
-                        example: false
                       single_noun:
                         type: string
-                        example: example
                       emoji:
                         type: string
-                        example: example
                       icon_color:
                         type: string
-                        example: example
                       disable_side_effects:
                         type: boolean
-                        example: false
+                      disable_relation_logging:
+                        type: boolean
+                      default_view_id:
+                        type: number
                       field_ids:
                         type: array
                         items:
                           type: number
-                          example: 1
                       views:
                         type: array
                         items:
@@ -314,64 +298,51 @@ paths:
                           properties:
                             id:
                               type: number
-                              example: 1
                             name:
                               type: string
-                              example: example
                             type:
                               type: string
                               enum:
                               - TABLE
                               - KANBAN
                               - RECORD
-                              example: TABLE
                             is_default:
                               type: boolean
-                              example: false
                             is_private:
                               type: boolean
-                              example: false
                             record_type_id:
-                              type: number
-                              nullable: true
-                              example: 1
+                              type:
+                              - number
+                              - 'null'
                             created_at:
-                              type: string
-                              nullable: true
-                              example: example
+                              type:
+                              - string
+                              - 'null'
                             updated_at:
-                              type: string
-                              nullable: true
-                              example: example
+                              type:
+                              - string
+                              - 'null'
                             column_order:
                               type: array
                               items:
                                 type: string
-                                example: example
                             hidden_columns:
                               type: array
                               items:
                                 type: string
-                                example: example
                             sticky_columns:
                               type: array
                               items:
                                 type: string
-                                example: example
                             grouping_field_id:
                               type: number
-                              example: 1
-                            column_ordering:
-                              nullable: true
-                              type: object
+                            column_ordering: {}
                             title_field_id:
                               type: number
-                              example: 1
                             display_field_ids:
                               type: array
                               items:
                                 type: number
-                                example: 1
                           required:
                           - id
                           - name
@@ -411,7 +382,7 @@ paths:
     patch:
       summary: Update record type
       operationId: updateObjectRecordType
-      description: Updates a record type. The default record type's name and display name cannot be changed (promote another record type to default first). Requires a USER API key.
+      description: Updates a record type. The default record type's name and display name cannot be changed (promote another record type to default first). Requires a USER API key with ADMIN or OWNER role.
       security:
       - bearerAuth: []
       tags:
@@ -426,9 +397,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 3
+          exclusiveMinimum: 0
         required: true
         name: recordTypeId
         in: path
@@ -441,36 +411,56 @@ paths:
                 name:
                   type: string
                   minLength: 1
-                  example: example
                 displayName:
                   type: string
                   minLength: 1
-                  example: example
+                display_name:
+                  type: string
+                  minLength: 1
                 singularNoun:
                   type: string
-                  example: example
+                singleNoun:
+                  type: string
+                singular_noun:
+                  type: string
                 emoji:
                   type: string
-                  example: example
                 icon_color:
                   type: string
-                  example: example
                 iconColor:
                   type: string
-                  example: example
                 fieldNames:
                   type: array
                   items:
                     type: string
-                    example: example
                 columnIds:
                   type: array
                   items:
                     type: number
-                    example: 1
+                fieldIds:
+                  type: array
+                  items:
+                    type: number
+                field_ids:
+                  type: array
+                  items:
+                    type: number
                 disableSideEffects:
                   type: boolean
-                  example: false
+                disableRelationLogging:
+                  type: boolean
+                disable_relation_logging:
+                  type: boolean
+                defaultViewId:
+                  type:
+                  - integer
+                  - 'null'
+                  exclusiveMinimum: 0
+                default_view_id:
+                  type:
+                  - integer
+                  - 'null'
+                  exclusiveMinimum: 0
       responses:
         '200':
           description: Updated record type
@@ -483,39 +473,33 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
-                        example: 1
                       name:
                         type: string
-                        example: example
                       display_name:
                         type: string
-                        example: example
                       is_default:
                         type: boolean
-                        example: false
                       single_noun:
                         type: string
-                        example: example
                       emoji:
                         type: string
-                        example: example
                       icon_color:
                         type: string
-                        example: example
                       disable_side_effects:
                         type: boolean
-                        example: false
+                      disable_relation_logging:
+                        type: boolean
+                      default_view_id:
+                        type: number
                       field_ids:
                         type: array
                         items:
                           type: number
-                          example: 1
                       views:
                         type: array
                         items:
@@ -523,64 +507,51 @@ paths:
                           properties:
                             id:
                               type: number
-                              example: 1
                             name:
                               type: string
-                              example: example
                             type:
                               type: string
                               enum:
                               - TABLE
                               - KANBAN
                               - RECORD
-                              example: TABLE
                             is_default:
                               type: boolean
-                              example: false
                             is_private:
                               type: boolean
-                              example: false
                             record_type_id:
-                              type: number
-                              nullable: true
-                              example: 1
+                              type:
+                              - number
+                              - 'null'
                             created_at:
-                              type: string
-                              nullable: true
-                              example: example
+                              type:
+                              - string
+                              - 'null'
                             updated_at:
-                              type: string
-                              nullable: true
-                              example: example
+                              type:
+                              - string
+                              - 'null'
                             column_order:
                               type: array
                               items:
                                 type: string
-                                example: example
                             hidden_columns:
                               type: array
                               items:
                                 type: string
-                                example: example
                             sticky_columns:
                               type: array
                               items:
                                 type: string
-                                example: example
                             grouping_field_id:
                               type: number
-                              example: 1
-                            column_ordering:
-                              nullable: true
-                              type: object
+                            column_ordering: {}
                             title_field_id:
                               type: number
-                              example: 1
                             display_field_ids:
                               type: array
                               items:
                                 type: number
-                                example: 1
                           required:
                           - id
                           - name
@@ -619,7 +590,7 @@ paths:
     delete:
       summary: Delete record type
       operationId: deleteObjectRecordType
-      description: Deletes a record type. The default record type cannot be deleted. Requires a USER API key.
+      description: Deletes a record type. The default record type cannot be deleted. Requires a USER API key with ADMIN or OWNER role.
       security:
       - bearerAuth: []
       tags:
@@ -634,9 +605,8 @@ paths:
         in: path
       - schema:
           type: integer
-          minimum: 0
-          exclusiveMinimum: true
           example: 3
+          exclusiveMinimum: 0
         required: true
         name: recordTypeId
         in: path
@@ -652,7 +622,6 @@ paths:
                     type: boolean
                     enum:
                     - true
-                    example: true
                   data:
                     type: object
                     properties:
@@ -660,13 +629,10 @@ paths:
                         type: boolean
                         enum:
                         - true
-                        example: true
                       id:
                         anyOf:
                         - type: string
-                          example: example
                         - type: number
-                          example: 1
                     required:
                     - deleted
                 required:
@@ -690,21 +656,238 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /public/v1/objects/{name}/record-types/{recordTypeId}/security:
+    get:
+      summary: Get record type security
+      operationId: getObjectRecordTypeSecurity
+      description: 'Returns the record-level security (RLS) configuration for a record type, including the workspace default for new records. If no config has been saved yet, returns in-memory defaults (enabled: false, auto-detected Users column if present). Requires a USER API key with ADMIN or OWNER role.'
+      security:
+      - bearerAuth: []
+      tags:
+      - Object record types
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          example: 3
+          exclusiveMinimum: 0
+        required: true
+        name: recordTypeId
+        in: path
+      responses:
+        '200':
+          description: Record type security config
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      enabled:
+                        type: boolean
+                      virtual_owner_column_ids:
+                        type: array
+                        items:
+                          type: number
+                      virtual_owner_columns:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            key:
+                              type: string
+                          required:
+                          - id
+                          - name
+                          - key
+                      workspace:
+                        type: string
+                        enum:
+                        - FULL_ACCESS
+                        - READ_ONLY
+                        - NO_ACCESS
+                    required:
+                    - enabled
+                    - virtual_owner_column_ids
+                    - workspace
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update record type security
+      operationId: updateObjectRecordTypeSecurity
+      description: Updates record-level security (RLS) for a record type. virtual_owner_column_ids must reference User-relation fields assigned to the record type. workspace sets the default access for new records (FULL_ACCESS, READ_ONLY, NO_ACCESS). Unknown body keys return 400. Requires a USER API key with ADMIN or OWNER role.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object record types
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          example: 3
+          exclusiveMinimum: 0
+        required: true
+        name: recordTypeId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                virtualOwnerColumnIds:
+                  type: array
+                  items:
+                    type: integer
+                    exclusiveMinimum: 0
+                virtual_owner_column_ids:
+                  type: array
+                  items:
+                    type: integer
+                    exclusiveMinimum: 0
+                workspace:
+                  type: string
+                  enum:
+                  - FULL_ACCESS
+                  - READ_ONLY
+                  - NO_ACCESS
+                default_workspace_record_permission:
+                  type: string
+                  enum:
+                  - FULL_ACCESS
+                  - READ_ONLY
+                  - NO_ACCESS
+                defaultWorkspaceRecordPermission:
+                  type: string
+                  enum:
+                  - FULL_ACCESS
+                  - READ_ONLY
+                  - NO_ACCESS
+              additionalProperties: false
+      responses:
+        '200':
+          description: Updated record type security config
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      enabled:
+                        type: boolean
+                      virtual_owner_column_ids:
+                        type: array
+                        items:
+                          type: number
+                      virtual_owner_columns:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            key:
+                              type: string
+                          required:
+                          - id
+                          - name
+                          - key
+                      workspace:
+                        type: string
+                        enum:
+                        - FULL_ACCESS
+                        - READ_ONLY
+                        - NO_ACCESS
+                    required:
+                    - enabled
+                    - virtual_owner_column_ids
+                    - workspace
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
     ErrorBody:
       type: object
       properties:
@@ -734,6 +917,19 @@ components:
       required:
       - code
       - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
   securitySchemes:
     accountApiKey:
       type: http
@@ -753,6 +949,7 @@ x-tagGroups:
   - Flow Variables
   - Intents
   - Agents
+  - Agent Playbooks
 - name: Workflows
   tags:
   - Workflows
@@ -782,12 +979,24 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
+- name: Channels
+  tags:
+  - Channels
 - name: Integrations
   tags:
-  - Tools
+  - Custom Tools
   - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
 - name: Core
   tags:
   - Account
   - AI Models
   - Billing
+  - Users
+  - User Tasks
+  - Guidance

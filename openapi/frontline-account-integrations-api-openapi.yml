@@ -1,0 +1,519 @@
+openapi: 3.2.0
+info:
+  title: Public Account Integrations API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer <YOUR_API_KEY>
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Account Integrations
+  description: View account-scoped (Studio) connected integrations, discover connectable toolkits, and configure which tools each integration exposes to agents, flows, and workflows. These are used for workflows and agents, separate from Max integrations.
+paths:
+  /public/v1/integrations/toolkits:
+    get:
+      summary: List connectable toolkits
+      operationId: listIntegrationToolkits
+      description: Lists the catalog of toolkits that can be connected, with each toolkit's auth scheme and the tool slugs it supports. Use this to discover valid toolkit values and the tool slugs accepted by the update-tools endpoint. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Account Integrations
+      responses:
+        '200':
+          description: Connectable toolkits
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIntegrationToolkitList'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/integrations/{integrationId}:
+    get:
+      summary: Get account integration details
+      operationId: getAccountIntegration
+      description: Returns a single account integration by ID. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Account Integrations
+      parameters:
+      - schema:
+          type: integer
+          example: 42
+          exclusiveMinimum: 0
+        required: true
+        name: integrationId
+        in: path
+      responses:
+        '200':
+          description: Account integration details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIntegration'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update account integration
+      operationId: updateAccountIntegration
+      description: Updates an integration's alias and/or visibility (SHARED or PRIVATE). Only the creator, an admin, or an owner may update. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Account Integrations
+      parameters:
+      - schema:
+          type: integer
+          example: 42
+          exclusiveMinimum: 0
+        required: true
+        name: integrationId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicIntegrationUpdateInput'
+      responses:
+        '200':
+          description: Updated account integration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIntegration'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/integrations/{integrationId}/tools:
+    get:
+      summary: List integration tools
+      operationId: getAccountIntegrationTools
+      description: Returns the integration's tools split into enabled and available, including whether the connected account holds the OAuth scopes each tool requires. Use the tool `slug` values with the update-tools endpoint. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Account Integrations
+      parameters:
+      - schema:
+          type: integer
+          example: 42
+          exclusiveMinimum: 0
+        required: true
+        name: integrationId
+        in: path
+      responses:
+        '200':
+          description: Integration tools (enabled + available)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIntegrationTools'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Set integration allowed tools
+      operationId: setAccountIntegrationTools
+      description: Replaces the integration's enabled tool slugs with the provided list. Slugs must belong to the integration's toolkit. Only the creator, an admin, or an owner may update. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Account Integrations
+      parameters:
+      - schema:
+          type: integer
+          example: 42
+          exclusiveMinimum: 0
+        required: true
+        name: integrationId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicIntegrationSetToolsInput'
+      responses:
+        '200':
+          description: Updated account integration
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIntegration'
+        '400':
+          description: Invalid tool slugs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicIntegrationToolkit:
+      type: object
+      properties:
+        toolkit:
+          type: string
+          example: GMAIL
+        name:
+          type: string
+          example: Gmail
+        description:
+          type:
+          - string
+          - 'null'
+          example: Send and read email via Gmail
+        authScheme:
+          type: string
+          example: OAUTH2
+        toolCount:
+          type: number
+          example: 12
+        tools:
+          type: array
+          items:
+            type: string
+          example:
+          - GMAIL_SEND_EMAIL
+      required:
+      - toolkit
+      - name
+      - authScheme
+      - toolCount
+      - tools
+    PublicIntegrationSetToolsInput:
+      type: object
+      properties:
+        slugs:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          minItems: 1
+      required:
+      - slugs
+    PublicIntegration:
+      type: object
+      properties:
+        id:
+          type: number
+        toolkit:
+          type: string
+        alias:
+          type:
+          - string
+          - 'null'
+        visibility:
+          type: string
+          enum:
+          - PRIVATE
+          - SHARED
+        isConnected:
+          type: boolean
+        isExpired:
+          type: boolean
+          default: false
+        connectedEmail:
+          type:
+          - string
+          - 'null'
+        connectedAt:
+          type:
+          - string
+          - 'null'
+        composioConnectedAccountId:
+          type:
+          - string
+          - 'null'
+        allowedToolSlugs:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        availableToolsCount:
+          type:
+          - number
+          - 'null'
+        enabledToolsCount:
+          type:
+          - number
+          - 'null'
+        accountId:
+          type:
+          - number
+          - 'null'
+        createdByUserId:
+          type:
+          - number
+          - 'null'
+        createdByUser:
+          type:
+          - object
+          - 'null'
+          properties:
+            id:
+              type: number
+            firstName:
+              type: string
+            lastName:
+              type: string
+            email:
+              type: string
+            avatar:
+              type:
+              - string
+              - 'null'
+          required:
+          - id
+          - firstName
+          - lastName
+          - email
+          - avatar
+        createdAt:
+          type:
+          - string
+          - 'null'
+        updatedAt:
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - toolkit
+      - visibility
+      - isConnected
+      - createdAt
+      - updatedAt
+    PublicIntegrationToolkitList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIntegrationToolkit'
+      required:
+      - results
+    PublicIntegrationTools:
+      type: object
+      properties:
+        enabledTools:
+          type: array
+          items:
+            type: object
+            properties:
+              slug:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              enabled:
+                type: boolean
+              hasRequiredScopes:
+                type: boolean
+            required:
+            - slug
+            - name
+            - description
+            - enabled
+            - hasRequiredScopes
+        availableTools:
+          type: array
+          items:
+            type: object
+            properties:
+              slug:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              enabled:
+                type: boolean
+              hasRequiredScopes:
+                type: boolean
+            required:
+            - slug
+            - name
+            - description
+            - enabled
+            - hasRequiredScopes
+      required:
+      - enabledTools
+      - availableTools
+    PublicIntegrationUpdateInput:
+      type: object
+      properties:
+        alias:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 100
+        visibility:
+          type: string
+          enum:
+          - PRIVATE
+          - SHARED
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

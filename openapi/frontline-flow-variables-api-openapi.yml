@@ -1,6 +1,6 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  title: Public Account Flow Variables API
+  title: Public Flow Variables API
   version: 1.0.0
   description: 'Public API for accessing agents, flows, and analytics.
 
@@ -65,9 +65,7 @@ paths:
       - schema:
           anyOf:
           - type: boolean
-            example: false
           - type: string
-            example: example
           example: false
         required: false
         name: isDefault
@@ -82,19 +80,14 @@ paths:
                 properties:
                   count:
                     type: number
-                    example: 1
                   pageSize:
                     type: number
-                    example: 1
                   pageNum:
                     type: number
-                    example: 1
                   totalPages:
                     type: number
-                    example: 1
                   cursor:
                     type: number
-                    example: 1
                   results:
                     type: array
                     items:
@@ -105,15 +98,11 @@ paths:
                     - offset
                     - cursor
                     default: offset
-                    example: offset
                   nextCursor:
                     anyOf:
                     - type: string
-                      example: example
                     - type: number
-                      example: 1
-                    - nullable: true
-                      type: object
+                    - {}
                 required:
                 - pageSize
                 - results
@@ -216,8 +205,9 @@ paths:
         name: agentId
         in: path
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 123
         required: false
         name: variableId
@@ -245,8 +235,9 @@ paths:
         name: agentId
         in: path
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 123
         required: false
         name: variableId
@@ -279,8 +270,9 @@ paths:
         name: agentId
         in: path
       - schema:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           example: 123
         required: false
         name: variableId
@@ -290,6 +282,33 @@ paths:
           description: Variable deleted
 components:
   schemas:
+    PublicFlowVariableCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: customer_name
+        description:
+          type:
+          - string
+          - 'null'
+          example: Customer name captured during the conversation
+        pattern:
+          type:
+          - string
+          - 'null'
+          example: ^[A-Za-z ]+$
+      required:
+      - name
+    VariableCheckName:
+      type: object
+      properties:
+        exists:
+          type: boolean
+          example: false
+      required:
+      - exists
     Variable:
       type: object
       properties:
@@ -300,9 +319,9 @@ components:
           type: string
           example: customer_name
         description:
-          type: string
-          nullable: true
-          example: example
+          type:
+          - string
+          - 'null'
         status:
           type: string
           enum:
@@ -316,21 +335,21 @@ components:
           type: string
           example: '2024-01-01T12:00:00Z'
         assistantId:
-          type: string
-          nullable: true
-          example: example
+          type:
+          - string
+          - 'null'
         automationId:
-          type: number
-          nullable: true
-          example: 1
+          type:
+          - number
+          - 'null'
         pattern:
-          type: string
-          nullable: true
-          example: example
+          type:
+          - string
+          - 'null'
         defaultValue:
-          type: string
-          nullable: true
-          example: example
+          type:
+          - string
+          - 'null'
         isDefault:
           type: boolean
           example: false
@@ -349,40 +368,17 @@ components:
           minLength: 1
           example: customer_name
         description:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: Customer name captured during the conversation
         pattern:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           example: ^[A-Za-z ]+$
       required:
       - name
-    PublicFlowVariableCreateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: customer_name
-        description:
-          type: string
-          nullable: true
-          example: Customer name captured during the conversation
-        pattern:
-          type: string
-          nullable: true
-          example: ^[A-Za-z ]+$
-      required:
-      - name
-    VariableCheckName:
-      type: object
-      properties:
-        exists:
-          type: boolean
-          example: false
-      required:
-      - exists
   securitySchemes:
     accountApiKey:
       type: http
@@ -402,6 +398,7 @@ x-tagGroups:
   - Flow Variables
   - Intents
   - Agents
+  - Agent Playbooks
 - name: Workflows
   tags:
   - Workflows
@@ -431,12 +428,24 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
+- name: Channels
+  tags:
+  - Channels
 - name: Integrations
   tags:
-  - Tools
+  - Custom Tools
   - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
 - name: Core
   tags:
   - Account
   - AI Models
   - Billing
+  - Users
+  - User Tasks
+  - Guidance
