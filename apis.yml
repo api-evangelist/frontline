@@ -503,7 +503,7 @@ apis:
   humanURL: https://docs.getfrontline.ai/reference/openapi
   baseURL: https://prod-api.getfrontline.ai/public/v1
   tags:
-  - Table Rows
+  - Table rows
   tags_raw:
   - Table rows
   properties:
@@ -708,6 +708,8 @@ apis:
   humanURL: https://docs.getfrontline.ai/reference/openapi
   baseURL: https://prod-api.getfrontline.ai/public/v1
   tags:
+  - Integration
+  tags_raw:
   - Integrations
   properties:
   - type: OpenAPI
@@ -759,6 +761,8 @@ apis:
   humanURL: https://docs.getfrontline.ai/reference/openapi
   baseURL: https://prod-api.getfrontline.ai/public/v1
   tags:
+  - User
+  tags_raw:
   - Users
   properties:
   - type: OpenAPI
