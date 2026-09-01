@@ -503,7 +503,7 @@ apis:
   humanURL: https://docs.getfrontline.ai/reference/openapi
   baseURL: https://prod-api.getfrontline.ai/public/v1
   tags:
-  - Table rows
+  - Table Rows
   tags_raw:
   - Table rows
   properties:
