@@ -169,6 +169,8 @@ apis:
   humanURL: https://docs.getfrontline.ai/reference/openapi
   baseURL: https://prod-api.getfrontline.ai/public/v1
   tags:
+  - Flow
+  tags_raw:
   - Flows
   properties:
   - type: OpenAPI
