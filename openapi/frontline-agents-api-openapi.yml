@@ -2,35 +2,7 @@ openapi: 3.2.0
 info:
   title: Public Agents API
   version: 1.0.0
-  description: 'Public API for accessing agents, flows, and analytics.
-
-
-    ## Authentication
-
-
-    The Public API supports two API key types. Pass the key as a Bearer token:
-
-
-    ```
-
-    Authorization: Bearer <YOUR_API_KEY>
-
-    ```
-
-
-    ### Account API key (GENERAL)
-
-
-    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
-
-
-    ### User API key (USER)
-
-
-    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
-
-
-    Each operation documents which key type(s) it accepts in its **Security** section.'
+  description: Public API for accessing agents, flows, and analytics.
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -254,82 +226,17 @@ paths:
                 $ref: '#/components/schemas/PublicExecutionTrace'
 components:
   schemas:
-    PublicConversation:
+    PublicExecutionTrace:
       type: object
       properties:
         id:
-          type: number
-          example: 42
-        name:
           type:
           - string
           - 'null'
-          example: Anonymous Visitor
-        channel:
-          type: string
-          example: API
-        is_closed:
-          type: boolean
-        contact_id:
+        type:
           type:
           - string
           - 'null'
-        summary:
-          type:
-          - string
-          - 'null'
-          description: Latest rolling summary of the conversation, if one has been generated.
-        contact:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-          description: The linked CRM contact (People record), if any.
-        created_at:
-          type: string
-        updated_at:
-          type:
-          - string
-          - 'null'
-      required:
-      - id
-      - channel
-      - is_closed
-      - created_at
-    PublicAgentMessageInput:
-      type: object
-      properties:
-        message:
-          type: string
-          minLength: 1
-          description: The message to send. Omit on a NEW conversation to just open it and run the agent's Start flow (like the Overview/Playground). Required when continuing an existing conversation (conversation_id present).
-          example: Hi, I need help with my order
-        conversation_id:
-          type: integer
-          description: Continue an existing conversation. Omit to start a new one.
-          example: 42
-          exclusiveMinimum: 0
-        contact_id:
-          type: string
-          description: Link the conversation to a People (contact) record.
-        initial_variables:
-          type: object
-          additionalProperties: {}
-          description: Variables to seed the conversation with when starting a new one (HMAC is computed server-side).
-    PublicAgentRunOutput:
-      type: object
-      properties:
-        conversation_id:
-          type:
-          - number
-          - 'null'
-          example: 42
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicAgentRunMessage'
-      required:
-      - messages
     PublicAgentRunMessage:
       type: object
       properties:
@@ -386,6 +293,48 @@ components:
       - role
       - type
       - text
+    PublicConversation:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 42
+        name:
+          type:
+          - string
+          - 'null'
+          example: Anonymous Visitor
+        channel:
+          type: string
+          example: API
+        is_closed:
+          type: boolean
+        contact_id:
+          type:
+          - string
+          - 'null'
+        summary:
+          type:
+          - string
+          - 'null'
+          description: Latest rolling summary of the conversation, if one has been generated.
+        contact:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: The linked CRM contact (People record), if any.
+        created_at:
+          type: string
+        updated_at:
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - channel
+      - is_closed
+      - created_at
     PublicConversationMessage:
       type: object
       properties:
@@ -446,17 +395,26 @@ components:
       - role
       - type
       - created_at
-    PublicExecutionTrace:
+    PublicAgentMessageInput:
       type: object
       properties:
-        id:
-          type:
-          - string
-          - 'null'
-        type:
-          type:
-          - string
-          - 'null'
+        message:
+          type: string
+          minLength: 1
+          description: The message to send. Omit on a NEW conversation to just open it and run the agent's Start flow (like the Overview/Playground). Required when continuing an existing conversation (conversation_id present).
+          example: Hi, I need help with my order
+        conversation_id:
+          type: integer
+          description: Continue an existing conversation. Omit to start a new one.
+          example: 42
+          exclusiveMinimum: 0
+        contact_id:
+          type: string
+          description: Link the conversation to a People (contact) record.
+        initial_variables:
+          type: object
+          additionalProperties: {}
+          description: Variables to seed the conversation with when starting a new one (HMAC is computed server-side).
     PublicConversationTranscript:
       allOf:
       - $ref: '#/components/schemas/PublicConversation'
@@ -468,6 +426,20 @@ components:
               $ref: '#/components/schemas/PublicConversationMessage'
         required:
         - messages
+    PublicAgentRunOutput:
+      type: object
+      properties:
+        conversation_id:
+          type:
+          - number
+          - 'null'
+          example: 42
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicAgentRunMessage'
+      required:
+      - messages
   securitySchemes:
     accountApiKey:
       type: http

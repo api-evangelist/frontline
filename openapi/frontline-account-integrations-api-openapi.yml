@@ -2,35 +2,7 @@ openapi: 3.2.0
 info:
   title: Public Account Integrations API
   version: 1.0.0
-  description: 'Public API for accessing agents, flows, and analytics.
-
-
-    ## Authentication
-
-
-    The Public API supports two API key types. Pass the key as a Bearer token:
-
-
-    ```
-
-    Authorization: Bearer <YOUR_API_KEY>
-
-    ```
-
-
-    ### Account API key (GENERAL)
-
-
-    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
-
-
-    ### User API key (USER)
-
-
-    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
-
-
-    Each operation documents which key type(s) it accepts in its **Security** section.'
+  description: Public API for accessing agents, flows, and analytics.
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -227,6 +199,19 @@ components:
       required:
       - code
       - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
     PublicIntegrationToolkit:
       type: object
       properties:
@@ -270,6 +255,54 @@ components:
           minItems: 1
       required:
       - slugs
+    PublicIntegrationTools:
+      type: object
+      properties:
+        enabledTools:
+          type: array
+          items:
+            type: object
+            properties:
+              slug:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              enabled:
+                type: boolean
+              hasRequiredScopes:
+                type: boolean
+            required:
+            - slug
+            - name
+            - description
+            - enabled
+            - hasRequiredScopes
+        availableTools:
+          type: array
+          items:
+            type: object
+            properties:
+              slug:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              enabled:
+                type: boolean
+              hasRequiredScopes:
+                type: boolean
+            required:
+            - slug
+            - name
+            - description
+            - enabled
+            - hasRequiredScopes
+      required:
+      - enabledTools
+      - availableTools
     PublicIntegration:
       type: object
       properties:
@@ -363,63 +396,6 @@ components:
       - isConnected
       - createdAt
       - updatedAt
-    PublicIntegrationToolkitList:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicIntegrationToolkit'
-      required:
-      - results
-    PublicIntegrationTools:
-      type: object
-      properties:
-        enabledTools:
-          type: array
-          items:
-            type: object
-            properties:
-              slug:
-                type: string
-              name:
-                type: string
-              description:
-                type: string
-              enabled:
-                type: boolean
-              hasRequiredScopes:
-                type: boolean
-            required:
-            - slug
-            - name
-            - description
-            - enabled
-            - hasRequiredScopes
-        availableTools:
-          type: array
-          items:
-            type: object
-            properties:
-              slug:
-                type: string
-              name:
-                type: string
-              description:
-                type: string
-              enabled:
-                type: boolean
-              hasRequiredScopes:
-                type: boolean
-            required:
-            - slug
-            - name
-            - description
-            - enabled
-            - hasRequiredScopes
-      required:
-      - enabledTools
-      - availableTools
     PublicIntegrationUpdateInput:
       type: object
       properties:
@@ -434,19 +410,15 @@ components:
           enum:
           - PRIVATE
           - SHARED
-    Error:
+    PublicIntegrationToolkitList:
       type: object
       properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIntegrationToolkit'
       required:
-      - ok
-      - error
+      - results
   securitySchemes:
     accountApiKey:
       type: http

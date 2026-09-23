@@ -2,35 +2,7 @@ openapi: 3.2.0
 info:
   title: Public Billing API
   version: 1.0.0
-  description: 'Public API for accessing agents, flows, and analytics.
-
-
-    ## Authentication
-
-
-    The Public API supports two API key types. Pass the key as a Bearer token:
-
-
-    ```
-
-    Authorization: Bearer <YOUR_API_KEY>
-
-    ```
-
-
-    ### Account API key (GENERAL)
-
-
-    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
-
-
-    ### User API key (USER)
-
-
-    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
-
-
-    Each operation documents which key type(s) it accepts in its **Security** section.'
+  description: Public API for accessing agents, flows, and analytics.
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -272,53 +244,35 @@ components:
       required:
       - code
       - message
-    PublicMaxUsage:
+    PublicMaxSeatResult:
       type: object
       properties:
-        plan:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        subscription:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        seats:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        limits:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        next:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-    PublicCreditHistory:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicCreditHistoryItem'
-      required:
-      - results
-    PublicMaxSeatInput:
-      type: object
-      properties:
+        success:
+          type: boolean
+          example: true
         userId:
-          type: integer
-          description: ID of the user to assign/unassign (see GET /users)
+          type: number
           example: 12
-          exclusiveMinimum: 0
+        assigned:
+          type: boolean
+          description: Whether the user holds a Max seat after this operation
       required:
+      - success
       - userId
+      - assigned
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
     PublicCreditHistoryItem:
       type: object
       properties:
@@ -353,30 +307,70 @@ components:
       - date
       - totalCredits
       - messageCount
-    PublicMaxSeatUser:
+    PublicMaxSeatInput:
       type: object
       properties:
         userId:
-          type: number
+          type: integer
+          description: ID of the user to assign/unassign (see GET /users)
           example: 12
-        firstName:
-          type:
-          - string
-          - 'null'
-        lastName:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-        assignedAt:
-          type:
-          - string
-          - 'null'
+          exclusiveMinimum: 0
       required:
       - userId
+    BillingPlan:
+      type: object
+      properties:
+        planName:
+          type:
+          - string
+          - 'null'
+          example: Professional
+        creditsPerMonth:
+          type:
+          - number
+          - 'null'
+          example: 5000
+        creditsUsed:
+          type: number
+          example: 1250.5
+        subscriptionRenews:
+          type:
+          - string
+          - 'null'
+          example: '2026-03-25T00:00:00Z'
+      required:
+      - planName
+      - creditsPerMonth
+      - creditsUsed
+      - subscriptionRenews
+    PublicMaxUsage:
+      type: object
+      properties:
+        plan:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        subscription:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        seats:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        limits:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        next:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
     PublicMaxSeats:
       type: object
       properties:
@@ -449,61 +443,39 @@ components:
           - object
           - 'null'
           additionalProperties: {}
-    BillingPlan:
+    PublicMaxSeatUser:
       type: object
       properties:
-        planName:
-          type:
-          - string
-          - 'null'
-          example: Professional
-        creditsPerMonth:
-          type:
-          - number
-          - 'null'
-          example: 5000
-        creditsUsed:
-          type: number
-          example: 1250.5
-        subscriptionRenews:
-          type:
-          - string
-          - 'null'
-          example: '2026-03-25T00:00:00Z'
-      required:
-      - planName
-      - creditsPerMonth
-      - creditsUsed
-      - subscriptionRenews
-    PublicMaxSeatResult:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
         userId:
           type: number
           example: 12
-        assigned:
-          type: boolean
-          description: Whether the user holds a Max seat after this operation
+        firstName:
+          type:
+          - string
+          - 'null'
+        lastName:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        assignedAt:
+          type:
+          - string
+          - 'null'
       required:
-      - success
       - userId
-      - assigned
-    Error:
+    PublicCreditHistory:
       type: object
       properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicCreditHistoryItem'
       required:
-      - ok
-      - error
+      - results
   securitySchemes:
     accountApiKey:
       type: http

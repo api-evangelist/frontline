@@ -2,35 +2,7 @@ openapi: 3.2.0
 info:
   title: Public Table files API
   version: 1.0.0
-  description: 'Public API for accessing agents, flows, and analytics.
-
-
-    ## Authentication
-
-
-    The Public API supports two API key types. Pass the key as a Bearer token:
-
-
-    ```
-
-    Authorization: Bearer <YOUR_API_KEY>
-
-    ```
-
-
-    ### Account API key (GENERAL)
-
-
-    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
-
-
-    ### User API key (USER)
-
-
-    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
-
-
-    Each operation documents which key type(s) it accepts in its **Security** section.'
+  description: Public API for accessing agents, flows, and analytics.
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions

@@ -2,35 +2,7 @@ openapi: 3.2.0
 info:
   title: Public AI Models API
   version: 1.0.0
-  description: 'Public API for accessing agents, flows, and analytics.
-
-
-    ## Authentication
-
-
-    The Public API supports two API key types. Pass the key as a Bearer token:
-
-
-    ```
-
-    Authorization: Bearer <YOUR_API_KEY>
-
-    ```
-
-
-    ### Account API key (GENERAL)
-
-
-    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
-
-
-    ### User API key (USER)
-
-
-    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
-
-
-    Each operation documents which key type(s) it accepts in its **Security** section.'
+  description: Public API for accessing agents, flows, and analytics.
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -150,6 +122,48 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
     AiModel:
       type: object
       properties:
@@ -188,48 +202,6 @@ components:
       required:
       - id
       - name
-    ErrorBody:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
   securitySchemes:
     accountApiKey:
       type: http

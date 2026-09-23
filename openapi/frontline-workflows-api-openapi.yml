@@ -2,35 +2,7 @@ openapi: 3.2.0
 info:
   title: Public Workflows API
   version: 1.0.0
-  description: 'Public API for accessing agents, flows, and analytics.
-
-
-    ## Authentication
-
-
-    The Public API supports two API key types. Pass the key as a Bearer token:
-
-
-    ```
-
-    Authorization: Bearer <YOUR_API_KEY>
-
-    ```
-
-
-    ### Account API key (GENERAL)
-
-
-    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
-
-
-    ### User API key (USER)
-
-
-    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
-
-
-    Each operation documents which key type(s) it accepts in its **Security** section.'
+  description: Public API for accessing agents, flows, and analytics.
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -638,30 +610,22 @@ paths:
                 $ref: '#/components/schemas/PublicExecutionTrace'
 components:
   schemas:
-    WorkflowRunResult:
+    DynamicTablesQuery:
+      anyOf:
+      - $ref: '#/components/schemas/DynamicTablesQueryCondition'
+      - $ref: '#/components/schemas/DynamicTablesQueryGroup'
+      - {}
+    PublicExecutionTrace:
       type: object
       properties:
-        automationId:
-          type: number
-          example: 42
-        name:
-          type: string
-          example: Daily CRM Sync
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - DELETED
-          - DRAFT
-          example: ACTIVE
-        enqueued:
-          type: boolean
-          example: true
-      required:
-      - automationId
-      - name
-      - status
-      - enqueued
+        id:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
     WorkflowAnalytics:
       type: object
       properties:
@@ -732,1332 +696,98 @@ components:
       required:
       - runsByDate
       - summary
-    DynamicTablesQueryCondition:
-      type: object
-      properties:
-        path:
-          type: string
-          description: Field path in format [Field] or [Relation].[Field]
-          example: '[Status]'
-        operator:
-          type: string
-          example: equals
-        value: {}
-        valueType: {}
-      required:
-      - path
-      - operator
-    WorkflowDetail:
-      allOf:
-      - $ref: '#/components/schemas/Workflow'
-      - type: object
-        properties:
-          liveSnapshotId:
-            type:
-            - string
-            - 'null'
-            example: 64f1c2e6a75f2d4a9a2f1234
-          draftSnapshotId:
-            type:
-            - string
-            - 'null'
-            example: 64f1c2e6a75f2d4a9a2f1234
-          nodes:
-            type: array
-            items:
-              $ref: '#/components/schemas/PublicWorkflowNode'
-        required:
-        - liveSnapshotId
-        - draftSnapshotId
-    DynamicTablesQuery:
-      anyOf:
-      - $ref: '#/components/schemas/DynamicTablesQueryCondition'
-      - $ref: '#/components/schemas/DynamicTablesQueryGroup'
-      - {}
-    ErrorBody:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
-    Workflow:
+    WorkflowGraph:
       type: object
       properties:
         id:
-          type: number
-          example: 501
-        name:
           type: string
-          example: Daily CRM Sync
-        description:
+        assistantId:
           type:
           - string
           - 'null'
-          example: Syncs contacts to HubSpot
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - DELETED
-          - DRAFT
-          example: ACTIVE
-        triggerType:
-          type:
-          - string
-          - 'null'
-          enum:
-          - CONVERSATION_ENDED
-          - CONTACT_CREATED
-          - CONTACT_UPDATED
-          - FEEDBACK_CAPTURED
-          - INCOMING_WEBHOOK
-          - TABLE_ROW_CREATED
-          - OBJECT_RECORD_CREATED
-          - TABLE_ROW_UPDATED
-          - OBJECT_RECORD_UPDATED
-          - SCHEDULED_TRIGGER
-          - CONVERSATION_IDLE
-          - COMPOSIO_TRIGGER
-          example: CONVERSATION_ENDED
-        createdAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
-        updatedAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
-        runsCount:
-          type: number
-          example: 1200
-        runsFailedCount:
-          type: number
-          example: 5
-        lastRunDate:
-          type:
-          - string
-          - 'null'
-          example: '2024-01-01T12:00:00Z'
-      required:
-      - id
-      - name
-      - description
-      - status
-      - triggerType
-      - createdAt
-      - updatedAt
-      - runsCount
-      - runsFailedCount
-      - lastRunDate
-    DynamicTablesQueryGroup:
-      type: object
-      properties:
-        operator:
-          type: string
-          enum:
-          - and
-          - or
-        conditions:
-          type: array
-          items: {}
-          description: Nested filter conditions or AND/OR groups
-      required:
-      - operator
-      - conditions
-    PublicWorkflowUpdateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: Daily CRM Sync
-        description:
-          type:
-          - string
-          - 'null'
-          example: Syncs contacts daily
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - DELETED
-          - DRAFT
-          example: ACTIVE
-      required:
-      - name
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
-    PublicWorkflowNodeCreateInput:
-      type: object
-      properties:
-        node:
-          type: object
-          properties:
-            name:
-              type: string
-              example: Initial trigger
-            position:
-              type: object
-              properties:
-                positionX:
-                  type: number
-                positionY:
-                  type: number
-              required:
-              - positionX
-              - positionY
-            type:
-              type: string
-              enum:
-              - TRIGGER
-              - SCHEDULED_TRIGGER
-              - WEBHOOK
-              - TOOLS_AI
-              - API
-              - CONDITIONAL_ROUTING
-              - AI_CAPTURE
-              - DATA_TRANSFORMER
-              - DYNAMIC_TABLES
-              - ITERATION
-              - BREAK
-              - AUTOMATION_STATUS
-              - SEND_MESSAGE
-              - SEND_WHATSAPP_MESSAGE
-              - TRANSCRIPTION
-              - FILE_ANALYSIS
-              - CREATE_RECORD_ACTIVITY
-              example: TRIGGER
-            data:
-              oneOf:
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - TRIGGER
-                  triggerType:
-                    type:
-                    - string
-                    - 'null'
-                    enum:
-                    - CONVERSATION_ENDED
-                    - CONTACT_CREATED
-                    - CONTACT_UPDATED
-                    - FEEDBACK_CAPTURED
-                    - INCOMING_WEBHOOK
-                    - TABLE_ROW_CREATED
-                    - OBJECT_RECORD_CREATED
-                    - TABLE_ROW_UPDATED
-                    - OBJECT_RECORD_UPDATED
-                    - CONVERSATION_IDLE
-                    - COMPOSIO_TRIGGER
-                  triggeredBy:
-                    type:
-                    - string
-                    - 'null'
-                    enum:
-                    - BOTH
-                    - AGENT
-                    - USER
-                    - INCOMING_WEBHOOK
-                  triggeredByAgentIds:
-                    type: array
-                    items:
-                      type: string
-                  triggerByWebhookIds:
-                    type: array
-                    items:
-                      type: string
-                  triggeredByTableId:
-                    type:
-                    - number
-                    - 'null'
-                  triggeredByRecordTypeId:
-                    type:
-                    - number
-                    - 'null'
-                  connectedAccountTriggerId:
-                    type:
-                    - string
-                    - 'null'
-                  triggerToolkit:
-                    type:
-                    - string
-                    - 'null'
-                  triggerSlug:
-                    type:
-                    - string
-                    - 'null'
-                  triggerConfig:
-                    type:
-                    - object
-                    - 'null'
-                    additionalProperties: {}
-                  triggerQueryConfig:
-                    type:
-                    - object
-                    - 'null'
-                    properties:
-                      query:
-                        type: object
-                        description: 'Dynamic-table query: a single `{ path, operator, value }` condition, or a nested `{ operator: ''and'' | ''or'', conditions: [...] }` group.'
-                  connectedAccountId:
-                    type:
-                    - number
-                    - 'null'
-                required:
-                - type
-                additionalProperties: false
-                description: Event-based entry point. Conversation triggers (CONVERSATION_ENDED, CONVERSATION_IDLE, FEEDBACK_CAPTURED) only fire for the agents listed in triggeredByAgentIds — leave it empty and the workflow never runs. Get the ids from GET /public/v1/agents.
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - SCHEDULED_TRIGGER
-                  cronExpression:
-                    type: string
-                    description: Cron expression (default preset). Validated by cron-validate.
-                    example: 0 9 * * 1-5
-                  timezone:
-                    type: string
-                    description: IANA timezone identifier. Validated against the host ICU table.
-                    example: America/Argentina/Buenos_Aires
-                  startTime:
-                    type:
-                    - string
-                    - 'null'
-                  endTime:
-                    type:
-                    - string
-                    - 'null'
-                  startDate:
-                    type:
-                    - string
-                    - 'null'
-                  endDate:
-                    type:
-                    - string
-                    - 'null'
-                  frequency:
-                    type:
-                    - string
-                    - 'null'
-                    enum:
-                    - INTERVALS
-                    - DAILY
-                    - WEEKLY
-                    - MONTHLY
-                required:
-                - type
-                - cronExpression
-                - timezone
-                - startTime
-                - endTime
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - WEBHOOK
-                  includeConversationTranscript:
-                    type: boolean
-                    default: false
-                  includeContactInfo:
-                    type: boolean
-                    default: false
-                  includeFeedbackCaptured:
-                    type: boolean
-                    default: false
-                  includeCapturedVariables:
-                    type: boolean
-                    default: false
-                  includeWebhookPayload:
-                    type: boolean
-                    default: false
-                  url:
-                    type:
-                    - string
-                    - 'null'
-                required:
-                - type
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - TOOLS_AI
-                  conditions:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        handleId:
-                          type: string
-                        expression:
-                          type: string
-                      required:
-                      - handleId
-                      - expression
-                  temperature:
-                    type: number
-                  model:
-                    type: string
-                  aiVendor:
-                    type: string
-                    enum:
-                    - OPENAI
-                    - ANTHROPIC
-                    - GOOGLE
-                    - AZURE
-                    - DEEPSEEK
-                    - LLAMA
-                  instructions:
-                    type:
-                    - string
-                    - 'null'
-                  prompt:
-                    type:
-                    - string
-                    - 'null'
-                  customToolIds:
-                    type:
-                    - array
-                    - 'null'
-                    items:
-                      type: number
-                  maxIterations:
-                    type: number
-                    minimum: 1
-                    maximum: 30
-                    default: 10
-                  agentType:
-                    type: string
-                    enum:
-                    - BASIC
-                    - ADVANCED
-                    default: BASIC
-                  captureVariables:
-                    type:
-                    - array
-                    - 'null'
-                    items: {}
-                  knowledgeBaseMode:
-                    type: string
-                    enum:
-                    - DEFAULT
-                    - CUSTOM
-                    - DISABLED
-                    default: DEFAULT
-                  knowledgeBaseIds:
-                    type:
-                    - array
-                    - 'null'
-                    items:
-                      type: integer
-                      exclusiveMinimum: 0
-                  selectedRecordTypes:
-                    type:
-                    - array
-                    - 'null'
-                    items:
-                      type: object
-                      properties:
-                        recordTypeId:
-                          type: number
-                        read:
-                          type: boolean
-                        create:
-                          type: boolean
-                        update:
-                          type: boolean
-                        delete:
-                          type: boolean
-                        createActivity:
-                          type: boolean
-                      required:
-                      - recordTypeId
-                  systemToolsConfig:
-                    type:
-                    - object
-                    - 'null'
-                    properties:
-                      webSearchEnabled:
-                        type: boolean
-                        default: false
-                      urlScrapeEnabled:
-                        type: boolean
-                        default: false
-                      linkedinSearchEnabled:
-                        type: boolean
-                        default: false
-                  connectedAccountConfigs:
-                    type:
-                    - array
-                    - 'null'
-                    items:
-                      type: object
-                      properties:
-                        connectedAccountId:
-                          type: number
-                        useAllTools:
-                          type: boolean
-                          default: true
-                        selectedToolSlugs:
-                          type:
-                          - array
-                          - 'null'
-                          items:
-                            type: string
-                      required:
-                      - connectedAccountId
-                  playbookIds:
-                    type:
-                    - array
-                    - 'null'
-                    items:
-                      type: integer
-                      exclusiveMinimum: 0
-                  aiModelId:
-                    type:
-                    - integer
-                    - 'null'
-                required:
-                - type
-                - conditions
-                - instructions
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - API
-                  url:
-                    type: string
-                    example: https://api.example.com/hook
-                  method:
-                    type: string
-                    enum:
-                    - GET
-                    - POST
-                    - PUT
-                    - DELETE
-                    - PATCH
-                  headers:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        key:
-                          type: string
-                        value:
-                          type: string
-                      required:
-                      - key
-                      - value
-                  body:
-                    type:
-                    - string
-                    - 'null'
-                  response:
-                    type:
-                    - string
-                    - 'null'
-                  parameters:
-                    type:
-                    - array
-                    - 'null'
-                    items:
-                      type: object
-                      properties:
-                        key:
-                          type: string
-                        value:
-                          type: string
-                      required:
-                      - key
-                      - value
-                  variables:
-                    type:
-                    - array
-                    - 'null'
-                    items:
-                      type: object
-                      properties:
-                        key:
-                          type: string
-                        value:
-                          type: string
-                        fullResponse:
-                          type: boolean
-                          default: false
-                      required:
-                      - key
-                      - value
-                required:
-                - type
-                - url
-                - method
-                - headers
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - CONDITIONAL_ROUTING
-                  routingType:
-                    type: string
-                    enum:
-                    - CONDITIONAL_AI
-                    - DYNAMIC
-                  conditions:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        handleId:
-                          type: string
-                        expression:
-                          type: string
-                      required:
-                      - handleId
-                      - expression
-                  temperature:
-                    type: number
-                  model:
-                    type: string
-                  aiVendor:
-                    type: string
-                    enum:
-                    - OPENAI
-                    - ANTHROPIC
-                    - GOOGLE
-                    - AZURE
-                    - DEEPSEEK
-                    - LLAMA
-                  aiModelId:
-                    type:
-                    - integer
-                    - 'null'
-                required:
-                - type
-                - routingType
-                - conditions
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - AI_CAPTURE
-                  aiModelId:
-                    type:
-                    - number
-                    - 'null'
-                  model:
-                    type: string
-                  aiVendor:
-                    type: string
-                    enum:
-                    - OPENAI
-                    - ANTHROPIC
-                    - GOOGLE
-                    - AZURE
-                    - DEEPSEEK
-                    - LLAMA
-                  instructions:
-                    type:
-                    - string
-                    - 'null'
-                  prompt:
-                    type:
-                    - string
-                    - 'null'
-                  temperature:
-                    type: number
-                  captureVariables:
-                    type: array
-                    items: {}
-                  knowledgeBaseMode:
-                    type: string
-                    enum:
-                    - DEFAULT
-                    - CUSTOM
-                    - DISABLED
-                    default: DEFAULT
-                  knowledgeBaseIds:
-                    type:
-                    - array
-                    - 'null'
-                    items:
-                      type: integer
-                      exclusiveMinimum: 0
-                required:
-                - type
-                - model
-                - aiVendor
-                - prompt
-                - temperature
-                - captureVariables
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - DATA_TRANSFORMER
-                  prompt:
-                    type:
-                    - string
-                    - 'null'
-                  temperature:
-                    type: number
-                    default: 0.7
-                  model:
-                    type:
-                    - string
-                    - 'null'
-                  aiVendor:
-                    type:
-                    - string
-                    - 'null'
-                    enum:
-                    - OPENAI
-                    - ANTHROPIC
-                    - GOOGLE
-                    - AZURE
-                    - DEEPSEEK
-                    - LLAMA
-                  aiModelId:
-                    type:
-                    - integer
-                    - 'null'
-                  outputJson:
-                    type:
-                    - string
-                    - 'null'
-                  outputMode:
-                    type:
-                    - string
-                    - 'null'
-                    enum:
-                    - JSON
-                    - KEY_VALUE
-                    - TEXT
-                  keyValuePairs:
-                    type:
-                    - array
-                    - 'null'
-                    items:
-                      type: object
-                      properties:
-                        key:
-                          type: string
-                        value:
-                          type: string
-                      required:
-                      - key
-                      - value
-                required:
-                - type
-                - prompt
-                - model
-                - aiVendor
-                - outputMode
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - DYNAMIC_TABLES
-                  tableId:
-                    type:
-                    - number
-                    - 'null'
-                  recordTypeId:
-                    type:
-                    - number
-                    - 'null'
-                  targetRecordTypeId:
-                    type:
-                    - number
-                    - 'null'
-                    description: Destination record type id. Required when actionType is CHANGE_RECORD_TYPE.
-                    example: 12
-                  actionType:
-                    type:
-                    - string
-                    - 'null'
-                    enum:
-                    - CREATE
-                    - UPDATE
-                    - DELETE
-                    - SEARCH
-                    - SEARCH_BY_ID
-                    - CHANGE_RECORD_TYPE
-                    description: 'Operation to run. Required-field rules per action: CREATE → rowData; UPDATE → rowId + rowData; DELETE / SEARCH_BY_ID → rowId; CHANGE_RECORD_TYPE → rowId + targetRecordTypeId.'
-                    example: CREATE
-                  rowData:
-                    type:
-                    - object
-                    - 'null'
-                    additionalProperties: {}
-                  inputModeByField:
-                    type:
-                    - object
-                    - 'null'
-                    additionalProperties:
-                      type: string
-                      enum:
-                      - INPUT
-                      - VARIABLE
-                      - EMPTY
-                  rowId:
-                    type:
-                    - string
-                    - 'null'
-                  search:
-                    type:
-                    - string
-                    - 'null'
-                  pageNum:
-                    anyOf:
-                    - type: number
-                    - type: string
-                    - {}
-                  pageSize:
-                    anyOf:
-                    - type: number
-                    - type: string
-                    - {}
-                  pageNumMode:
-                    type:
-                    - string
-                    - 'null'
-                    enum:
-                    - INPUT
-                    - VARIABLE
-                    - EMPTY
-                  pageSizeMode:
-                    type:
-                    - string
-                    - 'null'
-                    enum:
-                    - INPUT
-                    - VARIABLE
-                    - EMPTY
-                  sort:
-                    type:
-                    - array
-                    - 'null'
-                    items:
-                      type: object
-                      properties:
-                        path:
-                          type: string
-                        type:
-                          type: string
-                          enum:
-                          - asc
-                          - desc
-                      required:
-                      - path
-                      - type
-                  query:
-                    $ref: '#/components/schemas/DynamicTablesQuery'
-                required:
-                - type
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - ITERATION
-                  variableName:
-                    type: string
-                    default: ''
-                  variablePath:
-                    type: string
-                    default: ''
-                  continueOnError:
-                    type: boolean
-                    default: false
-                required:
-                - type
-                description: Loop node. Wire type is ITERATION. Connect edges with sourceHandle body (for-each), completed (after all items), and empty (null/empty list). At most 50 items per loop invocation; if the resolved array has more than 50 items, the automation run fails before the loop body starts (no items processed). Automations are also limited to 500 node execution steps total. Not available in agent flows.
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - BREAK
-                required:
-                - type
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - AUTOMATION_STATUS
-                  automationId:
-                    type:
-                    - integer
-                    - 'null'
-                    exclusiveMinimum: 0
-                  automationName:
-                    type:
-                    - string
-                    - 'null'
-                  action:
-                    type: string
-                    enum:
-                    - SET_ACTIVE
-                    - SET_DRAFT
-                    - TOGGLE
-                    default: SET_ACTIVE
-                required:
-                - type
-                description: Changes another automation's status (live/draft/toggle). Does not publish draft graph changes.
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - SEND_MESSAGE
-                  whatsapp:
-                    type:
-                    - object
-                    - 'null'
-                    properties:
-                      messageType:
-                        type: string
-                        enum:
-                        - STATIC
-                        - DYNAMIC
-                        - WHATSAPP_TEMPLATE
-                      message:
-                        type:
-                        - string
-                        - 'null'
-                      prompt:
-                        type:
-                        - string
-                        - 'null'
-                      temperature:
-                        type:
-                        - number
-                        - 'null'
-                      aiModelId:
-                        type:
-                        - number
-                        - 'null'
-                      aiVendor:
-                        type:
-                        - string
-                        - 'null'
-                        enum:
-                        - OPENAI
-                        - ANTHROPIC
-                        - GOOGLE
-                        - AZURE
-                        - DEEPSEEK
-                        - LLAMA
-                      model:
-                        type:
-                        - string
-                        - 'null'
-                      template:
-                        type:
-                        - string
-                        - 'null'
-                      templateVariables:
-                        type:
-                        - object
-                        - 'null'
-                        properties:
-                          body:
-                            type: object
-                            additionalProperties: {}
-                          header:
-                            type: object
-                            additionalProperties: {}
-                          buttons:
-                            type: array
-                            items:
-                              type: object
-                              additionalProperties: {}
-                      templateData:
-                        type:
-                        - object
-                        - 'null'
-                        additionalProperties: {}
-                    required:
-                    - messageType
-                  instagram:
-                    type:
-                    - object
-                    - 'null'
-                    properties:
-                      messageType:
-                        type: string
-                        enum:
-                        - STATIC
-                        - DYNAMIC
-                        - WHATSAPP_TEMPLATE
-                      message:
-                        type:
-                        - string
-                        - 'null'
-                      prompt:
-                        type:
-                        - string
-                        - 'null'
-                      temperature:
-                        type:
-                        - number
-                        - 'null'
-                      aiModelId:
-                        type:
-                        - number
-                        - 'null'
-                      aiVendor:
-                        type:
-                        - string
-                        - 'null'
-                        enum:
-                        - OPENAI
-                        - ANTHROPIC
-                        - GOOGLE
-                        - AZURE
-                        - DEEPSEEK
-                        - LLAMA
-                      model:
-                        type:
-                        - string
-                        - 'null'
-                    required:
-                    - messageType
-                  messenger:
-                    type:
-                    - object
-                    - 'null'
-                    properties:
-                      messageType:
-                        type: string
-                        enum:
-                        - STATIC
-                        - DYNAMIC
-                        - WHATSAPP_TEMPLATE
-                      message:
-                        type:
-                        - string
-                        - 'null'
-                      prompt:
-                        type:
-                        - string
-                        - 'null'
-                      temperature:
-                        type:
-                        - number
-                        - 'null'
-                      aiModelId:
-                        type:
-                        - number
-                        - 'null'
-                      aiVendor:
-                        type:
-                        - string
-                        - 'null'
-                        enum:
-                        - OPENAI
-                        - ANTHROPIC
-                        - GOOGLE
-                        - AZURE
-                        - DEEPSEEK
-                        - LLAMA
-                      model:
-                        type:
-                        - string
-                        - 'null'
-                    required:
-                    - messageType
-                required:
-                - type
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - SEND_WHATSAPP_MESSAGE
-                  recipientMode:
-                    type:
-                    - string
-                    - 'null'
-                    enum:
-                    - PHONE_NUMBER
-                    - PEOPLE_RECORD
-                  peopleRecordTypeId:
-                    type:
-                    - number
-                    - 'null'
-                  peopleRowId:
-                    type:
-                    - string
-                    - 'null'
-                  personName:
-                    type:
-                    - string
-                    - 'null'
-                  phoneNumber:
-                    type:
-                    - string
-                    - 'null'
-                  phoneNumberId:
-                    type:
-                    - string
-                    - 'null'
-                  template:
-                    type:
-                    - string
-                    - 'null'
-                  templateVariables:
-                    type:
-                    - object
-                    - 'null'
-                    properties:
-                      body:
-                        type: object
-                        additionalProperties: {}
-                      header:
-                        type: object
-                        additionalProperties: {}
-                      buttons:
-                        type: array
-                        items:
-                          type: object
-                          additionalProperties: {}
-                required:
-                - type
-                description: Sends a WhatsApp Business template message. phoneNumberId must belong to this account and have an assistantId assigned.
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - TRANSCRIPTION
-                  audioUrl:
-                    type: string
-                  language:
-                    type: string
-                    default: es
-                  aiModelId:
-                    type:
-                    - number
-                    - 'null'
-                  aiVendor:
-                    type:
-                    - string
-                    - 'null'
-                    enum:
-                    - OPENAI
-                    - ANTHROPIC
-                    - GOOGLE
-                    - AZURE
-                    - DEEPSEEK
-                    - LLAMA
-                  model:
-                    type: string
-                    default: gpt-4o-transcribe
-                  captureVariables:
-                    type:
-                    - array
-                    - 'null'
-                    items: {}
-                  enableDiarization:
-                    type: boolean
-                    default: false
-                  captureSegmentsVariable:
-                    type:
-                    - object
-                    - 'null'
-                    properties:
-                      id:
-                        type: number
-                      name:
-                        type: string
-                      description:
-                        type: string
-                    required:
-                    - id
-                    - name
-                required:
-                - type
-                - audioUrl
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - FILE_ANALYSIS
-                  fileUrl:
-                    type: string
-                  aiModelId:
-                    type:
-                    - number
-                    - 'null'
-                  aiVendor:
-                    type:
-                    - string
-                    - 'null'
-                    enum:
-                    - OPENAI
-                    - ANTHROPIC
-                    - GOOGLE
-                    - AZURE
-                    - DEEPSEEK
-                    - LLAMA
-                  model:
-                    type:
-                    - string
-                    - 'null'
-                  prompt:
-                    type:
-                    - string
-                    - 'null'
-                  captureVariables:
-                    type:
-                    - array
-                    - 'null'
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: number
-                        name:
-                          type: string
-                        description:
-                          type: string
-                      required:
-                      - id
-                      - name
-                  captureOcrVariable:
-                    type:
-                    - object
-                    - 'null'
-                    properties:
-                      id:
-                        type: number
-                      name:
-                        type: string
-                      description:
-                        type: string
-                    required:
-                    - id
-                    - name
-                required:
-                - type
-                - fileUrl
-              - type: object
-                properties:
-                  type:
-                    type: string
-                    enum:
-                    - CREATE_RECORD_ACTIVITY
-                  recordTypeId: {}
-                  rowId:
-                    type:
-                    - string
-                    - 'null'
-                  activityType:
-                    type:
-                    - string
-                    - 'null'
-                    enum:
-                    - NOTE
-                    - EMAIL
-                    - PHONE_CALL
-                    - MEETING
-                    - WHATSAPP
-                  content:
-                    type:
-                    - string
-                    - 'null'
-                required:
-                - type
-              - {}
-          required:
-          - position
-          - type
-      required:
-      - node
-    PublicWorkflowLogNodeResult:
-      type: object
-      properties:
-        id:
-          type: number
-          description: Node-result ID. Use with the node trace endpoint.
-        node_id:
-          type: string
-        alias:
-          type:
-          - string
-          - 'null'
-        type:
-          type:
-          - string
-          - 'null'
-        success:
-          type: boolean
-        error:
-          type:
-          - string
-          - 'null'
-        ai_credits:
+        accountId:
           type:
           - number
           - 'null'
-        created_at:
+        entityId:
+          type: number
+        type:
           type: string
-        audit_log_id:
+          enum:
+          - FLOW
+          - AUTOMATION
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicWorkflowNode'
+        createdAt:
+          type: string
+        updatedAt:
           type:
           - string
           - 'null'
-          description: Pointer to this node's full execution trace. Fetch via the node trace endpoint.
+        executed:
+          type: boolean
+          default: false
+        breakingChangeAt:
+          type:
+          - string
+          - 'null'
+        breakingChangeReason:
+          type:
+          - string
+          - 'null'
       required:
-      - id
-      - node_id
-      - success
-      - created_at
+      - entityId
+      - type
+      - nodes
+      - createdAt
+    PublicWorkflowNodeCreated:
+      allOf:
+      - $ref: '#/components/schemas/PublicWorkflowNode'
+      - type: object
+        properties:
+          alias:
+            type: string
+            example: API Call
+        required:
+        - alias
+    PublicWorkflowEdgeInput:
+      type: object
+      properties:
+        edge:
+          type: object
+          properties:
+            source:
+              type: string
+              example: trigger_1
+            sourceHandle:
+              type: string
+              example: default
+            target:
+              type: string
+              example: api_1
+            targetHandle:
+              type: string
+              example: default
+          required:
+          - source
+          - sourceHandle
+          - target
+          - targetHandle
+      required:
+      - edge
+    PublicWorkflowLogDetail:
+      allOf:
+      - $ref: '#/components/schemas/PublicWorkflowLog'
+      - type: object
+        properties:
+          node_results:
+            type:
+            - array
+            - 'null'
+            items:
+              $ref: '#/components/schemas/PublicWorkflowLogNodeResult'
     PublicWorkflowEdgeDeleteInput:
       type: object
       properties:
@@ -2083,17 +813,49 @@ components:
           - targetHandle
       required:
       - edge
-    PublicExecutionTrace:
+    PublicWorkflowUpdateInput:
       type: object
       properties:
-        id:
+        name:
+          type: string
+          minLength: 1
+          example: Daily CRM Sync
+        description:
           type:
           - string
           - 'null'
-        type:
-          type:
-          - string
-          - 'null'
+          example: Syncs contacts daily
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          - DRAFT
+          example: ACTIVE
+      required:
+      - name
+    WorkflowDetail:
+      allOf:
+      - $ref: '#/components/schemas/Workflow'
+      - type: object
+        properties:
+          liveSnapshotId:
+            type:
+            - string
+            - 'null'
+            example: 64f1c2e6a75f2d4a9a2f1234
+          draftSnapshotId:
+            type:
+            - string
+            - 'null'
+            example: 64f1c2e6a75f2d4a9a2f1234
+          nodes:
+            type: array
+            items:
+              $ref: '#/components/schemas/PublicWorkflowNode'
+        required:
+        - liveSnapshotId
+        - draftSnapshotId
     PublicWorkflowNodePatch:
       type: object
       properties:
@@ -3192,149 +1954,6 @@ components:
             required:
             - type
           - {}
-    PublicWorkflowNodeCreated:
-      allOf:
-      - $ref: '#/components/schemas/PublicWorkflowNode'
-      - type: object
-        properties:
-          alias:
-            type: string
-            example: API Call
-        required:
-        - alias
-    PublicWorkflowLogDetail:
-      allOf:
-      - $ref: '#/components/schemas/PublicWorkflowLog'
-      - type: object
-        properties:
-          node_results:
-            type:
-            - array
-            - 'null'
-            items:
-              $ref: '#/components/schemas/PublicWorkflowLogNodeResult'
-    PublicWorkflowEdgeInput:
-      type: object
-      properties:
-        edge:
-          type: object
-          properties:
-            source:
-              type: string
-              example: trigger_1
-            sourceHandle:
-              type: string
-              example: default
-            target:
-              type: string
-              example: api_1
-            targetHandle:
-              type: string
-              example: default
-          required:
-          - source
-          - sourceHandle
-          - target
-          - targetHandle
-      required:
-      - edge
-    WorkflowGraph:
-      type: object
-      properties:
-        id:
-          type: string
-        assistantId:
-          type:
-          - string
-          - 'null'
-        accountId:
-          type:
-          - number
-          - 'null'
-        entityId:
-          type: number
-        type:
-          type: string
-          enum:
-          - FLOW
-          - AUTOMATION
-        nodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicWorkflowNode'
-        createdAt:
-          type: string
-        updatedAt:
-          type:
-          - string
-          - 'null'
-        executed:
-          type: boolean
-          default: false
-        breakingChangeAt:
-          type:
-          - string
-          - 'null'
-        breakingChangeReason:
-          type:
-          - string
-          - 'null'
-      required:
-      - entityId
-      - type
-      - nodes
-      - createdAt
-    PublicWorkflowNodeUpdateInput:
-      type: object
-      properties:
-        node:
-          $ref: '#/components/schemas/PublicWorkflowNodePatch'
-      required:
-      - node
-    PublicWorkflowLog:
-      type: object
-      properties:
-        id:
-          type: number
-          example: 501
-        successful:
-          type: boolean
-        started_at:
-          type:
-          - string
-          - 'null'
-        completed_at:
-          type:
-          - string
-          - 'null'
-        duration:
-          type:
-          - number
-          - 'null'
-          description: Run duration in ms.
-        operations:
-          type:
-          - number
-          - 'null'
-        ai_credits:
-          type:
-          - number
-          - 'null'
-        error:
-          type:
-          - string
-          - 'null'
-        insufficient_credits:
-          type:
-          - boolean
-          - 'null'
-        prevented_loop:
-          type:
-          - boolean
-          - 'null'
-      required:
-      - id
-      - successful
     PublicWorkflowNode:
       type: object
       properties:
@@ -4498,6 +3117,1315 @@ components:
       - nodeId
       - position
       - type
+    PublicWorkflowNodeCreateInput:
+      type: object
+      properties:
+        node:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Initial trigger
+            position:
+              type: object
+              properties:
+                positionX:
+                  type: number
+                positionY:
+                  type: number
+              required:
+              - positionX
+              - positionY
+            type:
+              type: string
+              enum:
+              - TRIGGER
+              - SCHEDULED_TRIGGER
+              - WEBHOOK
+              - TOOLS_AI
+              - API
+              - CONDITIONAL_ROUTING
+              - AI_CAPTURE
+              - DATA_TRANSFORMER
+              - DYNAMIC_TABLES
+              - ITERATION
+              - BREAK
+              - AUTOMATION_STATUS
+              - SEND_MESSAGE
+              - SEND_WHATSAPP_MESSAGE
+              - TRANSCRIPTION
+              - FILE_ANALYSIS
+              - CREATE_RECORD_ACTIVITY
+              example: TRIGGER
+            data:
+              oneOf:
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - TRIGGER
+                  triggerType:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - CONVERSATION_ENDED
+                    - CONTACT_CREATED
+                    - CONTACT_UPDATED
+                    - FEEDBACK_CAPTURED
+                    - INCOMING_WEBHOOK
+                    - TABLE_ROW_CREATED
+                    - OBJECT_RECORD_CREATED
+                    - TABLE_ROW_UPDATED
+                    - OBJECT_RECORD_UPDATED
+                    - CONVERSATION_IDLE
+                    - COMPOSIO_TRIGGER
+                  triggeredBy:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - BOTH
+                    - AGENT
+                    - USER
+                    - INCOMING_WEBHOOK
+                  triggeredByAgentIds:
+                    type: array
+                    items:
+                      type: string
+                  triggerByWebhookIds:
+                    type: array
+                    items:
+                      type: string
+                  triggeredByTableId:
+                    type:
+                    - number
+                    - 'null'
+                  triggeredByRecordTypeId:
+                    type:
+                    - number
+                    - 'null'
+                  connectedAccountTriggerId:
+                    type:
+                    - string
+                    - 'null'
+                  triggerToolkit:
+                    type:
+                    - string
+                    - 'null'
+                  triggerSlug:
+                    type:
+                    - string
+                    - 'null'
+                  triggerConfig:
+                    type:
+                    - object
+                    - 'null'
+                    additionalProperties: {}
+                  triggerQueryConfig:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      query:
+                        type: object
+                        description: 'Dynamic-table query: a single `{ path, operator, value }` condition, or a nested `{ operator: ''and'' | ''or'', conditions: [...] }` group.'
+                  connectedAccountId:
+                    type:
+                    - number
+                    - 'null'
+                required:
+                - type
+                additionalProperties: false
+                description: Event-based entry point. Conversation triggers (CONVERSATION_ENDED, CONVERSATION_IDLE, FEEDBACK_CAPTURED) only fire for the agents listed in triggeredByAgentIds — leave it empty and the workflow never runs. Get the ids from GET /public/v1/agents.
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - SCHEDULED_TRIGGER
+                  cronExpression:
+                    type: string
+                    description: Cron expression (default preset). Validated by cron-validate.
+                    example: 0 9 * * 1-5
+                  timezone:
+                    type: string
+                    description: IANA timezone identifier. Validated against the host ICU table.
+                    example: America/Argentina/Buenos_Aires
+                  startTime:
+                    type:
+                    - string
+                    - 'null'
+                  endTime:
+                    type:
+                    - string
+                    - 'null'
+                  startDate:
+                    type:
+                    - string
+                    - 'null'
+                  endDate:
+                    type:
+                    - string
+                    - 'null'
+                  frequency:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - INTERVALS
+                    - DAILY
+                    - WEEKLY
+                    - MONTHLY
+                required:
+                - type
+                - cronExpression
+                - timezone
+                - startTime
+                - endTime
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - WEBHOOK
+                  includeConversationTranscript:
+                    type: boolean
+                    default: false
+                  includeContactInfo:
+                    type: boolean
+                    default: false
+                  includeFeedbackCaptured:
+                    type: boolean
+                    default: false
+                  includeCapturedVariables:
+                    type: boolean
+                    default: false
+                  includeWebhookPayload:
+                    type: boolean
+                    default: false
+                  url:
+                    type:
+                    - string
+                    - 'null'
+                required:
+                - type
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - TOOLS_AI
+                  conditions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        handleId:
+                          type: string
+                        expression:
+                          type: string
+                      required:
+                      - handleId
+                      - expression
+                  temperature:
+                    type: number
+                  model:
+                    type: string
+                  aiVendor:
+                    type: string
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  instructions:
+                    type:
+                    - string
+                    - 'null'
+                  prompt:
+                    type:
+                    - string
+                    - 'null'
+                  customToolIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: number
+                  maxIterations:
+                    type: number
+                    minimum: 1
+                    maximum: 30
+                    default: 10
+                  agentType:
+                    type: string
+                    enum:
+                    - BASIC
+                    - ADVANCED
+                    default: BASIC
+                  captureVariables:
+                    type:
+                    - array
+                    - 'null'
+                    items: {}
+                  knowledgeBaseMode:
+                    type: string
+                    enum:
+                    - DEFAULT
+                    - CUSTOM
+                    - DISABLED
+                    default: DEFAULT
+                  knowledgeBaseIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: integer
+                      exclusiveMinimum: 0
+                  selectedRecordTypes:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        recordTypeId:
+                          type: number
+                        read:
+                          type: boolean
+                        create:
+                          type: boolean
+                        update:
+                          type: boolean
+                        delete:
+                          type: boolean
+                        createActivity:
+                          type: boolean
+                      required:
+                      - recordTypeId
+                  systemToolsConfig:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      webSearchEnabled:
+                        type: boolean
+                        default: false
+                      urlScrapeEnabled:
+                        type: boolean
+                        default: false
+                      linkedinSearchEnabled:
+                        type: boolean
+                        default: false
+                  connectedAccountConfigs:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        connectedAccountId:
+                          type: number
+                        useAllTools:
+                          type: boolean
+                          default: true
+                        selectedToolSlugs:
+                          type:
+                          - array
+                          - 'null'
+                          items:
+                            type: string
+                      required:
+                      - connectedAccountId
+                  playbookIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: integer
+                      exclusiveMinimum: 0
+                  aiModelId:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - type
+                - conditions
+                - instructions
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - API
+                  url:
+                    type: string
+                    example: https://api.example.com/hook
+                  method:
+                    type: string
+                    enum:
+                    - GET
+                    - POST
+                    - PUT
+                    - DELETE
+                    - PATCH
+                  headers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                      - key
+                      - value
+                  body:
+                    type:
+                    - string
+                    - 'null'
+                  response:
+                    type:
+                    - string
+                    - 'null'
+                  parameters:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                      - key
+                      - value
+                  variables:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                        fullResponse:
+                          type: boolean
+                          default: false
+                      required:
+                      - key
+                      - value
+                required:
+                - type
+                - url
+                - method
+                - headers
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - CONDITIONAL_ROUTING
+                  routingType:
+                    type: string
+                    enum:
+                    - CONDITIONAL_AI
+                    - DYNAMIC
+                  conditions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        handleId:
+                          type: string
+                        expression:
+                          type: string
+                      required:
+                      - handleId
+                      - expression
+                  temperature:
+                    type: number
+                  model:
+                    type: string
+                  aiVendor:
+                    type: string
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  aiModelId:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - type
+                - routingType
+                - conditions
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - AI_CAPTURE
+                  aiModelId:
+                    type:
+                    - number
+                    - 'null'
+                  model:
+                    type: string
+                  aiVendor:
+                    type: string
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  instructions:
+                    type:
+                    - string
+                    - 'null'
+                  prompt:
+                    type:
+                    - string
+                    - 'null'
+                  temperature:
+                    type: number
+                  captureVariables:
+                    type: array
+                    items: {}
+                  knowledgeBaseMode:
+                    type: string
+                    enum:
+                    - DEFAULT
+                    - CUSTOM
+                    - DISABLED
+                    default: DEFAULT
+                  knowledgeBaseIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: integer
+                      exclusiveMinimum: 0
+                required:
+                - type
+                - model
+                - aiVendor
+                - prompt
+                - temperature
+                - captureVariables
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - DATA_TRANSFORMER
+                  prompt:
+                    type:
+                    - string
+                    - 'null'
+                  temperature:
+                    type: number
+                    default: 0.7
+                  model:
+                    type:
+                    - string
+                    - 'null'
+                  aiVendor:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  aiModelId:
+                    type:
+                    - integer
+                    - 'null'
+                  outputJson:
+                    type:
+                    - string
+                    - 'null'
+                  outputMode:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - JSON
+                    - KEY_VALUE
+                    - TEXT
+                  keyValuePairs:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                      - key
+                      - value
+                required:
+                - type
+                - prompt
+                - model
+                - aiVendor
+                - outputMode
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - DYNAMIC_TABLES
+                  tableId:
+                    type:
+                    - number
+                    - 'null'
+                  recordTypeId:
+                    type:
+                    - number
+                    - 'null'
+                  targetRecordTypeId:
+                    type:
+                    - number
+                    - 'null'
+                    description: Destination record type id. Required when actionType is CHANGE_RECORD_TYPE.
+                    example: 12
+                  actionType:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - CREATE
+                    - UPDATE
+                    - DELETE
+                    - SEARCH
+                    - SEARCH_BY_ID
+                    - CHANGE_RECORD_TYPE
+                    description: 'Operation to run. Required-field rules per action: CREATE → rowData; UPDATE → rowId + rowData; DELETE / SEARCH_BY_ID → rowId; CHANGE_RECORD_TYPE → rowId + targetRecordTypeId.'
+                    example: CREATE
+                  rowData:
+                    type:
+                    - object
+                    - 'null'
+                    additionalProperties: {}
+                  inputModeByField:
+                    type:
+                    - object
+                    - 'null'
+                    additionalProperties:
+                      type: string
+                      enum:
+                      - INPUT
+                      - VARIABLE
+                      - EMPTY
+                  rowId:
+                    type:
+                    - string
+                    - 'null'
+                  search:
+                    type:
+                    - string
+                    - 'null'
+                  pageNum:
+                    anyOf:
+                    - type: number
+                    - type: string
+                    - {}
+                  pageSize:
+                    anyOf:
+                    - type: number
+                    - type: string
+                    - {}
+                  pageNumMode:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - INPUT
+                    - VARIABLE
+                    - EMPTY
+                  pageSizeMode:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - INPUT
+                    - VARIABLE
+                    - EMPTY
+                  sort:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        path:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - asc
+                          - desc
+                      required:
+                      - path
+                      - type
+                  query:
+                    $ref: '#/components/schemas/DynamicTablesQuery'
+                required:
+                - type
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - ITERATION
+                  variableName:
+                    type: string
+                    default: ''
+                  variablePath:
+                    type: string
+                    default: ''
+                  continueOnError:
+                    type: boolean
+                    default: false
+                required:
+                - type
+                description: Loop node. Wire type is ITERATION. Connect edges with sourceHandle body (for-each), completed (after all items), and empty (null/empty list). At most 50 items per loop invocation; if the resolved array has more than 50 items, the automation run fails before the loop body starts (no items processed). Automations are also limited to 500 node execution steps total. Not available in agent flows.
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - BREAK
+                required:
+                - type
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - AUTOMATION_STATUS
+                  automationId:
+                    type:
+                    - integer
+                    - 'null'
+                    exclusiveMinimum: 0
+                  automationName:
+                    type:
+                    - string
+                    - 'null'
+                  action:
+                    type: string
+                    enum:
+                    - SET_ACTIVE
+                    - SET_DRAFT
+                    - TOGGLE
+                    default: SET_ACTIVE
+                required:
+                - type
+                description: Changes another automation's status (live/draft/toggle). Does not publish draft graph changes.
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - SEND_MESSAGE
+                  whatsapp:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      messageType:
+                        type: string
+                        enum:
+                        - STATIC
+                        - DYNAMIC
+                        - WHATSAPP_TEMPLATE
+                      message:
+                        type:
+                        - string
+                        - 'null'
+                      prompt:
+                        type:
+                        - string
+                        - 'null'
+                      temperature:
+                        type:
+                        - number
+                        - 'null'
+                      aiModelId:
+                        type:
+                        - number
+                        - 'null'
+                      aiVendor:
+                        type:
+                        - string
+                        - 'null'
+                        enum:
+                        - OPENAI
+                        - ANTHROPIC
+                        - GOOGLE
+                        - AZURE
+                        - DEEPSEEK
+                        - LLAMA
+                      model:
+                        type:
+                        - string
+                        - 'null'
+                      template:
+                        type:
+                        - string
+                        - 'null'
+                      templateVariables:
+                        type:
+                        - object
+                        - 'null'
+                        properties:
+                          body:
+                            type: object
+                            additionalProperties: {}
+                          header:
+                            type: object
+                            additionalProperties: {}
+                          buttons:
+                            type: array
+                            items:
+                              type: object
+                              additionalProperties: {}
+                      templateData:
+                        type:
+                        - object
+                        - 'null'
+                        additionalProperties: {}
+                    required:
+                    - messageType
+                  instagram:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      messageType:
+                        type: string
+                        enum:
+                        - STATIC
+                        - DYNAMIC
+                        - WHATSAPP_TEMPLATE
+                      message:
+                        type:
+                        - string
+                        - 'null'
+                      prompt:
+                        type:
+                        - string
+                        - 'null'
+                      temperature:
+                        type:
+                        - number
+                        - 'null'
+                      aiModelId:
+                        type:
+                        - number
+                        - 'null'
+                      aiVendor:
+                        type:
+                        - string
+                        - 'null'
+                        enum:
+                        - OPENAI
+                        - ANTHROPIC
+                        - GOOGLE
+                        - AZURE
+                        - DEEPSEEK
+                        - LLAMA
+                      model:
+                        type:
+                        - string
+                        - 'null'
+                    required:
+                    - messageType
+                  messenger:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      messageType:
+                        type: string
+                        enum:
+                        - STATIC
+                        - DYNAMIC
+                        - WHATSAPP_TEMPLATE
+                      message:
+                        type:
+                        - string
+                        - 'null'
+                      prompt:
+                        type:
+                        - string
+                        - 'null'
+                      temperature:
+                        type:
+                        - number
+                        - 'null'
+                      aiModelId:
+                        type:
+                        - number
+                        - 'null'
+                      aiVendor:
+                        type:
+                        - string
+                        - 'null'
+                        enum:
+                        - OPENAI
+                        - ANTHROPIC
+                        - GOOGLE
+                        - AZURE
+                        - DEEPSEEK
+                        - LLAMA
+                      model:
+                        type:
+                        - string
+                        - 'null'
+                    required:
+                    - messageType
+                required:
+                - type
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - SEND_WHATSAPP_MESSAGE
+                  recipientMode:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - PHONE_NUMBER
+                    - PEOPLE_RECORD
+                  peopleRecordTypeId:
+                    type:
+                    - number
+                    - 'null'
+                  peopleRowId:
+                    type:
+                    - string
+                    - 'null'
+                  personName:
+                    type:
+                    - string
+                    - 'null'
+                  phoneNumber:
+                    type:
+                    - string
+                    - 'null'
+                  phoneNumberId:
+                    type:
+                    - string
+                    - 'null'
+                  template:
+                    type:
+                    - string
+                    - 'null'
+                  templateVariables:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      body:
+                        type: object
+                        additionalProperties: {}
+                      header:
+                        type: object
+                        additionalProperties: {}
+                      buttons:
+                        type: array
+                        items:
+                          type: object
+                          additionalProperties: {}
+                required:
+                - type
+                description: Sends a WhatsApp Business template message. phoneNumberId must belong to this account and have an assistantId assigned.
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - TRANSCRIPTION
+                  audioUrl:
+                    type: string
+                  language:
+                    type: string
+                    default: es
+                  aiModelId:
+                    type:
+                    - number
+                    - 'null'
+                  aiVendor:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  model:
+                    type: string
+                    default: gpt-4o-transcribe
+                  captureVariables:
+                    type:
+                    - array
+                    - 'null'
+                    items: {}
+                  enableDiarization:
+                    type: boolean
+                    default: false
+                  captureSegmentsVariable:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                      description:
+                        type: string
+                    required:
+                    - id
+                    - name
+                required:
+                - type
+                - audioUrl
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - FILE_ANALYSIS
+                  fileUrl:
+                    type: string
+                  aiModelId:
+                    type:
+                    - number
+                    - 'null'
+                  aiVendor:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  model:
+                    type:
+                    - string
+                    - 'null'
+                  prompt:
+                    type:
+                    - string
+                    - 'null'
+                  captureVariables:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        name:
+                          type: string
+                        description:
+                          type: string
+                      required:
+                      - id
+                      - name
+                  captureOcrVariable:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                      description:
+                        type: string
+                    required:
+                    - id
+                    - name
+                required:
+                - type
+                - fileUrl
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - CREATE_RECORD_ACTIVITY
+                  recordTypeId: {}
+                  rowId:
+                    type:
+                    - string
+                    - 'null'
+                  activityType:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - NOTE
+                    - EMAIL
+                    - PHONE_CALL
+                    - MEETING
+                    - WHATSAPP
+                  content:
+                    type:
+                    - string
+                    - 'null'
+                required:
+                - type
+              - {}
+          required:
+          - position
+          - type
+      required:
+      - node
+    WorkflowRunResult:
+      type: object
+      properties:
+        automationId:
+          type: number
+          example: 42
+        name:
+          type: string
+          example: Daily CRM Sync
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          - DRAFT
+          example: ACTIVE
+        enqueued:
+          type: boolean
+          example: true
+      required:
+      - automationId
+      - name
+      - status
+      - enqueued
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    DynamicTablesQueryGroup:
+      type: object
+      properties:
+        operator:
+          type: string
+          enum:
+          - and
+          - or
+        conditions:
+          type: array
+          items: {}
+          description: Nested filter conditions or AND/OR groups
+      required:
+      - operator
+      - conditions
+    PublicWorkflowLogNodeResult:
+      type: object
+      properties:
+        id:
+          type: number
+          description: Node-result ID. Use with the node trace endpoint.
+        node_id:
+          type: string
+        alias:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+        success:
+          type: boolean
+        error:
+          type:
+          - string
+          - 'null'
+        ai_credits:
+          type:
+          - number
+          - 'null'
+        created_at:
+          type: string
+        audit_log_id:
+          type:
+          - string
+          - 'null'
+          description: Pointer to this node's full execution trace. Fetch via the node trace endpoint.
+      required:
+      - id
+      - node_id
+      - success
+      - created_at
+    Workflow:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 501
+        name:
+          type: string
+          example: Daily CRM Sync
+        description:
+          type:
+          - string
+          - 'null'
+          example: Syncs contacts to HubSpot
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          - DRAFT
+          example: ACTIVE
+        triggerType:
+          type:
+          - string
+          - 'null'
+          enum:
+          - CONVERSATION_ENDED
+          - CONTACT_CREATED
+          - CONTACT_UPDATED
+          - FEEDBACK_CAPTURED
+          - INCOMING_WEBHOOK
+          - TABLE_ROW_CREATED
+          - OBJECT_RECORD_CREATED
+          - TABLE_ROW_UPDATED
+          - OBJECT_RECORD_UPDATED
+          - SCHEDULED_TRIGGER
+          - CONVERSATION_IDLE
+          - COMPOSIO_TRIGGER
+          example: CONVERSATION_ENDED
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        runsCount:
+          type: number
+          example: 1200
+        runsFailedCount:
+          type: number
+          example: 5
+        lastRunDate:
+          type:
+          - string
+          - 'null'
+          example: '2024-01-01T12:00:00Z'
+      required:
+      - id
+      - name
+      - description
+      - status
+      - triggerType
+      - createdAt
+      - updatedAt
+      - runsCount
+      - runsFailedCount
+      - lastRunDate
+    PublicWorkflowNodeUpdateInput:
+      type: object
+      properties:
+        node:
+          $ref: '#/components/schemas/PublicWorkflowNodePatch'
+      required:
+      - node
+    DynamicTablesQueryCondition:
+      type: object
+      properties:
+        path:
+          type: string
+          description: Field path in format [Field] or [Relation].[Field]
+          example: '[Status]'
+        operator:
+          type: string
+          example: equals
+        value: {}
+        valueType: {}
+      required:
+      - path
+      - operator
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
     PublicWorkflowCreateInput:
       type: object
       properties:
@@ -4512,6 +4440,50 @@ components:
           example: Syncs contacts daily
       required:
       - name
+    PublicWorkflowLog:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 501
+        successful:
+          type: boolean
+        started_at:
+          type:
+          - string
+          - 'null'
+        completed_at:
+          type:
+          - string
+          - 'null'
+        duration:
+          type:
+          - number
+          - 'null'
+          description: Run duration in ms.
+        operations:
+          type:
+          - number
+          - 'null'
+        ai_credits:
+          type:
+          - number
+          - 'null'
+        error:
+          type:
+          - string
+          - 'null'
+        insufficient_credits:
+          type:
+          - boolean
+          - 'null'
+        prevented_loop:
+          type:
+          - boolean
+          - 'null'
+      required:
+      - id
+      - successful
   securitySchemes:
     accountApiKey:
       type: http

@@ -2,35 +2,7 @@ openapi: 3.2.0
 info:
   title: Public Agent Channels API
   version: 1.0.0
-  description: 'Public API for accessing agents, flows, and analytics.
-
-
-    ## Authentication
-
-
-    The Public API supports two API key types. Pass the key as a Bearer token:
-
-
-    ```
-
-    Authorization: Bearer <YOUR_API_KEY>
-
-    ```
-
-
-    ### Account API key (GENERAL)
-
-
-    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
-
-
-    ### User API key (USER)
-
-
-    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
-
-
-    Each operation documents which key type(s) it accepts in its **Security** section.'
+  description: Public API for accessing agents, flows, and analytics.
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -218,246 +190,6 @@ paths:
           description: The updated Messenger page
 components:
   schemas:
-    PublicWhatsAppBusinessInfo:
-      type: object
-      properties:
-        about:
-          type:
-          - string
-          - 'null'
-        address:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-        profile_picture_url:
-          type:
-          - string
-          - 'null'
-        websites:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        vertical:
-          type:
-          - string
-          - 'null'
-          enum:
-          - AUTO
-          - BEAUTY
-          - APPAREL
-          - EDU
-          - ENTERTAIN
-          - EVENT_PLAN
-          - FINANCE
-          - GROCERY
-          - GOVT
-          - HOTEL
-          - HEALTH
-          - NONPROFIT
-          - PROF_SERVICES
-          - RETAIL
-          - TRAVEL
-          - RESTAURANT
-          - OTHER
-          - UNDEFINED
-    PublicChannelAssignInput:
-      type: object
-      properties:
-        agentId:
-          type:
-          - string
-          - 'null'
-          example: asst_123
-      required:
-      - agentId
-    PublicWhatsAppNumber:
-      type: object
-      properties:
-        id:
-          type: number
-        phoneNumberId:
-          type: string
-        assistantId:
-          type:
-          - string
-          - 'null'
-        assistant:
-          type:
-          - object
-          - 'null'
-          properties:
-            id:
-              type: string
-            name:
-              type: string
-          required:
-          - id
-          - name
-        status:
-          type: string
-          enum:
-          - CONNECTED
-          - PENDING
-          - UNREGISTERED
-          - ERROR
-          - VERIFICATION_PENDING
-          - DELETED
-        wabaId:
-          type: string
-        name:
-          type: string
-        about:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        address:
-          type:
-          - string
-          - 'null'
-        category:
-          type: string
-          enum:
-          - AUTO
-          - BEAUTY
-          - APPAREL
-          - EDU
-          - ENTERTAIN
-          - EVENT_PLAN
-          - FINANCE
-          - GROCERY
-          - GOVT
-          - HOTEL
-          - HEALTH
-          - NONPROFIT
-          - PROF_SERVICES
-          - RETAIL
-          - TRAVEL
-          - RESTAURANT
-          - OTHER
-          - UNDEFINED
-        displayPhoneNumber:
-          type: string
-        website:
-          type:
-          - string
-          - 'null'
-        secondaryWebsite:
-          type:
-          - string
-          - 'null'
-        verificationStatus:
-          type: string
-          enum:
-          - VERIFIED
-          - NOT_VERIFIED
-        image:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
-      required:
-      - id
-      - phoneNumberId
-      - assistantId
-      - status
-      - wabaId
-      - name
-      - about
-      - description
-      - address
-      - category
-      - displayPhoneNumber
-      - website
-      - secondaryWebsite
-      - verificationStatus
-      - image
-      - email
-      - createdAt
-      - updatedAt
-    PublicWhatsAppNumberUpdateInput:
-      type: object
-      properties:
-        description:
-          type:
-          - string
-          - 'null'
-          maxLength: 512
-        website:
-          type:
-          - string
-          - 'null'
-          maxLength: 256
-        secondaryWebsite:
-          type:
-          - string
-          - 'null'
-          maxLength: 256
-        address:
-          type:
-          - string
-          - 'null'
-          maxLength: 256
-        email:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-          format: email
-        about:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 139
-        category:
-          type:
-          - string
-          - 'null'
-          enum:
-          - AUTO
-          - BEAUTY
-          - APPAREL
-          - EDU
-          - ENTERTAIN
-          - EVENT_PLAN
-          - FINANCE
-          - GROCERY
-          - GOVT
-          - HOTEL
-          - HEALTH
-          - NONPROFIT
-          - PROF_SERVICES
-          - RETAIL
-          - TRAVEL
-          - RESTAURANT
-          - OTHER
-          - UNDEFINED
-        agentId:
-          type:
-          - string
-          - 'null'
-          example: asst_123
     PublicChannelIntegrations:
       type:
       - object
@@ -723,6 +455,246 @@ components:
       - whatsapp
       - instagram
       - messenger
+    PublicChannelAssignInput:
+      type: object
+      properties:
+        agentId:
+          type:
+          - string
+          - 'null'
+          example: asst_123
+      required:
+      - agentId
+    PublicWhatsAppNumberUpdateInput:
+      type: object
+      properties:
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 512
+        website:
+          type:
+          - string
+          - 'null'
+          maxLength: 256
+        secondaryWebsite:
+          type:
+          - string
+          - 'null'
+          maxLength: 256
+        address:
+          type:
+          - string
+          - 'null'
+          maxLength: 256
+        email:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+          format: email
+        about:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 139
+        category:
+          type:
+          - string
+          - 'null'
+          enum:
+          - AUTO
+          - BEAUTY
+          - APPAREL
+          - EDU
+          - ENTERTAIN
+          - EVENT_PLAN
+          - FINANCE
+          - GROCERY
+          - GOVT
+          - HOTEL
+          - HEALTH
+          - NONPROFIT
+          - PROF_SERVICES
+          - RETAIL
+          - TRAVEL
+          - RESTAURANT
+          - OTHER
+          - UNDEFINED
+        agentId:
+          type:
+          - string
+          - 'null'
+          example: asst_123
+    PublicWhatsAppBusinessInfo:
+      type: object
+      properties:
+        about:
+          type:
+          - string
+          - 'null'
+        address:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        profile_picture_url:
+          type:
+          - string
+          - 'null'
+        websites:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        vertical:
+          type:
+          - string
+          - 'null'
+          enum:
+          - AUTO
+          - BEAUTY
+          - APPAREL
+          - EDU
+          - ENTERTAIN
+          - EVENT_PLAN
+          - FINANCE
+          - GROCERY
+          - GOVT
+          - HOTEL
+          - HEALTH
+          - NONPROFIT
+          - PROF_SERVICES
+          - RETAIL
+          - TRAVEL
+          - RESTAURANT
+          - OTHER
+          - UNDEFINED
+    PublicWhatsAppNumber:
+      type: object
+      properties:
+        id:
+          type: number
+        phoneNumberId:
+          type: string
+        assistantId:
+          type:
+          - string
+          - 'null'
+        assistant:
+          type:
+          - object
+          - 'null'
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+          required:
+          - id
+          - name
+        status:
+          type: string
+          enum:
+          - CONNECTED
+          - PENDING
+          - UNREGISTERED
+          - ERROR
+          - VERIFICATION_PENDING
+          - DELETED
+        wabaId:
+          type: string
+        name:
+          type: string
+        about:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        address:
+          type:
+          - string
+          - 'null'
+        category:
+          type: string
+          enum:
+          - AUTO
+          - BEAUTY
+          - APPAREL
+          - EDU
+          - ENTERTAIN
+          - EVENT_PLAN
+          - FINANCE
+          - GROCERY
+          - GOVT
+          - HOTEL
+          - HEALTH
+          - NONPROFIT
+          - PROF_SERVICES
+          - RETAIL
+          - TRAVEL
+          - RESTAURANT
+          - OTHER
+          - UNDEFINED
+        displayPhoneNumber:
+          type: string
+        website:
+          type:
+          - string
+          - 'null'
+        secondaryWebsite:
+          type:
+          - string
+          - 'null'
+        verificationStatus:
+          type: string
+          enum:
+          - VERIFIED
+          - NOT_VERIFIED
+        image:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+      - id
+      - phoneNumberId
+      - assistantId
+      - status
+      - wabaId
+      - name
+      - about
+      - description
+      - address
+      - category
+      - displayPhoneNumber
+      - website
+      - secondaryWebsite
+      - verificationStatus
+      - image
+      - email
+      - createdAt
+      - updatedAt
   securitySchemes:
     accountApiKey:
       type: http

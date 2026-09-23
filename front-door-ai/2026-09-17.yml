@@ -1,0 +1,31 @@
+# Front Door AI Index — frontline — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: frontline
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: getfrontline.ai
+  final_host: www.getfrontline.ai
+  ownership: own
+  owner: frontline
+  shares_host_with: null
+  inherited_from: null
+  verdict: scored
+  score: 37
+  host_score: 37
+  density: 29.7
+  words: 1246
+  tiers:
+    agentic: 6
+    core: 16
+    model: 15
+  ambiguous: 9
+  top_terms:
+    AI: 16
+    Claude: 15
+    agent: 8
+    AI agent: 4
+    agentic: 1
+    intelligence: 1
+    prompts: 1

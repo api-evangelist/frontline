@@ -53,18 +53,28 @@
   "warnings": [],
   "notes": [
     "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
-    "frontline-openapi-original.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0"
+    "frontline-openapi-original.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "frontline-account-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "frontline-account-integrations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-agent-builder-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "frontline-agent-channels-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "frontline-agent-playbooks-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-agents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-ai-models-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-billing-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "frontline-channels-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "frontline-custom-tools-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-flow-variables-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-flows-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "frontline-guidance-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-incoming-webhooks-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "frontline-integration-resources-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "frontline-integrations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-intents-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "frontline-knowledge-bases-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-object-activities-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-object-aggregations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-object-export-api-openapi.yml: previously refined output, superseded by openapi/_original/",
@@ -86,7 +96,8 @@
     "frontline-table-rows-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-table-tasks-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-tables-api-openapi.yml: previously refined output, superseded by openapi/_original/",
-    "frontline-tools-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "frontline-user-tasks-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "frontline-users-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-workflow-variables-api-openapi.yml: previously refined output, superseded by openapi/_original/",
     "frontline-workflows-api-openapi.yml: previously refined output, superseded by openapi/_original/"
   ]

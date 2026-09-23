@@ -2,35 +2,7 @@ openapi: 3.2.0
 info:
   title: Public Integrations API
   version: 1.0.0
-  description: 'Public API for accessing agents, flows, and analytics.
-
-
-    ## Authentication
-
-
-    The Public API supports two API key types. Pass the key as a Bearer token:
-
-
-    ```
-
-    Authorization: Bearer <YOUR_API_KEY>
-
-    ```
-
-
-    ### Account API key (GENERAL)
-
-
-    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
-
-
-    ### User API key (USER)
-
-
-    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
-
-
-    Each operation documents which key type(s) it accepts in its **Security** section.'
+  description: Public API for accessing agents, flows, and analytics.
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -316,60 +288,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicConnectedAccount:
-      type: object
-      properties:
-        id:
-          type: number
-          description: Connected account ID. Use as connectedAccountId in agent settings, flows, and workflows.
-        toolkit:
-          type: string
-          example: googlesheets
-        alias:
-          type:
-          - string
-          - 'null'
-        visibility:
-          type: string
-          enum:
-          - PRIVATE
-          - SHARED
-        isConnected:
-          type: boolean
-        isExpired:
-          type: boolean
-        connectedEmail:
-          type:
-          - string
-          - 'null'
-        connectedAt:
-          type:
-          - string
-          - 'null'
-        availableToolsCount:
-          type:
-          - number
-          - 'null'
-        enabledToolsCount:
-          type:
-          - number
-          - 'null'
-        createdAt:
-          type:
-          - string
-          - 'null'
-        updatedAt:
-          type:
-          - string
-          - 'null'
-      required:
-      - id
-      - toolkit
-      - visibility
-      - isConnected
-      - isExpired
-      - createdAt
-      - updatedAt
     ErrorBody:
       type: object
       properties:
@@ -399,51 +317,19 @@ components:
       required:
       - code
       - message
-    PublicTriggerConfigField:
+    Error:
       type: object
       properties:
-        name:
-          type: string
-          description: Key to send inside triggerConfig on the TRIGGER node.
-          example: folder_id
-        type:
-          type: string
-          example: string
-        description:
-          type: string
-        required:
+        ok:
           type: boolean
-          description: When true, the trigger cannot be created without this config field.
-        userConfigurable:
-          type: boolean
-          description: When false the value is managed by the platform and is ignored if you send it.
-        resourceType:
-          type:
-          - string
-          - 'null'
           enum:
-          - gmail_labels
-          - googlesheets_spreadsheets
-          - googlesheets_sheets
-          - googledocs_documents
-          - googledrive_folders
-          - googledrive_shared_drives
-          - onedrive_folders
-          - asana_workspaces
-          - asana_projects
-          - salesforce_sobjects
-          - salesforce_sobject_fields
-          - outlook_folders
-          - outlook_calendars
-          description: Picker that lists valid values for this field. Call GET /public/v1/integrations/trigger-resources with this resourceType. Null when the value is free text.
-          example: googledrive_folders
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       required:
-      - name
-      - type
-      - description
-      - required
-      - userConfigurable
-      - resourceType
+      - ok
+      - error
     PublicTriggerType:
       type: object
       properties:
@@ -535,24 +421,60 @@ components:
       - description
       - deliveryType
       - configFields
-    PublicTriggerTypesListResponse:
+    PublicConnectedAccount:
       type: object
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicTriggerType'
+        id:
+          type: number
+          description: Connected account ID. Use as connectedAccountId in agent settings, flows, and workflows.
+        toolkit:
+          type: string
+          example: googlesheets
+        alias:
+          type:
+          - string
+          - 'null'
+        visibility:
+          type: string
+          enum:
+          - PRIVATE
+          - SHARED
+        isConnected:
+          type: boolean
+        isExpired:
+          type: boolean
+        connectedEmail:
+          type:
+          - string
+          - 'null'
+        connectedAt:
+          type:
+          - string
+          - 'null'
+        availableToolsCount:
+          type:
+          - number
+          - 'null'
+        enabledToolsCount:
+          type:
+          - number
+          - 'null'
+        createdAt:
+          type:
+          - string
+          - 'null'
+        updatedAt:
+          type:
+          - string
+          - 'null'
       required:
-      - results
-    PublicIntegrationsListResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicConnectedAccount'
-      required:
-      - results
+      - id
+      - toolkit
+      - visibility
+      - isConnected
+      - isExpired
+      - createdAt
+      - updatedAt
     PublicTriggerResource:
       type: object
       properties:
@@ -564,6 +486,15 @@ components:
       required:
       - id
       - name
+    PublicIntegrationsListResponse:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnectedAccount'
+      required:
+      - results
     PublicTriggerResourcesListResponse:
       type: object
       properties:
@@ -598,19 +529,60 @@ components:
       - parent
       - results
       - total
-    Error:
+    PublicTriggerTypesListResponse:
       type: object
       properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicTriggerType'
       required:
-      - ok
-      - error
+      - results
+    PublicTriggerConfigField:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Key to send inside triggerConfig on the TRIGGER node.
+          example: folder_id
+        type:
+          type: string
+          example: string
+        description:
+          type: string
+        required:
+          type: boolean
+          description: When true, the trigger cannot be created without this config field.
+        userConfigurable:
+          type: boolean
+          description: When false the value is managed by the platform and is ignored if you send it.
+        resourceType:
+          type:
+          - string
+          - 'null'
+          enum:
+          - gmail_labels
+          - googlesheets_spreadsheets
+          - googlesheets_sheets
+          - googledocs_documents
+          - googledrive_folders
+          - googledrive_shared_drives
+          - onedrive_folders
+          - asana_workspaces
+          - asana_projects
+          - salesforce_sobjects
+          - salesforce_sobject_fields
+          - outlook_folders
+          - outlook_calendars
+          description: Picker that lists valid values for this field. Call GET /public/v1/integrations/trigger-resources with this resourceType. Null when the value is free text.
+          example: googledrive_folders
+      required:
+      - name
+      - type
+      - description
+      - required
+      - userConfigurable
+      - resourceType
   securitySchemes:
     accountApiKey:
       type: http

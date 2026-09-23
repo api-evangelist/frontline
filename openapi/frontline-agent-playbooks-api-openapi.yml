@@ -2,35 +2,7 @@ openapi: 3.2.0
 info:
   title: Public Agent Playbooks API
   version: 1.0.0
-  description: 'Public API for accessing agents, flows, and analytics.
-
-
-    ## Authentication
-
-
-    The Public API supports two API key types. Pass the key as a Bearer token:
-
-
-    ```
-
-    Authorization: Bearer <YOUR_API_KEY>
-
-    ```
-
-
-    ### Account API key (GENERAL)
-
-
-    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
-
-
-    ### User API key (USER)
-
-
-    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
-
-
-    Each operation documents which key type(s) it accepts in its **Security** section.'
+  description: Public API for accessing agents, flows, and analytics.
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -249,90 +221,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicAgentPlaybookCreateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 100
-        description:
-          type: string
-          minLength: 10
-          maxLength: 750
-        instructions:
-          type: string
-          minLength: 10
-          maxLength: 10000
-        tools:
-          type: array
-          items:
-            type: string
-          maxItems: 20
-          default: []
-        visibility:
-          type: string
-          enum:
-          - PRIVATE
-          - ACCOUNT
-          default: ACCOUNT
-        isActive:
-          type: boolean
-          default: true
-        connectedAccountConfigs:
-          type: array
-          items:
-            type: object
-            properties:
-              connectedAccountId:
-                type: number
-              useAllTools:
-                type: boolean
-                default: true
-              selectedToolSlugs:
-                type:
-                - array
-                - 'null'
-                items:
-                  type: string
-            required:
-            - connectedAccountId
-        selectedRecordTypes:
-          type: array
-          items:
-            type: object
-            properties:
-              recordTypeId:
-                type: number
-              read:
-                type: boolean
-              create:
-                type: boolean
-              update:
-                type: boolean
-              delete:
-                type: boolean
-              createActivity:
-                type: boolean
-            required:
-            - recordTypeId
-        selectedCustomTools:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: integer
-                exclusiveMinimum: 0
-              enabled:
-                type: boolean
-                default: true
-            required:
-            - id
-      required:
-      - name
-      - description
-      - instructions
     ErrorBody:
       type: object
       properties:
@@ -362,83 +250,6 @@ components:
       required:
       - code
       - message
-    PublicAgentPlaybookUpdateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 100
-        description:
-          type: string
-          minLength: 10
-          maxLength: 750
-        instructions:
-          type: string
-          minLength: 10
-          maxLength: 10000
-        tools:
-          type: array
-          items:
-            type: string
-          maxItems: 20
-        visibility:
-          type: string
-          enum:
-          - PRIVATE
-          - ACCOUNT
-        isActive:
-          type: boolean
-        connectedAccountConfigs:
-          type: array
-          items:
-            type: object
-            properties:
-              connectedAccountId:
-                type: number
-              useAllTools:
-                type: boolean
-                default: true
-              selectedToolSlugs:
-                type:
-                - array
-                - 'null'
-                items:
-                  type: string
-            required:
-            - connectedAccountId
-        selectedRecordTypes:
-          type: array
-          items:
-            type: object
-            properties:
-              recordTypeId:
-                type: number
-              read:
-                type: boolean
-              create:
-                type: boolean
-              update:
-                type: boolean
-              delete:
-                type: boolean
-              createActivity:
-                type: boolean
-            required:
-            - recordTypeId
-        selectedCustomTools:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type: integer
-                exclusiveMinimum: 0
-              enabled:
-                type: boolean
-                default: true
-            required:
-            - id
     PublicAgentPlaybook:
       type: object
       properties:
@@ -585,6 +396,188 @@ components:
       - visibility
       - createdAt
       - updatedAt
+    PublicAgentPlaybookDeleteResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+      required:
+      - success
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicAgentPlaybookUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          minLength: 10
+          maxLength: 750
+        instructions:
+          type: string
+          minLength: 10
+          maxLength: 10000
+        tools:
+          type: array
+          items:
+            type: string
+          maxItems: 20
+        visibility:
+          type: string
+          enum:
+          - PRIVATE
+          - ACCOUNT
+        isActive:
+          type: boolean
+        connectedAccountConfigs:
+          type: array
+          items:
+            type: object
+            properties:
+              connectedAccountId:
+                type: number
+              useAllTools:
+                type: boolean
+                default: true
+              selectedToolSlugs:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: string
+            required:
+            - connectedAccountId
+        selectedRecordTypes:
+          type: array
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: number
+              read:
+                type: boolean
+              create:
+                type: boolean
+              update:
+                type: boolean
+              delete:
+                type: boolean
+              createActivity:
+                type: boolean
+            required:
+            - recordTypeId
+        selectedCustomTools:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                exclusiveMinimum: 0
+              enabled:
+                type: boolean
+                default: true
+            required:
+            - id
+    PublicAgentPlaybookCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+        description:
+          type: string
+          minLength: 10
+          maxLength: 750
+        instructions:
+          type: string
+          minLength: 10
+          maxLength: 10000
+        tools:
+          type: array
+          items:
+            type: string
+          maxItems: 20
+          default: []
+        visibility:
+          type: string
+          enum:
+          - PRIVATE
+          - ACCOUNT
+          default: ACCOUNT
+        isActive:
+          type: boolean
+          default: true
+        connectedAccountConfigs:
+          type: array
+          items:
+            type: object
+            properties:
+              connectedAccountId:
+                type: number
+              useAllTools:
+                type: boolean
+                default: true
+              selectedToolSlugs:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: string
+            required:
+            - connectedAccountId
+        selectedRecordTypes:
+          type: array
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: number
+              read:
+                type: boolean
+              create:
+                type: boolean
+              update:
+                type: boolean
+              delete:
+                type: boolean
+              createActivity:
+                type: boolean
+            required:
+            - recordTypeId
+        selectedCustomTools:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                exclusiveMinimum: 0
+              enabled:
+                type: boolean
+                default: true
+            required:
+            - id
+      required:
+      - name
+      - description
+      - instructions
     PublicAgentPlaybookList:
       type: object
       properties:
@@ -750,27 +743,6 @@ components:
       - page
       - pageSize
       - totalPages
-    PublicAgentPlaybookDeleteResult:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-      required:
-      - success
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
   securitySchemes:
     accountApiKey:
       type: http

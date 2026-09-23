@@ -2,35 +2,7 @@ openapi: 3.2.0
 info:
   title: Public Guidance API
   version: 1.0.0
-  description: 'Public API for accessing agents, flows, and analytics.
-
-
-    ## Authentication
-
-
-    The Public API supports two API key types. Pass the key as a Bearer token:
-
-
-    ```
-
-    Authorization: Bearer <YOUR_API_KEY>
-
-    ```
-
-
-    ### Account API key (GENERAL)
-
-
-    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
-
-
-    ### User API key (USER)
-
-
-    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
-
-
-    Each operation documents which key type(s) it accepts in its **Security** section.'
+  description: Public API for accessing agents, flows, and analytics.
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -193,48 +165,27 @@ components:
       required:
       - code
       - message
-    PublicNodeGuidance:
+    Error:
       type: object
       properties:
-        nodeType:
-          type: string
-          example: TOOLS_AI
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicFieldGuidance:
+      type: object
+      properties:
         guidance:
           type: string
-          description: Markdown guidance for configuring this node type. Empty when no guidance is published for the type.
+          description: Markdown reference covering every field/column type, its metadata shape, and best practices — generated from the same constants the create/update schemas validate against.
       required:
-      - nodeType
       - guidance
-    PublicNodeTypeList:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            type: object
-            properties:
-              type:
-                type: string
-                example: TOOLS_AI
-              validInFlow:
-                type: boolean
-                description: Usable in an agent flow (WorkflowType.FLOW).
-                example: true
-              validInAutomation:
-                type: boolean
-                description: Usable in an automation workflow (WorkflowType.AUTOMATION).
-                example: true
-              allowsMultipleOutgoingHandles:
-                type: boolean
-                description: May fan out to more than one outgoing edge.
-                example: true
-            required:
-            - type
-            - validInFlow
-            - validInAutomation
-            - allowsMultipleOutgoingHandles
-      required:
-      - results
     PublicVisualOptions:
       type: object
       properties:
@@ -298,27 +249,48 @@ components:
       - optionColors
       - tagModes
       - relationModes
-    PublicFieldGuidance:
+    PublicNodeTypeList:
       type: object
       properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                example: TOOLS_AI
+              validInFlow:
+                type: boolean
+                description: Usable in an agent flow (WorkflowType.FLOW).
+                example: true
+              validInAutomation:
+                type: boolean
+                description: Usable in an automation workflow (WorkflowType.AUTOMATION).
+                example: true
+              allowsMultipleOutgoingHandles:
+                type: boolean
+                description: May fan out to more than one outgoing edge.
+                example: true
+            required:
+            - type
+            - validInFlow
+            - validInAutomation
+            - allowsMultipleOutgoingHandles
+      required:
+      - results
+    PublicNodeGuidance:
+      type: object
+      properties:
+        nodeType:
+          type: string
+          example: TOOLS_AI
         guidance:
           type: string
-          description: Markdown reference covering every field/column type, its metadata shape, and best practices — generated from the same constants the create/update schemas validate against.
+          description: Markdown guidance for configuring this node type. Empty when no guidance is published for the type.
       required:
+      - nodeType
       - guidance
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
   securitySchemes:
     accountApiKey:
       type: http

@@ -2,35 +2,7 @@ openapi: 3.2.0
 info:
   title: Public Flows API
   version: 1.0.0
-  description: 'Public API for accessing agents, flows, and analytics.
-
-
-    ## Authentication
-
-
-    The Public API supports two API key types. Pass the key as a Bearer token:
-
-
-    ```
-
-    Authorization: Bearer <YOUR_API_KEY>
-
-    ```
-
-
-    ### Account API key (GENERAL)
-
-
-    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
-
-
-    ### User API key (USER)
-
-
-    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
-
-
-    Each operation documents which key type(s) it accepts in its **Security** section.'
+  description: Public API for accessing agents, flows, and analytics.
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -496,140 +468,6 @@ paths:
                 $ref: '#/components/schemas/FlowGraph'
 components:
   schemas:
-    PublicFlowNodeCreated:
-      allOf:
-      - $ref: '#/components/schemas/PublicFlowNode'
-      - type: object
-        properties:
-          alias:
-            type: string
-            example: Say
-        required:
-        - alias
-    ErrorBody:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
-    DynamicTablesQuery:
-      anyOf:
-      - $ref: '#/components/schemas/DynamicTablesQueryCondition'
-      - $ref: '#/components/schemas/DynamicTablesQueryGroup'
-      - {}
-    FlowGraph:
-      type: object
-      properties:
-        id:
-          type: string
-        assistantId:
-          type:
-          - string
-          - 'null'
-        accountId:
-          type:
-          - number
-          - 'null'
-        entityId:
-          type: number
-        type:
-          type: string
-          enum:
-          - FLOW
-          - AUTOMATION
-        nodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicFlowNode'
-        createdAt:
-          type: string
-        updatedAt:
-          type:
-          - string
-          - 'null'
-        executed:
-          type: boolean
-          default: false
-        breakingChangeAt:
-          type:
-          - string
-          - 'null'
-        breakingChangeReason:
-          type:
-          - string
-          - 'null'
-      required:
-      - entityId
-      - type
-      - nodes
-      - createdAt
-    PublicFlowNodeUpdateInput:
-      type: object
-      properties:
-        node:
-          $ref: '#/components/schemas/PublicFlowNodePatch'
-      required:
-      - node
-    PublicFlowUpdateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: Order Routing
-        description:
-          type:
-          - string
-          - 'null'
-          example: Routes order conversations
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - SUSPENDED
-          - DELETED
-          - DRAFT
-          example: ACTIVE
-      required:
-      - name
-    DynamicTablesQueryCondition:
-      type: object
-      properties:
-        path:
-          type: string
-          description: Field path in format [Field] or [Relation].[Field]
-          example: '[Status]'
-        operator:
-          type: string
-          example: equals
-        value: {}
-        valueType: {}
-      required:
-      - path
-      - operator
     PublicFlowNodePatch:
       type: object
       properties:
@@ -1207,46 +1045,65 @@ components:
             required:
             - type
           - {}
-    PublicFlowEdgeDeleteInput:
+    ErrorBody:
       type: object
       properties:
-        edge:
-          type: object
-          properties:
-            source:
-              type: string
-              example: trigger_1
-            sourceHandle:
-              type: string
-              example: default
-            target:
-              type: string
-              example: api_1
-            targetHandle:
-              type: string
-              example: default
-          required:
-          - source
-          - sourceHandle
-          - target
-          - targetHandle
-      required:
-      - edge
-    DynamicTablesQueryGroup:
-      type: object
-      properties:
-        operator:
+        code:
           type: string
           enum:
-          - and
-          - or
-        conditions:
-          type: array
-          items: {}
-          description: Nested filter conditions or AND/OR groups
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
       required:
-      - operator
-      - conditions
+      - code
+      - message
+    FlowDetail:
+      allOf:
+      - $ref: '#/components/schemas/Flow'
+      - type: object
+        properties:
+          assistantId:
+            type: string
+            example: 550e8400-e29b-41d4-a716-446655440000
+          isDefault:
+            type: boolean
+            example: false
+          liveSnapshotId:
+            type:
+            - string
+            - 'null'
+            example: 64f1c2e6a75f2d4a9a2f1234
+          draftSnapshotId:
+            type:
+            - string
+            - 'null'
+            example: 64f1c2e6a75f2d4a9a2f1234
+          nodes:
+            type: array
+            items:
+              $ref: '#/components/schemas/PublicFlowNode'
+        required:
+        - assistantId
+        - isDefault
+        - liveSnapshotId
+        - draftSnapshotId
     Flow:
       type: object
       properties:
@@ -1286,6 +1143,51 @@ components:
       - createdAt
       - updatedAt
       - runCount
+    DynamicTablesQueryGroup:
+      type: object
+      properties:
+        operator:
+          type: string
+          enum:
+          - and
+          - or
+        conditions:
+          type: array
+          items: {}
+          description: Nested filter conditions or AND/OR groups
+      required:
+      - operator
+      - conditions
+    DynamicTablesQuery:
+      anyOf:
+      - $ref: '#/components/schemas/DynamicTablesQueryCondition'
+      - $ref: '#/components/schemas/DynamicTablesQueryGroup'
+      - {}
+    PublicFlowEdgeInput:
+      type: object
+      properties:
+        edge:
+          type: object
+          properties:
+            source:
+              type: string
+              example: trigger_1
+            sourceHandle:
+              type: string
+              example: default
+            target:
+              type: string
+              example: api_1
+            targetHandle:
+              type: string
+              example: default
+          required:
+          - source
+          - sourceHandle
+          - target
+          - targetHandle
+      required:
+      - edge
     PublicFlowNode:
       type: object
       properties:
@@ -1930,6 +1832,66 @@ components:
       - nodeId
       - position
       - type
+    PublicFlowNodeCreated:
+      allOf:
+      - $ref: '#/components/schemas/PublicFlowNode'
+      - type: object
+        properties:
+          alias:
+            type: string
+            example: Say
+        required:
+        - alias
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicFlowUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Order Routing
+        description:
+          type:
+          - string
+          - 'null'
+          example: Routes order conversations
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - SUSPENDED
+          - DELETED
+          - DRAFT
+          example: ACTIVE
+      required:
+      - name
+    DynamicTablesQueryCondition:
+      type: object
+      properties:
+        path:
+          type: string
+          description: Field path in format [Field] or [Relation].[Field]
+          example: '[Status]'
+        operator:
+          type: string
+          example: equals
+        value: {}
+        valueType: {}
+      required:
+      - path
+      - operator
     PublicFlowNodeCreateInput:
       type: object
       properties:
@@ -2510,7 +2472,60 @@ components:
           - type
       required:
       - node
-    PublicFlowEdgeInput:
+    PublicFlowNodeUpdateInput:
+      type: object
+      properties:
+        node:
+          $ref: '#/components/schemas/PublicFlowNodePatch'
+      required:
+      - node
+    FlowGraph:
+      type: object
+      properties:
+        id:
+          type: string
+        assistantId:
+          type:
+          - string
+          - 'null'
+        accountId:
+          type:
+          - number
+          - 'null'
+        entityId:
+          type: number
+        type:
+          type: string
+          enum:
+          - FLOW
+          - AUTOMATION
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicFlowNode'
+        createdAt:
+          type: string
+        updatedAt:
+          type:
+          - string
+          - 'null'
+        executed:
+          type: boolean
+          default: false
+        breakingChangeAt:
+          type:
+          - string
+          - 'null'
+        breakingChangeReason:
+          type:
+          - string
+          - 'null'
+      required:
+      - entityId
+      - type
+      - nodes
+      - createdAt
+    PublicFlowEdgeDeleteInput:
       type: object
       properties:
         edge:
@@ -2535,36 +2550,6 @@ components:
           - targetHandle
       required:
       - edge
-    FlowDetail:
-      allOf:
-      - $ref: '#/components/schemas/Flow'
-      - type: object
-        properties:
-          assistantId:
-            type: string
-            example: 550e8400-e29b-41d4-a716-446655440000
-          isDefault:
-            type: boolean
-            example: false
-          liveSnapshotId:
-            type:
-            - string
-            - 'null'
-            example: 64f1c2e6a75f2d4a9a2f1234
-          draftSnapshotId:
-            type:
-            - string
-            - 'null'
-            example: 64f1c2e6a75f2d4a9a2f1234
-          nodes:
-            type: array
-            items:
-              $ref: '#/components/schemas/PublicFlowNode'
-        required:
-        - assistantId
-        - isDefault
-        - liveSnapshotId
-        - draftSnapshotId
     PublicFlowCreateInput:
       type: object
       properties:
@@ -2579,19 +2564,6 @@ components:
           example: Routes order conversations
       required:
       - name
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
   securitySchemes:
     accountApiKey:
       type: http

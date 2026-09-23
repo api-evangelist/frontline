@@ -2,35 +2,7 @@ openapi: 3.2.0
 info:
   title: Public User Tasks API
   version: 1.0.0
-  description: 'Public API for accessing agents, flows, and analytics.
-
-
-    ## Authentication
-
-
-    The Public API supports two API key types. Pass the key as a Bearer token:
-
-
-    ```
-
-    Authorization: Bearer <YOUR_API_KEY>
-
-    ```
-
-
-    ### Account API key (GENERAL)
-
-
-    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
-
-
-    ### User API key (USER)
-
-
-    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
-
-
-    Each operation documents which key type(s) it accepts in its **Security** section.'
+  description: Public API for accessing agents, flows, and analytics.
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -295,32 +267,6 @@ paths:
                 $ref: '#/components/schemas/PublicUserTask'
 components:
   schemas:
-    PublicUserTaskUpdateInput:
-      type: object
-      properties:
-        content:
-          type: string
-          minLength: 1
-        due_date:
-          type:
-          - string
-          - 'null'
-          description: Pass null to clear the due date.
-        assignee_ids:
-          type: array
-          items:
-            type: number
-        object_name:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          description: Pass null (with row_id null) to unlink the object record.
-        row_id:
-          type:
-          - string
-          - 'null'
-          minLength: 1
     ErrorBody:
       type: object
       properties:
@@ -350,36 +296,6 @@ components:
       required:
       - code
       - message
-    PublicUserTaskCreateInput:
-      type: object
-      properties:
-        content:
-          type: string
-          minLength: 1
-          example: Email David Booth about Q3 renewal
-        due_date:
-          type:
-          - string
-          - 'null'
-          example: '2026-06-25'
-        assignee_ids:
-          type: array
-          items:
-            type: number
-          description: User IDs (see GET /users).
-          example:
-          - 42
-        object_name:
-          type: string
-          minLength: 1
-          description: Link the task to an object record (requires row_id too).
-          example: companies
-        row_id:
-          type: string
-          minLength: 1
-          example: abc123
-      required:
-      - content
     PublicUserTask:
       type: object
       properties:
@@ -511,6 +427,62 @@ components:
       required:
       - ok
       - error
+    PublicUserTaskCreateInput:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+          example: Email David Booth about Q3 renewal
+        due_date:
+          type:
+          - string
+          - 'null'
+          example: '2026-06-25'
+        assignee_ids:
+          type: array
+          items:
+            type: number
+          description: User IDs (see GET /users).
+          example:
+          - 42
+        object_name:
+          type: string
+          minLength: 1
+          description: Link the task to an object record (requires row_id too).
+          example: companies
+        row_id:
+          type: string
+          minLength: 1
+          example: abc123
+      required:
+      - content
+    PublicUserTaskUpdateInput:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+        due_date:
+          type:
+          - string
+          - 'null'
+          description: Pass null to clear the due date.
+        assignee_ids:
+          type: array
+          items:
+            type: number
+        object_name:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          description: Pass null (with row_id null) to unlink the object record.
+        row_id:
+          type:
+          - string
+          - 'null'
+          minLength: 1
   securitySchemes:
     accountApiKey:
       type: http
