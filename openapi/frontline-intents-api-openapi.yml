@@ -290,7 +290,18 @@ components:
       - name
       - samples
       - amount
-    PublicIntentCreateInput:
+    PublicIntentGeneratePhrasesOutput:
+      type: object
+      properties:
+        phrases:
+          type: array
+          items:
+            type: string
+          example:
+          - I want to cancel my order
+      required:
+      - phrases
+    PublicIntentUpdateInput:
       type: object
       properties:
         name:
@@ -305,10 +316,18 @@ components:
         phrases:
           type: array
           items:
-            type: string
+            type: object
+            properties:
+              id:
+                type:
+                - number
+                - 'null'
+              phrase:
+                type: string
+                example: cancel my order
+            required:
+            - phrase
           minItems: 1
-          example:
-          - cancel my order
       required:
       - name
       - phrases
@@ -369,18 +388,7 @@ components:
       - updatedAt
       - status
       - assistantId
-    PublicIntentGeneratePhrasesOutput:
-      type: object
-      properties:
-        phrases:
-          type: array
-          items:
-            type: string
-          example:
-          - I want to cancel my order
-      required:
-      - phrases
-    PublicIntentUpdateInput:
+    PublicIntentCreateInput:
       type: object
       properties:
         name:
@@ -395,18 +403,10 @@ components:
         phrases:
           type: array
           items:
-            type: object
-            properties:
-              id:
-                type:
-                - number
-                - 'null'
-              phrase:
-                type: string
-                example: cancel my order
-            required:
-            - phrase
+            type: string
           minItems: 1
+          example:
+          - cancel my order
       required:
       - name
       - phrases

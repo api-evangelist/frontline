@@ -1695,35 +1695,61 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    ErrorBody:
+    AgentAnalytics:
       type: object
       properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
+        summary:
           type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
+          properties:
+            totalCredits:
+              type: number
+              example: 500.25
+            totalConversations:
+              type: number
+              example: 150
+          required:
+          - totalCredits
+          - totalConversations
+        creditsByDate:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                example: '2024-01-01'
+              totalCredits:
+                type: number
+                example: 25.5
+              conversationCount:
+                type: number
+                example: 10
+            required:
+            - date
+            - totalCredits
+            - conversationCount
+        conversationsByChannel:
+          type: array
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                example: '2024-01-15'
+              channel:
+                type: string
+                example: WHATSAPP
+              count:
+                type: number
+                example: 12
+            required:
+            - date
+            - channel
+            - count
       required:
-      - code
-      - message
+      - summary
+      - creditsByDate
+      - conversationsByChannel
     Agent:
       type: object
       properties:
@@ -1760,236 +1786,6 @@ components:
       - status
       - createdAt
       - updatedAt
-    AgentSetting:
-      type:
-      - object
-      - 'null'
-      properties:
-        id:
-          type: number
-        aiModelId:
-          type:
-          - number
-          - 'null'
-        aiModel:
-          allOf:
-          - $ref: '#/components/schemas/AiModel'
-          - {}
-        model:
-          type:
-          - string
-          - 'null'
-        aiType:
-          type: string
-          enum:
-          - ASSISTANT
-          - AGENT
-        temperature:
-          type: number
-        instructions:
-          type:
-          - string
-          - 'null'
-        agentRole:
-          type: string
-          enum:
-          - NONE
-          - CUSTOM
-          - CUSTOMER_SUPPORT
-          - SALES_REPRESENTATIVE
-          - COLLECTIONS
-          - RECRUITING_AGENT
-          - HR_MANAGER
-          - PRODUCT_COPILOT
-          - AI_ASSISTANT
-          - ANALYST
-          - POST_SALES
-        toneOfVoice:
-          type: string
-          enum:
-          - NONE
-          - CUSTOM
-          - FRIENDLY
-          - NEUTRAL
-          - MATTER_OF_FACT
-          - PROFESSIONAL
-          - HUMOROUS
-          - WITTY
-          - GEN_Z
-        answerLength:
-          type: string
-          enum:
-          - NONE
-          - CUSTOM
-          - DYNAMIC
-          - CONCISE
-          - STANDARD
-          - THOROUGH
-        maxIterations:
-          type: number
-        agentType:
-          type: string
-          enum:
-          - BASIC
-          - ADVANCED
-        customTools:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              id:
-                type: number
-              name:
-                type: string
-              description:
-                type:
-                - string
-                - 'null'
-              status:
-                type:
-                - string
-                - 'null'
-              type:
-                type:
-                - string
-                - 'null'
-            required:
-            - id
-            - name
-        systemToolsConfig: {}
-        selectedRecordTypes:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              recordTypeId:
-                type: number
-              read:
-                type: boolean
-              create:
-                type: boolean
-              update:
-                type: boolean
-              delete:
-                type: boolean
-              createActivity:
-                type: boolean
-            required:
-            - recordTypeId
-        agentConnectedAccounts:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              connectedAccountId:
-                type: number
-              useAllTools:
-                type: boolean
-              selectedToolSlugs:
-                type:
-                - array
-                - 'null'
-                items:
-                  type: string
-              connectedAccount:
-                type: object
-                properties:
-                  id:
-                    type: number
-                  toolkit:
-                    type: string
-                  alias:
-                    type:
-                    - string
-                    - 'null'
-                  connectedEmail:
-                    type:
-                    - string
-                    - 'null'
-                  isConnected:
-                    type: boolean
-                required:
-                - id
-                - toolkit
-                - alias
-                - connectedEmail
-                - isConnected
-            required:
-            - connectedAccountId
-            - useAllTools
-        agentPlaybooks:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              playbookId:
-                type: number
-              assignedAt:
-                type: string
-              playbook:
-                type: object
-                properties:
-                  id:
-                    type: number
-                  name:
-                    type: string
-                  description:
-                    type:
-                    - string
-                    - 'null'
-                required:
-                - id
-                - name
-            required:
-            - playbookId
-      required:
-      - id
-    AiModel:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        creditsPerMessage:
-          type: number
-        isDefault:
-          type: boolean
-        order:
-          type: number
-        analyticsColor:
-          type:
-          - string
-          - 'null'
-        externalId:
-          type:
-          - string
-          - 'null'
-        aiVendor:
-          type: string
-        reasoningModel:
-          type: boolean
-        type:
-          type: string
-          enum:
-          - TEXT
-          - TRANSCRIPTION
-          - FILE_ANALYSIS
-      required:
-      - id
-      - name
     Error:
       type: object
       properties:
@@ -2003,73 +1799,6 @@ components:
       required:
       - ok
       - error
-    PublicAgentThemeUpdateOutput:
-      type: object
-      properties:
-        id:
-          type: number
-        assistantId:
-          type: string
-        avatar:
-          type:
-          - string
-          - 'null'
-        bubbleImage:
-          type:
-          - string
-          - 'null'
-        title:
-          type: string
-        initialMessage:
-          type: string
-        placeholder:
-          type: string
-        bubbleColor:
-          type: string
-        userMessageColor:
-          type: string
-        agentMessageColor:
-          type:
-          - string
-          - 'null'
-        bubbleAlignment:
-          type: string
-          enum:
-          - RIGHT
-          - LEFT
-        progressIndicator:
-          type: string
-          enum:
-          - STATIC
-          - DYNAMIC
-        verticalPositionInPixels:
-          type: number
-        updatedAt:
-          type: string
-      required:
-      - id
-      - assistantId
-      - avatar
-      - bubbleImage
-      - title
-      - initialMessage
-      - placeholder
-      - bubbleColor
-      - userMessageColor
-      - agentMessageColor
-      - bubbleAlignment
-      - progressIndicator
-      - verticalPositionInPixels
-      - updatedAt
-    PublicAgentCreateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: Support Agent
-      required:
-      - name
     AgentChannelSettings:
       type: object
       properties:
@@ -2465,6 +2194,549 @@ components:
       - whatsApp
       - instagram
       - messenger
+    AgentSetting:
+      type:
+      - object
+      - 'null'
+      properties:
+        id:
+          type: number
+        aiModelId:
+          type:
+          - number
+          - 'null'
+        aiModel:
+          allOf:
+          - $ref: '#/components/schemas/AiModel'
+          - {}
+        model:
+          type:
+          - string
+          - 'null'
+        aiType:
+          type: string
+          enum:
+          - ASSISTANT
+          - AGENT
+        temperature:
+          type: number
+        instructions:
+          type:
+          - string
+          - 'null'
+        agentRole:
+          type: string
+          enum:
+          - NONE
+          - CUSTOM
+          - CUSTOMER_SUPPORT
+          - SALES_REPRESENTATIVE
+          - COLLECTIONS
+          - RECRUITING_AGENT
+          - HR_MANAGER
+          - PRODUCT_COPILOT
+          - AI_ASSISTANT
+          - ANALYST
+          - POST_SALES
+        toneOfVoice:
+          type: string
+          enum:
+          - NONE
+          - CUSTOM
+          - FRIENDLY
+          - NEUTRAL
+          - MATTER_OF_FACT
+          - PROFESSIONAL
+          - HUMOROUS
+          - WITTY
+          - GEN_Z
+        answerLength:
+          type: string
+          enum:
+          - NONE
+          - CUSTOM
+          - DYNAMIC
+          - CONCISE
+          - STANDARD
+          - THOROUGH
+        maxIterations:
+          type: number
+        agentType:
+          type: string
+          enum:
+          - BASIC
+          - ADVANCED
+        customTools:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+              name:
+                type: string
+              description:
+                type:
+                - string
+                - 'null'
+              status:
+                type:
+                - string
+                - 'null'
+              type:
+                type:
+                - string
+                - 'null'
+            required:
+            - id
+            - name
+        systemToolsConfig: {}
+        selectedRecordTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: number
+              read:
+                type: boolean
+              create:
+                type: boolean
+              update:
+                type: boolean
+              delete:
+                type: boolean
+              createActivity:
+                type: boolean
+            required:
+            - recordTypeId
+        agentConnectedAccounts:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              connectedAccountId:
+                type: number
+              useAllTools:
+                type: boolean
+              selectedToolSlugs:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: string
+              connectedAccount:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  toolkit:
+                    type: string
+                  alias:
+                    type:
+                    - string
+                    - 'null'
+                  connectedEmail:
+                    type:
+                    - string
+                    - 'null'
+                  isConnected:
+                    type: boolean
+                required:
+                - id
+                - toolkit
+                - alias
+                - connectedEmail
+                - isConnected
+            required:
+            - connectedAccountId
+            - useAllTools
+        agentPlaybooks:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              playbookId:
+                type: number
+              assignedAt:
+                type: string
+              playbook:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  name:
+                    type: string
+                  description:
+                    type:
+                    - string
+                    - 'null'
+                required:
+                - id
+                - name
+            required:
+            - playbookId
+      required:
+      - id
+    PublicAgentDeploymentStatusInput:
+      type: object
+      properties:
+        isOffline:
+          type: boolean
+      required:
+      - isOffline
+    AgentTheme:
+      type:
+      - object
+      - 'null'
+      properties:
+        id:
+          type: number
+        assistantId:
+          type: string
+        avatar:
+          type:
+          - string
+          - 'null'
+        bubbleImage:
+          type:
+          - string
+          - 'null'
+        title:
+          type: string
+        initialMessage:
+          type: string
+        placeholder:
+          type: string
+        bubbleColor:
+          type: string
+        userMessageColor:
+          type: string
+        agentMessageColor:
+          type:
+          - string
+          - 'null'
+        bubbleAlignment:
+          type: string
+          enum:
+          - RIGHT
+          - LEFT
+        progressIndicator:
+          type: string
+          enum:
+          - STATIC
+          - DYNAMIC
+        verticalPositionInPixels:
+          type: number
+        removePowerBy:
+          type: boolean
+        updatedAt:
+          type: string
+      required:
+      - id
+      - avatar
+      - bubbleImage
+      - title
+      - initialMessage
+      - placeholder
+      - bubbleColor
+      - userMessageColor
+      - agentMessageColor
+      - bubbleAlignment
+      - progressIndicator
+      - verticalPositionInPixels
+    PublicAgentThemeUpdateOutput:
+      type: object
+      properties:
+        id:
+          type: number
+        assistantId:
+          type: string
+        avatar:
+          type:
+          - string
+          - 'null'
+        bubbleImage:
+          type:
+          - string
+          - 'null'
+        title:
+          type: string
+        initialMessage:
+          type: string
+        placeholder:
+          type: string
+        bubbleColor:
+          type: string
+        userMessageColor:
+          type: string
+        agentMessageColor:
+          type:
+          - string
+          - 'null'
+        bubbleAlignment:
+          type: string
+          enum:
+          - RIGHT
+          - LEFT
+        progressIndicator:
+          type: string
+          enum:
+          - STATIC
+          - DYNAMIC
+        verticalPositionInPixels:
+          type: number
+        updatedAt:
+          type: string
+      required:
+      - id
+      - assistantId
+      - avatar
+      - bubbleImage
+      - title
+      - initialMessage
+      - placeholder
+      - bubbleColor
+      - userMessageColor
+      - agentMessageColor
+      - bubbleAlignment
+      - progressIndicator
+      - verticalPositionInPixels
+      - updatedAt
+    PublicAgentCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Support Agent
+      required:
+      - name
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicAgentSettingUpdateInput:
+      type: object
+      properties:
+        aiModelId:
+          type:
+          - number
+          - 'null'
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 1
+        instructions:
+          type:
+          - string
+          - 'null'
+        maxIterations:
+          type: number
+          minimum: 3
+          maximum: 30
+          default: 10
+        agentType:
+          type: string
+          enum:
+          - BASIC
+          - ADVANCED
+          default: BASIC
+        customToolIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: number
+        connectedAccountConfigs:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              connectedAccountId:
+                type: number
+              useAllTools:
+                type: boolean
+                default: true
+              selectedToolSlugs:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: string
+            required:
+            - connectedAccountId
+        systemToolsConfig:
+          type:
+          - object
+          - 'null'
+          properties:
+            webSearchEnabled:
+              type: boolean
+              default: false
+            urlScrapeEnabled:
+              type: boolean
+              default: false
+            linkedinSearchEnabled:
+              type: boolean
+              default: false
+        selectedRecordTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: number
+              read:
+                type: boolean
+              create:
+                type: boolean
+              update:
+                type: boolean
+              delete:
+                type: boolean
+              createActivity:
+                type: boolean
+            required:
+            - recordTypeId
+      required:
+      - aiModelId
+      - temperature
+      - instructions
+    PublicAgentUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 256
+          example: Support Agent
+      required:
+      - name
+    AiModel:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        creditsPerMessage:
+          type: number
+        isDefault:
+          type: boolean
+        order:
+          type: number
+        analyticsColor:
+          type:
+          - string
+          - 'null'
+        externalId:
+          type:
+          - string
+          - 'null'
+        aiVendor:
+          type: string
+        reasoningModel:
+          type: boolean
+        type:
+          type: string
+          enum:
+          - TEXT
+          - TRANSCRIPTION
+          - FILE_ANALYSIS
+      required:
+      - id
+      - name
+    PublicAgentThemeUpdateInput:
+      type: object
+      properties:
+        avatar:
+          type:
+          - string
+          - 'null'
+        bubbleImage:
+          type:
+          - string
+          - 'null'
+        title:
+          type: string
+        initialMessage:
+          type: string
+        placeholder:
+          type: string
+        bubbleColor:
+          type: string
+        userMessageColor:
+          type: string
+        agentMessageColor:
+          type:
+          - string
+          - 'null'
+        bubbleAlignment:
+          type: string
+          enum:
+          - RIGHT
+          - LEFT
+        progressIndicator:
+          type: string
+          enum:
+          - STATIC
+          - DYNAMIC
+        verticalPositionInPixels:
+          type: number
+      required:
+      - avatar
+      - bubbleImage
+      - title
+      - initialMessage
+      - placeholder
+      - bubbleColor
+      - userMessageColor
+      - agentMessageColor
+      - bubbleAlignment
+      - progressIndicator
+      - verticalPositionInPixels
     AgentDetail:
       allOf:
       - $ref: '#/components/schemas/Agent'
@@ -2900,278 +3172,6 @@ components:
         required:
         - isOffline
         - accountId
-    AgentTheme:
-      type:
-      - object
-      - 'null'
-      properties:
-        id:
-          type: number
-        assistantId:
-          type: string
-        avatar:
-          type:
-          - string
-          - 'null'
-        bubbleImage:
-          type:
-          - string
-          - 'null'
-        title:
-          type: string
-        initialMessage:
-          type: string
-        placeholder:
-          type: string
-        bubbleColor:
-          type: string
-        userMessageColor:
-          type: string
-        agentMessageColor:
-          type:
-          - string
-          - 'null'
-        bubbleAlignment:
-          type: string
-          enum:
-          - RIGHT
-          - LEFT
-        progressIndicator:
-          type: string
-          enum:
-          - STATIC
-          - DYNAMIC
-        verticalPositionInPixels:
-          type: number
-        removePowerBy:
-          type: boolean
-        updatedAt:
-          type: string
-      required:
-      - id
-      - avatar
-      - bubbleImage
-      - title
-      - initialMessage
-      - placeholder
-      - bubbleColor
-      - userMessageColor
-      - agentMessageColor
-      - bubbleAlignment
-      - progressIndicator
-      - verticalPositionInPixels
-    AgentAnalytics:
-      type: object
-      properties:
-        summary:
-          type: object
-          properties:
-            totalCredits:
-              type: number
-              example: 500.25
-            totalConversations:
-              type: number
-              example: 150
-          required:
-          - totalCredits
-          - totalConversations
-        creditsByDate:
-          type: array
-          items:
-            type: object
-            properties:
-              date:
-                type: string
-                example: '2024-01-01'
-              totalCredits:
-                type: number
-                example: 25.5
-              conversationCount:
-                type: number
-                example: 10
-            required:
-            - date
-            - totalCredits
-            - conversationCount
-        conversationsByChannel:
-          type: array
-          items:
-            type: object
-            properties:
-              date:
-                type: string
-                example: '2024-01-15'
-              channel:
-                type: string
-                example: WHATSAPP
-              count:
-                type: number
-                example: 12
-            required:
-            - date
-            - channel
-            - count
-      required:
-      - summary
-      - creditsByDate
-      - conversationsByChannel
-    PublicAgentThemeUpdateInput:
-      type: object
-      properties:
-        avatar:
-          type:
-          - string
-          - 'null'
-        bubbleImage:
-          type:
-          - string
-          - 'null'
-        title:
-          type: string
-        initialMessage:
-          type: string
-        placeholder:
-          type: string
-        bubbleColor:
-          type: string
-        userMessageColor:
-          type: string
-        agentMessageColor:
-          type:
-          - string
-          - 'null'
-        bubbleAlignment:
-          type: string
-          enum:
-          - RIGHT
-          - LEFT
-        progressIndicator:
-          type: string
-          enum:
-          - STATIC
-          - DYNAMIC
-        verticalPositionInPixels:
-          type: number
-      required:
-      - avatar
-      - bubbleImage
-      - title
-      - initialMessage
-      - placeholder
-      - bubbleColor
-      - userMessageColor
-      - agentMessageColor
-      - bubbleAlignment
-      - progressIndicator
-      - verticalPositionInPixels
-    PublicAgentSettingUpdateInput:
-      type: object
-      properties:
-        aiModelId:
-          type:
-          - number
-          - 'null'
-        temperature:
-          type: number
-          minimum: 0
-          maximum: 1
-        instructions:
-          type:
-          - string
-          - 'null'
-        maxIterations:
-          type: number
-          minimum: 3
-          maximum: 30
-          default: 10
-        agentType:
-          type: string
-          enum:
-          - BASIC
-          - ADVANCED
-          default: BASIC
-        customToolIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: number
-        connectedAccountConfigs:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              connectedAccountId:
-                type: number
-              useAllTools:
-                type: boolean
-                default: true
-              selectedToolSlugs:
-                type:
-                - array
-                - 'null'
-                items:
-                  type: string
-            required:
-            - connectedAccountId
-        systemToolsConfig:
-          type:
-          - object
-          - 'null'
-          properties:
-            webSearchEnabled:
-              type: boolean
-              default: false
-            urlScrapeEnabled:
-              type: boolean
-              default: false
-            linkedinSearchEnabled:
-              type: boolean
-              default: false
-        selectedRecordTypes:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              recordTypeId:
-                type: number
-              read:
-                type: boolean
-              create:
-                type: boolean
-              update:
-                type: boolean
-              delete:
-                type: boolean
-              createActivity:
-                type: boolean
-            required:
-            - recordTypeId
-      required:
-      - aiModelId
-      - temperature
-      - instructions
-    PublicAgentUpdateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 256
-          example: Support Agent
-      required:
-      - name
-    PublicAgentDeploymentStatusInput:
-      type: object
-      properties:
-        isOffline:
-          type: boolean
-      required:
-      - isOffline
   securitySchemes:
     accountApiKey:
       type: http

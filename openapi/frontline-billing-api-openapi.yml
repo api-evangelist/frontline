@@ -215,51 +215,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    ErrorBody:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
-    PublicMaxSeatResult:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-        userId:
-          type: number
-          example: 12
-        assigned:
-          type: boolean
-          description: Whether the user holds a Max seat after this operation
-      required:
-      - success
-      - userId
-      - assigned
     Error:
       type: object
       properties:
@@ -273,6 +228,34 @@ components:
       required:
       - ok
       - error
+    PublicMaxUsage:
+      type: object
+      properties:
+        plan:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        subscription:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        seats:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        limits:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        next:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
     PublicCreditHistoryItem:
       type: object
       properties:
@@ -307,56 +290,20 @@ components:
       - date
       - totalCredits
       - messageCount
-    PublicMaxSeatInput:
+    PublicStudioUsage:
       type: object
       properties:
-        userId:
-          type: integer
-          description: ID of the user to assign/unassign (see GET /users)
-          example: 12
-          exclusiveMinimum: 0
-      required:
-      - userId
-    BillingPlan:
-      type: object
-      properties:
-        planName:
+        usage:
           type:
-          - string
+          - object
           - 'null'
-          example: Professional
-        creditsPerMonth:
-          type:
-          - number
-          - 'null'
-          example: 5000
-        creditsUsed:
-          type: number
-          example: 1250.5
-        subscriptionRenews:
-          type:
-          - string
-          - 'null'
-          example: '2026-03-25T00:00:00Z'
-      required:
-      - planName
-      - creditsPerMonth
-      - creditsUsed
-      - subscriptionRenews
-    PublicMaxUsage:
-      type: object
-      properties:
+          additionalProperties: {}
         plan:
           type:
           - object
           - 'null'
           additionalProperties: {}
         subscription:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        seats:
           type:
           - object
           - 'null'
@@ -371,6 +318,45 @@ components:
           - object
           - 'null'
           additionalProperties: {}
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicMaxSeatInput:
+      type: object
+      properties:
+        userId:
+          type: integer
+          description: ID of the user to assign/unassign (see GET /users)
+          example: 12
+          exclusiveMinimum: 0
+      required:
+      - userId
     PublicMaxSeats:
       type: object
       properties:
@@ -415,34 +401,41 @@ components:
       - available
       - assigned
       - unassigned
-    PublicStudioUsage:
+    BillingPlan:
       type: object
       properties:
-        usage:
+        planName:
           type:
-          - object
+          - string
           - 'null'
-          additionalProperties: {}
-        plan:
+          example: Professional
+        creditsPerMonth:
           type:
-          - object
+          - number
           - 'null'
-          additionalProperties: {}
-        subscription:
+          example: 5000
+        creditsUsed:
+          type: number
+          example: 1250.5
+        subscriptionRenews:
           type:
-          - object
+          - string
           - 'null'
-          additionalProperties: {}
-        limits:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        next:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
+          example: '2026-03-25T00:00:00Z'
+      required:
+      - planName
+      - creditsPerMonth
+      - creditsUsed
+      - subscriptionRenews
+    PublicCreditHistory:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicCreditHistoryItem'
+      required:
+      - results
     PublicMaxSeatUser:
       type: object
       properties:
@@ -467,15 +460,22 @@ components:
           - 'null'
       required:
       - userId
-    PublicCreditHistory:
+    PublicMaxSeatResult:
       type: object
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicCreditHistoryItem'
+        success:
+          type: boolean
+          example: true
+        userId:
+          type: number
+          example: 12
+        assigned:
+          type: boolean
+          description: Whether the user holds a Max seat after this operation
       required:
-      - results
+      - success
+      - userId
+      - assigned
   securitySchemes:
     accountApiKey:
       type: http

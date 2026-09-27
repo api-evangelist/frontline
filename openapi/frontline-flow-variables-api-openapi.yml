@@ -254,7 +254,15 @@ paths:
           description: Variable deleted
 components:
   schemas:
-    PublicVariableUpdateInput:
+    VariableCheckName:
+      type: object
+      properties:
+        exists:
+          type: boolean
+          example: false
+      required:
+      - exists
+    PublicFlowVariableCreateInput:
       type: object
       properties:
         name:
@@ -324,15 +332,7 @@ components:
       - createdAt
       - updatedAt
       - isDefault
-    VariableCheckName:
-      type: object
-      properties:
-        exists:
-          type: boolean
-          example: false
-      required:
-      - exists
-    PublicFlowVariableCreateInput:
+    PublicVariableUpdateInput:
       type: object
       properties:
         name:

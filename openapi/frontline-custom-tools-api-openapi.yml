@@ -222,35 +222,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    ErrorBody:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
     Error:
       type: object
       properties:
@@ -264,32 +235,6 @@ components:
       required:
       - ok
       - error
-    PublicToolTestOutput:
-      type: object
-      properties:
-        status:
-          type: number
-          example: 200
-        headers:
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            content-type: application/json
-        data: {}
-        duration:
-          type: number
-          description: Request duration in milliseconds
-          example: 245
-        contentLength:
-          type:
-          - number
-          - 'null'
-          example: 128
-      required:
-      - status
-      - headers
-      - duration
     PublicToolUpdateInput:
       type: object
       properties:
@@ -389,120 +334,35 @@ components:
             required:
             - key
             - value
-    PublicToolTestInput:
+    ErrorBody:
       type: object
       properties:
-        values:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
           type: object
-          additionalProperties: {}
-          default: {}
-          description: Argument values keyed by argument name. Every declared tool argument must be present.
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
           example:
-            contactId: '42'
-    PublicToolCreateInput:
-      type: object
-      properties:
-        type:
-          type: string
-          enum:
-          - API_CALL
-          default: API_CALL
-          example: API_CALL
-        name:
-          type: string
-          minLength: 1
-          maxLength: 256
-          example: Fetch contact
-        description:
-          type: string
-          maxLength: 1000
-          example: Fetches a contact from the external CRM
-        method:
-          type: string
-          enum:
-          - GET
-          - POST
-          - PUT
-          - PATCH
-          - DELETE
-          example: GET
-        url:
-          type: string
-          format: uri
-          example: https://api.example.com/contacts/123
-        body:
-          type: string
-          description: Raw request body template (typically a JSON string). Interpolate argument values with single braces, e.g. {contactName} (not double braces).
-          example: '{"name":"{contactName}"}'
-        arguments:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                minLength: 1
-                example: contactId
-              description:
-                type: string
-                minLength: 1
-                example: The contact ID to fetch
-              dataType:
-                type: string
-                enum:
-                - STRING
-                - NUMBER
-                - DECIMAL
-                - BOOLEAN
-                description: Argument type. Use STRING, NUMBER (covers decimals), or BOOLEAN. DECIMAL is accepted but not shown in the app UI — prefer NUMBER.
-                example: STRING
-              required:
-                type: boolean
-                default: true
-                description: Whether the caller must provide this argument. Defaults to true.
-                example: true
-              defaultValue:
-                type: string
-                description: Fallback value (as a string, coerced to dataType) used when the argument is omitted.
-                example: normal
-            required:
-            - name
-            - dataType
-        headers:
-          type: array
-          items:
-            type: object
-            properties:
-              key:
-                type: string
-                minLength: 1
-                example: Authorization
-              value:
-                type: string
-                example: Bearer {apiKey}
-            required:
-            - key
-            - value
-        queryParams:
-          type: array
-          items:
-            type: object
-            properties:
-              key:
-                type: string
-                minLength: 1
-                example: limit
-              value:
-                type: string
-                example: '10'
-            required:
-            - key
-            - value
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
       required:
-      - name
-      - description
-      - method
-      - url
+      - code
+      - message
     CustomTool:
       type: object
       properties:
@@ -628,6 +488,146 @@ components:
       - createdAt
       - updatedAt
       - type
+    PublicToolTestOutput:
+      type: object
+      properties:
+        status:
+          type: number
+          example: 200
+        headers:
+          type: object
+          additionalProperties:
+            type: string
+          example:
+            content-type: application/json
+        data: {}
+        duration:
+          type: number
+          description: Request duration in milliseconds
+          example: 245
+        contentLength:
+          type:
+          - number
+          - 'null'
+          example: 128
+      required:
+      - status
+      - headers
+      - duration
+    PublicToolCreateInput:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - API_CALL
+          default: API_CALL
+          example: API_CALL
+        name:
+          type: string
+          minLength: 1
+          maxLength: 256
+          example: Fetch contact
+        description:
+          type: string
+          maxLength: 1000
+          example: Fetches a contact from the external CRM
+        method:
+          type: string
+          enum:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          example: GET
+        url:
+          type: string
+          format: uri
+          example: https://api.example.com/contacts/123
+        body:
+          type: string
+          description: Raw request body template (typically a JSON string). Interpolate argument values with single braces, e.g. {contactName} (not double braces).
+          example: '{"name":"{contactName}"}'
+        arguments:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                minLength: 1
+                example: contactId
+              description:
+                type: string
+                minLength: 1
+                example: The contact ID to fetch
+              dataType:
+                type: string
+                enum:
+                - STRING
+                - NUMBER
+                - DECIMAL
+                - BOOLEAN
+                description: Argument type. Use STRING, NUMBER (covers decimals), or BOOLEAN. DECIMAL is accepted but not shown in the app UI — prefer NUMBER.
+                example: STRING
+              required:
+                type: boolean
+                default: true
+                description: Whether the caller must provide this argument. Defaults to true.
+                example: true
+              defaultValue:
+                type: string
+                description: Fallback value (as a string, coerced to dataType) used when the argument is omitted.
+                example: normal
+            required:
+            - name
+            - dataType
+        headers:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: Authorization
+              value:
+                type: string
+                example: Bearer {apiKey}
+            required:
+            - key
+            - value
+        queryParams:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: limit
+              value:
+                type: string
+                example: '10'
+            required:
+            - key
+            - value
+      required:
+      - name
+      - description
+      - method
+      - url
+    PublicToolTestInput:
+      type: object
+      properties:
+        values:
+          type: object
+          additionalProperties: {}
+          default: {}
+          description: Argument values keyed by argument name. Every declared tool argument must be present.
+          example:
+            contactId: '42'
   securitySchemes:
     accountApiKey:
       type: http

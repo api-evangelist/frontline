@@ -43,6 +43,52 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicWhatsAppTemplatesOutput:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicWhatsAppTemplate'
+      required:
+      - results
+    PublicWhatsAppTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          description: Template name to use in SEND_WHATSAPP_MESSAGE nodes.
+          example: hello_world
+        language:
+          type: string
+        status:
+          type: string
+        category:
+          type: string
+        components:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        parameters:
+          $ref: '#/components/schemas/PublicWhatsAppTemplateParameters'
+      required:
+      - name
     ErrorBody:
       type: object
       properties:
@@ -95,52 +141,6 @@ components:
           type: array
           items:
             type: string
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
-    PublicWhatsAppTemplatesOutput:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicWhatsAppTemplate'
-      required:
-      - results
-    PublicWhatsAppTemplate:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-          description: Template name to use in SEND_WHATSAPP_MESSAGE nodes.
-          example: hello_world
-        language:
-          type: string
-        status:
-          type: string
-        category:
-          type: string
-        components:
-          type: array
-          items:
-            type: object
-            additionalProperties: {}
-        parameters:
-          $ref: '#/components/schemas/PublicWhatsAppTemplateParameters'
-      required:
-      - name
   securitySchemes:
     accountApiKey:
       type: http

@@ -50,7 +50,7 @@ tags:
 - CRM
 - AI Agents
 - Sales Automation
-- Customer-Support
+- Customer Support
 - Workflows
 - Conversational AI
 tags_raw:
@@ -61,6 +61,7 @@ tags_raw:
 - Customer Support
 - Workflows
 - Conversational AI
+- Customer-Support
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

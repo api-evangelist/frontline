@@ -226,115 +226,6 @@ paths:
                 $ref: '#/components/schemas/PublicExecutionTrace'
 components:
   schemas:
-    PublicExecutionTrace:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        type:
-          type:
-          - string
-          - 'null'
-    PublicAgentRunMessage:
-      type: object
-      properties:
-        id:
-          type:
-          - number
-          - 'null'
-        role:
-          type: string
-          enum:
-          - USER
-          - ASSISTANT
-          - SYSTEM
-          example: ASSISTANT
-        type:
-          type: string
-          enum:
-          - MESSAGE
-          - TRIGGER_INTENT
-          - RESPONSE_AI
-          - SAY_AI
-          - API
-          - ENTER_FLOW
-          - EXIT_FLOW
-          - ERROR_MESSAGE
-          - SET_VARIABLES
-          - OFF_TOPIC
-          - CONVERSATION_ENDED
-          - CONVERSATION_IDLE
-          - CONDITIONAL_ROUTING
-          - PROCESSED_MEDIA_WITH_AI
-          - AGENT_TOOL
-          - START_CONVERSATION
-          - WHATSAPP_TEMPLATE_MESSAGE
-          - WHATSAPP_FLOW_COMPLETED
-          - MESSAGE_REACTION
-          - CHANNEL_CONTEXT
-          - ABORTED_MESSAGE
-          - MAX_PLAN_PROPOSED
-          - MAX_PLAN_STARTED
-          - MAX_PLAN_COMPLETED
-          - MAX_PLAN_CANCELLED
-          - MAX_PLAN_QUESTIONS_PROPOSED
-          - MAX_PLAN_QUESTIONS_RESOLVED
-          example: MESSAGE
-        text:
-          type: string
-          example: Hi! How can I help?
-        created_at:
-          type:
-          - string
-          - 'null'
-      required:
-      - role
-      - type
-      - text
-    PublicConversation:
-      type: object
-      properties:
-        id:
-          type: number
-          example: 42
-        name:
-          type:
-          - string
-          - 'null'
-          example: Anonymous Visitor
-        channel:
-          type: string
-          example: API
-        is_closed:
-          type: boolean
-        contact_id:
-          type:
-          - string
-          - 'null'
-        summary:
-          type:
-          - string
-          - 'null'
-          description: Latest rolling summary of the conversation, if one has been generated.
-        contact:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-          description: The linked CRM contact (People record), if any.
-        created_at:
-          type: string
-        updated_at:
-          type:
-          - string
-          - 'null'
-      required:
-      - id
-      - channel
-      - is_closed
-      - created_at
     PublicConversationMessage:
       type: object
       properties:
@@ -395,6 +286,140 @@ components:
       - role
       - type
       - created_at
+    PublicAgentRunOutput:
+      type: object
+      properties:
+        conversation_id:
+          type:
+          - number
+          - 'null'
+          example: 42
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicAgentRunMessage'
+      required:
+      - messages
+    PublicConversationTranscript:
+      allOf:
+      - $ref: '#/components/schemas/PublicConversation'
+      - type: object
+        properties:
+          messages:
+            type: array
+            items:
+              $ref: '#/components/schemas/PublicConversationMessage'
+        required:
+        - messages
+    PublicExecutionTrace:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+    PublicConversation:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 42
+        name:
+          type:
+          - string
+          - 'null'
+          example: Anonymous Visitor
+        channel:
+          type: string
+          example: API
+        is_closed:
+          type: boolean
+        contact_id:
+          type:
+          - string
+          - 'null'
+        summary:
+          type:
+          - string
+          - 'null'
+          description: Latest rolling summary of the conversation, if one has been generated.
+        contact:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          description: The linked CRM contact (People record), if any.
+        created_at:
+          type: string
+        updated_at:
+          type:
+          - string
+          - 'null'
+      required:
+      - id
+      - channel
+      - is_closed
+      - created_at
+    PublicAgentRunMessage:
+      type: object
+      properties:
+        id:
+          type:
+          - number
+          - 'null'
+        role:
+          type: string
+          enum:
+          - USER
+          - ASSISTANT
+          - SYSTEM
+          example: ASSISTANT
+        type:
+          type: string
+          enum:
+          - MESSAGE
+          - TRIGGER_INTENT
+          - RESPONSE_AI
+          - SAY_AI
+          - API
+          - ENTER_FLOW
+          - EXIT_FLOW
+          - ERROR_MESSAGE
+          - SET_VARIABLES
+          - OFF_TOPIC
+          - CONVERSATION_ENDED
+          - CONVERSATION_IDLE
+          - CONDITIONAL_ROUTING
+          - PROCESSED_MEDIA_WITH_AI
+          - AGENT_TOOL
+          - START_CONVERSATION
+          - WHATSAPP_TEMPLATE_MESSAGE
+          - WHATSAPP_FLOW_COMPLETED
+          - MESSAGE_REACTION
+          - CHANNEL_CONTEXT
+          - ABORTED_MESSAGE
+          - MAX_PLAN_PROPOSED
+          - MAX_PLAN_STARTED
+          - MAX_PLAN_COMPLETED
+          - MAX_PLAN_CANCELLED
+          - MAX_PLAN_QUESTIONS_PROPOSED
+          - MAX_PLAN_QUESTIONS_RESOLVED
+          example: MESSAGE
+        text:
+          type: string
+          example: Hi! How can I help?
+        created_at:
+          type:
+          - string
+          - 'null'
+      required:
+      - role
+      - type
+      - text
     PublicAgentMessageInput:
       type: object
       properties:
@@ -415,31 +440,6 @@ components:
           type: object
           additionalProperties: {}
           description: Variables to seed the conversation with when starting a new one (HMAC is computed server-side).
-    PublicConversationTranscript:
-      allOf:
-      - $ref: '#/components/schemas/PublicConversation'
-      - type: object
-        properties:
-          messages:
-            type: array
-            items:
-              $ref: '#/components/schemas/PublicConversationMessage'
-        required:
-        - messages
-    PublicAgentRunOutput:
-      type: object
-      properties:
-        conversation_id:
-          type:
-          - number
-          - 'null'
-          example: 42
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicAgentRunMessage'
-      required:
-      - messages
   securitySchemes:
     accountApiKey:
       type: http

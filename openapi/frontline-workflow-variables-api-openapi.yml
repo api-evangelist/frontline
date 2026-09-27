@@ -287,6 +287,14 @@ components:
           example: ^[A-Za-z ]+$
       required:
       - name
+    VariableCheckName:
+      type: object
+      properties:
+        exists:
+          type: boolean
+          example: false
+      required:
+      - exists
     Variable:
       type: object
       properties:
@@ -338,14 +346,6 @@ components:
       - createdAt
       - updatedAt
       - isDefault
-    VariableCheckName:
-      type: object
-      properties:
-        exists:
-          type: boolean
-          example: false
-      required:
-      - exists
     PublicVariableUpdateInput:
       type: object
       properties:

@@ -136,6 +136,31 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicNodeGuidance:
+      type: object
+      properties:
+        nodeType:
+          type: string
+          example: TOOLS_AI
+        guidance:
+          type: string
+          description: Markdown guidance for configuring this node type. Empty when no guidance is published for the type.
+      required:
+      - nodeType
+      - guidance
     ErrorBody:
       type: object
       properties:
@@ -165,27 +190,6 @@ components:
       required:
       - code
       - message
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
-    PublicFieldGuidance:
-      type: object
-      properties:
-        guidance:
-          type: string
-          description: Markdown reference covering every field/column type, its metadata shape, and best practices — generated from the same constants the create/update schemas validate against.
-      required:
-      - guidance
     PublicVisualOptions:
       type: object
       properties:
@@ -279,17 +283,13 @@ components:
             - allowsMultipleOutgoingHandles
       required:
       - results
-    PublicNodeGuidance:
+    PublicFieldGuidance:
       type: object
       properties:
-        nodeType:
-          type: string
-          example: TOOLS_AI
         guidance:
           type: string
-          description: Markdown guidance for configuring this node type. Empty when no guidance is published for the type.
+          description: Markdown reference covering every field/column type, its metadata shape, and best practices — generated from the same constants the create/update schemas validate against.
       required:
-      - nodeType
       - guidance
   securitySchemes:
     accountApiKey:

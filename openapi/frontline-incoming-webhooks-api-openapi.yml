@@ -299,35 +299,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    ErrorBody:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
     PublicIncomingWebhookEventList:
       type: object
       properties:
@@ -359,6 +330,19 @@ components:
       required:
       - pageSize
       - results
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
     PublicIncomingWebhookUpdateInput:
       type: object
       properties:
@@ -377,19 +361,124 @@ components:
         useAuthentication:
           type: boolean
           example: true
-    Error:
+    PublicIncomingWebhookEvent:
       type: object
       properties:
-        ok:
-          type: boolean
+        id:
+          type: string
+          example: clx987event
+        status:
+          type: string
           enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+          - RECEIVED
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+          - TIMEOUT
+          example: COMPLETED
+        payload:
+          description: Raw JSON payload received
+        payloadSize:
+          type:
+          - number
+          - 'null'
+          example: 512
+        ipAddress:
+          type:
+          - string
+          - 'null'
+          example: 203.0.113.10
+        userAgent:
+          type:
+          - string
+          - 'null'
+          example: curl/8.4.0
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
       required:
-      - ok
-      - error
+      - id
+      - status
+      - createdAt
+      - updatedAt
+    PublicIncomingWebhookCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: External CRM event
+        description:
+          type:
+          - string
+          - 'null'
+          example: Receives events from the external CRM
+        isActive:
+          type: boolean
+          default: true
+          example: true
+        useAuthentication:
+          type: boolean
+          default: true
+          example: true
+      required:
+      - name
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicIncomingWebhookEventDetail:
+      allOf:
+      - $ref: '#/components/schemas/PublicIncomingWebhookEvent'
+      - type: object
+        properties:
+          automations:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 42
+                name:
+                  type: string
+                  example: Notify sales channel
+                status:
+                  type:
+                  - string
+                  - 'null'
+                  example: ACTIVE
+              required:
+              - id
+              - name
     IncomingWebhookCreateOutput:
       type: object
       properties:
@@ -474,95 +563,6 @@ components:
       - useAuthentication
       - createdAt
       - updatedAt
-    PublicIncomingWebhookEvent:
-      type: object
-      properties:
-        id:
-          type: string
-          example: clx987event
-        status:
-          type: string
-          enum:
-          - RECEIVED
-          - PROCESSING
-          - COMPLETED
-          - FAILED
-          - TIMEOUT
-          example: COMPLETED
-        payload:
-          description: Raw JSON payload received
-        payloadSize:
-          type:
-          - number
-          - 'null'
-          example: 512
-        ipAddress:
-          type:
-          - string
-          - 'null'
-          example: 203.0.113.10
-        userAgent:
-          type:
-          - string
-          - 'null'
-          example: curl/8.4.0
-        createdAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
-        updatedAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
-      required:
-      - id
-      - status
-      - createdAt
-      - updatedAt
-    PublicIncomingWebhookCreateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: External CRM event
-        description:
-          type:
-          - string
-          - 'null'
-          example: Receives events from the external CRM
-        isActive:
-          type: boolean
-          default: true
-          example: true
-        useAuthentication:
-          type: boolean
-          default: true
-          example: true
-      required:
-      - name
-    PublicIncomingWebhookEventDetail:
-      allOf:
-      - $ref: '#/components/schemas/PublicIncomingWebhookEvent'
-      - type: object
-        properties:
-          automations:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: number
-                  example: 42
-                name:
-                  type: string
-                  example: Notify sales channel
-                status:
-                  type:
-                  - string
-                  - 'null'
-                  example: ACTIVE
-              required:
-              - id
-              - name
   securitySchemes:
     accountApiKey:
       type: http
