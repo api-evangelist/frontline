@@ -254,6 +254,25 @@ paths:
           description: Variable deleted
 components:
   schemas:
+    PublicVariableUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: customer_name
+        description:
+          type:
+          - string
+          - 'null'
+          example: Customer name captured during the conversation
+        pattern:
+          type:
+          - string
+          - 'null'
+          example: ^[A-Za-z ]+$
+      required:
+      - name
     VariableCheckName:
       type: object
       properties:
@@ -332,25 +351,6 @@ components:
       - createdAt
       - updatedAt
       - isDefault
-    PublicVariableUpdateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: customer_name
-        description:
-          type:
-          - string
-          - 'null'
-          example: Customer name captured during the conversation
-        pattern:
-          type:
-          - string
-          - 'null'
-          example: ^[A-Za-z ]+$
-      required:
-      - name
   securitySchemes:
     accountApiKey:
       type: http

@@ -215,19 +215,74 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
+    PublicMaxSeatResult:
       type: object
       properties:
-        ok:
+        success:
           type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+          example: true
+        userId:
+          type: number
+          example: 12
+        assigned:
+          type: boolean
+          description: Whether the user holds a Max seat after this operation
       required:
-      - ok
-      - error
+      - success
+      - userId
+      - assigned
+    PublicMaxSeatUser:
+      type: object
+      properties:
+        userId:
+          type: number
+          example: 12
+        firstName:
+          type:
+          - string
+          - 'null'
+        lastName:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        assignedAt:
+          type:
+          - string
+          - 'null'
+      required:
+      - userId
+    PublicStudioUsage:
+      type: object
+      properties:
+        usage:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        plan:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        subscription:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        limits:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        next:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
     PublicMaxUsage:
       type: object
       properties:
@@ -256,6 +311,55 @@ components:
           - object
           - 'null'
           additionalProperties: {}
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    BillingPlan:
+      type: object
+      properties:
+        planName:
+          type:
+          - string
+          - 'null'
+          example: Professional
+        creditsPerMonth:
+          type:
+          - number
+          - 'null'
+          example: 5000
+        creditsUsed:
+          type: number
+          example: 1250.5
+        subscriptionRenews:
+          type:
+          - string
+          - 'null'
+          example: '2026-03-25T00:00:00Z'
+      required:
+      - planName
+      - creditsPerMonth
+      - creditsUsed
+      - subscriptionRenews
+    PublicMaxSeatInput:
+      type: object
+      properties:
+        userId:
+          type: integer
+          description: ID of the user to assign/unassign (see GET /users)
+          example: 12
+          exclusiveMinimum: 0
+      required:
+      - userId
     PublicCreditHistoryItem:
       type: object
       properties:
@@ -290,34 +394,6 @@ components:
       - date
       - totalCredits
       - messageCount
-    PublicStudioUsage:
-      type: object
-      properties:
-        usage:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        plan:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        subscription:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        limits:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        next:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
     ErrorBody:
       type: object
       properties:
@@ -347,16 +423,6 @@ components:
       required:
       - code
       - message
-    PublicMaxSeatInput:
-      type: object
-      properties:
-        userId:
-          type: integer
-          description: ID of the user to assign/unassign (see GET /users)
-          example: 12
-          exclusiveMinimum: 0
-      required:
-      - userId
     PublicMaxSeats:
       type: object
       properties:
@@ -401,32 +467,6 @@ components:
       - available
       - assigned
       - unassigned
-    BillingPlan:
-      type: object
-      properties:
-        planName:
-          type:
-          - string
-          - 'null'
-          example: Professional
-        creditsPerMonth:
-          type:
-          - number
-          - 'null'
-          example: 5000
-        creditsUsed:
-          type: number
-          example: 1250.5
-        subscriptionRenews:
-          type:
-          - string
-          - 'null'
-          example: '2026-03-25T00:00:00Z'
-      required:
-      - planName
-      - creditsPerMonth
-      - creditsUsed
-      - subscriptionRenews
     PublicCreditHistory:
       type: object
       properties:
@@ -436,46 +476,6 @@ components:
             $ref: '#/components/schemas/PublicCreditHistoryItem'
       required:
       - results
-    PublicMaxSeatUser:
-      type: object
-      properties:
-        userId:
-          type: number
-          example: 12
-        firstName:
-          type:
-          - string
-          - 'null'
-        lastName:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-        assignedAt:
-          type:
-          - string
-          - 'null'
-      required:
-      - userId
-    PublicMaxSeatResult:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-        userId:
-          type: number
-          example: 12
-        assigned:
-          type: boolean
-          description: Whether the user holds a Max seat after this operation
-      required:
-      - success
-      - userId
-      - assigned
   securitySchemes:
     accountApiKey:
       type: http

@@ -267,74 +267,6 @@ paths:
                 $ref: '#/components/schemas/PublicUserTask'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
-    PublicUserTaskUpdateInput:
-      type: object
-      properties:
-        content:
-          type: string
-          minLength: 1
-        due_date:
-          type:
-          - string
-          - 'null'
-          description: Pass null to clear the due date.
-        assignee_ids:
-          type: array
-          items:
-            type: number
-        object_name:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          description: Pass null (with row_id null) to unlink the object record.
-        row_id:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-    ErrorBody:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
     PublicUserTask:
       type: object
       properties:
@@ -453,6 +385,74 @@ components:
       - created_at
       - updated_at
       - assignees
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicUserTaskUpdateInput:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+        due_date:
+          type:
+          - string
+          - 'null'
+          description: Pass null to clear the due date.
+        assignee_ids:
+          type: array
+          items:
+            type: number
+        object_name:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          description: Pass null (with row_id null) to unlink the object record.
+        row_id:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
     PublicUserTaskCreateInput:
       type: object
       properties:

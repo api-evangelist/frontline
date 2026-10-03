@@ -190,52 +190,36 @@ paths:
           description: The updated Messenger page
 components:
   schemas:
-    PublicChannelAssignInput:
+    PublicWhatsAppBusinessInfo:
       type: object
       properties:
-        agentId:
-          type:
-          - string
-          - 'null'
-          example: asst_123
-      required:
-      - agentId
-    PublicWhatsAppNumberUpdateInput:
-      type: object
-      properties:
-        description:
-          type:
-          - string
-          - 'null'
-          maxLength: 512
-        website:
-          type:
-          - string
-          - 'null'
-          maxLength: 256
-        secondaryWebsite:
-          type:
-          - string
-          - 'null'
-          maxLength: 256
-        address:
-          type:
-          - string
-          - 'null'
-          maxLength: 256
-        email:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-          format: email
         about:
           type:
           - string
           - 'null'
-          minLength: 1
-          maxLength: 139
-        category:
+        address:
+          type:
+          - string
+          - 'null'
+        description:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        profile_picture_url:
+          type:
+          - string
+          - 'null'
+        websites:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        vertical:
           type:
           - string
           - 'null'
@@ -258,11 +242,16 @@ components:
           - RESTAURANT
           - OTHER
           - UNDEFINED
+    PublicChannelAssignInput:
+      type: object
+      properties:
         agentId:
           type:
           - string
           - 'null'
           example: asst_123
+      required:
+      - agentId
     PublicWhatsAppNumber:
       type: object
       properties:
@@ -378,58 +367,6 @@ components:
       - email
       - createdAt
       - updatedAt
-    PublicWhatsAppBusinessInfo:
-      type: object
-      properties:
-        about:
-          type:
-          - string
-          - 'null'
-        address:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-        profile_picture_url:
-          type:
-          - string
-          - 'null'
-        websites:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        vertical:
-          type:
-          - string
-          - 'null'
-          enum:
-          - AUTO
-          - BEAUTY
-          - APPAREL
-          - EDU
-          - ENTERTAIN
-          - EVENT_PLAN
-          - FINANCE
-          - GROCERY
-          - GOVT
-          - HOTEL
-          - HEALTH
-          - NONPROFIT
-          - PROF_SERVICES
-          - RETAIL
-          - TRAVEL
-          - RESTAURANT
-          - OTHER
-          - UNDEFINED
     PublicChannelIntegrations:
       type:
       - object
@@ -695,6 +632,69 @@ components:
       - whatsapp
       - instagram
       - messenger
+    PublicWhatsAppNumberUpdateInput:
+      type: object
+      properties:
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 512
+        website:
+          type:
+          - string
+          - 'null'
+          maxLength: 256
+        secondaryWebsite:
+          type:
+          - string
+          - 'null'
+          maxLength: 256
+        address:
+          type:
+          - string
+          - 'null'
+          maxLength: 256
+        email:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+          format: email
+        about:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 139
+        category:
+          type:
+          - string
+          - 'null'
+          enum:
+          - AUTO
+          - BEAUTY
+          - APPAREL
+          - EDU
+          - ENTERTAIN
+          - EVENT_PLAN
+          - FINANCE
+          - GROCERY
+          - GOVT
+          - HOTEL
+          - HEALTH
+          - NONPROFIT
+          - PROF_SERVICES
+          - RETAIL
+          - TRAVEL
+          - RESTAURANT
+          - OTHER
+          - UNDEFINED
+        agentId:
+          type:
+          - string
+          - 'null'
+          example: asst_123
   securitySchemes:
     accountApiKey:
       type: http

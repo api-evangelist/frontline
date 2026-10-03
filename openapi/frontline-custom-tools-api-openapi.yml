@@ -222,22 +222,15 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
+    PublicToolCreateInput:
       type: object
       properties:
-        ok:
-          type: boolean
+        type:
+          type: string
           enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
-    PublicToolUpdateInput:
-      type: object
-      properties:
+          - API_CALL
+          default: API_CALL
+          example: API_CALL
         name:
           type: string
           minLength: 1
@@ -247,12 +240,6 @@ components:
           type: string
           maxLength: 1000
           example: Fetches a contact from the external CRM
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - PAUSED
-          example: ACTIVE
         method:
           type: string
           enum:
@@ -334,35 +321,24 @@ components:
             required:
             - key
             - value
-    ErrorBody:
+      required:
+      - name
+      - description
+      - method
+      - url
+    Error:
       type: object
       properties:
-        code:
-          type: string
+        ok:
+          type: boolean
           enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       required:
-      - code
-      - message
+      - ok
+      - error
     CustomTool:
       type: object
       properties:
@@ -488,41 +464,48 @@ components:
       - createdAt
       - updatedAt
       - type
-    PublicToolTestOutput:
+    ErrorBody:
       type: object
       properties:
-        status:
-          type: number
-          example: 200
-        headers:
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            content-type: application/json
-        data: {}
-        duration:
-          type: number
-          description: Request duration in milliseconds
-          example: 245
-        contentLength:
-          type:
-          - number
-          - 'null'
-          example: 128
-      required:
-      - status
-      - headers
-      - duration
-    PublicToolCreateInput:
-      type: object
-      properties:
-        type:
+        code:
           type: string
           enum:
-          - API_CALL
-          default: API_CALL
-          example: API_CALL
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicToolTestInput:
+      type: object
+      properties:
+        values:
+          type: object
+          additionalProperties: {}
+          default: {}
+          description: Argument values keyed by argument name. Every declared tool argument must be present.
+          example:
+            contactId: '42'
+    PublicToolUpdateInput:
+      type: object
+      properties:
         name:
           type: string
           minLength: 1
@@ -532,6 +515,12 @@ components:
           type: string
           maxLength: 1000
           example: Fetches a contact from the external CRM
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - PAUSED
+          example: ACTIVE
         method:
           type: string
           enum:
@@ -613,21 +602,32 @@ components:
             required:
             - key
             - value
-      required:
-      - name
-      - description
-      - method
-      - url
-    PublicToolTestInput:
+    PublicToolTestOutput:
       type: object
       properties:
-        values:
+        status:
+          type: number
+          example: 200
+        headers:
           type: object
-          additionalProperties: {}
-          default: {}
-          description: Argument values keyed by argument name. Every declared tool argument must be present.
+          additionalProperties:
+            type: string
           example:
-            contactId: '42'
+            content-type: application/json
+        data: {}
+        duration:
+          type: number
+          description: Request duration in milliseconds
+          example: 245
+        contentLength:
+          type:
+          - number
+          - 'null'
+          example: 128
+      required:
+      - status
+      - headers
+      - duration
   securitySchemes:
     accountApiKey:
       type: http

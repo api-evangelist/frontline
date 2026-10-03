@@ -299,50 +299,48 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicIncomingWebhookEventList:
+    IncomingWebhookCreateOutput:
       type: object
       properties:
-        count:
-          type: number
-        pageSize:
-          type: number
-        pageNum:
-          type: number
-        totalPages:
-          type: number
-        cursor:
-          type: number
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicIncomingWebhookEvent'
-        paginationType:
+        id:
           type: string
-          enum:
-          - offset
-          - cursor
-          default: offset
-        nextCursor:
-          anyOf:
-          - type: string
-          - type: number
-          - {}
-      required:
-      - pageSize
-      - results
-    Error:
-      type: object
-      properties:
-        ok:
+          example: clx123incomingwebhook
+        name:
+          type: string
+          example: External CRM event
+        description:
+          type:
+          - string
+          - 'null'
+          example: Receives events from the external CRM
+        url:
+          type: string
+          example: https://hooks.example.com/webhook/clx123incomingwebhook
+        isActive:
           type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+          example: true
+        useAuthentication:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        accessToken:
+          type:
+          - string
+          - 'null'
+          example: 64-character-access-token
       required:
-      - ok
-      - error
+      - id
+      - name
+      - url
+      - isActive
+      - useAuthentication
+      - createdAt
+      - updatedAt
     PublicIncomingWebhookUpdateInput:
       type: object
       properties:
@@ -361,49 +359,19 @@ components:
         useAuthentication:
           type: boolean
           example: true
-    PublicIncomingWebhookEvent:
+    Error:
       type: object
       properties:
-        id:
-          type: string
-          example: clx987event
-        status:
-          type: string
+        ok:
+          type: boolean
           enum:
-          - RECEIVED
-          - PROCESSING
-          - COMPLETED
-          - FAILED
-          - TIMEOUT
-          example: COMPLETED
-        payload:
-          description: Raw JSON payload received
-        payloadSize:
-          type:
-          - number
-          - 'null'
-          example: 512
-        ipAddress:
-          type:
-          - string
-          - 'null'
-          example: 203.0.113.10
-        userAgent:
-          type:
-          - string
-          - 'null'
-          example: curl/8.4.0
-        createdAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
-        updatedAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       required:
-      - id
-      - status
-      - createdAt
-      - updatedAt
+      - ok
+      - error
     PublicIncomingWebhookCreateInput:
       type: object
       properties:
@@ -479,46 +447,47 @@ components:
               required:
               - id
               - name
-    IncomingWebhookCreateOutput:
+    PublicIncomingWebhookEvent:
       type: object
       properties:
         id:
           type: string
-          example: clx123incomingwebhook
-        name:
+          example: clx987event
+        status:
           type: string
-          example: External CRM event
-        description:
+          enum:
+          - RECEIVED
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+          - TIMEOUT
+          example: COMPLETED
+        payload:
+          description: Raw JSON payload received
+        payloadSize:
+          type:
+          - number
+          - 'null'
+          example: 512
+        ipAddress:
           type:
           - string
           - 'null'
-          example: Receives events from the external CRM
-        url:
-          type: string
-          example: https://hooks.example.com/webhook/clx123incomingwebhook
-        isActive:
-          type: boolean
-          example: true
-        useAuthentication:
-          type: boolean
-          example: true
+          example: 203.0.113.10
+        userAgent:
+          type:
+          - string
+          - 'null'
+          example: curl/8.4.0
         createdAt:
           type: string
           example: '2024-01-01T12:00:00Z'
         updatedAt:
           type: string
           example: '2024-01-01T12:00:00Z'
-        accessToken:
-          type:
-          - string
-          - 'null'
-          example: 64-character-access-token
       required:
       - id
-      - name
-      - url
-      - isActive
-      - useAuthentication
+      - status
       - createdAt
       - updatedAt
     PublicIncomingWebhook:
@@ -563,6 +532,37 @@ components:
       - useAuthentication
       - createdAt
       - updatedAt
+    PublicIncomingWebhookEventList:
+      type: object
+      properties:
+        count:
+          type: number
+        pageSize:
+          type: number
+        pageNum:
+          type: number
+        totalPages:
+          type: number
+        cursor:
+          type: number
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIncomingWebhookEvent'
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: number
+          - {}
+      required:
+      - pageSize
+      - results
   securitySchemes:
     accountApiKey:
       type: http

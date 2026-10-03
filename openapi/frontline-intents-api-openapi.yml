@@ -268,39 +268,6 @@ paths:
           description: Intent deleted
 components:
   schemas:
-    PublicIntentGeneratePhrasesInput:
-      type: object
-      properties:
-        name:
-          type: string
-          example: Cancel order
-        samples:
-          type: array
-          items:
-            type: string
-          example:
-          - cancel my order
-          - stop the order
-        amount:
-          type: integer
-          minimum: 1
-          maximum: 50
-          example: 10
-      required:
-      - name
-      - samples
-      - amount
-    PublicIntentGeneratePhrasesOutput:
-      type: object
-      properties:
-        phrases:
-          type: array
-          items:
-            type: string
-          example:
-          - I want to cancel my order
-      required:
-      - phrases
     PublicIntentUpdateInput:
       type: object
       properties:
@@ -328,6 +295,28 @@ components:
             required:
             - phrase
           minItems: 1
+      required:
+      - name
+      - phrases
+    PublicIntentCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Cancel order
+        description:
+          type:
+          - string
+          - 'null'
+          example: User wants to cancel
+        phrases:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          example:
+          - cancel my order
       required:
       - name
       - phrases
@@ -388,27 +377,38 @@ components:
       - updatedAt
       - status
       - assistantId
-    PublicIntentCreateInput:
+    PublicIntentGeneratePhrasesInput:
       type: object
       properties:
         name:
           type: string
-          minLength: 1
           example: Cancel order
-        description:
-          type:
-          - string
-          - 'null'
-          example: User wants to cancel
+        samples:
+          type: array
+          items:
+            type: string
+          example:
+          - cancel my order
+          - stop the order
+        amount:
+          type: integer
+          minimum: 1
+          maximum: 50
+          example: 10
+      required:
+      - name
+      - samples
+      - amount
+    PublicIntentGeneratePhrasesOutput:
+      type: object
+      properties:
         phrases:
           type: array
           items:
             type: string
-          minItems: 1
           example:
-          - cancel my order
+          - I want to cancel my order
       required:
-      - name
       - phrases
   securitySchemes:
     accountApiKey:

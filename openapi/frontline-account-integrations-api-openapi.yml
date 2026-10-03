@@ -170,19 +170,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
     PublicIntegrationToolkit:
       type: object
       properties:
@@ -215,103 +202,6 @@ components:
       - authScheme
       - toolCount
       - tools
-    PublicIntegrationTools:
-      type: object
-      properties:
-        enabledTools:
-          type: array
-          items:
-            type: object
-            properties:
-              slug:
-                type: string
-              name:
-                type: string
-              description:
-                type: string
-              enabled:
-                type: boolean
-              hasRequiredScopes:
-                type: boolean
-            required:
-            - slug
-            - name
-            - description
-            - enabled
-            - hasRequiredScopes
-        availableTools:
-          type: array
-          items:
-            type: object
-            properties:
-              slug:
-                type: string
-              name:
-                type: string
-              description:
-                type: string
-              enabled:
-                type: boolean
-              hasRequiredScopes:
-                type: boolean
-            required:
-            - slug
-            - name
-            - description
-            - enabled
-            - hasRequiredScopes
-      required:
-      - enabledTools
-      - availableTools
-    PublicIntegrationToolkitList:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicIntegrationToolkit'
-      required:
-      - results
-    ErrorBody:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
-    PublicIntegrationSetToolsInput:
-      type: object
-      properties:
-        slugs:
-          type: array
-          items:
-            type: string
-            minLength: 1
-          minItems: 1
-      required:
-      - slugs
     PublicIntegration:
       type: object
       properties:
@@ -405,6 +295,19 @@ components:
       - isConnected
       - createdAt
       - updatedAt
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
     PublicIntegrationUpdateInput:
       type: object
       properties:
@@ -419,6 +322,103 @@ components:
           enum:
           - PRIVATE
           - SHARED
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicIntegrationTools:
+      type: object
+      properties:
+        enabledTools:
+          type: array
+          items:
+            type: object
+            properties:
+              slug:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              enabled:
+                type: boolean
+              hasRequiredScopes:
+                type: boolean
+            required:
+            - slug
+            - name
+            - description
+            - enabled
+            - hasRequiredScopes
+        availableTools:
+          type: array
+          items:
+            type: object
+            properties:
+              slug:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              enabled:
+                type: boolean
+              hasRequiredScopes:
+                type: boolean
+            required:
+            - slug
+            - name
+            - description
+            - enabled
+            - hasRequiredScopes
+      required:
+      - enabledTools
+      - availableTools
+    PublicIntegrationSetToolsInput:
+      type: object
+      properties:
+        slugs:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          minItems: 1
+      required:
+      - slugs
+    PublicIntegrationToolkitList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIntegrationToolkit'
+      required:
+      - results
   securitySchemes:
     accountApiKey:
       type: http
