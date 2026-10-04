@@ -43,29 +43,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicWhatsAppTemplateParameters:
-      type: object
-      properties:
-        HEADER:
-          type: array
-          items:
-            type: string
-        BODY:
-          type: array
-          items:
-            type: string
-        FOOTER:
-          type: array
-          items:
-            type: string
-        BUTTONS:
-          type: array
-          items:
-            type: string
-        BUTTONS_URL:
-          type: array
-          items:
-            type: string
     PublicWhatsAppTemplate:
       type: object
       properties:
@@ -90,28 +67,6 @@ components:
           $ref: '#/components/schemas/PublicWhatsAppTemplateParameters'
       required:
       - name
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
-    PublicWhatsAppTemplatesOutput:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicWhatsAppTemplate'
-      required:
-      - results
     ErrorBody:
       type: object
       properties:
@@ -141,6 +96,51 @@ components:
       required:
       - code
       - message
+    PublicWhatsAppTemplatesOutput:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicWhatsAppTemplate'
+      required:
+      - results
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicWhatsAppTemplateParameters:
+      type: object
+      properties:
+        HEADER:
+          type: array
+          items:
+            type: string
+        BODY:
+          type: array
+          items:
+            type: string
+        FOOTER:
+          type: array
+          items:
+            type: string
+        BUTTONS:
+          type: array
+          items:
+            type: string
+        BUTTONS_URL:
+          type: array
+          items:
+            type: string
   securitySchemes:
     accountApiKey:
       type: http

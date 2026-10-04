@@ -299,79 +299,37 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    IncomingWebhookCreateOutput:
+    PublicIncomingWebhookEventList:
       type: object
       properties:
-        id:
+        count:
+          type: number
+        pageSize:
+          type: number
+        pageNum:
+          type: number
+        totalPages:
+          type: number
+        cursor:
+          type: number
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIncomingWebhookEvent'
+        paginationType:
           type: string
-          example: clx123incomingwebhook
-        name:
-          type: string
-          example: External CRM event
-        description:
-          type:
-          - string
-          - 'null'
-          example: Receives events from the external CRM
-        url:
-          type: string
-          example: https://hooks.example.com/webhook/clx123incomingwebhook
-        isActive:
-          type: boolean
-          example: true
-        useAuthentication:
-          type: boolean
-          example: true
-        createdAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
-        updatedAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
-        accessToken:
-          type:
-          - string
-          - 'null'
-          example: 64-character-access-token
-      required:
-      - id
-      - name
-      - url
-      - isActive
-      - useAuthentication
-      - createdAt
-      - updatedAt
-    PublicIncomingWebhookUpdateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: External CRM event
-        description:
-          type:
-          - string
-          - 'null'
-          example: Receives events from the external CRM
-        isActive:
-          type: boolean
-          example: true
-        useAuthentication:
-          type: boolean
-          example: true
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
           enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+          - offset
+          - cursor
+          default: offset
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: number
+          - {}
       required:
-      - ok
-      - error
+      - pageSize
+      - results
     PublicIncomingWebhookCreateInput:
       type: object
       properties:
@@ -394,6 +352,30 @@ components:
           example: true
       required:
       - name
+    PublicIncomingWebhookEventDetail:
+      allOf:
+      - $ref: '#/components/schemas/PublicIncomingWebhookEvent'
+      - type: object
+        properties:
+          automations:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 42
+                name:
+                  type: string
+                  example: Notify sales channel
+                status:
+                  type:
+                  - string
+                  - 'null'
+                  example: ACTIVE
+              required:
+              - id
+              - name
     ErrorBody:
       type: object
       properties:
@@ -423,30 +405,6 @@ components:
       required:
       - code
       - message
-    PublicIncomingWebhookEventDetail:
-      allOf:
-      - $ref: '#/components/schemas/PublicIncomingWebhookEvent'
-      - type: object
-        properties:
-          automations:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: number
-                  example: 42
-                name:
-                  type: string
-                  example: Notify sales channel
-                status:
-                  type:
-                  - string
-                  - 'null'
-                  example: ACTIVE
-              required:
-              - id
-              - name
     PublicIncomingWebhookEvent:
       type: object
       properties:
@@ -490,6 +448,79 @@ components:
       - status
       - createdAt
       - updatedAt
+    IncomingWebhookCreateOutput:
+      type: object
+      properties:
+        id:
+          type: string
+          example: clx123incomingwebhook
+        name:
+          type: string
+          example: External CRM event
+        description:
+          type:
+          - string
+          - 'null'
+          example: Receives events from the external CRM
+        url:
+          type: string
+          example: https://hooks.example.com/webhook/clx123incomingwebhook
+        isActive:
+          type: boolean
+          example: true
+        useAuthentication:
+          type: boolean
+          example: true
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        accessToken:
+          type:
+          - string
+          - 'null'
+          example: 64-character-access-token
+      required:
+      - id
+      - name
+      - url
+      - isActive
+      - useAuthentication
+      - createdAt
+      - updatedAt
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicIncomingWebhookUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: External CRM event
+        description:
+          type:
+          - string
+          - 'null'
+          example: Receives events from the external CRM
+        isActive:
+          type: boolean
+          example: true
+        useAuthentication:
+          type: boolean
+          example: true
     PublicIncomingWebhook:
       type: object
       properties:
@@ -532,37 +563,6 @@ components:
       - useAuthentication
       - createdAt
       - updatedAt
-    PublicIncomingWebhookEventList:
-      type: object
-      properties:
-        count:
-          type: number
-        pageSize:
-          type: number
-        pageNum:
-          type: number
-        totalPages:
-          type: number
-        cursor:
-          type: number
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicIncomingWebhookEvent'
-        paginationType:
-          type: string
-          enum:
-          - offset
-          - cursor
-          default: offset
-        nextCursor:
-          anyOf:
-          - type: string
-          - type: number
-          - {}
-      required:
-      - pageSize
-      - results
   securitySchemes:
     accountApiKey:
       type: http

@@ -30,6 +30,15 @@ paths:
                 $ref: '#/components/schemas/PublicUserList'
 components:
   schemas:
+    PublicUserList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicUser'
+      required:
+      - results
     PublicUser:
       type: object
       properties:
@@ -73,15 +82,6 @@ components:
       - id
       - role
       - status
-    PublicUserList:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicUser'
-      required:
-      - results
   securitySchemes:
     accountApiKey:
       type: http

@@ -222,123 +222,16 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicToolCreateInput:
+    PublicToolTestInput:
       type: object
       properties:
-        type:
-          type: string
-          enum:
-          - API_CALL
-          default: API_CALL
-          example: API_CALL
-        name:
-          type: string
-          minLength: 1
-          maxLength: 256
-          example: Fetch contact
-        description:
-          type: string
-          maxLength: 1000
-          example: Fetches a contact from the external CRM
-        method:
-          type: string
-          enum:
-          - GET
-          - POST
-          - PUT
-          - PATCH
-          - DELETE
-          example: GET
-        url:
-          type: string
-          format: uri
-          example: https://api.example.com/contacts/123
-        body:
-          type: string
-          description: Raw request body template (typically a JSON string). Interpolate argument values with single braces, e.g. {contactName} (not double braces).
-          example: '{"name":"{contactName}"}'
-        arguments:
-          type: array
-          items:
-            type: object
-            properties:
-              name:
-                type: string
-                minLength: 1
-                example: contactId
-              description:
-                type: string
-                minLength: 1
-                example: The contact ID to fetch
-              dataType:
-                type: string
-                enum:
-                - STRING
-                - NUMBER
-                - DECIMAL
-                - BOOLEAN
-                description: Argument type. Use STRING, NUMBER (covers decimals), or BOOLEAN. DECIMAL is accepted but not shown in the app UI — prefer NUMBER.
-                example: STRING
-              required:
-                type: boolean
-                default: true
-                description: Whether the caller must provide this argument. Defaults to true.
-                example: true
-              defaultValue:
-                type: string
-                description: Fallback value (as a string, coerced to dataType) used when the argument is omitted.
-                example: normal
-            required:
-            - name
-            - dataType
-        headers:
-          type: array
-          items:
-            type: object
-            properties:
-              key:
-                type: string
-                minLength: 1
-                example: Authorization
-              value:
-                type: string
-                example: Bearer {apiKey}
-            required:
-            - key
-            - value
-        queryParams:
-          type: array
-          items:
-            type: object
-            properties:
-              key:
-                type: string
-                minLength: 1
-                example: limit
-              value:
-                type: string
-                example: '10'
-            required:
-            - key
-            - value
-      required:
-      - name
-      - description
-      - method
-      - url
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
+        values:
+          type: object
+          additionalProperties: {}
+          default: {}
+          description: Argument values keyed by argument name. Every declared tool argument must be present.
+          example:
+            contactId: '42'
     CustomTool:
       type: object
       properties:
@@ -493,16 +386,32 @@ components:
       required:
       - code
       - message
-    PublicToolTestInput:
+    PublicToolTestOutput:
       type: object
       properties:
-        values:
+        status:
+          type: number
+          example: 200
+        headers:
           type: object
-          additionalProperties: {}
-          default: {}
-          description: Argument values keyed by argument name. Every declared tool argument must be present.
+          additionalProperties:
+            type: string
           example:
-            contactId: '42'
+            content-type: application/json
+        data: {}
+        duration:
+          type: number
+          description: Request duration in milliseconds
+          example: 245
+        contentLength:
+          type:
+          - number
+          - 'null'
+          example: 128
+      required:
+      - status
+      - headers
+      - duration
     PublicToolUpdateInput:
       type: object
       properties:
@@ -602,32 +511,123 @@ components:
             required:
             - key
             - value
-    PublicToolTestOutput:
+    Error:
       type: object
       properties:
-        status:
-          type: number
-          example: 200
-        headers:
-          type: object
-          additionalProperties:
-            type: string
-          example:
-            content-type: application/json
-        data: {}
-        duration:
-          type: number
-          description: Request duration in milliseconds
-          example: 245
-        contentLength:
-          type:
-          - number
-          - 'null'
-          example: 128
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
       required:
-      - status
-      - headers
-      - duration
+      - ok
+      - error
+    PublicToolCreateInput:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+          - API_CALL
+          default: API_CALL
+          example: API_CALL
+        name:
+          type: string
+          minLength: 1
+          maxLength: 256
+          example: Fetch contact
+        description:
+          type: string
+          maxLength: 1000
+          example: Fetches a contact from the external CRM
+        method:
+          type: string
+          enum:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          example: GET
+        url:
+          type: string
+          format: uri
+          example: https://api.example.com/contacts/123
+        body:
+          type: string
+          description: Raw request body template (typically a JSON string). Interpolate argument values with single braces, e.g. {contactName} (not double braces).
+          example: '{"name":"{contactName}"}'
+        arguments:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                minLength: 1
+                example: contactId
+              description:
+                type: string
+                minLength: 1
+                example: The contact ID to fetch
+              dataType:
+                type: string
+                enum:
+                - STRING
+                - NUMBER
+                - DECIMAL
+                - BOOLEAN
+                description: Argument type. Use STRING, NUMBER (covers decimals), or BOOLEAN. DECIMAL is accepted but not shown in the app UI — prefer NUMBER.
+                example: STRING
+              required:
+                type: boolean
+                default: true
+                description: Whether the caller must provide this argument. Defaults to true.
+                example: true
+              defaultValue:
+                type: string
+                description: Fallback value (as a string, coerced to dataType) used when the argument is omitted.
+                example: normal
+            required:
+            - name
+            - dataType
+        headers:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: Authorization
+              value:
+                type: string
+                example: Bearer {apiKey}
+            required:
+            - key
+            - value
+        queryParams:
+          type: array
+          items:
+            type: object
+            properties:
+              key:
+                type: string
+                minLength: 1
+                example: limit
+              value:
+                type: string
+                example: '10'
+            required:
+            - key
+            - value
+      required:
+      - name
+      - description
+      - method
+      - url
   securitySchemes:
     accountApiKey:
       type: http

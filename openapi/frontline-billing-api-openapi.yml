@@ -215,115 +215,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicMaxSeatResult:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-        userId:
-          type: number
-          example: 12
-        assigned:
-          type: boolean
-          description: Whether the user holds a Max seat after this operation
-      required:
-      - success
-      - userId
-      - assigned
-    PublicMaxSeatUser:
-      type: object
-      properties:
-        userId:
-          type: number
-          example: 12
-        firstName:
-          type:
-          - string
-          - 'null'
-        lastName:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-        assignedAt:
-          type:
-          - string
-          - 'null'
-      required:
-      - userId
-    PublicStudioUsage:
-      type: object
-      properties:
-        usage:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        plan:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        subscription:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        limits:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        next:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-    PublicMaxUsage:
-      type: object
-      properties:
-        plan:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        subscription:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        seats:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        limits:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        next:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
     BillingPlan:
       type: object
       properties:
@@ -350,16 +241,6 @@ components:
       - creditsPerMonth
       - creditsUsed
       - subscriptionRenews
-    PublicMaxSeatInput:
-      type: object
-      properties:
-        userId:
-          type: integer
-          description: ID of the user to assign/unassign (see GET /users)
-          example: 12
-          exclusiveMinimum: 0
-      required:
-      - userId
     PublicCreditHistoryItem:
       type: object
       properties:
@@ -394,6 +275,74 @@ components:
       - date
       - totalCredits
       - messageCount
+    PublicStudioUsage:
+      type: object
+      properties:
+        usage:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        plan:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        subscription:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        limits:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        next:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+    PublicMaxSeatUser:
+      type: object
+      properties:
+        userId:
+          type: number
+          example: 12
+        firstName:
+          type:
+          - string
+          - 'null'
+        lastName:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        assignedAt:
+          type:
+          - string
+          - 'null'
+      required:
+      - userId
+    PublicMaxSeatResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        userId:
+          type: number
+          example: 12
+        assigned:
+          type: boolean
+          description: Whether the user holds a Max seat after this operation
+      required:
+      - success
+      - userId
+      - assigned
     ErrorBody:
       type: object
       properties:
@@ -423,6 +372,38 @@ components:
       required:
       - code
       - message
+    PublicCreditHistory:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicCreditHistoryItem'
+      required:
+      - results
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicMaxSeatInput:
+      type: object
+      properties:
+        userId:
+          type: integer
+          description: ID of the user to assign/unassign (see GET /users)
+          example: 12
+          exclusiveMinimum: 0
+      required:
+      - userId
     PublicMaxSeats:
       type: object
       properties:
@@ -467,15 +448,34 @@ components:
       - available
       - assigned
       - unassigned
-    PublicCreditHistory:
+    PublicMaxUsage:
       type: object
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicCreditHistoryItem'
-      required:
-      - results
+        plan:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        subscription:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        seats:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        limits:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        next:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
   securitySchemes:
     accountApiKey:
       type: http

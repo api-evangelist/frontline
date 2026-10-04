@@ -170,38 +170,83 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicIntegrationToolkit:
+    PublicIntegrationTools:
       type: object
       properties:
-        toolkit:
-          type: string
-          example: GMAIL
-        name:
-          type: string
-          example: Gmail
-        description:
-          type:
-          - string
-          - 'null'
-          example: Send and read email via Gmail
-        authScheme:
-          type: string
-          example: OAUTH2
-        toolCount:
-          type: number
-          example: 12
-        tools:
+        enabledTools:
           type: array
           items:
-            type: string
-          example:
-          - GMAIL_SEND_EMAIL
+            type: object
+            properties:
+              slug:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              enabled:
+                type: boolean
+              hasRequiredScopes:
+                type: boolean
+            required:
+            - slug
+            - name
+            - description
+            - enabled
+            - hasRequiredScopes
+        availableTools:
+          type: array
+          items:
+            type: object
+            properties:
+              slug:
+                type: string
+              name:
+                type: string
+              description:
+                type: string
+              enabled:
+                type: boolean
+              hasRequiredScopes:
+                type: boolean
+            required:
+            - slug
+            - name
+            - description
+            - enabled
+            - hasRequiredScopes
       required:
-      - toolkit
-      - name
-      - authScheme
-      - toolCount
-      - tools
+      - enabledTools
+      - availableTools
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
     PublicIntegration:
       type: object
       properties:
@@ -322,83 +367,47 @@ components:
           enum:
           - PRIVATE
           - SHARED
-    ErrorBody:
+    PublicIntegrationToolkit:
       type: object
       properties:
-        code:
+        toolkit:
           type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
+          example: GMAIL
+        name:
           type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example: Gmail
+        description:
+          type:
+          - string
+          - 'null'
+          example: Send and read email via Gmail
+        authScheme:
+          type: string
+          example: OAUTH2
+        toolCount:
+          type: number
+          example: 12
+        tools:
+          type: array
+          items:
+            type: string
           example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
+          - GMAIL_SEND_EMAIL
       required:
-      - code
-      - message
-    PublicIntegrationTools:
+      - toolkit
+      - name
+      - authScheme
+      - toolCount
+      - tools
+    PublicIntegrationToolkitList:
       type: object
       properties:
-        enabledTools:
+        results:
           type: array
           items:
-            type: object
-            properties:
-              slug:
-                type: string
-              name:
-                type: string
-              description:
-                type: string
-              enabled:
-                type: boolean
-              hasRequiredScopes:
-                type: boolean
-            required:
-            - slug
-            - name
-            - description
-            - enabled
-            - hasRequiredScopes
-        availableTools:
-          type: array
-          items:
-            type: object
-            properties:
-              slug:
-                type: string
-              name:
-                type: string
-              description:
-                type: string
-              enabled:
-                type: boolean
-              hasRequiredScopes:
-                type: boolean
-            required:
-            - slug
-            - name
-            - description
-            - enabled
-            - hasRequiredScopes
+            $ref: '#/components/schemas/PublicIntegrationToolkit'
       required:
-      - enabledTools
-      - availableTools
+      - results
     PublicIntegrationSetToolsInput:
       type: object
       properties:
@@ -410,15 +419,6 @@ components:
           minItems: 1
       required:
       - slugs
-    PublicIntegrationToolkitList:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicIntegrationToolkit'
-      required:
-      - results
   securitySchemes:
     accountApiKey:
       type: http

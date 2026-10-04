@@ -226,6 +226,158 @@ paths:
                 $ref: '#/components/schemas/PublicExecutionTrace'
 components:
   schemas:
+    PublicConversationTranscript:
+      allOf:
+      - $ref: '#/components/schemas/PublicConversation'
+      - type: object
+        properties:
+          messages:
+            type: array
+            items:
+              $ref: '#/components/schemas/PublicConversationMessage'
+        required:
+        - messages
+    PublicExecutionTrace:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
+    PublicAgentRunMessage:
+      type: object
+      properties:
+        id:
+          type:
+          - number
+          - 'null'
+        role:
+          type: string
+          enum:
+          - USER
+          - ASSISTANT
+          - SYSTEM
+          example: ASSISTANT
+        type:
+          type: string
+          enum:
+          - MESSAGE
+          - TRIGGER_INTENT
+          - RESPONSE_AI
+          - SAY_AI
+          - API
+          - ENTER_FLOW
+          - EXIT_FLOW
+          - ERROR_MESSAGE
+          - SET_VARIABLES
+          - OFF_TOPIC
+          - CONVERSATION_ENDED
+          - CONVERSATION_IDLE
+          - CONDITIONAL_ROUTING
+          - PROCESSED_MEDIA_WITH_AI
+          - AGENT_TOOL
+          - START_CONVERSATION
+          - WHATSAPP_TEMPLATE_MESSAGE
+          - WHATSAPP_FLOW_COMPLETED
+          - MESSAGE_REACTION
+          - CHANNEL_CONTEXT
+          - ABORTED_MESSAGE
+          - MAX_PLAN_PROPOSED
+          - MAX_PLAN_STARTED
+          - MAX_PLAN_COMPLETED
+          - MAX_PLAN_CANCELLED
+          - MAX_PLAN_QUESTIONS_PROPOSED
+          - MAX_PLAN_QUESTIONS_RESOLVED
+          example: MESSAGE
+        text:
+          type: string
+          example: Hi! How can I help?
+        created_at:
+          type:
+          - string
+          - 'null'
+      required:
+      - role
+      - type
+      - text
+    PublicConversationMessage:
+      type: object
+      properties:
+        id:
+          type:
+          - number
+          - 'null'
+        role:
+          type: string
+          enum:
+          - USER
+          - ASSISTANT
+          - SYSTEM
+          example: USER
+        type:
+          type: string
+          enum:
+          - MESSAGE
+          - TRIGGER_INTENT
+          - RESPONSE_AI
+          - SAY_AI
+          - API
+          - ENTER_FLOW
+          - EXIT_FLOW
+          - ERROR_MESSAGE
+          - SET_VARIABLES
+          - OFF_TOPIC
+          - CONVERSATION_ENDED
+          - CONVERSATION_IDLE
+          - CONDITIONAL_ROUTING
+          - PROCESSED_MEDIA_WITH_AI
+          - AGENT_TOOL
+          - START_CONVERSATION
+          - WHATSAPP_TEMPLATE_MESSAGE
+          - WHATSAPP_FLOW_COMPLETED
+          - MESSAGE_REACTION
+          - CHANNEL_CONTEXT
+          - ABORTED_MESSAGE
+          - MAX_PLAN_PROPOSED
+          - MAX_PLAN_STARTED
+          - MAX_PLAN_COMPLETED
+          - MAX_PLAN_CANCELLED
+          - MAX_PLAN_QUESTIONS_PROPOSED
+          - MAX_PLAN_QUESTIONS_RESOLVED
+          example: MESSAGE
+        text:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type: string
+        audit_log_id:
+          type:
+          - string
+          - 'null'
+          description: Pointer to the message's full LLM trace. Fetch via the message trace endpoint.
+      required:
+      - role
+      - type
+      - created_at
+    PublicAgentRunOutput:
+      type: object
+      properties:
+        conversation_id:
+          type:
+          - number
+          - 'null'
+          example: 42
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicAgentRunMessage'
+      required:
+      - messages
     PublicConversation:
       type: object
       properties:
@@ -288,158 +440,6 @@ components:
           type: object
           additionalProperties: {}
           description: Variables to seed the conversation with when starting a new one (HMAC is computed server-side).
-    PublicExecutionTrace:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        type:
-          type:
-          - string
-          - 'null'
-    PublicConversationTranscript:
-      allOf:
-      - $ref: '#/components/schemas/PublicConversation'
-      - type: object
-        properties:
-          messages:
-            type: array
-            items:
-              $ref: '#/components/schemas/PublicConversationMessage'
-        required:
-        - messages
-    PublicAgentRunMessage:
-      type: object
-      properties:
-        id:
-          type:
-          - number
-          - 'null'
-        role:
-          type: string
-          enum:
-          - USER
-          - ASSISTANT
-          - SYSTEM
-          example: ASSISTANT
-        type:
-          type: string
-          enum:
-          - MESSAGE
-          - TRIGGER_INTENT
-          - RESPONSE_AI
-          - SAY_AI
-          - API
-          - ENTER_FLOW
-          - EXIT_FLOW
-          - ERROR_MESSAGE
-          - SET_VARIABLES
-          - OFF_TOPIC
-          - CONVERSATION_ENDED
-          - CONVERSATION_IDLE
-          - CONDITIONAL_ROUTING
-          - PROCESSED_MEDIA_WITH_AI
-          - AGENT_TOOL
-          - START_CONVERSATION
-          - WHATSAPP_TEMPLATE_MESSAGE
-          - WHATSAPP_FLOW_COMPLETED
-          - MESSAGE_REACTION
-          - CHANNEL_CONTEXT
-          - ABORTED_MESSAGE
-          - MAX_PLAN_PROPOSED
-          - MAX_PLAN_STARTED
-          - MAX_PLAN_COMPLETED
-          - MAX_PLAN_CANCELLED
-          - MAX_PLAN_QUESTIONS_PROPOSED
-          - MAX_PLAN_QUESTIONS_RESOLVED
-          example: MESSAGE
-        text:
-          type: string
-          example: Hi! How can I help?
-        created_at:
-          type:
-          - string
-          - 'null'
-      required:
-      - role
-      - type
-      - text
-    PublicAgentRunOutput:
-      type: object
-      properties:
-        conversation_id:
-          type:
-          - number
-          - 'null'
-          example: 42
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicAgentRunMessage'
-      required:
-      - messages
-    PublicConversationMessage:
-      type: object
-      properties:
-        id:
-          type:
-          - number
-          - 'null'
-        role:
-          type: string
-          enum:
-          - USER
-          - ASSISTANT
-          - SYSTEM
-          example: USER
-        type:
-          type: string
-          enum:
-          - MESSAGE
-          - TRIGGER_INTENT
-          - RESPONSE_AI
-          - SAY_AI
-          - API
-          - ENTER_FLOW
-          - EXIT_FLOW
-          - ERROR_MESSAGE
-          - SET_VARIABLES
-          - OFF_TOPIC
-          - CONVERSATION_ENDED
-          - CONVERSATION_IDLE
-          - CONDITIONAL_ROUTING
-          - PROCESSED_MEDIA_WITH_AI
-          - AGENT_TOOL
-          - START_CONVERSATION
-          - WHATSAPP_TEMPLATE_MESSAGE
-          - WHATSAPP_FLOW_COMPLETED
-          - MESSAGE_REACTION
-          - CHANNEL_CONTEXT
-          - ABORTED_MESSAGE
-          - MAX_PLAN_PROPOSED
-          - MAX_PLAN_STARTED
-          - MAX_PLAN_COMPLETED
-          - MAX_PLAN_CANCELLED
-          - MAX_PLAN_QUESTIONS_PROPOSED
-          - MAX_PLAN_QUESTIONS_RESOLVED
-          example: MESSAGE
-        text:
-          type:
-          - string
-          - 'null'
-        created_at:
-          type: string
-        audit_log_id:
-          type:
-          - string
-          - 'null'
-          description: Pointer to the message's full LLM trace. Fetch via the message trace endpoint.
-      required:
-      - role
-      - type
-      - created_at
   securitySchemes:
     accountApiKey:
       type: http

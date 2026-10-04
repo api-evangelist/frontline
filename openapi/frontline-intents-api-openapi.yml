@@ -268,58 +268,6 @@ paths:
           description: Intent deleted
 components:
   schemas:
-    PublicIntentUpdateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: Cancel order
-        description:
-          type:
-          - string
-          - 'null'
-          example: User wants to cancel
-        phrases:
-          type: array
-          items:
-            type: object
-            properties:
-              id:
-                type:
-                - number
-                - 'null'
-              phrase:
-                type: string
-                example: cancel my order
-            required:
-            - phrase
-          minItems: 1
-      required:
-      - name
-      - phrases
-    PublicIntentCreateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: Cancel order
-        description:
-          type:
-          - string
-          - 'null'
-          example: User wants to cancel
-        phrases:
-          type: array
-          items:
-            type: string
-          minItems: 1
-          example:
-          - cancel my order
-      required:
-      - name
-      - phrases
     Intent:
       type: object
       properties:
@@ -409,6 +357,58 @@ components:
           example:
           - I want to cancel my order
       required:
+      - phrases
+    PublicIntentCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Cancel order
+        description:
+          type:
+          - string
+          - 'null'
+          example: User wants to cancel
+        phrases:
+          type: array
+          items:
+            type: string
+          minItems: 1
+          example:
+          - cancel my order
+      required:
+      - name
+      - phrases
+    PublicIntentUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Cancel order
+        description:
+          type:
+          - string
+          - 'null'
+          example: User wants to cancel
+        phrases:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type:
+                - number
+                - 'null'
+              phrase:
+                type: string
+                example: cancel my order
+            required:
+            - phrase
+          minItems: 1
+      required:
+      - name
       - phrases
   securitySchemes:
     accountApiKey:

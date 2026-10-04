@@ -621,46 +621,81 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicKnowledgeWebsiteResyncInput:
+    PublicKnowledgeSourceRemoveInput:
       type: object
       properties:
-        description:
+        sourceIds:
+          type: array
+          items:
+            type: integer
+            exclusiveMinimum: 0
+          minItems: 1
+          maxItems: 100
+      required:
+      - sourceIds
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicKnowledgeBaseAssignment:
+      type: object
+      properties:
+        id:
+          type: number
+        knowledgeBaseId:
+          type: number
+        assistantId:
           type: string
-          maxLength: 1000
-        maxDepth:
-          type: integer
-          minimum: 1
-          maximum: 5
-        maxLinks:
-          type: integer
-          minimum: 1
-          maximum: 1000
-        includePaths:
-          type: array
-          items:
-            type: string
-        excludePaths:
-          type: array
-          items:
-            type: string
-        scrapeOptions:
+        maxUserProfileId:
+          type: number
+        assignedAt:
+          type: string
+        knowledgeBase:
           type: object
           properties:
-            includeSelectors:
-              type: array
-              items:
-                type: string
-            excludeSelectors:
-              type: array
-              items:
-                type: string
-        autoSyncFrequency:
-          type: string
-          enum:
-          - NONE
-          - DAILY
-          - WEEKLY
-          - MONTHLY
+            id:
+              type: number
+            name:
+              type: string
+            description:
+              type:
+              - string
+              - 'null'
+            namespace:
+              type:
+              - string
+              - 'null'
+            isShared:
+              type: boolean
+            isDefault:
+              type: boolean
+            createdAt:
+              type: string
+            updatedAt:
+              type: string
+          required:
+          - id
+          - name
+          - description
+          - namespace
+          - isShared
+          - isDefault
+          - createdAt
+          - updatedAt
+      required:
+      - id
+      - knowledgeBaseId
+      - assignedAt
+      - knowledgeBase
     PublicKnowledgeSearchResult:
       type: object
       properties:
@@ -683,37 +718,37 @@ components:
             - score
       required:
       - results
-    PublicKnowledgeSyncSummaryList:
+    PublicKnowledgeBaseAssignmentList:
+      type: array
+      items:
+        $ref: '#/components/schemas/PublicKnowledgeBaseAssignment'
+    PublicKnowledgeBaseAssignInput:
       type: object
       properties:
-        count:
-          type: number
-        pageSize:
-          type: number
-        pageNum:
-          type: number
-        totalPages:
-          type: number
-        cursor:
-          type: number
-        results:
+        knowledgeBaseIds:
           type: array
           items:
-            $ref: '#/components/schemas/PublicKnowledgeSyncSummary'
-        paginationType:
-          type: string
-          enum:
-          - offset
-          - cursor
-          default: offset
-        nextCursor:
-          anyOf:
-          - type: string
-          - type: number
-          - {}
+            type: integer
+            exclusiveMinimum: 0
+          example:
+          - 12
+          - 13
       required:
-      - pageSize
-      - results
+      - knowledgeBaseIds
+    PublicKnowledgeSearchInput:
+      type: object
+      properties:
+        query:
+          type: string
+          minLength: 1
+          example: refund policy
+        limit:
+          type: integer
+          maximum: 50
+          example: 10
+          exclusiveMinimum: 0
+      required:
+      - query
     PublicKnowledgeWebsiteCrawl:
       type: object
       properties:
@@ -775,35 +810,36 @@ components:
       - sourceUrl
       - websiteType
       - maxLinks
-    PublicKnowledgeSourceResyncResult:
+    ErrorBody:
       type: object
       properties:
-        itemsQueued:
-          type: number
-        itemsSkipped:
-          type: number
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
         details:
-          type: array
-          items:
-            type: object
-            properties:
-              sourceId:
-                type: number
-              status:
-                type: string
-              error:
-                type:
-                - string
-                - 'null'
-            required:
-            - sourceId
-            - status
-            - error
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
       required:
-      - itemsQueued
-      - itemsSkipped
-      - details
-    PublicKnowledgeBaseList:
+      - code
+      - message
+    PublicKnowledgeSyncSummaryList:
       type: object
       properties:
         count:
@@ -819,7 +855,7 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/PublicKnowledgeBase'
+            $ref: '#/components/schemas/PublicKnowledgeSyncSummary'
         paginationType:
           type: string
           enum:
@@ -834,20 +870,294 @@ components:
       required:
       - pageSize
       - results
-    PublicKnowledgeSearchInput:
+    PublicKnowledgeWebsiteResyncInput:
       type: object
       properties:
-        query:
+        description:
           type: string
-          minLength: 1
-          example: refund policy
-        limit:
+          maxLength: 1000
+        maxDepth:
           type: integer
-          maximum: 50
-          example: 10
-          exclusiveMinimum: 0
+          minimum: 1
+          maximum: 5
+        maxLinks:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        includePaths:
+          type: array
+          items:
+            type: string
+        excludePaths:
+          type: array
+          items:
+            type: string
+        scrapeOptions:
+          type: object
+          properties:
+            includeSelectors:
+              type: array
+              items:
+                type: string
+            excludeSelectors:
+              type: array
+              items:
+                type: string
+        autoSyncFrequency:
+          type: string
+          enum:
+          - NONE
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+    PublicKnowledgeSourceList:
+      type: object
+      properties:
+        count:
+          type: number
+        pageSize:
+          type: number
+        pageNum:
+          type: number
+        totalPages:
+          type: number
+        cursor:
+          type: number
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicKnowledgeSource'
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: number
+          - {}
       required:
-      - query
+      - pageSize
+      - results
+    PublicKnowledgeUrlSourceInput:
+      type: object
+      properties:
+        urls:
+          type: array
+          items:
+            type: string
+            format: uri
+          minItems: 1
+          maxItems: 10
+        description:
+          type: string
+          maxLength: 1000
+        type:
+          type: string
+          enum:
+          - UNKNOWN
+          - FILE
+          - URL
+          - ARTICLE
+          - QNA
+          - WEBPAGE
+          - FOLDER
+          default: URL
+        autoSyncFrequency:
+          type: string
+          enum:
+          - NONE
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+          default: NONE
+        scrapeOptions:
+          type: object
+          properties:
+            includeSelectors:
+              type: array
+              items:
+                type: string
+            excludeSelectors:
+              type: array
+              items:
+                type: string
+      required:
+      - urls
+    PublicKnowledgeSyncSummary:
+      type: object
+      properties:
+        id:
+          type: number
+        syncType:
+          type: string
+          enum:
+          - INITIAL_SYNC
+          - MANUAL_RESYNC
+          - AUTO_RESYNC
+        status:
+          type: string
+          enum:
+          - PROCESSING
+          - SYNCING
+          - COMPLETED
+          - FAILED
+          - DELETING
+          - DELETED
+        startedAt:
+          type: string
+        finishedAt:
+          type:
+          - string
+          - 'null'
+        duration:
+          type:
+          - number
+          - 'null'
+        syncedPages:
+          type: number
+        failedPages:
+          type: number
+        rejectedPages:
+          type: number
+        removedPages:
+          type: number
+        totalPages:
+          type: number
+        errorMessage:
+          type:
+          - string
+          - 'null'
+        ingestJobRunId:
+          type:
+          - string
+          - 'null'
+        websiteSourceId:
+          type: number
+        knowledgeBaseId:
+          type: number
+        triggeredByUserId:
+          type:
+          - number
+          - 'null'
+        websiteSource:
+          type: object
+          properties:
+            id:
+              type: number
+            name:
+              type: string
+            sourceUrl:
+              type: string
+            websiteType:
+              type: string
+              enum:
+              - WEBSITE_CRAWL
+              - SITEMAP
+          required:
+          - id
+          - name
+          - sourceUrl
+          - websiteType
+        triggeredByUser:
+          type:
+          - object
+          - 'null'
+          properties:
+            id:
+              type: number
+            firstName:
+              type: string
+            lastName:
+              type: string
+            avatar:
+              type:
+              - string
+              - 'null'
+          required:
+          - id
+          - firstName
+          - lastName
+          - avatar
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+      - id
+      - syncType
+      - status
+      - startedAt
+      - finishedAt
+      - duration
+      - syncedPages
+      - failedPages
+      - rejectedPages
+      - removedPages
+      - totalPages
+      - errorMessage
+      - ingestJobRunId
+      - websiteSourceId
+      - knowledgeBaseId
+      - triggeredByUserId
+      - websiteSource
+      - triggeredByUser
+      - createdAt
+      - updatedAt
+    PublicKnowledgeWebsiteCrawlInput:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 1000
+        sourceUrl:
+          type: string
+          format: uri
+        websiteType:
+          type: string
+          enum:
+          - WEBSITE_CRAWL
+          - SITEMAP
+        maxDepth:
+          type: integer
+          minimum: 1
+          maximum: 5
+        maxLinks:
+          type: integer
+          minimum: 1
+          maximum: 1000
+        includePaths:
+          type: array
+          items:
+            type: string
+        excludePaths:
+          type: array
+          items:
+            type: string
+        scrapeOptions:
+          type: object
+          properties:
+            includeSelectors:
+              type: array
+              items:
+                type: string
+            excludeSelectors:
+              type: array
+              items:
+                type: string
+        autoSyncFrequency:
+          type: string
+          enum:
+          - NONE
+          - DAILY
+          - WEEKLY
+          - MONTHLY
+      required:
+      - sourceUrl
+      - websiteType
+      - maxLinks
     PublicKnowledgeSource:
       type: object
       properties:
@@ -1050,412 +1360,6 @@ components:
       - folderId
       - parsedTextFileUrl
       - addedByUser
-    ErrorBody:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
-    PublicKnowledgeUrlSourceInput:
-      type: object
-      properties:
-        urls:
-          type: array
-          items:
-            type: string
-            format: uri
-          minItems: 1
-          maxItems: 10
-        description:
-          type: string
-          maxLength: 1000
-        type:
-          type: string
-          enum:
-          - UNKNOWN
-          - FILE
-          - URL
-          - ARTICLE
-          - QNA
-          - WEBPAGE
-          - FOLDER
-          default: URL
-        autoSyncFrequency:
-          type: string
-          enum:
-          - NONE
-          - DAILY
-          - WEEKLY
-          - MONTHLY
-          default: NONE
-        scrapeOptions:
-          type: object
-          properties:
-            includeSelectors:
-              type: array
-              items:
-                type: string
-            excludeSelectors:
-              type: array
-              items:
-                type: string
-      required:
-      - urls
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
-    PublicKnowledgeBaseAssignment:
-      type: object
-      properties:
-        id:
-          type: number
-        knowledgeBaseId:
-          type: number
-        assistantId:
-          type: string
-        maxUserProfileId:
-          type: number
-        assignedAt:
-          type: string
-        knowledgeBase:
-          type: object
-          properties:
-            id:
-              type: number
-            name:
-              type: string
-            description:
-              type:
-              - string
-              - 'null'
-            namespace:
-              type:
-              - string
-              - 'null'
-            isShared:
-              type: boolean
-            isDefault:
-              type: boolean
-            createdAt:
-              type: string
-            updatedAt:
-              type: string
-          required:
-          - id
-          - name
-          - description
-          - namespace
-          - isShared
-          - isDefault
-          - createdAt
-          - updatedAt
-      required:
-      - id
-      - knowledgeBaseId
-      - assignedAt
-      - knowledgeBase
-    PublicKnowledgeWebsiteCrawlInput:
-      type: object
-      properties:
-        description:
-          type: string
-          maxLength: 1000
-        sourceUrl:
-          type: string
-          format: uri
-        websiteType:
-          type: string
-          enum:
-          - WEBSITE_CRAWL
-          - SITEMAP
-        maxDepth:
-          type: integer
-          minimum: 1
-          maximum: 5
-        maxLinks:
-          type: integer
-          minimum: 1
-          maximum: 1000
-        includePaths:
-          type: array
-          items:
-            type: string
-        excludePaths:
-          type: array
-          items:
-            type: string
-        scrapeOptions:
-          type: object
-          properties:
-            includeSelectors:
-              type: array
-              items:
-                type: string
-            excludeSelectors:
-              type: array
-              items:
-                type: string
-        autoSyncFrequency:
-          type: string
-          enum:
-          - NONE
-          - DAILY
-          - WEEKLY
-          - MONTHLY
-      required:
-      - sourceUrl
-      - websiteType
-      - maxLinks
-    PublicKnowledgeSourceResyncInput:
-      type: object
-      properties:
-        sourceIds:
-          type: array
-          items:
-            type: integer
-            exclusiveMinimum: 0
-          minItems: 1
-          maxItems: 50
-      required:
-      - sourceIds
-    PublicKnowledgeBaseUpdateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-        description:
-          type:
-          - string
-          - 'null'
-    PublicKnowledgeBaseAssignmentList:
-      type: array
-      items:
-        $ref: '#/components/schemas/PublicKnowledgeBaseAssignment'
-    PublicKnowledgeSourceRemoveInput:
-      type: object
-      properties:
-        sourceIds:
-          type: array
-          items:
-            type: integer
-            exclusiveMinimum: 0
-          minItems: 1
-          maxItems: 100
-      required:
-      - sourceIds
-    PublicKnowledgeBaseAssignInput:
-      type: object
-      properties:
-        knowledgeBaseIds:
-          type: array
-          items:
-            type: integer
-            exclusiveMinimum: 0
-          example:
-          - 12
-          - 13
-      required:
-      - knowledgeBaseIds
-    PublicKnowledgeSyncSummary:
-      type: object
-      properties:
-        id:
-          type: number
-        syncType:
-          type: string
-          enum:
-          - INITIAL_SYNC
-          - MANUAL_RESYNC
-          - AUTO_RESYNC
-        status:
-          type: string
-          enum:
-          - PROCESSING
-          - SYNCING
-          - COMPLETED
-          - FAILED
-          - DELETING
-          - DELETED
-        startedAt:
-          type: string
-        finishedAt:
-          type:
-          - string
-          - 'null'
-        duration:
-          type:
-          - number
-          - 'null'
-        syncedPages:
-          type: number
-        failedPages:
-          type: number
-        rejectedPages:
-          type: number
-        removedPages:
-          type: number
-        totalPages:
-          type: number
-        errorMessage:
-          type:
-          - string
-          - 'null'
-        ingestJobRunId:
-          type:
-          - string
-          - 'null'
-        websiteSourceId:
-          type: number
-        knowledgeBaseId:
-          type: number
-        triggeredByUserId:
-          type:
-          - number
-          - 'null'
-        websiteSource:
-          type: object
-          properties:
-            id:
-              type: number
-            name:
-              type: string
-            sourceUrl:
-              type: string
-            websiteType:
-              type: string
-              enum:
-              - WEBSITE_CRAWL
-              - SITEMAP
-          required:
-          - id
-          - name
-          - sourceUrl
-          - websiteType
-        triggeredByUser:
-          type:
-          - object
-          - 'null'
-          properties:
-            id:
-              type: number
-            firstName:
-              type: string
-            lastName:
-              type: string
-            avatar:
-              type:
-              - string
-              - 'null'
-          required:
-          - id
-          - firstName
-          - lastName
-          - avatar
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
-      required:
-      - id
-      - syncType
-      - status
-      - startedAt
-      - finishedAt
-      - duration
-      - syncedPages
-      - failedPages
-      - rejectedPages
-      - removedPages
-      - totalPages
-      - errorMessage
-      - ingestJobRunId
-      - websiteSourceId
-      - knowledgeBaseId
-      - triggeredByUserId
-      - websiteSource
-      - triggeredByUser
-      - createdAt
-      - updatedAt
-    PublicKnowledgeBaseCreateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-        description:
-          type:
-          - string
-          - 'null'
-        isShared:
-          type: boolean
-          default: true
-      required:
-      - name
-    PublicKnowledgeSourceList:
-      type: object
-      properties:
-        count:
-          type: number
-        pageSize:
-          type: number
-        pageNum:
-          type: number
-        totalPages:
-          type: number
-        cursor:
-          type: number
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicKnowledgeSource'
-        paginationType:
-          type: string
-          enum:
-          - offset
-          - cursor
-          default: offset
-        nextCursor:
-          anyOf:
-          - type: string
-          - type: number
-          - {}
-      required:
-      - pageSize
-      - results
     PublicKnowledgeBase:
       type: object
       properties:
@@ -1519,6 +1423,102 @@ components:
       - vectorStoreId
       - createdAt
       - updatedAt
+    PublicKnowledgeBaseCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        description:
+          type:
+          - string
+          - 'null'
+        isShared:
+          type: boolean
+          default: true
+      required:
+      - name
+    PublicKnowledgeBaseList:
+      type: object
+      properties:
+        count:
+          type: number
+        pageSize:
+          type: number
+        pageNum:
+          type: number
+        totalPages:
+          type: number
+        cursor:
+          type: number
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicKnowledgeBase'
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: number
+          - {}
+      required:
+      - pageSize
+      - results
+    PublicKnowledgeBaseUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+        description:
+          type:
+          - string
+          - 'null'
+    PublicKnowledgeSourceResyncResult:
+      type: object
+      properties:
+        itemsQueued:
+          type: number
+        itemsSkipped:
+          type: number
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              sourceId:
+                type: number
+              status:
+                type: string
+              error:
+                type:
+                - string
+                - 'null'
+            required:
+            - sourceId
+            - status
+            - error
+      required:
+      - itemsQueued
+      - itemsSkipped
+      - details
+    PublicKnowledgeSourceResyncInput:
+      type: object
+      properties:
+        sourceIds:
+          type: array
+          items:
+            type: integer
+            exclusiveMinimum: 0
+          minItems: 1
+          maxItems: 50
+      required:
+      - sourceIds
   securitySchemes:
     accountApiKey:
       type: http
