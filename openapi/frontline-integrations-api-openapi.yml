@@ -288,15 +288,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicIntegrationsListResponse:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicConnectedAccount'
-      required:
-      - results
     PublicTriggerType:
       type: object
       properties:
@@ -388,17 +379,6 @@ components:
       - description
       - deliveryType
       - configFields
-    PublicTriggerResource:
-      type: object
-      properties:
-        id:
-          type: string
-          description: Value to send in triggerConfig for the matching field.
-        name:
-          type: string
-      required:
-      - id
-      - name
     PublicTriggerResourcesListResponse:
       type: object
       properties:
@@ -433,35 +413,73 @@ components:
       - parent
       - results
       - total
-    ErrorBody:
+    PublicIntegrationsListResponse:
       type: object
       properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicConnectedAccount'
       required:
-      - code
-      - message
+      - results
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicTriggerConfigField:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Key to send inside triggerConfig on the TRIGGER node.
+          example: folder_id
+        type:
+          type: string
+          example: string
+        description:
+          type: string
+        required:
+          type: boolean
+          description: When true, the trigger cannot be created without this config field.
+        userConfigurable:
+          type: boolean
+          description: When false the value is managed by the platform and is ignored if you send it.
+        resourceType:
+          type:
+          - string
+          - 'null'
+          enum:
+          - gmail_labels
+          - googlesheets_spreadsheets
+          - googlesheets_sheets
+          - googledocs_documents
+          - googledrive_folders
+          - googledrive_shared_drives
+          - onedrive_folders
+          - asana_workspaces
+          - asana_projects
+          - salesforce_sobjects
+          - salesforce_sobject_fields
+          - outlook_folders
+          - outlook_calendars
+          description: Picker that lists valid values for this field. Call GET /public/v1/integrations/trigger-resources with this resourceType. Null when the value is free text.
+          example: googledrive_folders
+      required:
+      - name
+      - type
+      - description
+      - required
+      - userConfigurable
+      - resourceType
     PublicConnectedAccount:
       type: object
       properties:
@@ -516,19 +534,46 @@ components:
       - isExpired
       - createdAt
       - updatedAt
-    Error:
+    PublicTriggerResource:
       type: object
       properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+        id:
+          type: string
+          description: Value to send in triggerConfig for the matching field.
+        name:
+          type: string
       required:
-      - ok
-      - error
+      - id
+      - name
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
     PublicTriggerTypesListResponse:
       type: object
       properties:
@@ -538,51 +583,6 @@ components:
             $ref: '#/components/schemas/PublicTriggerType'
       required:
       - results
-    PublicTriggerConfigField:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Key to send inside triggerConfig on the TRIGGER node.
-          example: folder_id
-        type:
-          type: string
-          example: string
-        description:
-          type: string
-        required:
-          type: boolean
-          description: When true, the trigger cannot be created without this config field.
-        userConfigurable:
-          type: boolean
-          description: When false the value is managed by the platform and is ignored if you send it.
-        resourceType:
-          type:
-          - string
-          - 'null'
-          enum:
-          - gmail_labels
-          - googlesheets_spreadsheets
-          - googlesheets_sheets
-          - googledocs_documents
-          - googledrive_folders
-          - googledrive_shared_drives
-          - onedrive_folders
-          - asana_workspaces
-          - asana_projects
-          - salesforce_sobjects
-          - salesforce_sobject_fields
-          - outlook_folders
-          - outlook_calendars
-          description: Picker that lists valid values for this field. Call GET /public/v1/integrations/trigger-resources with this resourceType. Null when the value is free text.
-          example: googledrive_folders
-      required:
-      - name
-      - type
-      - description
-      - required
-      - userConfigurable
-      - resourceType
   securitySchemes:
     accountApiKey:
       type: http

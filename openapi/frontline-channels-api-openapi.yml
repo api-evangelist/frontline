@@ -43,59 +43,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicWhatsAppTemplate:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-          description: Template name to use in SEND_WHATSAPP_MESSAGE nodes.
-          example: hello_world
-        language:
-          type: string
-        status:
-          type: string
-        category:
-          type: string
-        components:
-          type: array
-          items:
-            type: object
-            additionalProperties: {}
-        parameters:
-          $ref: '#/components/schemas/PublicWhatsAppTemplateParameters'
-      required:
-      - name
-    ErrorBody:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
     PublicWhatsAppTemplatesOutput:
       type: object
       properties:
@@ -141,6 +88,59 @@ components:
           type: array
           items:
             type: string
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicWhatsAppTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+          description: Template name to use in SEND_WHATSAPP_MESSAGE nodes.
+          example: hello_world
+        language:
+          type: string
+        status:
+          type: string
+        category:
+          type: string
+        components:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        parameters:
+          $ref: '#/components/schemas/PublicWhatsAppTemplateParameters'
+      required:
+      - name
   securitySchemes:
     accountApiKey:
       type: http

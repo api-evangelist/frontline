@@ -299,59 +299,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicIncomingWebhookEventList:
-      type: object
-      properties:
-        count:
-          type: number
-        pageSize:
-          type: number
-        pageNum:
-          type: number
-        totalPages:
-          type: number
-        cursor:
-          type: number
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicIncomingWebhookEvent'
-        paginationType:
-          type: string
-          enum:
-          - offset
-          - cursor
-          default: offset
-        nextCursor:
-          anyOf:
-          - type: string
-          - type: number
-          - {}
-      required:
-      - pageSize
-      - results
-    PublicIncomingWebhookCreateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: External CRM event
-        description:
-          type:
-          - string
-          - 'null'
-          example: Receives events from the external CRM
-        isActive:
-          type: boolean
-          default: true
-          example: true
-        useAuthentication:
-          type: boolean
-          default: true
-          example: true
-      required:
-      - name
     PublicIncomingWebhookEventDetail:
       allOf:
       - $ref: '#/components/schemas/PublicIncomingWebhookEvent'
@@ -376,35 +323,24 @@ components:
               required:
               - id
               - name
-    ErrorBody:
+    PublicIncomingWebhookUpdateInput:
       type: object
       properties:
-        code:
+        name:
           type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
+          minLength: 1
+          example: External CRM event
+        description:
+          type:
+          - string
+          - 'null'
+          example: Receives events from the external CRM
+        isActive:
+          type: boolean
+          example: true
+        useAuthentication:
+          type: boolean
+          example: true
     PublicIncomingWebhookEvent:
       type: object
       properties:
@@ -503,7 +439,38 @@ components:
       required:
       - ok
       - error
-    PublicIncomingWebhookUpdateInput:
+    PublicIncomingWebhookEventList:
+      type: object
+      properties:
+        count:
+          type: number
+        pageSize:
+          type: number
+        pageNum:
+          type: number
+        totalPages:
+          type: number
+        cursor:
+          type: number
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIncomingWebhookEvent'
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+        nextCursor:
+          anyOf:
+          - type: string
+          - type: number
+          - {}
+      required:
+      - pageSize
+      - results
+    PublicIncomingWebhookCreateInput:
       type: object
       properties:
         name:
@@ -517,10 +484,14 @@ components:
           example: Receives events from the external CRM
         isActive:
           type: boolean
+          default: true
           example: true
         useAuthentication:
           type: boolean
+          default: true
           example: true
+      required:
+      - name
     PublicIncomingWebhook:
       type: object
       properties:
@@ -563,6 +534,35 @@ components:
       - useAuthentication
       - createdAt
       - updatedAt
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
   securitySchemes:
     accountApiKey:
       type: http

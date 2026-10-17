@@ -1695,6 +1695,724 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    AgentChannelSettings:
+      type: object
+      properties:
+        liveChat:
+          type: object
+          properties:
+            splitMessages:
+              type: boolean
+            splitCharacterLimit:
+              type: integer
+            closeAfter:
+              type:
+              - number
+              - 'null'
+            timeUnit:
+              type:
+              - string
+              - 'null'
+              enum:
+              - MINUTES
+              - HOURS
+            conversationClose:
+              type: string
+              enum:
+              - NEVER
+              - AUTOMATICALLY
+              - DYNAMICALLY
+            collectFeedback:
+              type: boolean
+            feedbackVisibility:
+              type: string
+              enum:
+              - ON_HOVER
+              - ALWAYS_VISIBLE
+            feedbackText:
+              type:
+              - string
+              - 'null'
+            collectFeedbackReason:
+              type: boolean
+            includeOtherReason:
+              type: boolean
+            openFeedbackText:
+              type:
+              - string
+              - 'null'
+            feedbackReasons:
+              type:
+              - array
+              - 'null'
+              items:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  reason:
+                    type: string
+                  order:
+                    type: number
+                required:
+                - id
+                - reason
+                - order
+            enableDocumentProcessing:
+              type: boolean
+            enableImageProcessing:
+              type: boolean
+            enableIdle:
+              type: boolean
+            idleSettings:
+              type:
+              - object
+              - 'null'
+              properties:
+                id:
+                  type:
+                  - number
+                  - 'null'
+                after:
+                  type:
+                  - number
+                  - 'null'
+                timeUnit:
+                  type:
+                  - string
+                  - 'null'
+                  enum:
+                  - MINUTES
+                  - HOURS
+                resetsLimit:
+                  type:
+                  - number
+                  - 'null'
+              required:
+              - after
+              - timeUnit
+              - resetsLimit
+          required:
+          - splitMessages
+          - splitCharacterLimit
+          - closeAfter
+          - timeUnit
+          - conversationClose
+          - collectFeedback
+          - feedbackVisibility
+          - feedbackText
+          - collectFeedbackReason
+          - includeOtherReason
+          - openFeedbackText
+          - enableIdle
+        whatsApp:
+          type: object
+          properties:
+            splitMessages:
+              type: boolean
+            splitCharacterLimit:
+              type: integer
+            closeAfter:
+              type:
+              - number
+              - 'null'
+            timeUnit:
+              type:
+              - string
+              - 'null'
+              enum:
+              - MINUTES
+              - HOURS
+            conversationClose:
+              type:
+              - string
+              - 'null'
+              enum:
+              - NEVER
+              - AUTOMATICALLY
+              - DYNAMICALLY
+            enableDocumentProcessing:
+              type: boolean
+            enableImageProcessing:
+              type: boolean
+            debounce:
+              type: boolean
+            debounceTime:
+              type: integer
+              minimum: 0
+            enableIdle:
+              type: boolean
+            idleSettings:
+              type:
+              - object
+              - 'null'
+              properties:
+                id:
+                  type:
+                  - number
+                  - 'null'
+                after:
+                  type:
+                  - number
+                  - 'null'
+                timeUnit:
+                  type:
+                  - string
+                  - 'null'
+                  enum:
+                  - MINUTES
+                  - HOURS
+                resetsLimit:
+                  type:
+                  - number
+                  - 'null'
+              required:
+              - after
+              - timeUnit
+              - resetsLimit
+            conversationInterruptTimeout:
+              type: integer
+              minimum: 0
+            conversationInterruptTimeUnit:
+              type:
+              - string
+              - 'null'
+              enum:
+              - MINUTES
+              - HOURS
+            sendCloseMessage:
+              type: boolean
+            closeMessageType:
+              type: string
+              enum:
+              - STATIC
+              - DYNAMIC
+            closeMessage:
+              type:
+              - string
+              - 'null'
+            closeInstruction:
+              type:
+              - string
+              - 'null'
+            autoReplyOnUninterrupt:
+              type: boolean
+          required:
+          - splitMessages
+          - splitCharacterLimit
+          - enableIdle
+          - sendCloseMessage
+          - closeMessageType
+        instagram:
+          type: object
+          properties:
+            splitMessages:
+              type: boolean
+            splitCharacterLimit:
+              type: integer
+            closeAfter:
+              type:
+              - number
+              - 'null'
+            timeUnit:
+              type:
+              - string
+              - 'null'
+              enum:
+              - MINUTES
+              - HOURS
+            conversationClose:
+              type:
+              - string
+              - 'null'
+              enum:
+              - NEVER
+              - AUTOMATICALLY
+              - DYNAMICALLY
+            enableImageProcessing:
+              type: boolean
+            enableIdle:
+              type: boolean
+            idleSettings:
+              type:
+              - object
+              - 'null'
+              properties:
+                id:
+                  type:
+                  - number
+                  - 'null'
+                after:
+                  type:
+                  - number
+                  - 'null'
+                timeUnit:
+                  type:
+                  - string
+                  - 'null'
+                  enum:
+                  - MINUTES
+                  - HOURS
+                resetsLimit:
+                  type:
+                  - number
+                  - 'null'
+              required:
+              - after
+              - timeUnit
+              - resetsLimit
+            conversationInterruptTimeout:
+              type: integer
+              minimum: 0
+            conversationInterruptTimeUnit:
+              type:
+              - string
+              - 'null'
+              enum:
+              - MINUTES
+              - HOURS
+            sendCloseMessage:
+              type: boolean
+            closeMessageType:
+              type: string
+              enum:
+              - STATIC
+              - DYNAMIC
+            closeMessage:
+              type:
+              - string
+              - 'null'
+            closeInstruction:
+              type:
+              - string
+              - 'null'
+            autoReplyOnUninterrupt:
+              type: boolean
+          required:
+          - splitMessages
+          - splitCharacterLimit
+          - enableIdle
+          - sendCloseMessage
+          - closeMessageType
+        messenger:
+          type: object
+          properties:
+            splitMessages:
+              type: boolean
+            splitCharacterLimit:
+              type: integer
+            closeAfter:
+              type:
+              - number
+              - 'null'
+            timeUnit:
+              type:
+              - string
+              - 'null'
+              enum:
+              - MINUTES
+              - HOURS
+            conversationClose:
+              type:
+              - string
+              - 'null'
+              enum:
+              - NEVER
+              - AUTOMATICALLY
+              - DYNAMICALLY
+            enableImageProcessing:
+              type: boolean
+            enableIdle:
+              type: boolean
+            idleSettings:
+              type:
+              - object
+              - 'null'
+              properties:
+                id:
+                  type:
+                  - number
+                  - 'null'
+                after:
+                  type:
+                  - number
+                  - 'null'
+                timeUnit:
+                  type:
+                  - string
+                  - 'null'
+                  enum:
+                  - MINUTES
+                  - HOURS
+                resetsLimit:
+                  type:
+                  - number
+                  - 'null'
+              required:
+              - after
+              - timeUnit
+              - resetsLimit
+            conversationInterruptTimeout:
+              type: integer
+              minimum: 0
+            conversationInterruptTimeUnit:
+              type:
+              - string
+              - 'null'
+              enum:
+              - MINUTES
+              - HOURS
+            autoReplyOnUninterrupt:
+              type: boolean
+            sendCloseMessage:
+              type: boolean
+            closeMessageType:
+              type: string
+              enum:
+              - STATIC
+              - DYNAMIC
+            closeMessage:
+              type:
+              - string
+              - 'null'
+            closeInstruction:
+              type:
+              - string
+              - 'null'
+          required:
+          - splitMessages
+          - splitCharacterLimit
+          - enableIdle
+          - sendCloseMessage
+          - closeMessageType
+      required:
+      - liveChat
+      - whatsApp
+      - instagram
+      - messenger
+    AgentTheme:
+      type:
+      - object
+      - 'null'
+      properties:
+        id:
+          type: number
+        assistantId:
+          type: string
+        avatar:
+          type:
+          - string
+          - 'null'
+        bubbleImage:
+          type:
+          - string
+          - 'null'
+        title:
+          type: string
+        initialMessage:
+          type: string
+        placeholder:
+          type: string
+        bubbleColor:
+          type: string
+        userMessageColor:
+          type: string
+        agentMessageColor:
+          type:
+          - string
+          - 'null'
+        bubbleAlignment:
+          type: string
+          enum:
+          - RIGHT
+          - LEFT
+        progressIndicator:
+          type: string
+          enum:
+          - STATIC
+          - DYNAMIC
+        verticalPositionInPixels:
+          type: number
+        removePowerBy:
+          type: boolean
+        updatedAt:
+          type: string
+      required:
+      - id
+      - avatar
+      - bubbleImage
+      - title
+      - initialMessage
+      - placeholder
+      - bubbleColor
+      - userMessageColor
+      - agentMessageColor
+      - bubbleAlignment
+      - progressIndicator
+      - verticalPositionInPixels
+    AgentSetting:
+      type:
+      - object
+      - 'null'
+      properties:
+        id:
+          type: number
+        aiModelId:
+          type:
+          - number
+          - 'null'
+        aiModel:
+          allOf:
+          - $ref: '#/components/schemas/AiModel'
+          - {}
+        model:
+          type:
+          - string
+          - 'null'
+        aiType:
+          type: string
+          enum:
+          - ASSISTANT
+          - AGENT
+        temperature:
+          type: number
+        instructions:
+          type:
+          - string
+          - 'null'
+        agentRole:
+          type: string
+          enum:
+          - NONE
+          - CUSTOM
+          - CUSTOMER_SUPPORT
+          - SALES_REPRESENTATIVE
+          - COLLECTIONS
+          - RECRUITING_AGENT
+          - HR_MANAGER
+          - PRODUCT_COPILOT
+          - AI_ASSISTANT
+          - ANALYST
+          - POST_SALES
+        toneOfVoice:
+          type: string
+          enum:
+          - NONE
+          - CUSTOM
+          - FRIENDLY
+          - NEUTRAL
+          - MATTER_OF_FACT
+          - PROFESSIONAL
+          - HUMOROUS
+          - WITTY
+          - GEN_Z
+        answerLength:
+          type: string
+          enum:
+          - NONE
+          - CUSTOM
+          - DYNAMIC
+          - CONCISE
+          - STANDARD
+          - THOROUGH
+        maxIterations:
+          type: number
+        agentType:
+          type: string
+          enum:
+          - BASIC
+          - ADVANCED
+        customTools:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+              name:
+                type: string
+              description:
+                type:
+                - string
+                - 'null'
+              status:
+                type:
+                - string
+                - 'null'
+              type:
+                type:
+                - string
+                - 'null'
+            required:
+            - id
+            - name
+        systemToolsConfig: {}
+        selectedRecordTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: number
+              read:
+                type: boolean
+              create:
+                type: boolean
+              update:
+                type: boolean
+              delete:
+                type: boolean
+              createActivity:
+                type: boolean
+            required:
+            - recordTypeId
+        agentConnectedAccounts:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              connectedAccountId:
+                type: number
+              useAllTools:
+                type: boolean
+              selectedToolSlugs:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: string
+              connectedAccount:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  toolkit:
+                    type: string
+                  alias:
+                    type:
+                    - string
+                    - 'null'
+                  connectedEmail:
+                    type:
+                    - string
+                    - 'null'
+                  isConnected:
+                    type: boolean
+                required:
+                - id
+                - toolkit
+                - alias
+                - connectedEmail
+                - isConnected
+            required:
+            - connectedAccountId
+            - useAllTools
+        agentPlaybooks:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              playbookId:
+                type: number
+              assignedAt:
+                type: string
+              playbook:
+                type: object
+                properties:
+                  id:
+                    type: number
+                  name:
+                    type: string
+                  description:
+                    type:
+                    - string
+                    - 'null'
+                required:
+                - id
+                - name
+            required:
+            - playbookId
+      required:
+      - id
+    PublicAgentCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Support Agent
+      required:
+      - name
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicAgentThemeUpdateInput:
+      type: object
+      properties:
+        avatar:
+          type:
+          - string
+          - 'null'
+        bubbleImage:
+          type:
+          - string
+          - 'null'
+        title:
+          type: string
+        initialMessage:
+          type: string
+        placeholder:
+          type: string
+        bubbleColor:
+          type: string
+        userMessageColor:
+          type: string
+        agentMessageColor:
+          type:
+          - string
+          - 'null'
+        bubbleAlignment:
+          type: string
+          enum:
+          - RIGHT
+          - LEFT
+        progressIndicator:
+          type: string
+          enum:
+          - STATIC
+          - DYNAMIC
+        verticalPositionInPixels:
+          type: number
+      required:
+      - avatar
+      - bubbleImage
+      - title
+      - initialMessage
+      - placeholder
+      - bubbleColor
+      - userMessageColor
+      - agentMessageColor
+      - bubbleAlignment
+      - progressIndicator
+      - verticalPositionInPixels
     AgentAnalytics:
       type: object
       properties:
@@ -1750,55 +2468,87 @@ components:
       - summary
       - creditsByDate
       - conversationsByChannel
-    PublicAgentUpdateInput:
+    Agent:
       type: object
       properties:
+        id:
+          type: string
+          example: 550e8400-e29b-41d4-a716-446655440000
         name:
           type: string
-          minLength: 1
-          maxLength: 256
-          example: Support Agent
-      required:
-      - name
-    ErrorBody:
-      type: object
-      properties:
-        code:
+          example: Support Bot
+        description:
+          type:
+          - string
+          - 'null'
+          example: Main customer support agent
+        status:
           type: string
           enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
+          - NONE
+          - ACTIVE
+          - INACTIVE
+          - TRAINING
+          - TRAIN_ERROR
+          example: ACTIVE
+        createdAt:
           type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
       required:
-      - code
-      - message
-    PublicAgentDeploymentStatusInput:
+      - id
+      - name
+      - description
+      - status
+      - createdAt
+      - updatedAt
+    AiModel:
       type: object
       properties:
-        isOffline:
+        id:
+          type: number
+        name:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        creditsPerMessage:
+          type: number
+        isDefault:
           type: boolean
+        order:
+          type: number
+        analyticsColor:
+          type:
+          - string
+          - 'null'
+        externalId:
+          type:
+          - string
+          - 'null'
+        aiVendor:
+          type: string
+        reasoningModel:
+          type: boolean
+        type:
+          type: string
+          enum:
+          - TEXT
+          - TRANSCRIPTION
+          - FILE_ANALYSIS
       required:
-      - isOffline
-    PublicAgentThemeUpdateInput:
+      - id
+      - name
+    PublicAgentThemeUpdateOutput:
       type: object
       properties:
+        id:
+          type: number
+        assistantId:
+          type: string
         avatar:
           type:
           - string
@@ -1833,7 +2583,11 @@ components:
           - DYNAMIC
         verticalPositionInPixels:
           type: number
+        updatedAt:
+          type: string
       required:
+      - id
+      - assistantId
       - avatar
       - bubbleImage
       - title
@@ -1845,6 +2599,7 @@ components:
       - bubbleAlignment
       - progressIndicator
       - verticalPositionInPixels
+      - updatedAt
     PublicAgentSettingUpdateInput:
       type: object
       properties:
@@ -1936,57 +2691,52 @@ components:
       - aiModelId
       - temperature
       - instructions
-    AiModel:
+    PublicAgentUpdateInput:
       type: object
       properties:
-        id:
-          type: number
         name:
           type: string
-        description:
-          type:
-          - string
-          - 'null'
-        creditsPerMessage:
-          type: number
-        isDefault:
-          type: boolean
-        order:
-          type: number
-        analyticsColor:
-          type:
-          - string
-          - 'null'
-        externalId:
-          type:
-          - string
-          - 'null'
-        aiVendor:
-          type: string
-        reasoningModel:
-          type: boolean
-        type:
-          type: string
-          enum:
-          - TEXT
-          - TRANSCRIPTION
-          - FILE_ANALYSIS
+          minLength: 1
+          maxLength: 256
+          example: Support Agent
       required:
-      - id
       - name
-    Error:
+    ErrorBody:
       type: object
       properties:
-        ok:
-          type: boolean
+        code:
+          type: string
           enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
       required:
-      - ok
-      - error
+      - code
+      - message
+    PublicAgentDeploymentStatusInput:
+      type: object
+      properties:
+        isOffline:
+          type: boolean
+      required:
+      - isOffline
     AgentDetail:
       allOf:
       - $ref: '#/components/schemas/Agent'
@@ -2422,756 +3172,6 @@ components:
         required:
         - isOffline
         - accountId
-    AgentChannelSettings:
-      type: object
-      properties:
-        liveChat:
-          type: object
-          properties:
-            splitMessages:
-              type: boolean
-            splitCharacterLimit:
-              type: integer
-            closeAfter:
-              type:
-              - number
-              - 'null'
-            timeUnit:
-              type:
-              - string
-              - 'null'
-              enum:
-              - MINUTES
-              - HOURS
-            conversationClose:
-              type: string
-              enum:
-              - NEVER
-              - AUTOMATICALLY
-              - DYNAMICALLY
-            collectFeedback:
-              type: boolean
-            feedbackVisibility:
-              type: string
-              enum:
-              - ON_HOVER
-              - ALWAYS_VISIBLE
-            feedbackText:
-              type:
-              - string
-              - 'null'
-            collectFeedbackReason:
-              type: boolean
-            includeOtherReason:
-              type: boolean
-            openFeedbackText:
-              type:
-              - string
-              - 'null'
-            feedbackReasons:
-              type:
-              - array
-              - 'null'
-              items:
-                type: object
-                properties:
-                  id:
-                    type: number
-                  reason:
-                    type: string
-                  order:
-                    type: number
-                required:
-                - id
-                - reason
-                - order
-            enableDocumentProcessing:
-              type: boolean
-            enableImageProcessing:
-              type: boolean
-            enableIdle:
-              type: boolean
-            idleSettings:
-              type:
-              - object
-              - 'null'
-              properties:
-                id:
-                  type:
-                  - number
-                  - 'null'
-                after:
-                  type:
-                  - number
-                  - 'null'
-                timeUnit:
-                  type:
-                  - string
-                  - 'null'
-                  enum:
-                  - MINUTES
-                  - HOURS
-                resetsLimit:
-                  type:
-                  - number
-                  - 'null'
-              required:
-              - after
-              - timeUnit
-              - resetsLimit
-          required:
-          - splitMessages
-          - splitCharacterLimit
-          - closeAfter
-          - timeUnit
-          - conversationClose
-          - collectFeedback
-          - feedbackVisibility
-          - feedbackText
-          - collectFeedbackReason
-          - includeOtherReason
-          - openFeedbackText
-          - enableIdle
-        whatsApp:
-          type: object
-          properties:
-            splitMessages:
-              type: boolean
-            splitCharacterLimit:
-              type: integer
-            closeAfter:
-              type:
-              - number
-              - 'null'
-            timeUnit:
-              type:
-              - string
-              - 'null'
-              enum:
-              - MINUTES
-              - HOURS
-            conversationClose:
-              type:
-              - string
-              - 'null'
-              enum:
-              - NEVER
-              - AUTOMATICALLY
-              - DYNAMICALLY
-            enableDocumentProcessing:
-              type: boolean
-            enableImageProcessing:
-              type: boolean
-            debounce:
-              type: boolean
-            debounceTime:
-              type: integer
-              minimum: 0
-            enableIdle:
-              type: boolean
-            idleSettings:
-              type:
-              - object
-              - 'null'
-              properties:
-                id:
-                  type:
-                  - number
-                  - 'null'
-                after:
-                  type:
-                  - number
-                  - 'null'
-                timeUnit:
-                  type:
-                  - string
-                  - 'null'
-                  enum:
-                  - MINUTES
-                  - HOURS
-                resetsLimit:
-                  type:
-                  - number
-                  - 'null'
-              required:
-              - after
-              - timeUnit
-              - resetsLimit
-            conversationInterruptTimeout:
-              type: integer
-              minimum: 0
-            conversationInterruptTimeUnit:
-              type:
-              - string
-              - 'null'
-              enum:
-              - MINUTES
-              - HOURS
-            sendCloseMessage:
-              type: boolean
-            closeMessageType:
-              type: string
-              enum:
-              - STATIC
-              - DYNAMIC
-            closeMessage:
-              type:
-              - string
-              - 'null'
-            closeInstruction:
-              type:
-              - string
-              - 'null'
-            autoReplyOnUninterrupt:
-              type: boolean
-          required:
-          - splitMessages
-          - splitCharacterLimit
-          - enableIdle
-          - sendCloseMessage
-          - closeMessageType
-        instagram:
-          type: object
-          properties:
-            splitMessages:
-              type: boolean
-            splitCharacterLimit:
-              type: integer
-            closeAfter:
-              type:
-              - number
-              - 'null'
-            timeUnit:
-              type:
-              - string
-              - 'null'
-              enum:
-              - MINUTES
-              - HOURS
-            conversationClose:
-              type:
-              - string
-              - 'null'
-              enum:
-              - NEVER
-              - AUTOMATICALLY
-              - DYNAMICALLY
-            enableImageProcessing:
-              type: boolean
-            enableIdle:
-              type: boolean
-            idleSettings:
-              type:
-              - object
-              - 'null'
-              properties:
-                id:
-                  type:
-                  - number
-                  - 'null'
-                after:
-                  type:
-                  - number
-                  - 'null'
-                timeUnit:
-                  type:
-                  - string
-                  - 'null'
-                  enum:
-                  - MINUTES
-                  - HOURS
-                resetsLimit:
-                  type:
-                  - number
-                  - 'null'
-              required:
-              - after
-              - timeUnit
-              - resetsLimit
-            conversationInterruptTimeout:
-              type: integer
-              minimum: 0
-            conversationInterruptTimeUnit:
-              type:
-              - string
-              - 'null'
-              enum:
-              - MINUTES
-              - HOURS
-            sendCloseMessage:
-              type: boolean
-            closeMessageType:
-              type: string
-              enum:
-              - STATIC
-              - DYNAMIC
-            closeMessage:
-              type:
-              - string
-              - 'null'
-            closeInstruction:
-              type:
-              - string
-              - 'null'
-            autoReplyOnUninterrupt:
-              type: boolean
-          required:
-          - splitMessages
-          - splitCharacterLimit
-          - enableIdle
-          - sendCloseMessage
-          - closeMessageType
-        messenger:
-          type: object
-          properties:
-            splitMessages:
-              type: boolean
-            splitCharacterLimit:
-              type: integer
-            closeAfter:
-              type:
-              - number
-              - 'null'
-            timeUnit:
-              type:
-              - string
-              - 'null'
-              enum:
-              - MINUTES
-              - HOURS
-            conversationClose:
-              type:
-              - string
-              - 'null'
-              enum:
-              - NEVER
-              - AUTOMATICALLY
-              - DYNAMICALLY
-            enableImageProcessing:
-              type: boolean
-            enableIdle:
-              type: boolean
-            idleSettings:
-              type:
-              - object
-              - 'null'
-              properties:
-                id:
-                  type:
-                  - number
-                  - 'null'
-                after:
-                  type:
-                  - number
-                  - 'null'
-                timeUnit:
-                  type:
-                  - string
-                  - 'null'
-                  enum:
-                  - MINUTES
-                  - HOURS
-                resetsLimit:
-                  type:
-                  - number
-                  - 'null'
-              required:
-              - after
-              - timeUnit
-              - resetsLimit
-            conversationInterruptTimeout:
-              type: integer
-              minimum: 0
-            conversationInterruptTimeUnit:
-              type:
-              - string
-              - 'null'
-              enum:
-              - MINUTES
-              - HOURS
-            autoReplyOnUninterrupt:
-              type: boolean
-            sendCloseMessage:
-              type: boolean
-            closeMessageType:
-              type: string
-              enum:
-              - STATIC
-              - DYNAMIC
-            closeMessage:
-              type:
-              - string
-              - 'null'
-            closeInstruction:
-              type:
-              - string
-              - 'null'
-          required:
-          - splitMessages
-          - splitCharacterLimit
-          - enableIdle
-          - sendCloseMessage
-          - closeMessageType
-      required:
-      - liveChat
-      - whatsApp
-      - instagram
-      - messenger
-    PublicAgentThemeUpdateOutput:
-      type: object
-      properties:
-        id:
-          type: number
-        assistantId:
-          type: string
-        avatar:
-          type:
-          - string
-          - 'null'
-        bubbleImage:
-          type:
-          - string
-          - 'null'
-        title:
-          type: string
-        initialMessage:
-          type: string
-        placeholder:
-          type: string
-        bubbleColor:
-          type: string
-        userMessageColor:
-          type: string
-        agentMessageColor:
-          type:
-          - string
-          - 'null'
-        bubbleAlignment:
-          type: string
-          enum:
-          - RIGHT
-          - LEFT
-        progressIndicator:
-          type: string
-          enum:
-          - STATIC
-          - DYNAMIC
-        verticalPositionInPixels:
-          type: number
-        updatedAt:
-          type: string
-      required:
-      - id
-      - assistantId
-      - avatar
-      - bubbleImage
-      - title
-      - initialMessage
-      - placeholder
-      - bubbleColor
-      - userMessageColor
-      - agentMessageColor
-      - bubbleAlignment
-      - progressIndicator
-      - verticalPositionInPixels
-      - updatedAt
-    AgentSetting:
-      type:
-      - object
-      - 'null'
-      properties:
-        id:
-          type: number
-        aiModelId:
-          type:
-          - number
-          - 'null'
-        aiModel:
-          allOf:
-          - $ref: '#/components/schemas/AiModel'
-          - {}
-        model:
-          type:
-          - string
-          - 'null'
-        aiType:
-          type: string
-          enum:
-          - ASSISTANT
-          - AGENT
-        temperature:
-          type: number
-        instructions:
-          type:
-          - string
-          - 'null'
-        agentRole:
-          type: string
-          enum:
-          - NONE
-          - CUSTOM
-          - CUSTOMER_SUPPORT
-          - SALES_REPRESENTATIVE
-          - COLLECTIONS
-          - RECRUITING_AGENT
-          - HR_MANAGER
-          - PRODUCT_COPILOT
-          - AI_ASSISTANT
-          - ANALYST
-          - POST_SALES
-        toneOfVoice:
-          type: string
-          enum:
-          - NONE
-          - CUSTOM
-          - FRIENDLY
-          - NEUTRAL
-          - MATTER_OF_FACT
-          - PROFESSIONAL
-          - HUMOROUS
-          - WITTY
-          - GEN_Z
-        answerLength:
-          type: string
-          enum:
-          - NONE
-          - CUSTOM
-          - DYNAMIC
-          - CONCISE
-          - STANDARD
-          - THOROUGH
-        maxIterations:
-          type: number
-        agentType:
-          type: string
-          enum:
-          - BASIC
-          - ADVANCED
-        customTools:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              id:
-                type: number
-              name:
-                type: string
-              description:
-                type:
-                - string
-                - 'null'
-              status:
-                type:
-                - string
-                - 'null'
-              type:
-                type:
-                - string
-                - 'null'
-            required:
-            - id
-            - name
-        systemToolsConfig: {}
-        selectedRecordTypes:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              recordTypeId:
-                type: number
-              read:
-                type: boolean
-              create:
-                type: boolean
-              update:
-                type: boolean
-              delete:
-                type: boolean
-              createActivity:
-                type: boolean
-            required:
-            - recordTypeId
-        agentConnectedAccounts:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              connectedAccountId:
-                type: number
-              useAllTools:
-                type: boolean
-              selectedToolSlugs:
-                type:
-                - array
-                - 'null'
-                items:
-                  type: string
-              connectedAccount:
-                type: object
-                properties:
-                  id:
-                    type: number
-                  toolkit:
-                    type: string
-                  alias:
-                    type:
-                    - string
-                    - 'null'
-                  connectedEmail:
-                    type:
-                    - string
-                    - 'null'
-                  isConnected:
-                    type: boolean
-                required:
-                - id
-                - toolkit
-                - alias
-                - connectedEmail
-                - isConnected
-            required:
-            - connectedAccountId
-            - useAllTools
-        agentPlaybooks:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              playbookId:
-                type: number
-              assignedAt:
-                type: string
-              playbook:
-                type: object
-                properties:
-                  id:
-                    type: number
-                  name:
-                    type: string
-                  description:
-                    type:
-                    - string
-                    - 'null'
-                required:
-                - id
-                - name
-            required:
-            - playbookId
-      required:
-      - id
-    Agent:
-      type: object
-      properties:
-        id:
-          type: string
-          example: 550e8400-e29b-41d4-a716-446655440000
-        name:
-          type: string
-          example: Support Bot
-        description:
-          type:
-          - string
-          - 'null'
-          example: Main customer support agent
-        status:
-          type: string
-          enum:
-          - NONE
-          - ACTIVE
-          - INACTIVE
-          - TRAINING
-          - TRAIN_ERROR
-          example: ACTIVE
-        createdAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
-        updatedAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
-      required:
-      - id
-      - name
-      - description
-      - status
-      - createdAt
-      - updatedAt
-    PublicAgentCreateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: Support Agent
-      required:
-      - name
-    AgentTheme:
-      type:
-      - object
-      - 'null'
-      properties:
-        id:
-          type: number
-        assistantId:
-          type: string
-        avatar:
-          type:
-          - string
-          - 'null'
-        bubbleImage:
-          type:
-          - string
-          - 'null'
-        title:
-          type: string
-        initialMessage:
-          type: string
-        placeholder:
-          type: string
-        bubbleColor:
-          type: string
-        userMessageColor:
-          type: string
-        agentMessageColor:
-          type:
-          - string
-          - 'null'
-        bubbleAlignment:
-          type: string
-          enum:
-          - RIGHT
-          - LEFT
-        progressIndicator:
-          type: string
-          enum:
-          - STATIC
-          - DYNAMIC
-        verticalPositionInPixels:
-          type: number
-        removePowerBy:
-          type: boolean
-        updatedAt:
-          type: string
-      required:
-      - id
-      - avatar
-      - bubbleImage
-      - title
-      - initialMessage
-      - placeholder
-      - bubbleColor
-      - userMessageColor
-      - agentMessageColor
-      - bubbleAlignment
-      - progressIndicator
-      - verticalPositionInPixels
   securitySchemes:
     accountApiKey:
       type: http

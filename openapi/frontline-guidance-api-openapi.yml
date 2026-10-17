@@ -136,65 +136,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicNodeTypeList:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            type: object
-            properties:
-              type:
-                type: string
-                example: TOOLS_AI
-              validInFlow:
-                type: boolean
-                description: Usable in an agent flow (WorkflowType.FLOW).
-                example: true
-              validInAutomation:
-                type: boolean
-                description: Usable in an automation workflow (WorkflowType.AUTOMATION).
-                example: true
-              allowsMultipleOutgoingHandles:
-                type: boolean
-                description: May fan out to more than one outgoing edge.
-                example: true
-            required:
-            - type
-            - validInFlow
-            - validInAutomation
-            - allowsMultipleOutgoingHandles
-      required:
-      - results
-    ErrorBody:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
     PublicFieldGuidance:
       type: object
       properties:
@@ -202,31 +143,6 @@ components:
           type: string
           description: Markdown reference covering every field/column type, its metadata shape, and best practices — generated from the same constants the create/update schemas validate against.
       required:
-      - guidance
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
-    PublicNodeGuidance:
-      type: object
-      properties:
-        nodeType:
-          type: string
-          example: TOOLS_AI
-        guidance:
-          type: string
-          description: Markdown guidance for configuring this node type. Empty when no guidance is published for the type.
-      required:
-      - nodeType
       - guidance
     PublicVisualOptions:
       type: object
@@ -291,6 +207,90 @@ components:
       - optionColors
       - tagModes
       - relationModes
+    PublicNodeGuidance:
+      type: object
+      properties:
+        nodeType:
+          type: string
+          example: TOOLS_AI
+        guidance:
+          type: string
+          description: Markdown guidance for configuring this node type. Empty when no guidance is published for the type.
+      required:
+      - nodeType
+      - guidance
+    PublicNodeTypeList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+                example: TOOLS_AI
+              validInFlow:
+                type: boolean
+                description: Usable in an agent flow (WorkflowType.FLOW).
+                example: true
+              validInAutomation:
+                type: boolean
+                description: Usable in an automation workflow (WorkflowType.AUTOMATION).
+                example: true
+              allowsMultipleOutgoingHandles:
+                type: boolean
+                description: May fan out to more than one outgoing edge.
+                example: true
+            required:
+            - type
+            - validInFlow
+            - validInAutomation
+            - allowsMultipleOutgoingHandles
+      required:
+      - results
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
   securitySchemes:
     accountApiKey:
       type: http

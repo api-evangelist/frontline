@@ -253,57 +253,10 @@ components:
           - string
           - 'null'
           example: asst_123
-    PublicChannelAssignInput:
+    PublicWhatsAppBusinessInfo:
       type: object
       properties:
-        agentId:
-          type:
-          - string
-          - 'null'
-          example: asst_123
-      required:
-      - agentId
-    PublicWhatsAppNumber:
-      type: object
-      properties:
-        id:
-          type: number
-        phoneNumberId:
-          type: string
-        assistantId:
-          type:
-          - string
-          - 'null'
-        assistant:
-          type:
-          - object
-          - 'null'
-          properties:
-            id:
-              type: string
-            name:
-              type: string
-          required:
-          - id
-          - name
-        status:
-          type: string
-          enum:
-          - CONNECTED
-          - PENDING
-          - UNREGISTERED
-          - ERROR
-          - VERIFICATION_PENDING
-          - DELETED
-        wabaId:
-          type: string
-        name:
-          type: string
         about:
-          type:
-          - string
-          - 'null'
-        description:
           type:
           - string
           - 'null'
@@ -311,8 +264,28 @@ components:
           type:
           - string
           - 'null'
-        category:
-          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        profile_picture_url:
+          type:
+          - string
+          - 'null'
+        websites:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        vertical:
+          type:
+          - string
+          - 'null'
           enum:
           - AUTO
           - BEAUTY
@@ -332,52 +305,6 @@ components:
           - RESTAURANT
           - OTHER
           - UNDEFINED
-        displayPhoneNumber:
-          type: string
-        website:
-          type:
-          - string
-          - 'null'
-        secondaryWebsite:
-          type:
-          - string
-          - 'null'
-        verificationStatus:
-          type: string
-          enum:
-          - VERIFIED
-          - NOT_VERIFIED
-        image:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
-      required:
-      - id
-      - phoneNumberId
-      - assistantId
-      - status
-      - wabaId
-      - name
-      - about
-      - description
-      - address
-      - category
-      - displayPhoneNumber
-      - website
-      - secondaryWebsite
-      - verificationStatus
-      - image
-      - email
-      - createdAt
-      - updatedAt
     PublicChannelIntegrations:
       type:
       - object
@@ -643,14 +570,53 @@ components:
       - whatsapp
       - instagram
       - messenger
-    PublicWhatsAppBusinessInfo:
+    PublicChannelAssignInput:
       type: object
       properties:
-        about:
+        agentId:
           type:
           - string
           - 'null'
-        address:
+          example: asst_123
+      required:
+      - agentId
+    PublicWhatsAppNumber:
+      type: object
+      properties:
+        id:
+          type: number
+        phoneNumberId:
+          type: string
+        assistantId:
+          type:
+          - string
+          - 'null'
+        assistant:
+          type:
+          - object
+          - 'null'
+          properties:
+            id:
+              type: string
+            name:
+              type: string
+          required:
+          - id
+          - name
+        status:
+          type: string
+          enum:
+          - CONNECTED
+          - PENDING
+          - UNREGISTERED
+          - ERROR
+          - VERIFICATION_PENDING
+          - DELETED
+        wabaId:
+          type: string
+        name:
+          type: string
+        about:
           type:
           - string
           - 'null'
@@ -658,24 +624,12 @@ components:
           type:
           - string
           - 'null'
-        email:
+        address:
           type:
           - string
           - 'null'
-        profile_picture_url:
-          type:
-          - string
-          - 'null'
-        websites:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        vertical:
-          type:
-          - string
-          - 'null'
+        category:
+          type: string
           enum:
           - AUTO
           - BEAUTY
@@ -695,6 +649,52 @@ components:
           - RESTAURANT
           - OTHER
           - UNDEFINED
+        displayPhoneNumber:
+          type: string
+        website:
+          type:
+          - string
+          - 'null'
+        secondaryWebsite:
+          type:
+          - string
+          - 'null'
+        verificationStatus:
+          type: string
+          enum:
+          - VERIFIED
+          - NOT_VERIFIED
+        image:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required:
+      - id
+      - phoneNumberId
+      - assistantId
+      - status
+      - wabaId
+      - name
+      - about
+      - description
+      - address
+      - category
+      - displayPhoneNumber
+      - website
+      - secondaryWebsite
+      - verificationStatus
+      - image
+      - email
+      - createdAt
+      - updatedAt
   securitySchemes:
     accountApiKey:
       type: http

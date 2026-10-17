@@ -170,6 +170,26 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    PublicIntegrationSetToolsInput:
+      type: object
+      properties:
+        slugs:
+          type: array
+          items:
+            type: string
+            minLength: 1
+          minItems: 1
+      required:
+      - slugs
+    PublicIntegrationToolkitList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIntegrationToolkit'
+      required:
+      - results
     PublicIntegrationTools:
       type: object
       properties:
@@ -218,6 +238,33 @@ components:
       required:
       - enabledTools
       - availableTools
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicIntegrationUpdateInput:
+      type: object
+      properties:
+        alias:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 100
+        visibility:
+          type: string
+          enum:
+          - PRIVATE
+          - SHARED
     ErrorBody:
       type: object
       properties:
@@ -340,33 +387,6 @@ components:
       - isConnected
       - createdAt
       - updatedAt
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
-    PublicIntegrationUpdateInput:
-      type: object
-      properties:
-        alias:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 100
-        visibility:
-          type: string
-          enum:
-          - PRIVATE
-          - SHARED
     PublicIntegrationToolkit:
       type: object
       properties:
@@ -399,26 +419,6 @@ components:
       - authScheme
       - toolCount
       - tools
-    PublicIntegrationToolkitList:
-      type: object
-      properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicIntegrationToolkit'
-      required:
-      - results
-    PublicIntegrationSetToolsInput:
-      type: object
-      properties:
-        slugs:
-          type: array
-          items:
-            type: string
-            minLength: 1
-          minItems: 1
-      required:
-      - slugs
   securitySchemes:
     accountApiKey:
       type: http

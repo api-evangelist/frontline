@@ -268,6 +268,14 @@ paths:
           description: Variable deleted
 components:
   schemas:
+    VariableCheckName:
+      type: object
+      properties:
+        exists:
+          type: boolean
+          example: false
+      required:
+      - exists
     PublicVariableUpdateInput:
       type: object
       properties:
@@ -287,33 +295,6 @@ components:
           example: ^[A-Za-z ]+$
       required:
       - name
-    PublicWorkflowVariableCreateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: customer_name
-        description:
-          type:
-          - string
-          - 'null'
-          example: Customer name captured during the conversation
-        pattern:
-          type:
-          - string
-          - 'null'
-          example: ^[A-Za-z ]+$
-      required:
-      - name
-    VariableCheckName:
-      type: object
-      properties:
-        exists:
-          type: boolean
-          example: false
-      required:
-      - exists
     Variable:
       type: object
       properties:
@@ -365,6 +346,25 @@ components:
       - createdAt
       - updatedAt
       - isDefault
+    PublicWorkflowVariableCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: customer_name
+        description:
+          type:
+          - string
+          - 'null'
+          example: Customer name captured during the conversation
+        pattern:
+          type:
+          - string
+          - 'null'
+          example: ^[A-Za-z ]+$
+      required:
+      - name
   securitySchemes:
     accountApiKey:
       type: http

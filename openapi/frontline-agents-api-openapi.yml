@@ -226,28 +226,6 @@ paths:
                 $ref: '#/components/schemas/PublicExecutionTrace'
 components:
   schemas:
-    PublicConversationTranscript:
-      allOf:
-      - $ref: '#/components/schemas/PublicConversation'
-      - type: object
-        properties:
-          messages:
-            type: array
-            items:
-              $ref: '#/components/schemas/PublicConversationMessage'
-        required:
-        - messages
-    PublicExecutionTrace:
-      type: object
-      properties:
-        id:
-          type:
-          - string
-          - 'null'
-        type:
-          type:
-          - string
-          - 'null'
     PublicAgentRunMessage:
       type: object
       properties:
@@ -304,6 +282,31 @@ components:
       - role
       - type
       - text
+    PublicAgentRunOutput:
+      type: object
+      properties:
+        conversation_id:
+          type:
+          - number
+          - 'null'
+          example: 42
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicAgentRunMessage'
+      required:
+      - messages
+    PublicConversationTranscript:
+      allOf:
+      - $ref: '#/components/schemas/PublicConversation'
+      - type: object
+        properties:
+          messages:
+            type: array
+            items:
+              $ref: '#/components/schemas/PublicConversationMessage'
+        required:
+        - messages
     PublicConversationMessage:
       type: object
       properties:
@@ -364,20 +367,6 @@ components:
       - role
       - type
       - created_at
-    PublicAgentRunOutput:
-      type: object
-      properties:
-        conversation_id:
-          type:
-          - number
-          - 'null'
-          example: 42
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/PublicAgentRunMessage'
-      required:
-      - messages
     PublicConversation:
       type: object
       properties:
@@ -420,6 +409,17 @@ components:
       - channel
       - is_closed
       - created_at
+    PublicExecutionTrace:
+      type: object
+      properties:
+        id:
+          type:
+          - string
+          - 'null'
+        type:
+          type:
+          - string
+          - 'null'
     PublicAgentMessageInput:
       type: object
       properties:
