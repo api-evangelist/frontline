@@ -2,7 +2,35 @@ openapi: 3.2.0
 info:
   title: Public Billing API
   version: 1.0.0
-  description: Public API for accessing agents, flows, and analytics.
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -107,7 +135,7 @@ paths:
     get:
       summary: Get Max usage details
       operationId: getMaxUsage
-      description: 'Returns Max plan details: plan name and features, subscription status and renewal, seat totals, feature limits (knowledge sources, playbooks, custom labels, tasks, WhatsApp), and upcoming plan changes. Requires a USER API key.'
+      description: 'Returns the account''s Max subscription state: the current plan and its features, renewal and status, seat and add-on license pools with how many of each are assigned, pricing, feature limits, and any scheduled plan change. Requires a USER API key belonging to an OWNER or ADMIN.'
       security:
       - userApiKey: []
       tags:
@@ -125,33 +153,101 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /public/v1/billing/max/seats:
+        '403':
+          description: Caller is not an OWNER or ADMIN of the account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/billing/max/plans:
     get:
-      summary: List Max seat assignments
-      operationId: getMaxSeats
-      description: Returns total/available Max seat counts plus the users currently holding a seat and the users without one. Requires a USER API key.
+      summary: List Max plans
+      operationId: getMaxPlans
+      description: Returns the Max plans that can be bought, with their prices. Requires a USER API key belonging to an OWNER or ADMIN.
       security:
       - userApiKey: []
       tags:
       - Billing
       responses:
         '200':
-          description: Seat overview
+          description: Max plans
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PublicMaxSeats'
+                $ref: '#/components/schemas/PublicMaxPlanList'
         '401':
           description: Unauthorized
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /public/v1/billing/max/seats/assign:
-    post:
-      summary: Assign a Max seat to a user
-      operationId: assignMaxSeat
-      description: Assigns a Max seat to the given user. Fails if no seats are available or the user already holds one. Requires a USER API key belonging to an OWNER or ADMIN.
+        '403':
+          description: Caller is not an OWNER or ADMIN of the account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/billing/max/catalog:
+    get:
+      summary: Get the Max catalog
+      operationId: getMaxCatalog
+      description: 'Returns everything Max sells: plans, capability add-ons and additional credit bags, with their prices. Requires a USER API key belonging to an OWNER or ADMIN.'
+      security:
+      - userApiKey: []
+      tags:
+      - Billing
+      responses:
+        '200':
+          description: Max catalog
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicMaxCatalog'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Caller is not an OWNER or ADMIN of the account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/billing/max/seats/matrix:
+    get:
+      summary: Get the Max seat and license assignment matrix
+      operationId: getMaxSeatMatrix
+      description: 'Returns one row per account user showing whether they hold a Max seat and which capability licenses they hold — `MAX_MEETINGS` for the notetaker and `MAX_EMAIL_AGENT` for inbox labeling, drafting and follow-ups — plus the purchased-versus-assigned pool counters. This is the read side of `PUT /billing/max/assignments`: read the matrix, change the sets you care about, then write the whole thing back. Requires a USER API key belonging to an OWNER or ADMIN.'
+      security:
+      - userApiKey: []
+      tags:
+      - Billing
+      responses:
+        '200':
+          description: Seat and license matrix
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicMaxSeatMatrix'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Caller is not an OWNER or ADMIN of the account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/billing/max/assignments:
+    put:
+      summary: Set Max seat and license assignments
+      operationId: setMaxAssignments
+      description: Declaratively saves who holds a Max seat and who holds each capability license. `seatUserIds` is the complete set of seat holders, so any user left out loses their seat. Inside `licenses`, an omitted capability is left untouched while an explicit empty array revokes it for everyone. This only moves already-purchased seats and licenses between users; to change how many you pay for, use the cart. Returns the updated matrix. Requires a USER API key belonging to an OWNER or ADMIN.
       security:
       - userApiKey: []
       tags:
@@ -160,98 +256,178 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/PublicMaxSeatInput'
+              $ref: '#/components/schemas/PublicMaxAssignmentsInput'
       responses:
         '200':
-          description: Seat assigned
+          description: Updated seat and license matrix
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PublicMaxSeatResult'
+                $ref: '#/components/schemas/PublicMaxSeatMatrix'
         '400':
-          description: Bad Request (no Max profile / already has a seat)
+          description: Bad Request (more seats or licenses assigned than purchased, or a license given to a user without a seat)
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-        '404':
-          description: User not found, or caller is not an OWNER/ADMIN of the account
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-  /public/v1/billing/max/seats/unassign:
-    post:
-      summary: Unassign a user's Max seat
-      operationId: unassignMaxSeat
-      description: Removes the Max seat from the given user, freeing it for someone else. Requires a USER API key belonging to an OWNER or ADMIN.
-      security:
-      - userApiKey: []
-      tags:
-      - Billing
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/PublicMaxSeatInput'
-      responses:
-        '200':
-          description: Seat unassigned
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PublicMaxSeatResult'
-        '400':
-          description: Bad Request (user has no active seat)
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        '404':
-          description: User not found, or caller is not an OWNER/ADMIN of the account
+        '403':
+          description: Caller is not an OWNER or ADMIN of the account
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicMaxUsage:
+    PublicMaxPrice:
       type: object
       properties:
-        plan:
+        stripePriceId:
           type:
-          - object
+          - string
           - 'null'
-          additionalProperties: {}
-        subscription:
+          example: price_1QabcXYZ
+        interval:
+          type: string
+          enum:
+          - MONTHLY
+          - ANNUAL
+          example: MONTHLY
+        amount:
           type:
-          - object
+          - number
           - 'null'
-          additionalProperties: {}
-        seats:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        limits:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-        next:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-    PublicCreditHistory:
+          example: 49
+        currency:
+          type: string
+          example: usd
+        internalKey:
+          type: string
+          description: Price key accepted by the cart.
+          example: max_premium_monthly
+        isLegacy:
+          type: boolean
+          description: Legacy prices only appear to accounts already paying for them.
+          example: false
+      required:
+      - stripePriceId
+      - interval
+      - amount
+      - currency
+      - internalKey
+      - isLegacy
+    PublicMaxCreditBag:
       type: object
       properties:
-        results:
+        stripePriceId:
+          type: string
+          example: price_1QcreditXYZ
+        interval:
+          type: string
+          enum:
+          - MONTHLY
+          - ANNUAL
+          example: MONTHLY
+        amount:
+          type: number
+          example: 10
+        currency:
+          type: string
+          example: usd
+        credits:
+          type: number
+          example: 1000
+        internalKey:
+          type: string
+          example: max_additional_credits_1000
+      required:
+      - stripePriceId
+      - interval
+      - amount
+      - currency
+      - credits
+      - internalKey
+    PublicMaxPlan:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 3
+        name:
+          type: string
+          example: Max Premium
+        description:
+          type:
+          - string
+          - 'null'
+          example: example
+        featuresEnabled:
+          type: object
+        isLegacy:
+          type: boolean
+          example: false
+        prices:
           type: array
           items:
-            $ref: '#/components/schemas/PublicCreditHistoryItem'
+            $ref: '#/components/schemas/PublicMaxPrice'
       required:
-      - results
+      - id
+      - name
+      - isLegacy
+      - prices
+    PublicMaxAssignmentsInput:
+      type: object
+      properties:
+        seatUserIds:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            example: 1
+          description: The complete set of users who should hold a Max seat. Users omitted here lose their seat.
+          example:
+          - 12
+          - 13
+        licenses:
+          type: object
+          description: Per capability, the complete set of seat holders who should hold that license. An omitted capability is left untouched; an explicit empty array revokes it for everyone.
+          example:
+            MAX_MEETINGS:
+            - 12
+            MAX_EMAIL_AGENT:
+            - 12
+            - 13
+      required:
+      - seatUserIds
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          - upgrade_required
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
     BillingPlan:
       type: object
       properties:
@@ -278,19 +454,6 @@ components:
       - creditsPerMonth
       - creditsUsed
       - subscriptionRenews
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
     PublicCreditHistoryItem:
       type: object
       properties:
@@ -301,6 +464,7 @@ components:
           type:
           - number
           - 'null'
+          example: 1
         model:
           type:
           - string
@@ -315,6 +479,7 @@ components:
           type:
           - string
           - 'null'
+          example: example
         totalCredits:
           type: number
           example: 42.5
@@ -325,6 +490,166 @@ components:
       - date
       - totalCredits
       - messageCount
+    PublicMaxSeatMatrixRow:
+      type: object
+      properties:
+        userId:
+          type: number
+          example: 12
+        firstName:
+          type:
+          - string
+          - 'null'
+          example: Jane
+        lastName:
+          type:
+          - string
+          - 'null'
+          example: Doe
+        email:
+          type:
+          - string
+          - 'null'
+          example: jane@acme.com
+        avatar:
+          type:
+          - string
+          - 'null'
+          example: example
+        role:
+          type:
+          - string
+          - 'null'
+          example: ADMIN
+        hasSeat:
+          type: boolean
+          example: true
+        canHoldLicenses:
+          type: boolean
+          description: False when the user has no Max seat, since a license needs a live seat.
+          example: true
+        licenses:
+          type: object
+          description: Capability key to whether this user currently holds that license.
+          example:
+            MAX_MEETINGS: true
+            MAX_EMAIL_AGENT: false
+      required:
+      - userId
+      - hasSeat
+      - canHoldLicenses
+      - licenses
+    PublicMaxSeatMatrix:
+      type: object
+      properties:
+        rows:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicMaxSeatMatrixRow'
+        pools:
+          type: object
+          description: Purchased vs assigned counts, keyed by `seats` for the plan and by capability for add-ons.
+          example:
+            seats:
+              total: 3
+              assigned: 2
+            MAX_MEETINGS:
+              total: 2
+              assigned: 1
+            MAX_EMAIL_AGENT:
+              total: 3
+              assigned: 2
+      required:
+      - rows
+      - pools
+    PublicMaxCatalog:
+      type: object
+      properties:
+        plans:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicMaxPlan'
+        addons:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicMaxAddon'
+        additionalCredits:
+          type:
+          - object
+          - 'null'
+          properties:
+            name:
+              type: string
+              example: example
+            description:
+              type:
+              - string
+              - 'null'
+              example: example
+            bags:
+              type: array
+              items:
+                $ref: '#/components/schemas/PublicMaxCreditBag'
+          required:
+          - name
+          - bags
+      required:
+      - plans
+      - addons
+      - additionalCredits
+    PublicMaxAddon:
+      type: object
+      properties:
+        capability:
+          type: string
+          enum:
+          - MAX_PLAN
+          - MAX_MEETINGS
+          - MAX_EMAIL_AGENT
+          - MAX_ADDITIONAL_CREDITS
+          example: MAX_MEETINGS
+        name:
+          type: string
+          example: Meeting Intelligence
+        description:
+          type:
+          - string
+          - 'null'
+          example: example
+        isLegacy:
+          type: boolean
+          example: false
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicMaxPrice'
+      required:
+      - capability
+      - name
+      - isLegacy
+      - prices
+    PublicCreditHistory:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicCreditHistoryItem'
+      required:
+      - results
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
     PublicStudioUsage:
       type: object
       properties:
@@ -348,134 +673,105 @@ components:
           - object
           - 'null'
           additionalProperties: {}
+        campaignEmailCredits:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
         next:
           type:
           - object
           - 'null'
           additionalProperties: {}
-    PublicMaxSeats:
+    PublicMaxPlanList:
       type: object
       properties:
-        totalSeats:
-          type: number
-          example: 5
-        assignedCount:
-          type: number
-          example: 3
-        available:
-          type: number
-          example: 2
-        assigned:
+        results:
           type: array
           items:
-            $ref: '#/components/schemas/PublicMaxSeatUser'
-        unassigned:
-          type: array
-          items:
-            type: object
-            properties:
-              userId:
-                type: number
-                example: 12
-              firstName:
-                type:
-                - string
-                - 'null'
-              lastName:
-                type:
-                - string
-                - 'null'
-              email:
-                type:
-                - string
-                - 'null'
-            required:
-            - userId
+            $ref: '#/components/schemas/PublicMaxPlan'
       required:
-      - totalSeats
-      - assignedCount
-      - available
-      - assigned
-      - unassigned
-    PublicMaxSeatInput:
+      - results
+    PublicMaxUsage:
       type: object
       properties:
-        userId:
-          type: integer
-          description: ID of the user to assign/unassign (see GET /users)
-          example: 12
-          exclusiveMinimum: 0
-      required:
-      - userId
-    PublicMaxSeatResult:
-      type: object
-      properties:
-        success:
-          type: boolean
-          example: true
-        userId:
-          type: number
-          example: 12
-        assigned:
-          type: boolean
-          description: Whether the user holds a Max seat after this operation
-      required:
-      - success
-      - userId
-      - assigned
-    PublicMaxSeatUser:
-      type: object
-      properties:
-        userId:
-          type: number
-          example: 12
-        firstName:
+        plan:
           type:
-          - string
+          - object
           - 'null'
-        lastName:
+          additionalProperties: {}
+        subscription:
           type:
-          - string
+          - object
           - 'null'
-        email:
+          additionalProperties: {}
+        seats:
           type:
-          - string
+          - object
           - 'null'
-        assignedAt:
+          additionalProperties: {}
+        pricing:
           type:
-          - string
+          - object
           - 'null'
-      required:
-      - userId
-    ErrorBody:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
+          additionalProperties: {}
+        addons:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        limits:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        next:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        additionalCredits:
+          type:
+          - object
+          - 'null'
+          properties:
+            limit:
+              type: number
+              example: 1
+            spent:
+              type: number
+              example: 1
+          required:
+          - limit
+          - spent
+        userCredits:
+          type:
+          - object
+          - 'null'
+          properties:
+            limit:
+              type: number
+              example: 1
+            spent:
+              type: number
+              example: 1
+            available:
+              type: number
+              example: 1
+            additionalLimit:
+              type:
+              - number
+              - 'null'
+              example: 1
+            additionalSpent:
+              type: number
+              example: 1
+          required:
+          - limit
+          - spent
+          - available
+          - additionalLimit
+          - additionalSpent
   securitySchemes:
     accountApiKey:
       type: http
@@ -500,6 +796,14 @@ x-tagGroups:
   tags:
   - Workflows
   - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
 - name: Objects
   tags:
   - Objects
@@ -525,24 +829,34 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
-- name: Channels
-  tags:
-  - Channels
 - name: Integrations
   tags:
   - Custom Tools
   - Incoming Webhooks
-  - Account Integrations
+  - Workspace Connectors
   - Agent Channels
   - Integration Resources
 - name: Knowledge
   tags:
   - Knowledge Bases
-- name: Core
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
   tags:
   - Account
-  - AI Models
-  - Billing
   - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
   - User Tasks
   - Guidance

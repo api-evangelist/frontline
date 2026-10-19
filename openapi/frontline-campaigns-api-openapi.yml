@@ -1,0 +1,3052 @@
+openapi: 3.2.0
+info:
+  title: Public Campaigns API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Campaigns
+  description: Create, deliver, and report on campaigns
+paths:
+  /public/v1/campaigns:
+    get:
+      summary: List campaigns
+      operationId: listCampaigns
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: integer
+          minimum: 1
+          default: 1
+          example: 1
+        required: false
+        name: pageNum
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
+          example: 1
+        required: false
+        name: pageSize
+        in: query
+      - schema:
+          type: string
+          enum:
+          - DRAFT
+          - APPROVED
+          - SCHEDULED
+          - RUNNING
+          - PAUSED
+          - COMPLETED
+          - CANCELLED
+          - FAILED
+          example: DRAFT
+        required: false
+        name: status
+        in: query
+      - schema:
+          type: string
+          enum:
+          - EMAIL
+          - WHATSAPP
+          example: EMAIL
+        required: false
+        name: channel
+        in: query
+      - schema:
+          type: string
+          maxLength: 200
+          example: example
+        required: false
+        name: search
+        in: query
+      responses:
+        '200':
+          description: Campaigns
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaignList'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a campaign draft
+      operationId: createCampaign
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                audienceId:
+                  type:
+                  - string
+                  - 'null'
+                  format: cuid
+                  example: example
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 160
+                  example: example
+                channel:
+                  type: string
+                  enum:
+                  - EMAIL
+                  - WHATSAPP
+                  example: EMAIL
+                purpose:
+                  type: string
+                  enum:
+                  - MARKETING
+                  - TRANSACTIONAL
+                  example: MARKETING
+                subject:
+                  type:
+                  - string
+                  - 'null'
+                  minLength: 1
+                  maxLength: 998
+                  example: example
+                content:
+                  type:
+                  - string
+                  - 'null'
+                  minLength: 1
+                  maxLength: 1000000
+                  example: example
+                contentSource:
+                  type: string
+                  enum:
+                  - UPLOAD
+                  - ARTIFACT
+                  example: UPLOAD
+                artifactId:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 1
+                  example: 1
+                artifactVersionId:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 1
+                  example: 1
+                contentVariables:
+                  type:
+                  - object
+                  - 'null'
+                  additionalProperties:
+                    type: string
+                    maxLength: 10000
+                    example: example
+                senderConfig:
+                  anyOf:
+                  - type: object
+                    properties:
+                      domainId:
+                        type: string
+                        format: cuid
+                        example: example
+                      fromEmail:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      fromName:
+                        type: string
+                        minLength: 1
+                        maxLength: 160
+                        example: example
+                      replyTo:
+                        type: string
+                        format: email
+                        example: user@example.com
+                    required:
+                    - domainId
+                    - fromEmail
+                    - fromName
+                  - type: object
+                    properties:
+                      phoneNumberId:
+                        type: string
+                        minLength: 1
+                        example: example
+                      displayPhoneNumber:
+                        type: string
+                        minLength: 1
+                        maxLength: 40
+                        example: example
+                      senderName:
+                        type: string
+                        minLength: 1
+                        maxLength: 160
+                        example: example
+                      templateName:
+                        type: string
+                        minLength: 1
+                        example: example
+                      language:
+                        type: string
+                        minLength: 2
+                        maxLength: 20
+                        example: example
+                      templateContent:
+                        type: string
+                        maxLength: 1000000
+                        example: example
+                      templateComponents:
+                        type: array
+                        items:
+                          type: object
+                          additionalProperties: {}
+                      variables:
+                        type: object
+                        properties:
+                          header:
+                            type: object
+                            additionalProperties:
+                              type: string
+                              example: example
+                          body:
+                            type: object
+                            additionalProperties:
+                              type: string
+                              example: example
+                          buttons:
+                            type: array
+                            items:
+                              type: object
+                              additionalProperties:
+                                type: string
+                                example: example
+                    required:
+                    - phoneNumberId
+                    - templateName
+                    - language
+                  - type:
+                    - object
+                    - 'null'
+                scheduledAt:
+                  type:
+                  - string
+                  - 'null'
+                  example: example
+                deliveryTimezone:
+                  type:
+                  - string
+                  - 'null'
+                  example: example
+                deliveryWindowStart:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 0
+                  maximum: 23
+                  example: 0
+                deliveryWindowEnd:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 0
+                  maximum: 23
+                  example: 0
+                whatsappMessagesPerSecond:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 1
+                  maximum: 80
+                  example: 1
+                whatsappBatchSize:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 1
+                  maximum: 10000
+                  example: 1
+                whatsappBatchPauseSeconds:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 0
+                  maximum: 86400
+                  example: 0
+                whatsappReplyAttributionWindowDays:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 1
+                  maximum: 90
+                  example: 1
+                quietHoursStart:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 0
+                  maximum: 23
+                  example: 0
+                quietHoursEnd:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 0
+                  maximum: 23
+                  example: 0
+              required:
+              - name
+              - channel
+              - purpose
+      responses:
+        '201':
+          description: Created campaign
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaign'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/overview:
+    get:
+      summary: Get campaign overview
+      operationId: getCampaignOverview
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      responses:
+        '200':
+          description: Campaign overview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaignOverview'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/preflight:
+    post:
+      summary: Preflight an unsaved campaign
+      operationId: preflightTransientCampaign
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                audienceId:
+                  type: string
+                  format: cuid
+                  example: example
+                channel:
+                  type: string
+                  enum:
+                  - EMAIL
+                  - WHATSAPP
+                  example: EMAIL
+                purpose:
+                  type: string
+                  enum:
+                  - MARKETING
+                  - TRANSACTIONAL
+                  example: MARKETING
+              required:
+              - audienceId
+              - channel
+              - purpose
+      responses:
+        '200':
+          description: Preflight result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaignPreflight'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/preview:
+    post:
+      summary: Preview personalized campaign content
+      operationId: previewCampaignContent
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      requestBody:
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - type: object
+                properties:
+                  channel:
+                    type: string
+                    enum:
+                    - EMAIL
+                    example: EMAIL
+                  peopleId:
+                    type: string
+                    minLength: 1
+                    example: example
+                  subject:
+                    type: string
+                    maxLength: 998
+                    example: example
+                  contentSource:
+                    type: string
+                    enum:
+                    - UPLOAD
+                    example: UPLOAD
+                  content:
+                    type: string
+                    maxLength: 1000000
+                    example: example
+                required:
+                - channel
+                - peopleId
+                - subject
+                - content
+              - type: object
+                properties:
+                  channel:
+                    type: string
+                    enum:
+                    - EMAIL
+                    example: EMAIL
+                  peopleId:
+                    type: string
+                    minLength: 1
+                    example: example
+                  subject:
+                    type: string
+                    maxLength: 998
+                    example: example
+                  contentSource:
+                    type: string
+                    enum:
+                    - ARTIFACT
+                    example: ARTIFACT
+                  artifactId:
+                    type: integer
+                    minimum: 1
+                    example: 1
+                  artifactVersionId:
+                    type: integer
+                    minimum: 1
+                    example: 1
+                  contentVariables:
+                    type:
+                    - object
+                    - 'null'
+                    additionalProperties:
+                      type: string
+                      maxLength: 10000
+                      example: example
+                required:
+                - channel
+                - peopleId
+                - subject
+                - contentSource
+                - artifactId
+                - artifactVersionId
+              - type: object
+                properties:
+                  channel:
+                    type: string
+                    enum:
+                    - WHATSAPP
+                    example: WHATSAPP
+                  peopleId:
+                    type: string
+                    minLength: 1
+                    example: example
+                  template:
+                    type: object
+                    properties:
+                      displayPhoneNumber:
+                        type: string
+                        minLength: 1
+                        maxLength: 40
+                        example: example
+                      senderName:
+                        type: string
+                        minLength: 1
+                        maxLength: 160
+                        example: example
+                      templateName:
+                        type: string
+                        minLength: 1
+                        example: example
+                      language:
+                        type: string
+                        minLength: 2
+                        maxLength: 20
+                        example: example
+                      templateContent:
+                        type: string
+                        maxLength: 1000000
+                        example: example
+                      templateComponents:
+                        type: array
+                        items:
+                          type: object
+                          additionalProperties: {}
+                      variables:
+                        type: object
+                        properties:
+                          header:
+                            type: object
+                            additionalProperties:
+                              type: string
+                              example: example
+                          body:
+                            type: object
+                            additionalProperties:
+                              type: string
+                              example: example
+                          buttons:
+                            type: array
+                            items:
+                              type: object
+                              additionalProperties:
+                                type: string
+                                example: example
+                      content:
+                        type: string
+                        maxLength: 1000000
+                        example: example
+                      components:
+                        type: array
+                        items:
+                          type: object
+                          additionalProperties: {}
+                    required:
+                    - templateName
+                    - language
+                required:
+                - channel
+                - peopleId
+                - template
+      responses:
+        '200':
+          description: Personalized preview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaignPreview'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/{campaignId}:
+    get:
+      summary: Get a campaign
+      operationId: getCampaign
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      responses:
+        '200':
+          description: Campaign
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaign'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update a campaign draft
+      operationId: updateCampaign
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                audienceId:
+                  type:
+                  - string
+                  - 'null'
+                  format: cuid
+                  example: example
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 160
+                  example: example
+                channel:
+                  type: string
+                  enum:
+                  - EMAIL
+                  - WHATSAPP
+                  example: EMAIL
+                purpose:
+                  type: string
+                  enum:
+                  - MARKETING
+                  - TRANSACTIONAL
+                  example: MARKETING
+                subject:
+                  type:
+                  - string
+                  - 'null'
+                  minLength: 1
+                  maxLength: 998
+                  example: example
+                content:
+                  type:
+                  - string
+                  - 'null'
+                  minLength: 1
+                  maxLength: 1000000
+                  example: example
+                contentSource:
+                  type: string
+                  enum:
+                  - UPLOAD
+                  - ARTIFACT
+                  example: UPLOAD
+                artifactId:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 1
+                  example: 1
+                artifactVersionId:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 1
+                  example: 1
+                contentVariables:
+                  type:
+                  - object
+                  - 'null'
+                  additionalProperties:
+                    type: string
+                    maxLength: 10000
+                    example: example
+                senderConfig:
+                  anyOf:
+                  - type: object
+                    properties:
+                      domainId:
+                        type: string
+                        format: cuid
+                        example: example
+                      fromEmail:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      fromName:
+                        type: string
+                        minLength: 1
+                        maxLength: 160
+                        example: example
+                      replyTo:
+                        type: string
+                        format: email
+                        example: user@example.com
+                    required:
+                    - domainId
+                    - fromEmail
+                    - fromName
+                  - type: object
+                    properties:
+                      phoneNumberId:
+                        type: string
+                        minLength: 1
+                        example: example
+                      displayPhoneNumber:
+                        type: string
+                        minLength: 1
+                        maxLength: 40
+                        example: example
+                      senderName:
+                        type: string
+                        minLength: 1
+                        maxLength: 160
+                        example: example
+                      templateName:
+                        type: string
+                        minLength: 1
+                        example: example
+                      language:
+                        type: string
+                        minLength: 2
+                        maxLength: 20
+                        example: example
+                      templateContent:
+                        type: string
+                        maxLength: 1000000
+                        example: example
+                      templateComponents:
+                        type: array
+                        items:
+                          type: object
+                          additionalProperties: {}
+                      variables:
+                        type: object
+                        properties:
+                          header:
+                            type: object
+                            additionalProperties:
+                              type: string
+                              example: example
+                          body:
+                            type: object
+                            additionalProperties:
+                              type: string
+                              example: example
+                          buttons:
+                            type: array
+                            items:
+                              type: object
+                              additionalProperties:
+                                type: string
+                                example: example
+                    required:
+                    - phoneNumberId
+                    - templateName
+                    - language
+                  - type:
+                    - object
+                    - 'null'
+                scheduledAt:
+                  type:
+                  - string
+                  - 'null'
+                  example: example
+                deliveryTimezone:
+                  type:
+                  - string
+                  - 'null'
+                  example: example
+                deliveryWindowStart:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 0
+                  maximum: 23
+                  example: 0
+                deliveryWindowEnd:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 0
+                  maximum: 23
+                  example: 0
+                whatsappMessagesPerSecond:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 1
+                  maximum: 80
+                  example: 1
+                whatsappBatchSize:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 1
+                  maximum: 10000
+                  example: 1
+                whatsappBatchPauseSeconds:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 0
+                  maximum: 86400
+                  example: 0
+                whatsappReplyAttributionWindowDays:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 1
+                  maximum: 90
+                  example: 1
+                quietHoursStart:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 0
+                  maximum: 23
+                  example: 0
+                quietHoursEnd:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 0
+                  maximum: 23
+                  example: 0
+      responses:
+        '200':
+          description: Updated campaign
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaign'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/{campaignId}/preflight:
+    post:
+      summary: Preflight a campaign draft
+      operationId: preflightCampaign
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      responses:
+        '200':
+          description: Preflight result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaignPreflight'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/{campaignId}/test:
+    post:
+      summary: Send a campaign test
+      operationId: testCampaign
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              oneOf:
+              - type: object
+                properties:
+                  source:
+                    type: string
+                    enum:
+                    - MANUAL
+                    example: MANUAL
+                  destination:
+                    type: string
+                    minLength: 3
+                    maxLength: 500
+                    example: example
+                required:
+                - source
+                - destination
+              - type: object
+                properties:
+                  source:
+                    type: string
+                    enum:
+                    - PEOPLE
+                    example: PEOPLE
+                  peopleId:
+                    type: string
+                    minLength: 1
+                    example: example
+                required:
+                - source
+                - peopleId
+      responses:
+        '200':
+          description: Test send result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaignTestResult'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/{campaignId}/submit:
+    post:
+      summary: Start asynchronous campaign preparation
+      operationId: submitCampaign
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      responses:
+        '202':
+          description: Campaign preparation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: cuid
+                    example: example
+                  campaignId:
+                    type: string
+                    format: cuid
+                    example: example
+                  stage:
+                    type: string
+                    enum:
+                    - RESOLVING
+                    - ELIGIBILITY
+                    - QUOTA
+                    - SNAPSHOTTING
+                    - READY
+                    - FAILED
+                    - STALE
+                    - CANCELLED
+                    example: RESOLVING
+                  processedCount:
+                    type: integer
+                    example: 1
+                  eligibleCount:
+                    type: integer
+                    example: 1
+                  excludedCount:
+                    type: integer
+                    example: 1
+                  requiredCredits:
+                    type: integer
+                    example: 1
+                  remainingCredits:
+                    type: integer
+                    example: 1
+                  error:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                required:
+                - id
+                - campaignId
+                - stage
+                - processedCount
+                - eligibleCount
+                - excludedCount
+                - requiredCredits
+                - remainingCredits
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/{campaignId}/preparations/{preparationRunId}:
+    get:
+      summary: Get campaign preparation progress
+      operationId: getCampaignPreparation
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: preparationRunId
+        in: path
+      responses:
+        '200':
+          description: Campaign preparation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: cuid
+                    example: example
+                  campaignId:
+                    type: string
+                    format: cuid
+                    example: example
+                  stage:
+                    type: string
+                    enum:
+                    - RESOLVING
+                    - ELIGIBILITY
+                    - QUOTA
+                    - SNAPSHOTTING
+                    - READY
+                    - FAILED
+                    - STALE
+                    - CANCELLED
+                    example: RESOLVING
+                  processedCount:
+                    type: integer
+                    example: 1
+                  eligibleCount:
+                    type: integer
+                    example: 1
+                  excludedCount:
+                    type: integer
+                    example: 1
+                  requiredCredits:
+                    type: integer
+                    example: 1
+                  remainingCredits:
+                    type: integer
+                    example: 1
+                  error:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                required:
+                - id
+                - campaignId
+                - stage
+                - processedCount
+                - eligibleCount
+                - excludedCount
+                - requiredCredits
+                - remainingCredits
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/{campaignId}/pause:
+    post:
+      summary: Pause a campaign
+      operationId: pauseCampaign
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      responses:
+        '200':
+          description: Campaign
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaign'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/{campaignId}/resume:
+    post:
+      summary: Resume a campaign
+      operationId: resumeCampaign
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      responses:
+        '200':
+          description: Campaign
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaign'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/{campaignId}/cancel:
+    post:
+      summary: Cancel a campaign
+      operationId: cancelCampaign
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      responses:
+        '200':
+          description: Campaign
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaign'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/{campaignId}/stats:
+    get:
+      summary: Get campaign statistics
+      operationId: getCampaignStats
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      responses:
+        '200':
+          description: Campaign statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaignStats'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/{campaignId}/recipients:
+    get:
+      summary: List campaign recipients
+      operationId: listCampaignRecipients
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      - schema:
+          type: integer
+          minimum: 1
+          default: 1
+          example: 1
+        required: false
+        name: pageNum
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
+          example: 1
+        required: false
+        name: pageSize
+        in: query
+      - schema:
+          type: string
+          enum:
+          - PENDING
+          - EXCLUDED
+          - QUEUED
+          - SENDING
+          - SENT
+          - DELIVERED
+          - FAILED
+          - BOUNCED
+          example: PENDING
+        required: false
+        name: status
+        in: query
+      - schema:
+          type: string
+          enum:
+          - OPENED
+          - CLICKED
+          - REPLIED
+          - UNSUBSCRIBED
+          example: OPENED
+        required: false
+        name: activity
+        in: query
+      - schema:
+          type: string
+          maxLength: 200
+          example: example
+        required: false
+        name: search
+        in: query
+      responses:
+        '200':
+          description: Campaign recipients
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaignRecipients'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/{campaignId}/events:
+    get:
+      summary: List campaign tracking events
+      operationId: listCampaignEvents
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      - schema:
+          type: integer
+          minimum: 1
+          default: 1
+          example: 1
+        required: false
+        name: pageNum
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
+          example: 1
+        required: false
+        name: pageSize
+        in: query
+      - schema:
+          type: string
+          enum:
+          - SENT
+          - DELIVERED
+          - OPENED
+          - CLICKED
+          - REPLIED
+          - FAILED
+          - BOUNCED
+          - COMPLAINED
+          - UNSUBSCRIBED
+          - CONVERTED
+          example: SENT
+        required: false
+        name: type
+        in: query
+      - schema:
+          anyOf:
+          - type: string
+            format: uuid
+            example: 550e8400-e29b-41d4-a716-446655440000
+          - type: string
+            format: cuid
+            example: example
+        required: false
+        name: campaignRecipientId
+        in: query
+      responses:
+        '200':
+          description: Campaign events
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaignEvents'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/{campaignId}/links:
+    get:
+      summary: List campaign link performance
+      operationId: listCampaignLinks
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      - schema:
+          type: integer
+          minimum: 1
+          default: 1
+          example: 1
+        required: false
+        name: pageNum
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
+          example: 1
+        required: false
+        name: pageSize
+        in: query
+      responses:
+        '200':
+          description: Campaign links
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaignLinks'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/{campaignId}/export:
+    get:
+      summary: Export campaign recipients
+      operationId: exportCampaignRecipients
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: campaignId
+        in: path
+      responses:
+        '200':
+          description: Campaign recipients CSV
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+                example: example
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/email-domains:
+    get:
+      summary: List verified campaign email domains
+      operationId: listCampaignEmailDomains
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      responses:
+        '200':
+          description: Campaign resources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaignEmailDomains'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/whatsapp-senders:
+    get:
+      summary: List connected WhatsApp campaign senders
+      operationId: listCampaignWhatsAppSenders
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      responses:
+        '200':
+          description: Campaign resources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaignWhatsAppSenders'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/campaigns/whatsapp-templates:
+    get:
+      summary: List approved WhatsApp campaign templates
+      operationId: listCampaignWhatsAppTemplates
+      security:
+      - userApiKey: []
+      tags:
+      - Campaigns
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          maxLength: 255
+          example: example
+        required: true
+        name: phoneNumberId
+        in: query
+      responses:
+        '200':
+          description: Approved WhatsApp templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCampaignWhatsAppTemplates'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    PublicCampaignLinks:
+      type: object
+      properties:
+        count:
+          type: number
+          example: 1
+        pageSize:
+          type: number
+          example: 1
+        pageNum:
+          type: number
+          example: 1
+        totalPages:
+          type: number
+          example: 1
+        cursor:
+          type: number
+          example: 1
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              originalUrl:
+                type: string
+                example: example
+              clicks:
+                type: integer
+                example: 1
+              trackedLinkCount:
+                type: integer
+                example: 1
+              createdAt:
+                type:
+                - string
+                - 'null'
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+              firstClickedAt:
+                type:
+                - string
+                - 'null'
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+              lastClickedAt:
+                type:
+                - string
+                - 'null'
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+            required:
+            - originalUrl
+            - clicks
+            - trackedLinkCount
+            - createdAt
+            - firstClickedAt
+            - lastClickedAt
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+          example: offset
+        nextCursor:
+          anyOf:
+          - type: string
+            example: example
+          - type: number
+            example: 1
+          - type:
+            - object
+            - 'null'
+      required:
+      - pageSize
+      - results
+    PublicCampaignWhatsAppSenders:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: integer
+                example: 1
+              phoneNumberId:
+                type: string
+                example: example
+              wabaId:
+                type: string
+                example: example
+              displayPhoneNumber:
+                type: string
+                example: example
+              name:
+                type:
+                - string
+                - 'null'
+                example: example
+              status:
+                type: string
+                example: example
+              verificationStatus:
+                type:
+                - string
+                - 'null'
+                example: example
+              campaignMessagesPerSecond:
+                type: number
+                example: 1
+              campaignBurstSize:
+                type: integer
+                example: 1
+              campaignDailyRecipientLimit:
+                type: integer
+                example: 1
+              campaignAutoPauseOnRateErrors:
+                type: boolean
+                example: false
+            required:
+            - id
+            - phoneNumberId
+            - wabaId
+            - displayPhoneNumber
+            - name
+            - status
+            - verificationStatus
+            - campaignMessagesPerSecond
+            - campaignBurstSize
+            - campaignDailyRecipientLimit
+            - campaignAutoPauseOnRateErrors
+      required:
+      - results
+      description: Standard list response
+    PublicCampaignOverview:
+      type: object
+      properties:
+        completedCampaigns:
+          type: integer
+          example: 1
+        activeCampaigns:
+          type: integer
+          example: 1
+        draftCampaigns:
+          type: integer
+          example: 1
+        deliveredRecipients30d:
+          type: integer
+          example: 1
+        openRate:
+          type: number
+          example: 1
+        openedRecipients30d:
+          type: integer
+          example: 1
+        sentRecipients30d:
+          type: integer
+          example: 1
+        emailQuota:
+          type: object
+          properties:
+            enabled:
+              type: boolean
+              example: false
+            limit:
+              type: integer
+              example: 1
+            consumed:
+              type: integer
+              example: 1
+            remaining:
+              type: integer
+              example: 1
+            required:
+              type: integer
+              example: 1
+            shortfall:
+              type: integer
+              example: 1
+            periodStart:
+              type: string
+              format: date-time
+              example: '2024-01-01T12:00:00.000Z'
+            periodEnd:
+              type: string
+              format: date-time
+              example: '2024-01-01T12:00:00.000Z'
+          required:
+          - enabled
+          - limit
+          - consumed
+          - remaining
+          - required
+          - shortfall
+          - periodStart
+          - periodEnd
+        windowStart:
+          type: string
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        windowEnd:
+          type: string
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+      required:
+      - completedCampaigns
+      - activeCampaigns
+      - draftCampaigns
+      - deliveredRecipients30d
+      - openRate
+      - openedRecipients30d
+      - sentRecipients30d
+      - emailQuota
+      - windowStart
+      - windowEnd
+    PublicCampaignTestResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+          enum:
+          - true
+          example: true
+        providerMessageId:
+          type:
+          - string
+          - 'null'
+          example: example
+      required:
+      - success
+      - providerMessageId
+    PublicCampaignEvents:
+      type: object
+      properties:
+        count:
+          type: number
+          example: 1
+        pageSize:
+          type: number
+          example: 1
+        pageNum:
+          type: number
+          example: 1
+        totalPages:
+          type: number
+          example: 1
+        cursor:
+          type: number
+          example: 1
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: example
+              type:
+                type: string
+                example: example
+              occurredAt:
+                type: string
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+              createdAt:
+                type: string
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+              displayName:
+                type: string
+                example: example
+              destination:
+                type:
+                - string
+                - 'null'
+                example: example
+            required:
+            - id
+            - type
+            - occurredAt
+            - createdAt
+            - displayName
+            - destination
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+          example: offset
+        nextCursor:
+          anyOf:
+          - type: string
+            example: example
+          - type: number
+            example: 1
+          - type:
+            - object
+            - 'null'
+      required:
+      - pageSize
+      - results
+    PublicCampaignPreflight:
+      type: object
+      properties:
+        total:
+          type: integer
+          example: 1
+        totalAudience:
+          type: integer
+          example: 1
+        eligible:
+          type: integer
+          example: 1
+        excluded:
+          type: integer
+          example: 1
+        exclusions:
+          type: object
+          additionalProperties:
+            type: integer
+            example: 1
+        samplePeopleId:
+          type:
+          - string
+          - 'null'
+          example: example
+        truncated:
+          type: boolean
+          example: false
+        blockReason:
+          type:
+          - string
+          - 'null'
+          example: example
+        warnings:
+          type: array
+          items:
+            type: string
+            example: example
+        emailQuota:
+          type:
+          - object
+          - 'null'
+          properties:
+            enabled:
+              type: boolean
+              example: false
+            limit:
+              type: integer
+              example: 1
+            consumed:
+              type: integer
+              example: 1
+            remaining:
+              type: integer
+              example: 1
+            required:
+              type: integer
+              example: 1
+            shortfall:
+              type: integer
+              example: 1
+            periodStart:
+              type: string
+              format: date-time
+              example: '2024-01-01T12:00:00.000Z'
+            periodEnd:
+              type: string
+              format: date-time
+              example: '2024-01-01T12:00:00.000Z'
+          required:
+          - enabled
+          - limit
+          - consumed
+          - remaining
+          - required
+          - shortfall
+          - periodStart
+          - periodEnd
+      required:
+      - total
+      - totalAudience
+      - eligible
+      - excluded
+      - exclusions
+      - samplePeopleId
+      - truncated
+      - blockReason
+      - warnings
+      - emailQuota
+    PublicCampaignList:
+      type: object
+      properties:
+        count:
+          type: number
+          example: 1
+        pageSize:
+          type: number
+          example: 1
+        pageNum:
+          type: number
+          example: 1
+        totalPages:
+          type: number
+          example: 1
+        cursor:
+          type: number
+          example: 1
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicCampaign'
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+          example: offset
+        nextCursor:
+          anyOf:
+          - type: string
+            example: example
+          - type: number
+            example: 1
+          - type:
+            - object
+            - 'null'
+      required:
+      - pageSize
+      - results
+    PublicCampaignPreview:
+      anyOf:
+      - type: object
+        properties:
+          channel:
+            type: string
+            enum:
+            - EMAIL
+            example: EMAIL
+          peopleId:
+            type: string
+            example: example
+          subject:
+            type: string
+            example: example
+          html:
+            type: string
+            example: example
+        required:
+        - channel
+        - peopleId
+        - subject
+        - html
+      - type: object
+        properties:
+          channel:
+            type: string
+            enum:
+            - WHATSAPP
+            example: WHATSAPP
+          peopleId:
+            type: string
+            example: example
+          text:
+            type: string
+            example: example
+          preview:
+            type: object
+            additionalProperties: {}
+          template:
+            type: object
+            additionalProperties: {}
+        required:
+        - channel
+        - peopleId
+        - text
+        - preview
+        - template
+    PublicCampaignWhatsAppTemplates:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: example
+              name:
+                type: string
+                example: example
+              language:
+                type: string
+                example: example
+              status:
+                type: string
+                example: example
+              category:
+                type: string
+                example: example
+              components:
+                type: array
+                items:
+                  type: object
+                  additionalProperties: {}
+              parameters:
+                type:
+                - object
+                - 'null'
+            required:
+            - name
+            - language
+      required:
+      - results
+      description: Standard list response
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicCampaignRecipients:
+      type: object
+      properties:
+        count:
+          type: number
+          example: 1
+        pageSize:
+          type: number
+          example: 1
+        pageNum:
+          type: number
+          example: 1
+        totalPages:
+          type: number
+          example: 1
+        cursor:
+          type: number
+          example: 1
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: example
+              peopleId:
+                type: string
+                example: example
+              email:
+                type:
+                - string
+                - 'null'
+                example: example
+              phone:
+                type:
+                - string
+                - 'null'
+                example: example
+              status:
+                type: string
+                enum:
+                - PENDING
+                - EXCLUDED
+                - QUEUED
+                - SENDING
+                - SENT
+                - DELIVERED
+                - FAILED
+                - BOUNCED
+                example: PENDING
+              displayStatus:
+                type: string
+                example: example
+              displayStatusAt:
+                type: string
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+              exclusionReason:
+                type:
+                - string
+                - 'null'
+                example: example
+              queuedAt:
+                type:
+                - string
+                - 'null'
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+              sentAt:
+                type:
+                - string
+                - 'null'
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+              deliveredAt:
+                type:
+                - string
+                - 'null'
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+              failedAt:
+                type:
+                - string
+                - 'null'
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+              createdAt:
+                type: string
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+              updatedAt:
+                type: string
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+              displayName:
+                type: string
+                example: example
+              recordTypeId:
+                type:
+                - integer
+                - 'null'
+                example: 1
+              avatarUrl:
+                type:
+                - string
+                - 'null'
+                example: example
+              isTentative:
+                type: boolean
+                example: false
+            required:
+            - id
+            - peopleId
+            - email
+            - phone
+            - status
+            - displayStatus
+            - displayStatusAt
+            - exclusionReason
+            - queuedAt
+            - sentAt
+            - deliveredAt
+            - failedAt
+            - createdAt
+            - updatedAt
+            - displayName
+            - recordTypeId
+            - avatarUrl
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+          example: offset
+        nextCursor:
+          anyOf:
+          - type: string
+            example: example
+          - type: number
+            example: 1
+          - type:
+            - object
+            - 'null'
+      required:
+      - pageSize
+      - results
+    PublicCampaign:
+      type: object
+      properties:
+        id:
+          type: string
+          example: example
+        audienceId:
+          type:
+          - string
+          - 'null'
+          example: example
+        name:
+          type: string
+          example: example
+        channel:
+          type: string
+          enum:
+          - EMAIL
+          - WHATSAPP
+          example: EMAIL
+        purpose:
+          type: string
+          enum:
+          - MARKETING
+          - TRANSACTIONAL
+          example: MARKETING
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - APPROVED
+          - SCHEDULED
+          - RUNNING
+          - PAUSED
+          - COMPLETED
+          - CANCELLED
+          - FAILED
+          example: DRAFT
+        outcome:
+          type:
+          - string
+          - 'null'
+          enum:
+          - SUCCEEDED
+          - PARTIAL
+          - FAILED
+          - NO_DELIVERIES
+          example: SUCCEEDED
+        revision:
+          type: integer
+          example: 1
+        subject:
+          type:
+          - string
+          - 'null'
+          example: example
+        content:
+          type:
+          - string
+          - 'null'
+          example: example
+        contentSource:
+          type: string
+          example: example
+        artifactId:
+          type:
+          - integer
+          - 'null'
+          example: 1
+        contentVariables:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        senderConfig:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        scheduledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        quietHoursStart:
+          type:
+          - integer
+          - 'null'
+          example: 1
+        quietHoursEnd:
+          type:
+          - integer
+          - 'null'
+          example: 1
+        deliveryTimezone:
+          type:
+          - string
+          - 'null'
+          example: example
+        deliveryWindowStart:
+          type:
+          - integer
+          - 'null'
+          example: 1
+        deliveryWindowEnd:
+          type:
+          - integer
+          - 'null'
+          example: 1
+        whatsappMessagesPerSecond:
+          type:
+          - number
+          - 'null'
+          example: 1
+        whatsappBatchSize:
+          type:
+          - integer
+          - 'null'
+          example: 1
+        whatsappBatchPauseSeconds:
+          type:
+          - integer
+          - 'null'
+          example: 1
+        whatsappReplyAttributionWindowDays:
+          type:
+          - integer
+          - 'null'
+          example: 1
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        completedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        pausedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        pauseReason:
+          type:
+          - string
+          - 'null'
+          enum:
+          - MANUAL
+          - DELIVERY_FAILURE_RATE
+          - EMAIL_REPUTATION
+          - WHATSAPP_QUALITY_RESTRICTION
+          - WHATSAPP_RATE_LIMIT
+          - WHATSAPP_QUALITY
+          - WHATSAPP_SPAM
+          - BILLING_ACCOUNT_BLOCKED
+          - CAMPAIGNS_NOT_IN_PLAN
+          - CAMPAIGN_EMAIL_QUOTA_EXHAUSTED
+          example: MANUAL
+        cancelledAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        createdBy:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            firstName:
+              type:
+              - string
+              - 'null'
+              example: example
+            lastName:
+              type:
+              - string
+              - 'null'
+              example: example
+            avatar:
+              type:
+              - string
+              - 'null'
+              example: example
+          required:
+          - id
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+      required:
+      - id
+      - name
+      - channel
+      - purpose
+      - status
+      - revision
+    PublicCampaignStats:
+      type: object
+      properties:
+        recipients:
+          type: object
+          additionalProperties:
+            type: integer
+            example: 1
+        events:
+          type: object
+          additionalProperties:
+            type: integer
+            example: 1
+        summary:
+          type: object
+          properties:
+            sent:
+              type: integer
+              example: 1
+            delivered:
+              type: integer
+              example: 1
+            opened:
+              type: integer
+              example: 1
+            clicked:
+              type: integer
+              example: 1
+            replied:
+              type: integer
+              example: 1
+            bounced:
+              type: integer
+              example: 1
+            unsubscribed:
+              type: integer
+              example: 1
+          required:
+          - sent
+          - delivered
+          - opened
+          - clicked
+          - replied
+          - bounced
+          - unsubscribed
+      required:
+      - recipients
+      - events
+      - summary
+    PublicCampaignEmailDomains:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: example
+              domain:
+                type: string
+                example: example
+              status:
+                type: string
+                example: example
+              defaultFromEmail:
+                type:
+                - string
+                - 'null'
+                example: example
+              defaultFromName:
+                type:
+                - string
+                - 'null'
+                example: example
+              createdAt:
+                type: string
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+              updatedAt:
+                type: string
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+            required:
+            - id
+            - domain
+            - status
+            - defaultFromEmail
+            - defaultFromName
+      required:
+      - results
+      description: Standard list response
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          - upgrade_required
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Workspace Connectors
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
+  tags:
+  - Account
+  - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
+  - User Tasks
+  - Guidance

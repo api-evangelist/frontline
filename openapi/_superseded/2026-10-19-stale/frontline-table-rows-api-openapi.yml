@@ -1,0 +1,708 @@
+openapi: 3.2.0
+info:
+  title: Public Table rows API
+  version: 1.0.0
+  description: Public API for accessing agents, flows, and analytics.
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Table Rows
+  description: Read and write table rows
+paths:
+  /public/v1/tables/{name}/rows/list:
+    post:
+      summary: List rows
+      operationId: listTableRows
+      description: Returns a paginated, filterable list of rows.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table Rows
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: object
+                  description: 'Dynamic-table query. Either a single `{ path, operator, value }` condition, or a nested group `{ operator: ''and'' | ''or'', conditions: [...] }`.'
+                search:
+                  type:
+                  - string
+                  - 'null'
+                sort:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: object
+                    additionalProperties: {}
+                record_type:
+                  anyOf:
+                  - type: string
+                  - type: number
+                  - type: array
+                    items:
+                      anyOf:
+                      - type: string
+                      - type: number
+                  - {}
+                page:
+                  type: integer
+                  default: 1
+                  exclusiveMinimum: 0
+                page_size:
+                  type: integer
+                  maximum: 200
+                  default: 50
+                  exclusiveMinimum: 0
+      responses:
+        '200':
+          description: Rows page
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      rows:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            auto_id:
+                              type: number
+                            created_at:
+                              type:
+                              - string
+                              - 'null'
+                            updated_at:
+                              type:
+                              - string
+                              - 'null'
+                          additionalProperties: {}
+                      total_count:
+                        type: number
+                      total_pages:
+                        type: number
+                      current_page:
+                        type: number
+                    required:
+                    - rows
+                    - total_count
+                    - total_pages
+                    - current_page
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tables/{name}/rows:
+    post:
+      summary: Create row
+      operationId: createTableRow
+      description: Creates a single row. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table Rows
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  additionalProperties: {}
+              additionalProperties: {}
+      responses:
+        '201':
+          description: Created row
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      auto_id:
+                        type: number
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                    additionalProperties: {}
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tables/{name}/rows/bulk:
+    post:
+      summary: Bulk-create rows
+      operationId: createTableRowsBulk
+      description: Creates multiple rows in a single call. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table Rows
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rows:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      data:
+                        type: object
+                        additionalProperties: {}
+                    additionalProperties: {}
+                  minItems: 1
+              required:
+              - rows
+      responses:
+        '201':
+          description: Created rows
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        auto_id:
+                          type: number
+                        created_at:
+                          type:
+                          - string
+                          - 'null'
+                        updated_at:
+                          type:
+                          - string
+                          - 'null'
+                      additionalProperties: {}
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tables/{name}/rows/{id}:
+    get:
+      summary: Get row
+      operationId: getTableRow
+      description: Returns a single row by id.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table Rows
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: string
+          example: 65cf9b3a4b7c2a0012a3b4c5
+        required: true
+        name: id
+        in: path
+      responses:
+        '200':
+          description: Row
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      auto_id:
+                        type: number
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                    additionalProperties: {}
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update row
+      operationId: updateTableRow
+      description: Updates a row's fields. Pass field values flat in the body or nested under `data`. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table Rows
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: string
+          example: 65cf9b3a4b7c2a0012a3b4c5
+        required: true
+        name: id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                data:
+                  type: object
+                  additionalProperties: {}
+              additionalProperties: {}
+      responses:
+        '200':
+          description: Updated row
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      auto_id:
+                        type: number
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                    additionalProperties: {}
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete row
+      operationId: deleteTableRow
+      description: Deletes a row. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table Rows
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: string
+          example: 65cf9b3a4b7c2a0012a3b4c5
+        required: true
+        name: id
+        in: path
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      deleted:
+                        type: boolean
+                        enum:
+                        - true
+                      id:
+                        anyOf:
+                        - type: string
+                        - type: number
+                    required:
+                    - deleted
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tables/{name}/rows/count:
+    post:
+      summary: Count rows
+      operationId: countTableRows
+      description: Returns the number of rows matching the optional query.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table Rows
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: object
+                  description: 'Dynamic-table query. Either a single `{ path, operator, value }` condition, or a nested group `{ operator: ''and'' | ''or'', conditions: [...] }`.'
+                recordType:
+                  anyOf:
+                  - type: string
+                  - type: number
+                  - type: array
+                    items:
+                      anyOf:
+                      - type: string
+                      - type: number
+                  - {}
+      responses:
+        '200':
+          description: Count
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      count:
+                        type: number
+                    required:
+                    - count
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

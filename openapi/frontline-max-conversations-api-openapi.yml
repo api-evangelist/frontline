@@ -1,0 +1,657 @@
+openapi: 3.2.0
+info:
+  title: Public Max Conversations API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Max Conversations
+  description: Chat with Max and manage the resulting conversation threads for the calling user
+paths:
+  /public/v1/max/conversations:
+    get:
+      summary: List Max conversations
+      operationId: listMaxConversations
+      description: Returns the calling user's chat threads with Max, newest activity first, each with a short preview instead of the full message history. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Conversations
+      parameters:
+      - schema:
+          type:
+          - string
+          - 'null'
+          example: example
+        required: false
+        name: fromDate
+        in: query
+      - schema:
+          type:
+          - string
+          - 'null'
+          example: example
+        required: false
+        name: toDate
+        in: query
+      - schema:
+          anyOf:
+          - type: boolean
+            example: false
+          - type: string
+            example: example
+        required: false
+        name: isClosed
+        in: query
+      - schema:
+          anyOf:
+          - type: boolean
+            example: false
+          - type: string
+            example: example
+          default: false
+        required: false
+        name: isArchived
+        in: query
+      - schema:
+          anyOf:
+          - type: boolean
+            example: false
+          - type: string
+            example: example
+        required: false
+        name: pinned
+        in: query
+      - schema:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            enum:
+            - LIVE_CHAT
+            - SHARED
+            - OVERVIEW
+            - API
+            - WHATSAPP
+            - INSTAGRAM
+            - MESSENGER
+            - SLACK
+            - MAX_EXTENSION
+            - TEAMS
+            - MAX_WEB
+            - MAX_API
+            example: LIVE_CHAT
+        required: false
+        name: channels
+        in: query
+      - schema:
+          type: string
+          example: example
+        required: false
+        name: text
+        in: query
+      responses:
+        '200':
+          description: Paginated conversations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/PublicMaxConversationList'
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/max/conversations/message:
+    post:
+      summary: Send a message to Max
+      operationId: sendMaxMessage
+      description: Sends a message to Max and returns the conversation once Max has replied. Omit `conversationId` to start a new thread. Max may take a while to answer, since it can call tools and read your data before replying. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Conversations
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                context:
+                  type: object
+                  properties:
+                    folder:
+                      type:
+                      - string
+                      - 'null'
+                      example: example
+                    threadId:
+                      type:
+                      - string
+                      - 'null'
+                      example: example
+                    messageId:
+                      type:
+                      - string
+                      - 'null'
+                      example: example
+                    draftId:
+                      type:
+                      - string
+                      - 'null'
+                      example: example
+                    draftThreadText:
+                      type:
+                      - string
+                      - 'null'
+                      example: example
+                    threadSubject:
+                      type:
+                      - string
+                      - 'null'
+                      example: example
+                    draftContent:
+                      type:
+                      - string
+                      - 'null'
+                      example: example
+                    email:
+                      type:
+                      - string
+                      - 'null'
+                      example: example
+                    openedDrafts:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          recipients:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                email:
+                                  type: string
+                                  example: example
+                                name:
+                                  type:
+                                  - string
+                                  - 'null'
+                                  example: example
+                              required:
+                              - email
+                          draftContent:
+                            type: string
+                            example: example
+                          subject:
+                            type:
+                            - string
+                            - 'null'
+                            example: example
+                          draftId:
+                            type:
+                            - string
+                            - 'null'
+                            example: example
+                        required:
+                        - recipients
+                        - draftContent
+                    textSelections:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - content
+                            - chat
+                            example: content
+                          content:
+                            type: string
+                            example: example
+                          hostname:
+                            type:
+                            - string
+                            - 'null'
+                            example: example
+                        required:
+                        - type
+                        - content
+                    currentUrl:
+                      type:
+                      - string
+                      - 'null'
+                      example: example
+                    artifactIds:
+                      type: array
+                      items:
+                        type: number
+                        example: 1
+                    artifactHtmlBlocks:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          artifactId:
+                            type: number
+                            example: 1
+                          blockHtml:
+                            type: string
+                            example: example
+                          text:
+                            type: string
+                            example: example
+                        required:
+                        - artifactId
+                        - blockHtml
+                    selectedDesignSystems:
+                      type: array
+                      items:
+                        type: string
+                        example: example
+                message:
+                  type: string
+                  example: example
+                medias:
+                  type:
+                  - array
+                  - 'null'
+                  items:
+                    type: object
+                    properties:
+                      buffer:
+                        type:
+                        - object
+                        - 'null'
+                      mimeType:
+                        type: string
+                        example: example
+                      fileName:
+                        type: string
+                        example: example
+                      url:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      messageId:
+                        type: number
+                        example: 1
+                    required:
+                    - mimeType
+                    - fileName
+                conversationId:
+                  type:
+                  - number
+                  - 'null'
+                  example: 1
+                autoAcceptPlan:
+                  anyOf:
+                  - type: boolean
+                    example: false
+                  - type: string
+                    example: example
+                authorizationMode:
+                  type: string
+                  enum:
+                  - AUTO
+                  - SUPERVISED
+                  - ASK
+                  example: AUTO
+                modelTier:
+                  type: string
+                  enum:
+                  - AUTO
+                  - LITE
+                  - HIGH
+                  example: AUTO
+              required:
+              - message
+      responses:
+        '201':
+          description: Conversation with the reply
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/PublicMaxConversation'
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/max/conversations/{conversationId}:
+    get:
+      summary: Get a Max conversation
+      operationId: getMaxConversation
+      description: Returns one conversation with its full message history, the plan Max is currently working through, and any questions it is waiting on you to answer. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Conversations
+      parameters:
+      - schema:
+          type:
+          - integer
+          - 'null'
+          example: 42
+        required: false
+        name: conversationId
+        in: path
+      responses:
+        '200':
+          description: Conversation detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    $ref: '#/components/schemas/PublicMaxConversation'
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    PublicMaxConversation:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 8123
+        name:
+          type:
+          - string
+          - 'null'
+          example: Follow-up on Acme renewal
+        max_agent_id:
+          type:
+          - number
+          - 'null'
+          example: 44
+        channel:
+          type:
+          - string
+          - 'null'
+          example: EXTENSION
+        is_closed:
+          type:
+          - boolean
+          - 'null'
+          example: false
+        is_archived:
+          type:
+          - boolean
+          - 'null'
+          example: false
+        is_pinned:
+          type:
+          - boolean
+          - 'null'
+          example: false
+        created_at:
+          type:
+          - string
+          - 'null'
+          example: '2026-08-09T10:00:00.000Z'
+        updated_at:
+          type:
+          - string
+          - 'null'
+          example: '2026-08-09T10:05:00.000Z'
+        last_message_at:
+          type:
+          - string
+          - 'null'
+          example: '2026-08-09T10:05:00.000Z'
+        last_message_preview:
+          type:
+          - string
+          - 'null'
+          example: I've drafted the reply…
+        messages:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        current_plan:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        questions:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        message_abort_key:
+          type:
+          - string
+          - 'null'
+          example: abort:8123:91
+      required:
+      - id
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          - upgrade_required
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicMaxConversationList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicMaxConversation'
+        total:
+          type: number
+          example: 37
+        page_size:
+          type: number
+          example: 20
+        page_num:
+          type: number
+          example: 1
+        total_pages:
+          type: number
+          example: 2
+      required:
+      - results
+      - total
+      - page_size
+      - page_num
+      - total_pages
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Workspace Connectors
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
+  tags:
+  - Account
+  - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
+  - User Tasks
+  - Guidance

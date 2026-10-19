@@ -2,7 +2,35 @@ openapi: 3.2.0
 info:
   title: Public Account API
   version: 1.0.0
-  description: Public API for accessing agents, flows, and analytics.
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -34,8 +62,149 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /public/v1/account/sequence-settings:
+    get:
+      summary: Get the account's sequence delivery settings
+      operationId: getAccountSequenceSettings
+      description: 'Returns the account-level Sequence settings: allowMultipleActiveSequences, maxConcurrentActiveSequences, the account''s defaultDeliveryWindow override (null if never set), accountTimezone, effectiveDeliveryWindow — the window actually applied when a Sequence''s own `deliveryWindow` is null (defaultDeliveryWindow, or the hardcoded Mon-Fri 09:00-17:00 fallback) — and enrollOnBehalfPolicy, which governs the enroll and enroll-bulk endpoints'' `enrollerUserId` field. Use this before assuming `deliveryWindow: null` on a Sequence means unrestricted / 24-7 delivery — it does not. Requires a USER API key belonging to an OWNER or ADMIN.'
+      security:
+      - userApiKey: []
+      tags:
+      - Account
+      responses:
+        '200':
+          description: Account Sequence settings
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountSequenceSettings'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Sequence settings not found, or caller is not an OWNER/ADMIN of the account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 components:
   schemas:
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          - upgrade_required
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    AccountSequenceSettings:
+      type: object
+      properties:
+        allowMultipleActiveSequences:
+          type: boolean
+          example: false
+        maxConcurrentActiveSequences:
+          type:
+          - integer
+          - 'null'
+          minimum: 1
+          example: null
+        defaultDeliveryWindow:
+          type:
+          - object
+          - 'null'
+          properties:
+            startTime:
+              type: string
+              pattern: ^([01]\d|2[0-3]):([0-5]\d)$
+            endTime:
+              type: string
+              pattern: ^([01]\d|2[0-3]):([0-5]\d)$
+            allowedWeekdays:
+              type: array
+              items:
+                type: integer
+                minimum: 1
+                maximum: 7
+                example: 1
+              minItems: 1
+          required:
+          - startTime
+          - endTime
+          - allowedWeekdays
+          example: null
+        accountTimezone:
+          type: string
+          example: America/Argentina/Buenos_Aires
+        effectiveDeliveryWindow:
+          type: object
+          properties:
+            startTime:
+              type: string
+              pattern: ^([01]\d|2[0-3]):([0-5]\d)$
+            endTime:
+              type: string
+              pattern: ^([01]\d|2[0-3]):([0-5]\d)$
+            allowedWeekdays:
+              type: array
+              items:
+                type: integer
+                minimum: 1
+                maximum: 7
+                example: 1
+              minItems: 1
+          required:
+          - startTime
+          - endTime
+          - allowedWeekdays
+          example:
+            startTime: 09:00
+            endTime: '17:00'
+            allowedWeekdays:
+            - 1
+            - 2
+            - 3
+            - 4
+            - 5
+        enrollOnBehalfPolicy:
+          type: string
+          enum:
+          - NONE
+          - ADMINS_AND_OWNERS
+          - ALL_USERS
+          example: NONE
+      required:
+      - allowMultipleActiveSequences
+      - maxConcurrentActiveSequences
+      - defaultDeliveryWindow
+      - accountTimezone
+      - effectiveDeliveryWindow
+      - enrollOnBehalfPolicy
     Me:
       type: object
       properties:
@@ -86,35 +255,6 @@ components:
       required:
       - ok
       - data
-    ErrorBody:
-      type: object
-      properties:
-        code:
-          type: string
-          enum:
-          - bad_request
-          - unauthorized
-          - forbidden
-          - not_found
-          - conflict
-          - internal_error
-          - cli_outdated
-          example: unauthorized
-        message:
-          type: string
-          example: Detailed error message
-        details:
-          type: object
-          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
-          example:
-            issues:
-            - path:
-              - name
-              message: String must contain at least 1 character(s)
-              code: too_small
-      required:
-      - code
-      - message
     Error:
       type: object
       properties:
@@ -152,6 +292,14 @@ x-tagGroups:
   tags:
   - Workflows
   - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
 - name: Objects
   tags:
   - Objects
@@ -177,24 +325,34 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
-- name: Channels
-  tags:
-  - Channels
 - name: Integrations
   tags:
   - Custom Tools
   - Incoming Webhooks
-  - Account Integrations
+  - Workspace Connectors
   - Agent Channels
   - Integration Resources
 - name: Knowledge
   tags:
   - Knowledge Bases
-- name: Core
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
   tags:
   - Account
-  - AI Models
-  - Billing
   - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
   - User Tasks
   - Guidance

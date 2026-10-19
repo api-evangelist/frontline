@@ -1,0 +1,591 @@
+openapi: 3.2.0
+info:
+  title: Public Workspace Connectors API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Workspace Connectors
+  description: 'The account''s shared connected accounts — called ''workspace connectors'' in the app, and `integrations` in these URLs. Read-only: list them, discover connectable toolkits, and inspect which tools each one exposes. Connecting, renaming, visibility, and which tools a connector exposes are changed in the app only — not via an API key. Distinct from Max Connectors, which belong to a single user.'
+paths:
+  /public/v1/integrations:
+    get:
+      summary: List account integrations
+      operationId: listAccountIntegrations
+      description: Lists the account's connected integrations (MCP toolkits such as Gmail, Slack, Salesforce). Each entry exposes the integration `id` used as `connectedAccountId` when configuring workflow/flow triggers and tool nodes. Filter by toolkit, free text, or connection state. Read-only. Connecting, renaming, visibility, and which tools a connector exposes are changed in the app only — not via an API key. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Workspace Connectors
+      parameters:
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 1
+        required: false
+        name: id
+        in: query
+      - schema:
+          type: string
+          enum:
+          - GMAIL
+          - GOOGLECALENDAR
+          - SLACK
+          - CALENDLY
+          - GOOGLEDOCS
+          - GOOGLESHEETS
+          - NOTION
+          - GOOGLEDRIVE
+          - GRANOLA_MCP
+          - GOOGLEMEET
+          - ZOOM
+          - GAMMA
+          - STRIPE
+          - POSTHOG
+          - LINKEDIN
+          - FACEBOOK
+          - GOOGLE_ANALYTICS
+          - GOOGLE_SEARCH_CONSOLE
+          - MAILCHIMP
+          - SEMRUSH
+          - GOOGLEADS
+          - INSTAGRAM
+          - ADYNTEL
+          - GOOGLETASKS
+          - LINEAR
+          - JIRA
+          - ASANA
+          - SHARE_POINT
+          - ONE_DRIVE
+          - EXCEL
+          - TIKTOK
+          - TWITTER
+          - YOUTUBE
+          - GOOGLE_MAPS
+          - METAADS
+          - SHOPIFY
+          - AIRTABLE
+          - MONDAY
+          - TRELLO
+          - GOOGLESLIDES
+          - BUILTWITH
+          - HUBSPOT
+          - PIPEDRIVE
+          - ATTIO
+          - ZENDESK
+          - SALESFORCE
+          - SALESFORCE_SERVICE_CLOUD
+          - INTERCOM
+          - WEBFLOW
+          - FIGMA
+          - APOLLO
+          - OUTLOOK
+          - FRESHDESK
+          - ZOHO_DESK
+          - ZOHO_INVOICE
+          - ZOHO
+          - BREX
+          example: GMAIL
+        required: false
+        name: toolkit
+        in: query
+      - schema:
+          type: string
+          minLength: 1
+          example: example
+        required: false
+        name: filterText
+        in: query
+      - schema:
+          anyOf:
+          - type: boolean
+            example: false
+          - type: string
+            example: example
+        required: false
+        name: isConnected
+        in: query
+      responses:
+        '200':
+          description: Account integrations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIntegrationList'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/integrations/toolkits:
+    get:
+      summary: List connectable toolkits
+      operationId: listIntegrationToolkits
+      description: Lists the catalog of toolkits that can be connected, with each toolkit's auth scheme and the tool slugs it supports. Use this to discover valid toolkit values and to interpret the enabled-tools list on a connector. Read-only. Connecting, renaming, visibility, and which tools a connector exposes are changed in the app only — not via an API key. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Workspace Connectors
+      responses:
+        '200':
+          description: Connectable toolkits
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIntegrationToolkitList'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/integrations/{integrationId}:
+    get:
+      summary: Get account integration details
+      operationId: getAccountIntegration
+      description: Returns a single account integration by ID. Read-only. Connecting, renaming, visibility, and which tools a connector exposes are changed in the app only — not via an API key. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Workspace Connectors
+      parameters:
+      - schema:
+          type: integer
+          minimum: 1
+          example: 42
+        required: true
+        name: integrationId
+        in: path
+      responses:
+        '200':
+          description: Account integration details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIntegration'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/integrations/{integrationId}/tools:
+    get:
+      summary: List integration tools
+      operationId: getAccountIntegrationTools
+      description: Returns the integration's tools split into enabled and available, including whether the connected account holds the OAuth scopes each tool requires. Changing which tools are enabled is done in the app. Read-only. Connecting, renaming, visibility, and which tools a connector exposes are changed in the app only — not via an API key. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Workspace Connectors
+      parameters:
+      - schema:
+          type: integer
+          minimum: 1
+          example: 42
+        required: true
+        name: integrationId
+        in: path
+      responses:
+        '200':
+          description: Integration tools (enabled + available)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicIntegrationTools'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    PublicIntegration:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        toolkit:
+          type: string
+          example: example
+        alias:
+          type:
+          - string
+          - 'null'
+          example: example
+        visibility:
+          type: string
+          enum:
+          - PRIVATE
+          - SHARED
+          example: PRIVATE
+        isConnected:
+          type: boolean
+          example: false
+        isExpired:
+          type: boolean
+          default: false
+          example: false
+        connectedEmail:
+          type:
+          - string
+          - 'null'
+          example: example
+        connectedAt:
+          type:
+          - string
+          - 'null'
+          example: example
+        composioConnectedAccountId:
+          type:
+          - string
+          - 'null'
+          example: example
+        allowedToolSlugs:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            example: example
+        availableToolsCount:
+          type:
+          - number
+          - 'null'
+          example: 1
+        enabledToolsCount:
+          type:
+          - number
+          - 'null'
+          example: 1
+        accountId:
+          type:
+          - number
+          - 'null'
+          example: 1
+        createdByUserId:
+          type:
+          - number
+          - 'null'
+          example: 1
+        createdByUser:
+          type:
+          - object
+          - 'null'
+          properties:
+            id:
+              type: number
+              example: 1
+            firstName:
+              type: string
+              example: example
+            lastName:
+              type: string
+              example: example
+            email:
+              type: string
+              example: example
+            avatar:
+              type:
+              - string
+              - 'null'
+              example: example
+          required:
+          - id
+          - firstName
+          - lastName
+          - email
+          - avatar
+        createdAt:
+          type:
+          - string
+          - 'null'
+          example: example
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          example: example
+      required:
+      - id
+      - toolkit
+      - visibility
+      - isConnected
+      - createdAt
+      - updatedAt
+    PublicIntegrationToolkitList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIntegrationToolkit'
+      required:
+      - results
+    PublicIntegrationToolkit:
+      type: object
+      properties:
+        toolkit:
+          type: string
+          example: GMAIL
+        name:
+          type: string
+          example: Gmail
+        description:
+          type:
+          - string
+          - 'null'
+          example: Send and read email via Gmail
+        authScheme:
+          type: string
+          example: OAUTH2
+        toolCount:
+          type: number
+          example: 12
+        tools:
+          type: array
+          items:
+            type: string
+            example: example
+          example:
+          - GMAIL_SEND_EMAIL
+      required:
+      - toolkit
+      - name
+      - authScheme
+      - toolCount
+      - tools
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicIntegrationTools:
+      type: object
+      properties:
+        enabledTools:
+          type: array
+          items:
+            type: object
+            properties:
+              slug:
+                type: string
+                example: example
+              name:
+                type: string
+                example: example
+              description:
+                type: string
+                example: example
+              enabled:
+                type: boolean
+                example: false
+              hasRequiredScopes:
+                type: boolean
+                example: false
+            required:
+            - slug
+            - name
+            - description
+            - enabled
+            - hasRequiredScopes
+        availableTools:
+          type: array
+          items:
+            type: object
+            properties:
+              slug:
+                type: string
+                example: example
+              name:
+                type: string
+                example: example
+              description:
+                type: string
+                example: example
+              enabled:
+                type: boolean
+                example: false
+              hasRequiredScopes:
+                type: boolean
+                example: false
+            required:
+            - slug
+            - name
+            - description
+            - enabled
+            - hasRequiredScopes
+      required:
+      - enabledTools
+      - availableTools
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          - upgrade_required
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    PublicIntegrationList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicIntegration'
+      required:
+      - results
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Workspace Connectors
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
+  tags:
+  - Account
+  - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
+  - User Tasks
+  - Guidance

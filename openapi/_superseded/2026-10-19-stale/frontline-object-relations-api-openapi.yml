@@ -1,0 +1,509 @@
+openapi: 3.2.0
+info:
+  title: Public Object relations API
+  version: 1.0.0
+  description: Public API for accessing agents, flows, and analytics.
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Object relations
+  description: Link and unlink records across objects
+paths:
+  /public/v1/objects/{name}/rows/{id}/relations/{relation}:
+    get:
+      summary: List related rows
+      operationId: listObjectRelations
+      description: Returns rows linked to this row via the given relation field.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object relations
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: string
+          description: Row id (Mongo ObjectId)
+          example: 65cf9b3a4b7c2a0012a3b4c5
+        required: true
+        name: id
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          example: companies
+        required: true
+        name: relation
+        in: path
+      responses:
+        '200':
+          description: Related rows
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        auto_id:
+                          type: number
+                        created_at:
+                          type:
+                          - string
+                          - 'null'
+                        updated_at:
+                          type:
+                          - string
+                          - 'null'
+                      additionalProperties: {}
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/objects/{name}/relations/{relation}/target/{targetId}:
+    get:
+      summary: Find rows by relation target
+      operationId: findObjectByRelation
+      description: Returns rows on the source object linked to the target id via the relation.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object relations
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          example: companies
+        required: true
+        name: relation
+        in: path
+      - schema:
+          type: string
+          example: 65cf9b3a4b7c2a0012a3b4c5
+        required: true
+        name: targetId
+        in: path
+      - schema:
+          type: integer
+          default: 1
+          exclusiveMinimum: 0
+        required: false
+        name: page
+        in: query
+      - schema:
+          type: integer
+          maximum: 200
+          default: 50
+          exclusiveMinimum: 0
+        required: false
+        name: page_size
+        in: query
+      - schema:
+          type: string
+        required: false
+        name: search
+        in: query
+      responses:
+        '200':
+          description: Rows page
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      rows:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            auto_id:
+                              type: number
+                            created_at:
+                              type:
+                              - string
+                              - 'null'
+                            updated_at:
+                              type:
+                              - string
+                              - 'null'
+                          additionalProperties: {}
+                      total_count:
+                        type: number
+                      total_pages:
+                        type: number
+                      current_page:
+                        type: number
+                    required:
+                    - rows
+                    - total_count
+                    - total_pages
+                    - current_page
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/objects/{name}/rows/{id}/relations/{relation}/link:
+    post:
+      summary: Link relation
+      operationId: linkObjectRelation
+      description: Links the target row to this row via the relation. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object relations
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: string
+          description: Row id (Mongo ObjectId)
+          example: 65cf9b3a4b7c2a0012a3b4c5
+        required: true
+        name: id
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          example: companies
+        required: true
+        name: relation
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target_id:
+                  type: string
+                  pattern: '[a-fA-F0-9]{24}'
+                  example: 65cf9b3a4b7c2a0012a3b4c5
+              required:
+              - target_id
+      responses:
+        '200':
+          description: Updated row
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      auto_id:
+                        type: number
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                    additionalProperties: {}
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/objects/{name}/rows/{id}/relations/{relation}/unlink:
+    post:
+      summary: Unlink relation
+      operationId: unlinkObjectRelation
+      description: Unlinks the target row from this row's relation. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object relations
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: string
+          description: Row id (Mongo ObjectId)
+          example: 65cf9b3a4b7c2a0012a3b4c5
+        required: true
+        name: id
+        in: path
+      - schema:
+          type: string
+          minLength: 1
+          example: companies
+        required: true
+        name: relation
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                target_id:
+                  type: string
+                  pattern: '[a-fA-F0-9]{24}'
+                  example: 65cf9b3a4b7c2a0012a3b4c5
+              required:
+              - target_id
+      responses:
+        '200':
+          description: Updated row
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      auto_id:
+                        type: number
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                    additionalProperties: {}
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

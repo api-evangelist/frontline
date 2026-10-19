@@ -2,7 +2,35 @@ openapi: 3.2.0
 info:
   title: Public Flow Variables API
   version: 1.0.0
-  description: Public API for accessing agents, flows, and analytics.
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -37,7 +65,9 @@ paths:
       - schema:
           anyOf:
           - type: boolean
+            example: false
           - type: string
+            example: example
           example: false
         required: false
         name: isDefault
@@ -52,14 +82,19 @@ paths:
                 properties:
                   count:
                     type: number
+                    example: 1
                   pageSize:
                     type: number
+                    example: 1
                   pageNum:
                     type: number
+                    example: 1
                   totalPages:
                     type: number
+                    example: 1
                   cursor:
                     type: number
+                    example: 1
                   results:
                     type: array
                     items:
@@ -70,11 +105,16 @@ paths:
                     - offset
                     - cursor
                     default: offset
+                    example: offset
                   nextCursor:
                     anyOf:
                     - type: string
+                      example: example
                     - type: number
-                    - {}
+                      example: 1
+                    - type:
+                      - object
+                      - 'null'
                 required:
                 - pageSize
                 - results
@@ -254,65 +294,6 @@ paths:
           description: Variable deleted
 components:
   schemas:
-    VariableCheckName:
-      type: object
-      properties:
-        exists:
-          type: boolean
-          example: false
-      required:
-      - exists
-    Variable:
-      type: object
-      properties:
-        id:
-          type: number
-          example: 123
-        name:
-          type: string
-          example: customer_name
-        description:
-          type:
-          - string
-          - 'null'
-        status:
-          type: string
-          enum:
-          - ACTIVE
-          - DELETED
-          example: ACTIVE
-        createdAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
-        updatedAt:
-          type: string
-          example: '2024-01-01T12:00:00Z'
-        assistantId:
-          type:
-          - string
-          - 'null'
-        automationId:
-          type:
-          - number
-          - 'null'
-        pattern:
-          type:
-          - string
-          - 'null'
-        defaultValue:
-          type:
-          - string
-          - 'null'
-        isDefault:
-          type: boolean
-          example: false
-      required:
-      - id
-      - name
-      - status
-      - createdAt
-      - updatedAt
-      - isDefault
     PublicFlowVariableCreateInput:
       type: object
       properties:
@@ -332,6 +313,70 @@ components:
           example: ^[A-Za-z ]+$
       required:
       - name
+    Variable:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 123
+        name:
+          type: string
+          example: customer_name
+        description:
+          type:
+          - string
+          - 'null'
+          example: example
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          example: ACTIVE
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        assistantId:
+          type:
+          - string
+          - 'null'
+          example: example
+        automationId:
+          type:
+          - number
+          - 'null'
+          example: 1
+        pattern:
+          type:
+          - string
+          - 'null'
+          example: example
+        defaultValue:
+          type:
+          - string
+          - 'null'
+          example: example
+        isDefault:
+          type: boolean
+          example: false
+      required:
+      - id
+      - name
+      - status
+      - createdAt
+      - updatedAt
+      - isDefault
+    VariableCheckName:
+      type: object
+      properties:
+        exists:
+          type: boolean
+          example: false
+      required:
+      - exists
     PublicVariableUpdateInput:
       type: object
       properties:
@@ -375,6 +420,14 @@ x-tagGroups:
   tags:
   - Workflows
   - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
 - name: Objects
   tags:
   - Objects
@@ -400,24 +453,34 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
-- name: Channels
-  tags:
-  - Channels
 - name: Integrations
   tags:
   - Custom Tools
   - Incoming Webhooks
-  - Account Integrations
+  - Workspace Connectors
   - Agent Channels
   - Integration Resources
 - name: Knowledge
   tags:
   - Knowledge Bases
-- name: Core
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
   tags:
   - Account
-  - AI Models
-  - Billing
   - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
   - User Tasks
   - Guidance

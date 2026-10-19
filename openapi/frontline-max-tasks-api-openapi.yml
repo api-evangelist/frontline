@@ -1,0 +1,1638 @@
+openapi: 3.2.0
+info:
+  title: Public Max Tasks API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Max Tasks
+  description: The calling user's Max automations — scheduled (cron) and event-triggered — plus their triggers and templates
+paths:
+  /public/v1/max/periodic-tasks:
+    get:
+      summary: List Max tasks
+      operationId: listMaxPeriodicTasks
+      description: 'Returns the calling user''s Max automations: scheduled tasks that run on a cron expression, and event tasks that fire when something happens in a connected integration. Requires a USER API key.'
+      security:
+      - userApiKey: []
+      tags:
+      - Max Tasks
+      parameters:
+      - schema:
+          type: string
+          example: example
+        required: false
+        name: enabled
+        in: query
+      - schema:
+          type: string
+          example: example
+        required: false
+        name: name
+        in: query
+      responses:
+        '200':
+          description: Paginated tasks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: example
+                            enabled:
+                              type: boolean
+                              example: false
+                            instructions:
+                              type: string
+                              example: example
+                            name:
+                              type: string
+                              example: example
+                            notifyByEmail:
+                              type: boolean
+                              default: false
+                              example: false
+                            notifyByWhatsapp:
+                              type: boolean
+                              default: false
+                              example: false
+                            notifyBySlack:
+                              type: boolean
+                              default: false
+                              example: false
+                            notifyByTeams:
+                              type: boolean
+                              default: false
+                              example: false
+                            slackChannelId:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            createdAt:
+                              type: string
+                              example: example
+                            updatedAt:
+                              type: string
+                              example: example
+                            periodicTask:
+                              type:
+                              - object
+                              - 'null'
+                              properties:
+                                id:
+                                  type: string
+                                  example: example
+                                cronExpression:
+                                  type: string
+                                  example: example
+                                tz:
+                                  type: string
+                                  example: example
+                                updatedAt:
+                                  type: string
+                                  example: example
+                                createdAt:
+                                  type: string
+                                  example: example
+                              required:
+                              - id
+                              - cronExpression
+                              - tz
+                              - updatedAt
+                              - createdAt
+                            trigger:
+                              type:
+                              - object
+                              - 'null'
+                              properties:
+                                id:
+                                  type: string
+                                  example: example
+                                triggerType:
+                                  type: string
+                                  example: example
+                                toolkit:
+                                  type: string
+                                  example: example
+                                config:
+                                  type:
+                                  - object
+                                  - 'null'
+                                  additionalProperties: {}
+                                enabled:
+                                  type: boolean
+                                  example: false
+                              required:
+                              - id
+                              - triggerType
+                              - toolkit
+                              - config
+                              - enabled
+                            integrations:
+                              type:
+                              - array
+                              - 'null'
+                              items:
+                                type: string
+                                enum:
+                                - GMAIL
+                                - GOOGLECALENDAR
+                                - SLACK
+                                - CALENDLY
+                                - GOOGLEDOCS
+                                - GOOGLESHEETS
+                                - NOTION
+                                - GOOGLEDRIVE
+                                - GRANOLA_MCP
+                                - GOOGLEMEET
+                                - ZOOM
+                                - GAMMA
+                                - STRIPE
+                                - POSTHOG
+                                - LINKEDIN
+                                - FACEBOOK
+                                - GOOGLE_ANALYTICS
+                                - GOOGLE_SEARCH_CONSOLE
+                                - MAILCHIMP
+                                - SEMRUSH
+                                - GOOGLEADS
+                                - INSTAGRAM
+                                - ADYNTEL
+                                - GOOGLETASKS
+                                - LINEAR
+                                - JIRA
+                                - ASANA
+                                - SHARE_POINT
+                                - ONE_DRIVE
+                                - EXCEL
+                                - TIKTOK
+                                - TWITTER
+                                - YOUTUBE
+                                - GOOGLE_MAPS
+                                - METAADS
+                                - SHOPIFY
+                                - AIRTABLE
+                                - MONDAY
+                                - TRELLO
+                                - GOOGLESLIDES
+                                - BUILTWITH
+                                - HUBSPOT
+                                - PIPEDRIVE
+                                - ATTIO
+                                - ZENDESK
+                                - SALESFORCE
+                                - SALESFORCE_SERVICE_CLOUD
+                                - INTERCOM
+                                - WEBFLOW
+                                - FIGMA
+                                - APOLLO
+                                - OUTLOOK
+                                - FRESHDESK
+                                - ZOHO_DESK
+                                - ZOHO_INVOICE
+                                - ZOHO
+                                - BREX
+                                example: GMAIL
+                            availableTools:
+                              type:
+                              - array
+                              - 'null'
+                              items:
+                                type: string
+                                example: example
+                            selectedRecordTypes:
+                              type:
+                              - array
+                              - 'null'
+                              items:
+                                type: object
+                                properties:
+                                  recordTypeId:
+                                    type: number
+                                    example: 1
+                                  read:
+                                    type: boolean
+                                    example: false
+                                  create:
+                                    type: boolean
+                                    example: false
+                                  update:
+                                    type: boolean
+                                    example: false
+                                  delete:
+                                    type: boolean
+                                    example: false
+                                  createActivity:
+                                    type: boolean
+                                    example: false
+                                required:
+                                - recordTypeId
+                            selectedCustomTools:
+                              type:
+                              - array
+                              - 'null'
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                    minimum: 1
+                                    example: 1
+                                  enabled:
+                                    type: boolean
+                                    default: true
+                                    example: false
+                                required:
+                                - id
+                          required:
+                          - id
+                          - enabled
+                          - instructions
+                          - name
+                          - createdAt
+                          - updatedAt
+                    required:
+                    - results
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a Max task
+      operationId: createMaxPeriodicTask
+      description: Creates a Max automation. A scheduled task needs a cron expression; an event task needs a trigger from `GET /max/periodic-tasks/triggers`, and often a resource id identifying which mailbox, calendar, or spreadsheet to watch. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Tasks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                  default: true
+                  example: false
+                instructions:
+                  type: string
+                  minLength: 1
+                  example: example
+                name:
+                  type: string
+                  minLength: 1
+                  example: example
+                notifyByEmail:
+                  type: boolean
+                  default: false
+                  example: false
+                notifyByWhatsapp:
+                  type: boolean
+                  default: false
+                  example: false
+                notifyBySlack:
+                  type: boolean
+                  default: false
+                  example: false
+                notifyByTeams:
+                  type: boolean
+                  default: false
+                  example: false
+                slackChannelId:
+                  type:
+                  - string
+                  - 'null'
+                  example: example
+                cron:
+                  type: string
+                  example: example
+                triggerSlug:
+                  type: string
+                  enum:
+                  - GMAIL_NEW_GMAIL_MESSAGE
+                  - GOOGLECALENDAR_ATTENDEE_RESPONSE_CHANGED_TRIGGER
+                  - GOOGLECALENDAR_EVENT_STARTING_SOON_TRIGGER
+                  - GOOGLECALENDAR_GOOGLE_CALENDAR_EVENT_CREATED_TRIGGER
+                  - GOOGLECALENDAR_EVENT_CANCELED_DELETED_TRIGGER
+                  - GOOGLECALENDAR_GOOGLE_CALENDAR_EVENT_UPDATED_TRIGGER
+                  - GOOGLESHEETS_NEW_ROWS_TRIGGER
+                  - GOOGLEDOCS_DOCUMENT_UPDATED_TRIGGER
+                  - GOOGLEDOCS_DOCUMENT_DELETED_TRIGGER
+                  - GOOGLEDRIVE_FILE_CREATED_TRIGGER
+                  - GOOGLEDRIVE_FILE_UPDATED_TRIGGER
+                  - GOOGLEDRIVE_FILE_DELETED_OR_TRASHED_TRIGGER
+                  - ONE_DRIVE_FILE_CREATED_TRIGGER
+                  - ONE_DRIVE_FILE_UPDATED
+                  - ONE_DRIVE_FOLDER_CREATED_TRIGGER
+                  - YOUTUBE_NEW_ACTIVITY_TRIGGER
+                  - YOUTUBE_NEW_SUBSCRIPTION_TRIGGER
+                  - ZENDESK_NEW_ZENDESK_TICKET_TRIGGER
+                  - STRIPE_CHECKOUT_SESSION_COMPLETED_TRIGGER
+                  - STRIPE_PAYMENT_FAILED_TRIGGER
+                  - SALESFORCE_NEW_CONTACT_TRIGGER
+                  - SALESFORCE_NEW_LEAD_TRIGGER
+                  - SALESFORCE_NEW_OR_UPDATED_OPPORTUNITY_TRIGGER
+                  - SALESFORCE_ACCOUNT_CREATED_OR_UPDATED_TRIGGER
+                  - SALESFORCE_CONTACT_UPDATED_TRIGGER
+                  - SALESFORCE_GENERIC_S_OBJECT_RECORD_UPDATED_TRIGGER
+                  - HUBSPOT_DEAL_STAGE_UPDATED_TRIGGER
+                  - HUBSPOT_CONTACT_CREATED_TRIGGER
+                  - ASANA_TASK_TRIGGER
+                  - OUTLOOK_MESSAGE_TRIGGER
+                  - OUTLOOK_EVENT_CHANGE_TRIGGER
+                  - OUTLOOK_CONTACT_TRIGGER
+                  example: GMAIL_NEW_GMAIL_MESSAGE
+                triggerConfig:
+                  type: object
+                  additionalProperties: {}
+                integrations:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - GMAIL
+                    - GOOGLECALENDAR
+                    - SLACK
+                    - CALENDLY
+                    - GOOGLEDOCS
+                    - GOOGLESHEETS
+                    - NOTION
+                    - GOOGLEDRIVE
+                    - GRANOLA_MCP
+                    - GOOGLEMEET
+                    - ZOOM
+                    - GAMMA
+                    - STRIPE
+                    - POSTHOG
+                    - LINKEDIN
+                    - FACEBOOK
+                    - GOOGLE_ANALYTICS
+                    - GOOGLE_SEARCH_CONSOLE
+                    - MAILCHIMP
+                    - SEMRUSH
+                    - GOOGLEADS
+                    - INSTAGRAM
+                    - ADYNTEL
+                    - GOOGLETASKS
+                    - LINEAR
+                    - JIRA
+                    - ASANA
+                    - SHARE_POINT
+                    - ONE_DRIVE
+                    - EXCEL
+                    - TIKTOK
+                    - TWITTER
+                    - YOUTUBE
+                    - GOOGLE_MAPS
+                    - METAADS
+                    - SHOPIFY
+                    - AIRTABLE
+                    - MONDAY
+                    - TRELLO
+                    - GOOGLESLIDES
+                    - BUILTWITH
+                    - HUBSPOT
+                    - PIPEDRIVE
+                    - ATTIO
+                    - ZENDESK
+                    - SALESFORCE
+                    - SALESFORCE_SERVICE_CLOUD
+                    - INTERCOM
+                    - WEBFLOW
+                    - FIGMA
+                    - APOLLO
+                    - OUTLOOK
+                    - FRESHDESK
+                    - ZOHO_DESK
+                    - ZOHO_INVOICE
+                    - ZOHO
+                    - BREX
+                    example: GMAIL
+              required:
+              - instructions
+              - name
+      responses:
+        '201':
+          description: Task created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: example
+                      enabled:
+                        type: boolean
+                        example: false
+                      instructions:
+                        type: string
+                        example: example
+                      name:
+                        type: string
+                        example: example
+                      notifyByEmail:
+                        type: boolean
+                        default: false
+                        example: false
+                      notifyByWhatsapp:
+                        type: boolean
+                        default: false
+                        example: false
+                      notifyBySlack:
+                        type: boolean
+                        default: false
+                        example: false
+                      notifyByTeams:
+                        type: boolean
+                        default: false
+                        example: false
+                      slackChannelId:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      createdAt:
+                        type: string
+                        example: example
+                      updatedAt:
+                        type: string
+                        example: example
+                      periodicTask:
+                        type:
+                        - object
+                        - 'null'
+                        properties:
+                          id:
+                            type: string
+                            example: example
+                          cronExpression:
+                            type: string
+                            example: example
+                          tz:
+                            type: string
+                            example: example
+                          updatedAt:
+                            type: string
+                            example: example
+                          createdAt:
+                            type: string
+                            example: example
+                        required:
+                        - id
+                        - cronExpression
+                        - tz
+                        - updatedAt
+                        - createdAt
+                      trigger:
+                        type:
+                        - object
+                        - 'null'
+                        properties:
+                          id:
+                            type: string
+                            example: example
+                          triggerType:
+                            type: string
+                            example: example
+                          toolkit:
+                            type: string
+                            example: example
+                          config:
+                            type:
+                            - object
+                            - 'null'
+                            additionalProperties: {}
+                          enabled:
+                            type: boolean
+                            example: false
+                        required:
+                        - id
+                        - triggerType
+                        - toolkit
+                        - config
+                        - enabled
+                      integrations:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: string
+                          enum:
+                          - GMAIL
+                          - GOOGLECALENDAR
+                          - SLACK
+                          - CALENDLY
+                          - GOOGLEDOCS
+                          - GOOGLESHEETS
+                          - NOTION
+                          - GOOGLEDRIVE
+                          - GRANOLA_MCP
+                          - GOOGLEMEET
+                          - ZOOM
+                          - GAMMA
+                          - STRIPE
+                          - POSTHOG
+                          - LINKEDIN
+                          - FACEBOOK
+                          - GOOGLE_ANALYTICS
+                          - GOOGLE_SEARCH_CONSOLE
+                          - MAILCHIMP
+                          - SEMRUSH
+                          - GOOGLEADS
+                          - INSTAGRAM
+                          - ADYNTEL
+                          - GOOGLETASKS
+                          - LINEAR
+                          - JIRA
+                          - ASANA
+                          - SHARE_POINT
+                          - ONE_DRIVE
+                          - EXCEL
+                          - TIKTOK
+                          - TWITTER
+                          - YOUTUBE
+                          - GOOGLE_MAPS
+                          - METAADS
+                          - SHOPIFY
+                          - AIRTABLE
+                          - MONDAY
+                          - TRELLO
+                          - GOOGLESLIDES
+                          - BUILTWITH
+                          - HUBSPOT
+                          - PIPEDRIVE
+                          - ATTIO
+                          - ZENDESK
+                          - SALESFORCE
+                          - SALESFORCE_SERVICE_CLOUD
+                          - INTERCOM
+                          - WEBFLOW
+                          - FIGMA
+                          - APOLLO
+                          - OUTLOOK
+                          - FRESHDESK
+                          - ZOHO_DESK
+                          - ZOHO_INVOICE
+                          - ZOHO
+                          - BREX
+                          example: GMAIL
+                      availableTools:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: string
+                          example: example
+                      selectedRecordTypes:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: object
+                          properties:
+                            recordTypeId:
+                              type: number
+                              example: 1
+                            read:
+                              type: boolean
+                              example: false
+                            create:
+                              type: boolean
+                              example: false
+                            update:
+                              type: boolean
+                              example: false
+                            delete:
+                              type: boolean
+                              example: false
+                            createActivity:
+                              type: boolean
+                              example: false
+                          required:
+                          - recordTypeId
+                      selectedCustomTools:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              minimum: 1
+                              example: 1
+                            enabled:
+                              type: boolean
+                              default: true
+                              example: false
+                          required:
+                          - id
+                    required:
+                    - id
+                    - enabled
+                    - instructions
+                    - name
+                    - createdAt
+                    - updatedAt
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/max/periodic-tasks/triggers:
+    get:
+      summary: List available Max task triggers
+      operationId: listMaxPeriodicTaskTriggers
+      description: Returns the event triggers the caller can build automations on, based on which integrations they have connected. Use this before creating an event task, since the available triggers differ per user. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Tasks
+      responses:
+        '200':
+          description: Available triggers
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          type: object
+                          additionalProperties: {}
+                    required:
+                    - results
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/max/periodic-tasks/{id}:
+    get:
+      summary: Get a Max task
+      operationId: getMaxPeriodicTask
+      description: Returns one automation with its schedule or trigger, prompt, and enabled state. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Tasks
+      parameters:
+      - schema:
+          type: string
+          example: cmk3f1p2a0000qx0h9y6r1s2t
+        required: true
+        name: id
+        in: path
+      responses:
+        '200':
+          description: Task detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: example
+                      enabled:
+                        type: boolean
+                        example: false
+                      instructions:
+                        type: string
+                        example: example
+                      name:
+                        type: string
+                        example: example
+                      notifyByEmail:
+                        type: boolean
+                        default: false
+                        example: false
+                      notifyByWhatsapp:
+                        type: boolean
+                        default: false
+                        example: false
+                      notifyBySlack:
+                        type: boolean
+                        default: false
+                        example: false
+                      notifyByTeams:
+                        type: boolean
+                        default: false
+                        example: false
+                      slackChannelId:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      createdAt:
+                        type: string
+                        example: example
+                      updatedAt:
+                        type: string
+                        example: example
+                      periodicTask:
+                        type:
+                        - object
+                        - 'null'
+                        properties:
+                          id:
+                            type: string
+                            example: example
+                          cronExpression:
+                            type: string
+                            example: example
+                          tz:
+                            type: string
+                            example: example
+                          updatedAt:
+                            type: string
+                            example: example
+                          createdAt:
+                            type: string
+                            example: example
+                        required:
+                        - id
+                        - cronExpression
+                        - tz
+                        - updatedAt
+                        - createdAt
+                      trigger:
+                        type:
+                        - object
+                        - 'null'
+                        properties:
+                          id:
+                            type: string
+                            example: example
+                          triggerType:
+                            type: string
+                            example: example
+                          toolkit:
+                            type: string
+                            example: example
+                          config:
+                            type:
+                            - object
+                            - 'null'
+                            additionalProperties: {}
+                          enabled:
+                            type: boolean
+                            example: false
+                        required:
+                        - id
+                        - triggerType
+                        - toolkit
+                        - config
+                        - enabled
+                      integrations:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: string
+                          enum:
+                          - GMAIL
+                          - GOOGLECALENDAR
+                          - SLACK
+                          - CALENDLY
+                          - GOOGLEDOCS
+                          - GOOGLESHEETS
+                          - NOTION
+                          - GOOGLEDRIVE
+                          - GRANOLA_MCP
+                          - GOOGLEMEET
+                          - ZOOM
+                          - GAMMA
+                          - STRIPE
+                          - POSTHOG
+                          - LINKEDIN
+                          - FACEBOOK
+                          - GOOGLE_ANALYTICS
+                          - GOOGLE_SEARCH_CONSOLE
+                          - MAILCHIMP
+                          - SEMRUSH
+                          - GOOGLEADS
+                          - INSTAGRAM
+                          - ADYNTEL
+                          - GOOGLETASKS
+                          - LINEAR
+                          - JIRA
+                          - ASANA
+                          - SHARE_POINT
+                          - ONE_DRIVE
+                          - EXCEL
+                          - TIKTOK
+                          - TWITTER
+                          - YOUTUBE
+                          - GOOGLE_MAPS
+                          - METAADS
+                          - SHOPIFY
+                          - AIRTABLE
+                          - MONDAY
+                          - TRELLO
+                          - GOOGLESLIDES
+                          - BUILTWITH
+                          - HUBSPOT
+                          - PIPEDRIVE
+                          - ATTIO
+                          - ZENDESK
+                          - SALESFORCE
+                          - SALESFORCE_SERVICE_CLOUD
+                          - INTERCOM
+                          - WEBFLOW
+                          - FIGMA
+                          - APOLLO
+                          - OUTLOOK
+                          - FRESHDESK
+                          - ZOHO_DESK
+                          - ZOHO_INVOICE
+                          - ZOHO
+                          - BREX
+                          example: GMAIL
+                      availableTools:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: string
+                          example: example
+                      selectedRecordTypes:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: object
+                          properties:
+                            recordTypeId:
+                              type: number
+                              example: 1
+                            read:
+                              type: boolean
+                              example: false
+                            create:
+                              type: boolean
+                              example: false
+                            update:
+                              type: boolean
+                              example: false
+                            delete:
+                              type: boolean
+                              example: false
+                            createActivity:
+                              type: boolean
+                              example: false
+                          required:
+                          - recordTypeId
+                      selectedCustomTools:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              minimum: 1
+                              example: 1
+                            enabled:
+                              type: boolean
+                              default: true
+                              example: false
+                          required:
+                          - id
+                    required:
+                    - id
+                    - enabled
+                    - instructions
+                    - name
+                    - createdAt
+                    - updatedAt
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a Max task
+      operationId: updateMaxPeriodicTask
+      description: Replaces an automation's configuration. Send the whole task, not a patch — this is also how a task is enabled or disabled. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Tasks
+      parameters:
+      - schema:
+          type: string
+          example: cmk3f1p2a0000qx0h9y6r1s2t
+        required: true
+        name: id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                enabled:
+                  type: boolean
+                  default: true
+                  example: false
+                instructions:
+                  type: string
+                  minLength: 1
+                  example: example
+                name:
+                  type: string
+                  minLength: 1
+                  example: example
+                notifyByEmail:
+                  type: boolean
+                  default: false
+                  example: false
+                notifyByWhatsapp:
+                  type: boolean
+                  default: false
+                  example: false
+                notifyBySlack:
+                  type: boolean
+                  default: false
+                  example: false
+                notifyByTeams:
+                  type: boolean
+                  default: false
+                  example: false
+                slackChannelId:
+                  type:
+                  - string
+                  - 'null'
+                  example: example
+                cron:
+                  type: string
+                  example: example
+                triggerSlug:
+                  type: string
+                  enum:
+                  - GMAIL_NEW_GMAIL_MESSAGE
+                  - GOOGLECALENDAR_ATTENDEE_RESPONSE_CHANGED_TRIGGER
+                  - GOOGLECALENDAR_EVENT_STARTING_SOON_TRIGGER
+                  - GOOGLECALENDAR_GOOGLE_CALENDAR_EVENT_CREATED_TRIGGER
+                  - GOOGLECALENDAR_EVENT_CANCELED_DELETED_TRIGGER
+                  - GOOGLECALENDAR_GOOGLE_CALENDAR_EVENT_UPDATED_TRIGGER
+                  - GOOGLESHEETS_NEW_ROWS_TRIGGER
+                  - GOOGLEDOCS_DOCUMENT_UPDATED_TRIGGER
+                  - GOOGLEDOCS_DOCUMENT_DELETED_TRIGGER
+                  - GOOGLEDRIVE_FILE_CREATED_TRIGGER
+                  - GOOGLEDRIVE_FILE_UPDATED_TRIGGER
+                  - GOOGLEDRIVE_FILE_DELETED_OR_TRASHED_TRIGGER
+                  - ONE_DRIVE_FILE_CREATED_TRIGGER
+                  - ONE_DRIVE_FILE_UPDATED
+                  - ONE_DRIVE_FOLDER_CREATED_TRIGGER
+                  - YOUTUBE_NEW_ACTIVITY_TRIGGER
+                  - YOUTUBE_NEW_SUBSCRIPTION_TRIGGER
+                  - ZENDESK_NEW_ZENDESK_TICKET_TRIGGER
+                  - STRIPE_CHECKOUT_SESSION_COMPLETED_TRIGGER
+                  - STRIPE_PAYMENT_FAILED_TRIGGER
+                  - SALESFORCE_NEW_CONTACT_TRIGGER
+                  - SALESFORCE_NEW_LEAD_TRIGGER
+                  - SALESFORCE_NEW_OR_UPDATED_OPPORTUNITY_TRIGGER
+                  - SALESFORCE_ACCOUNT_CREATED_OR_UPDATED_TRIGGER
+                  - SALESFORCE_CONTACT_UPDATED_TRIGGER
+                  - SALESFORCE_GENERIC_S_OBJECT_RECORD_UPDATED_TRIGGER
+                  - HUBSPOT_DEAL_STAGE_UPDATED_TRIGGER
+                  - HUBSPOT_CONTACT_CREATED_TRIGGER
+                  - ASANA_TASK_TRIGGER
+                  - OUTLOOK_MESSAGE_TRIGGER
+                  - OUTLOOK_EVENT_CHANGE_TRIGGER
+                  - OUTLOOK_CONTACT_TRIGGER
+                  example: GMAIL_NEW_GMAIL_MESSAGE
+                triggerConfig:
+                  type: object
+                  additionalProperties: {}
+                integrations:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - GMAIL
+                    - GOOGLECALENDAR
+                    - SLACK
+                    - CALENDLY
+                    - GOOGLEDOCS
+                    - GOOGLESHEETS
+                    - NOTION
+                    - GOOGLEDRIVE
+                    - GRANOLA_MCP
+                    - GOOGLEMEET
+                    - ZOOM
+                    - GAMMA
+                    - STRIPE
+                    - POSTHOG
+                    - LINKEDIN
+                    - FACEBOOK
+                    - GOOGLE_ANALYTICS
+                    - GOOGLE_SEARCH_CONSOLE
+                    - MAILCHIMP
+                    - SEMRUSH
+                    - GOOGLEADS
+                    - INSTAGRAM
+                    - ADYNTEL
+                    - GOOGLETASKS
+                    - LINEAR
+                    - JIRA
+                    - ASANA
+                    - SHARE_POINT
+                    - ONE_DRIVE
+                    - EXCEL
+                    - TIKTOK
+                    - TWITTER
+                    - YOUTUBE
+                    - GOOGLE_MAPS
+                    - METAADS
+                    - SHOPIFY
+                    - AIRTABLE
+                    - MONDAY
+                    - TRELLO
+                    - GOOGLESLIDES
+                    - BUILTWITH
+                    - HUBSPOT
+                    - PIPEDRIVE
+                    - ATTIO
+                    - ZENDESK
+                    - SALESFORCE
+                    - SALESFORCE_SERVICE_CLOUD
+                    - INTERCOM
+                    - WEBFLOW
+                    - FIGMA
+                    - APOLLO
+                    - OUTLOOK
+                    - FRESHDESK
+                    - ZOHO_DESK
+                    - ZOHO_INVOICE
+                    - ZOHO
+                    - BREX
+                    example: GMAIL
+              required:
+              - instructions
+              - name
+      responses:
+        '200':
+          description: Updated task
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: example
+                      enabled:
+                        type: boolean
+                        example: false
+                      instructions:
+                        type: string
+                        example: example
+                      name:
+                        type: string
+                        example: example
+                      notifyByEmail:
+                        type: boolean
+                        default: false
+                        example: false
+                      notifyByWhatsapp:
+                        type: boolean
+                        default: false
+                        example: false
+                      notifyBySlack:
+                        type: boolean
+                        default: false
+                        example: false
+                      notifyByTeams:
+                        type: boolean
+                        default: false
+                        example: false
+                      slackChannelId:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      createdAt:
+                        type: string
+                        example: example
+                      updatedAt:
+                        type: string
+                        example: example
+                      periodicTask:
+                        type:
+                        - object
+                        - 'null'
+                        properties:
+                          id:
+                            type: string
+                            example: example
+                          cronExpression:
+                            type: string
+                            example: example
+                          tz:
+                            type: string
+                            example: example
+                          updatedAt:
+                            type: string
+                            example: example
+                          createdAt:
+                            type: string
+                            example: example
+                        required:
+                        - id
+                        - cronExpression
+                        - tz
+                        - updatedAt
+                        - createdAt
+                      trigger:
+                        type:
+                        - object
+                        - 'null'
+                        properties:
+                          id:
+                            type: string
+                            example: example
+                          triggerType:
+                            type: string
+                            example: example
+                          toolkit:
+                            type: string
+                            example: example
+                          config:
+                            type:
+                            - object
+                            - 'null'
+                            additionalProperties: {}
+                          enabled:
+                            type: boolean
+                            example: false
+                        required:
+                        - id
+                        - triggerType
+                        - toolkit
+                        - config
+                        - enabled
+                      integrations:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: string
+                          enum:
+                          - GMAIL
+                          - GOOGLECALENDAR
+                          - SLACK
+                          - CALENDLY
+                          - GOOGLEDOCS
+                          - GOOGLESHEETS
+                          - NOTION
+                          - GOOGLEDRIVE
+                          - GRANOLA_MCP
+                          - GOOGLEMEET
+                          - ZOOM
+                          - GAMMA
+                          - STRIPE
+                          - POSTHOG
+                          - LINKEDIN
+                          - FACEBOOK
+                          - GOOGLE_ANALYTICS
+                          - GOOGLE_SEARCH_CONSOLE
+                          - MAILCHIMP
+                          - SEMRUSH
+                          - GOOGLEADS
+                          - INSTAGRAM
+                          - ADYNTEL
+                          - GOOGLETASKS
+                          - LINEAR
+                          - JIRA
+                          - ASANA
+                          - SHARE_POINT
+                          - ONE_DRIVE
+                          - EXCEL
+                          - TIKTOK
+                          - TWITTER
+                          - YOUTUBE
+                          - GOOGLE_MAPS
+                          - METAADS
+                          - SHOPIFY
+                          - AIRTABLE
+                          - MONDAY
+                          - TRELLO
+                          - GOOGLESLIDES
+                          - BUILTWITH
+                          - HUBSPOT
+                          - PIPEDRIVE
+                          - ATTIO
+                          - ZENDESK
+                          - SALESFORCE
+                          - SALESFORCE_SERVICE_CLOUD
+                          - INTERCOM
+                          - WEBFLOW
+                          - FIGMA
+                          - APOLLO
+                          - OUTLOOK
+                          - FRESHDESK
+                          - ZOHO_DESK
+                          - ZOHO_INVOICE
+                          - ZOHO
+                          - BREX
+                          example: GMAIL
+                      availableTools:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: string
+                          example: example
+                      selectedRecordTypes:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: object
+                          properties:
+                            recordTypeId:
+                              type: number
+                              example: 1
+                            read:
+                              type: boolean
+                              example: false
+                            create:
+                              type: boolean
+                              example: false
+                            update:
+                              type: boolean
+                              example: false
+                            delete:
+                              type: boolean
+                              example: false
+                            createActivity:
+                              type: boolean
+                              example: false
+                          required:
+                          - recordTypeId
+                      selectedCustomTools:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              minimum: 1
+                              example: 1
+                            enabled:
+                              type: boolean
+                              default: true
+                              example: false
+                          required:
+                          - id
+                    required:
+                    - id
+                    - enabled
+                    - instructions
+                    - name
+                    - createdAt
+                    - updatedAt
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a Max task
+      operationId: deleteMaxPeriodicTask
+      description: Permanently deletes a Max automation. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Tasks
+      parameters:
+      - schema:
+          type: string
+          example: cmk3f1p2a0000qx0h9y6r1s2t
+        required: true
+        name: id
+        in: path
+      responses:
+        '200':
+          description: Task deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                        example: true
+                      taskId:
+                        type: string
+                        example: cmk3f1p2a0000qx0h9y6r1s2t
+                    required:
+                    - success
+                    - taskId
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/max/periodic-tasks/{id}/execute:
+    post:
+      summary: Run a Max task now
+      operationId: runMaxPeriodicTask
+      description: Runs a scheduled task immediately without waiting for its next cron slot, which is the fastest way to check that a new automation does what you expect. Event tasks cannot be run this way. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Tasks
+      parameters:
+      - schema:
+          type: string
+          example: cmk3f1p2a0000qx0h9y6r1s2t
+        required: true
+        name: id
+        in: path
+      responses:
+        '200':
+          description: Execution result
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    additionalProperties: {}
+                required:
+                - ok
+                - data
+        '400':
+          description: Event-triggered tasks cannot be run manually
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          - upgrade_required
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Workspace Connectors
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
+  tags:
+  - Account
+  - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
+  - User Tasks
+  - Guidance

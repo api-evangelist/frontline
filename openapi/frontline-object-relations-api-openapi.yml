@@ -2,7 +2,35 @@ openapi: 3.2.0
 info:
   title: Public Object relations API
   version: 1.0.0
-  description: Public API for accessing agents, flows, and analytics.
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -55,6 +83,7 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: array
                     items:
@@ -62,16 +91,20 @@ paths:
                       properties:
                         id:
                           type: string
+                          example: example
                         auto_id:
                           type: number
+                          example: 1
                         created_at:
                           type:
                           - string
                           - 'null'
+                          example: example
                         updated_at:
                           type:
                           - string
                           - 'null'
+                          example: example
                       additionalProperties: {}
                 required:
                 - ok
@@ -126,21 +159,24 @@ paths:
         in: path
       - schema:
           type: integer
+          minimum: 1
           default: 1
-          exclusiveMinimum: 0
+          example: 1
         required: false
         name: page
         in: query
       - schema:
           type: integer
+          minimum: 1
           maximum: 200
           default: 50
-          exclusiveMinimum: 0
+          example: 1
         required: false
         name: page_size
         in: query
       - schema:
           type: string
+          example: example
         required: false
         name: search
         in: query
@@ -156,6 +192,7 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: object
                     properties:
@@ -166,23 +203,30 @@ paths:
                           properties:
                             id:
                               type: string
+                              example: example
                             auto_id:
                               type: number
+                              example: 1
                             created_at:
                               type:
                               - string
                               - 'null'
+                              example: example
                             updated_at:
                               type:
                               - string
                               - 'null'
+                              example: example
                           additionalProperties: {}
                       total_count:
                         type: number
+                        example: 1
                       total_pages:
                         type: number
+                        example: 1
                       current_page:
                         type: number
+                        example: 1
                     required:
                     - rows
                     - total_count
@@ -264,21 +308,26 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: string
+                        example: example
                       auto_id:
                         type: number
+                        example: 1
                       created_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                       updated_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                     additionalProperties: {}
                 required:
                 - ok
@@ -356,21 +405,26 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: string
+                        example: example
                       auto_id:
                         type: number
+                        example: 1
                       created_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                       updated_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                     additionalProperties: {}
                 required:
                 - ok
@@ -408,6 +462,7 @@ components:
           - conflict
           - internal_error
           - cli_outdated
+          - upgrade_required
           example: unauthorized
         message:
           type: string
@@ -461,6 +516,14 @@ x-tagGroups:
   tags:
   - Workflows
   - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
 - name: Objects
   tags:
   - Objects
@@ -486,24 +549,34 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
-- name: Channels
-  tags:
-  - Channels
 - name: Integrations
   tags:
   - Custom Tools
   - Incoming Webhooks
-  - Account Integrations
+  - Workspace Connectors
   - Agent Channels
   - Integration Resources
 - name: Knowledge
   tags:
   - Knowledge Bases
-- name: Core
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
   tags:
   - Account
-  - AI Models
-  - Billing
   - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
   - User Tasks
   - Guidance

@@ -2,7 +2,35 @@ openapi: 3.2.0
 info:
   title: Public Table export API
   version: 1.0.0
-  description: Public API for accessing agents, flows, and analytics.
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -42,6 +70,7 @@ paths:
                   type:
                   - string
                   - 'null'
+                  example: example
                 sort:
                   type:
                   - array
@@ -54,7 +83,10 @@ paths:
           description: XLSX binary
           content:
             application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
-              schema: {}
+              schema:
+                type: string
+                format: binary
+                example: example
         '400':
           description: Bad Request
           content:
@@ -103,6 +135,7 @@ paths:
                   type:
                   - string
                   - 'null'
+                  example: example
                 sort:
                   type:
                   - array
@@ -115,7 +148,13 @@ paths:
           description: CSV body
           content:
             text/csv:
-              schema: {}
+              schema:
+                type: string
+                example: 'id,name
+
+                  1,Acme Inc.
+
+                  '
         '400':
           description: Bad Request
           content:
@@ -149,6 +188,7 @@ components:
           - conflict
           - internal_error
           - cli_outdated
+          - upgrade_required
           example: unauthorized
         message:
           type: string
@@ -202,6 +242,14 @@ x-tagGroups:
   tags:
   - Workflows
   - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
 - name: Objects
   tags:
   - Objects
@@ -227,24 +275,34 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
-- name: Channels
-  tags:
-  - Channels
 - name: Integrations
   tags:
   - Custom Tools
   - Incoming Webhooks
-  - Account Integrations
+  - Workspace Connectors
   - Agent Channels
   - Integration Resources
 - name: Knowledge
   tags:
   - Knowledge Bases
-- name: Core
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
   tags:
   - Account
-  - AI Models
-  - Billing
   - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
   - User Tasks
   - Guidance

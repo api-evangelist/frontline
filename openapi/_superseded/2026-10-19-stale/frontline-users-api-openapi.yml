@@ -1,0 +1,154 @@
+openapi: 3.2.0
+info:
+  title: Public Users API
+  version: 1.0.0
+  description: Public API for accessing agents, flows, and analytics.
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Users
+  description: List account users to resolve IDs for relations and assignment
+paths:
+  /public/v1/users:
+    get:
+      summary: List account users
+      operationId: listUsers
+      description: Lists the users in your account. Use to resolve user IDs for user-relation fields and task assignment. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Users
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicUserList'
+components:
+  schemas:
+    PublicUser:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 12
+        first_name:
+          type:
+          - string
+          - 'null'
+        last_name:
+          type:
+          - string
+          - 'null'
+        full_name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        avatar:
+          type:
+          - string
+          - 'null'
+        role:
+          type: string
+          enum:
+          - OWNER
+          - ADMIN
+          - USER
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - DELETED
+          - INVITED
+          - ONBOARDING
+      required:
+      - id
+      - role
+      - status
+    PublicUserList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicUser'
+      required:
+      - results
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

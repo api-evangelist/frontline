@@ -2,7 +2,35 @@ openapi: 3.2.0
 info:
   title: Public Incoming Webhooks API
   version: 1.0.0
-  description: Public API for accessing agents, flows, and analytics.
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -223,6 +251,7 @@ paths:
           type:
           - string
           - 'null'
+          example: example
         required: false
         name: startDate
         in: query
@@ -230,11 +259,13 @@ paths:
           type:
           - string
           - 'null'
+          example: example
         required: false
         name: endDate
         in: query
       - schema:
           type: string
+          example: example
         required: false
         name: search
         in: query
@@ -246,6 +277,7 @@ paths:
           - COMPLETED
           - FAILED
           - TIMEOUT
+          example: RECEIVED
         required: false
         name: status
         in: query
@@ -299,48 +331,6 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
-    PublicIncomingWebhookEventDetail:
-      allOf:
-      - $ref: '#/components/schemas/PublicIncomingWebhookEvent'
-      - type: object
-        properties:
-          automations:
-            type: array
-            items:
-              type: object
-              properties:
-                id:
-                  type: number
-                  example: 42
-                name:
-                  type: string
-                  example: Notify sales channel
-                status:
-                  type:
-                  - string
-                  - 'null'
-                  example: ACTIVE
-              required:
-              - id
-              - name
-    PublicIncomingWebhookUpdateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: External CRM event
-        description:
-          type:
-          - string
-          - 'null'
-          example: Receives events from the external CRM
-        isActive:
-          type: boolean
-          example: true
-        useAuthentication:
-          type: boolean
-          example: true
     PublicIncomingWebhookEvent:
       type: object
       properties:
@@ -358,6 +348,9 @@ components:
           example: COMPLETED
         payload:
           description: Raw JSON payload received
+          type:
+          - object
+          - 'null'
         payloadSize:
           type:
           - number
@@ -426,32 +419,24 @@ components:
       - useAuthentication
       - createdAt
       - updatedAt
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
     PublicIncomingWebhookEventList:
       type: object
       properties:
         count:
           type: number
+          example: 1
         pageSize:
           type: number
+          example: 1
         pageNum:
           type: number
+          example: 1
         totalPages:
           type: number
+          example: 1
         cursor:
           type: number
+          example: 1
         results:
           type: array
           items:
@@ -462,11 +447,16 @@ components:
           - offset
           - cursor
           default: offset
+          example: offset
         nextCursor:
           anyOf:
           - type: string
+            example: example
           - type: number
-          - {}
+            example: 1
+          - type:
+            - object
+            - 'null'
       required:
       - pageSize
       - results
@@ -534,6 +524,37 @@ components:
       - useAuthentication
       - createdAt
       - updatedAt
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicIncomingWebhookUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: External CRM event
+        description:
+          type:
+          - string
+          - 'null'
+          example: Receives events from the external CRM
+        isActive:
+          type: boolean
+          example: true
+        useAuthentication:
+          type: boolean
+          example: true
     ErrorBody:
       type: object
       properties:
@@ -547,6 +568,7 @@ components:
           - conflict
           - internal_error
           - cli_outdated
+          - upgrade_required
           example: unauthorized
         message:
           type: string
@@ -563,6 +585,30 @@ components:
       required:
       - code
       - message
+    PublicIncomingWebhookEventDetail:
+      allOf:
+      - $ref: '#/components/schemas/PublicIncomingWebhookEvent'
+      - type: object
+        properties:
+          automations:
+            type: array
+            items:
+              type: object
+              properties:
+                id:
+                  type: number
+                  example: 42
+                name:
+                  type: string
+                  example: Notify sales channel
+                status:
+                  type:
+                  - string
+                  - 'null'
+                  example: ACTIVE
+              required:
+              - id
+              - name
   securitySchemes:
     accountApiKey:
       type: http
@@ -587,6 +633,14 @@ x-tagGroups:
   tags:
   - Workflows
   - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
 - name: Objects
   tags:
   - Objects
@@ -612,24 +666,34 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
-- name: Channels
-  tags:
-  - Channels
 - name: Integrations
   tags:
   - Custom Tools
   - Incoming Webhooks
-  - Account Integrations
+  - Workspace Connectors
   - Agent Channels
   - Integration Resources
 - name: Knowledge
   tags:
   - Knowledge Bases
-- name: Core
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
   tags:
   - Account
-  - AI Models
-  - Billing
   - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
   - User Tasks
   - Guidance

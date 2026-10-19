@@ -2,7 +2,35 @@ openapi: 3.2.0
 info:
   title: Public Agent Channels API
   version: 1.0.0
-  description: Public API for accessing agents, flows, and analytics.
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -14,20 +42,88 @@ tags:
 paths:
   /public/v1/channels:
     get:
-      summary: List channel integrations
-      operationId: listChannelIntegrations
-      description: Returns the account's connected channel integrations (WhatsApp, Instagram, Messenger) and which agent each number/account/page is bound to. Connecting a channel requires the OAuth flow in the app and is not available via the API. Requires a USER API key.
+      summary: List connected communication channels
+      operationId: listChannels
+      description: Read-only list of WhatsApp Business numbers, Instagram accounts, and Messenger pages connected to this account, and which agent each one is bound to. For Send WhatsApp Message nodes, use a WhatsApp number where canSendMessages is true (assistantId assigned). Connecting a channel requires the OAuth flow in the app and is not available via the API.
       security:
+      - accountApiKey: []
       - userApiKey: []
       tags:
       - Agent Channels
       responses:
         '200':
-          description: The account's channel integrations (null if none connected)
+          description: Connected communication channels for this account
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/PublicChannelIntegrations'
+                $ref: '#/components/schemas/PublicChannelsOutput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/channels/whatsapp/flows/{flowId}/definition:
+    get:
+      summary: Get a WhatsApp flow definition
+      operationId: getChannelWhatsappFlowDefinition
+      description: Downloads flow.json from Meta using this account's WhatsApp integration. Use definition.screens[].data to build flowActionData. When Meta does not grant Flow asset access, available is false and callers should accept a raw flowActionData object instead.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Agent Channels
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          description: Meta WhatsApp Flow ID.
+          example: '1568183430948890'
+        required: true
+        name: flowId
+        in: path
+      responses:
+        '200':
+          description: WhatsApp Flow definition availability
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicWhatsAppFlowDefinitionOutput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/channels/whatsapp/templates:
+    get:
+      summary: List approved WhatsApp templates
+      operationId: listChannelWhatsappTemplates
+      description: Read-only list of APPROVED WhatsApp message templates from Meta for this account's WhatsApp Business channel. Use template.name in SEND_WHATSAPP_MESSAGE nodes and map parameters into templateVariables.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Agent Channels
+      responses:
+        '200':
+          description: Approved WhatsApp templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicWhatsAppTemplatesOutput'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: WhatsApp channel not configured
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /public/v1/channels/whatsapp/numbers/{phoneNumberId}/business-info:
     get:
       summary: Get WhatsApp number business info
@@ -63,8 +159,8 @@ paths:
       parameters:
       - schema:
           type: integer
+          minimum: 1
           example: 12
-          exclusiveMinimum: 0
         required: true
         name: integrationId
         in: path
@@ -98,8 +194,8 @@ paths:
       parameters:
       - schema:
           type: integer
+          minimum: 1
           example: 12
-          exclusiveMinimum: 0
         required: true
         name: integrationId
         in: path
@@ -124,8 +220,8 @@ paths:
       parameters:
       - schema:
           type: integer
+          minimum: 1
           example: 12
-          exclusiveMinimum: 0
         required: true
         name: integrationId
         in: path
@@ -150,8 +246,8 @@ paths:
       parameters:
       - schema:
           type: integer
+          minimum: 1
           example: 5
-          exclusiveMinimum: 0
         required: true
         name: instagramAccountId
         in: path
@@ -175,8 +271,8 @@ paths:
       parameters:
       - schema:
           type: integer
+          minimum: 1
           example: 7
-          exclusiveMinimum: 0
         required: true
         name: messengerPageId
         in: path
@@ -190,6 +286,298 @@ paths:
           description: The updated Messenger page
 components:
   schemas:
+    PublicWhatsAppTemplate:
+      type: object
+      properties:
+        id:
+          type: string
+          example: example
+        name:
+          type: string
+          description: Template name to use in SEND_WHATSAPP_MESSAGE nodes.
+          example: hello_world
+        language:
+          type: string
+          example: example
+        status:
+          type: string
+          example: example
+        category:
+          type: string
+          example: example
+        components:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+        parameters:
+          $ref: '#/components/schemas/PublicWhatsAppTemplateParameters'
+      required:
+      - name
+    PublicWhatsAppNumber:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        phoneNumberId:
+          type: string
+          example: example
+        assistantId:
+          type:
+          - string
+          - 'null'
+          example: example
+        assistant:
+          type:
+          - object
+          - 'null'
+          properties:
+            id:
+              type: string
+              example: example
+            name:
+              type: string
+              example: example
+          required:
+          - id
+          - name
+        status:
+          type: string
+          enum:
+          - CONNECTED
+          - PENDING
+          - UNREGISTERED
+          - ERROR
+          - VERIFICATION_PENDING
+          - DELETED
+          example: CONNECTED
+        wabaId:
+          type: string
+          example: example
+        name:
+          type: string
+          example: example
+        about:
+          type:
+          - string
+          - 'null'
+          example: example
+        description:
+          type:
+          - string
+          - 'null'
+          example: example
+        address:
+          type:
+          - string
+          - 'null'
+          example: example
+        category:
+          type: string
+          enum:
+          - AUTO
+          - BEAUTY
+          - APPAREL
+          - EDU
+          - ENTERTAIN
+          - EVENT_PLAN
+          - FINANCE
+          - GROCERY
+          - GOVT
+          - HOTEL
+          - HEALTH
+          - NONPROFIT
+          - PROF_SERVICES
+          - RETAIL
+          - TRAVEL
+          - RESTAURANT
+          - OTHER
+          - UNDEFINED
+          example: AUTO
+        displayPhoneNumber:
+          type: string
+          example: example
+        website:
+          type:
+          - string
+          - 'null'
+          example: example
+        secondaryWebsite:
+          type:
+          - string
+          - 'null'
+          example: example
+        verificationStatus:
+          type: string
+          enum:
+          - VERIFIED
+          - NOT_VERIFIED
+          example: VERIFIED
+        image:
+          type:
+          - string
+          - 'null'
+          example: example
+        email:
+          type:
+          - string
+          - 'null'
+          example: example
+        createdAt:
+          type: string
+          example: example
+        updatedAt:
+          type: string
+          example: example
+      required:
+      - id
+      - phoneNumberId
+      - assistantId
+      - status
+      - wabaId
+      - name
+      - about
+      - description
+      - address
+      - category
+      - displayPhoneNumber
+      - website
+      - secondaryWebsite
+      - verificationStatus
+      - image
+      - email
+      - createdAt
+      - updatedAt
+    PublicWhatsAppFlowDefinitionOutput:
+      oneOf:
+      - type: object
+        properties:
+          available:
+            type: boolean
+            enum:
+            - true
+            example: true
+          flowId:
+            type: string
+            example: example
+          definition:
+            type: object
+            additionalProperties: {}
+        required:
+        - available
+        - flowId
+        - definition
+      - type: object
+        properties:
+          available:
+            type: boolean
+            enum:
+            - false
+            example: false
+          flowId:
+            type: string
+            example: example
+          reason:
+            type: string
+            enum:
+            - integration_unavailable
+            - flow_not_in_account
+            - meta_permission_denied
+            - integration_auth_failed
+            - definition_unavailable
+            - upstream_unavailable
+            example: integration_unavailable
+          message:
+            type: string
+            example: example
+        required:
+        - available
+        - flowId
+        - reason
+        - message
+    PublicChannelAssistant:
+      type:
+      - object
+      - 'null'
+      properties:
+        id:
+          type: string
+          example: example
+        name:
+          type: string
+          example: example
+      required:
+      - id
+      - name
+    PublicWhatsAppTemplatesOutput:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicWhatsAppTemplate'
+      required:
+      - results
+    PublicChannelsOutput:
+      type: object
+      properties:
+        whatsapp:
+          type: object
+          properties:
+            connected:
+              type: boolean
+              example: false
+            phoneNumbers:
+              type: array
+              items:
+                $ref: '#/components/schemas/PublicWhatsAppPhoneNumber'
+          required:
+          - connected
+          - phoneNumbers
+          description: WhatsApp Business numbers connected to this account.
+        instagram:
+          type: object
+          properties:
+            connected:
+              type: boolean
+              example: false
+            accounts:
+              type: array
+              items:
+                $ref: '#/components/schemas/PublicInstagramAccount'
+          required:
+          - connected
+          - accounts
+          description: Instagram accounts connected to this account.
+        messenger:
+          type: object
+          properties:
+            connected:
+              type: boolean
+              example: false
+            pages:
+              type: array
+              items:
+                $ref: '#/components/schemas/PublicMessengerPage'
+          required:
+          - connected
+          - pages
+          description: Messenger pages connected to this account.
+      required:
+      - whatsapp
+      - instagram
+      - messenger
+    PublicChannelAssignInput:
+      type: object
+      properties:
+        agentId:
+          type:
+          - string
+          - 'null'
+          example: asst_123
+      required:
+      - agentId
     PublicWhatsAppNumberUpdateInput:
       type: object
       properties:
@@ -198,33 +586,39 @@ components:
           - string
           - 'null'
           maxLength: 512
+          example: example
         website:
           type:
           - string
           - 'null'
           maxLength: 256
+          example: example
         secondaryWebsite:
           type:
           - string
           - 'null'
           maxLength: 256
+          example: example
         address:
           type:
           - string
           - 'null'
           maxLength: 256
+          example: example
         email:
           type:
           - string
           - 'null'
           maxLength: 128
           format: email
+          example: user@example.com
         about:
           type:
           - string
           - 'null'
           minLength: 1
           maxLength: 139
+          example: example
         category:
           type:
           - string
@@ -248,11 +642,25 @@ components:
           - RESTAURANT
           - OTHER
           - UNDEFINED
+          example: AUTO
         agentId:
           type:
           - string
           - 'null'
           example: asst_123
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
     PublicWhatsAppBusinessInfo:
       type: object
       properties:
@@ -260,28 +668,34 @@ components:
           type:
           - string
           - 'null'
+          example: example
         address:
           type:
           - string
           - 'null'
+          example: example
         description:
           type:
           - string
           - 'null'
+          example: example
         email:
           type:
           - string
           - 'null'
+          example: example
         profile_picture_url:
           type:
           - string
           - 'null'
+          example: example
         websites:
           type:
           - array
           - 'null'
           items:
             type: string
+            example: example
         vertical:
           type:
           - string
@@ -305,396 +719,139 @@ components:
           - RESTAURANT
           - OTHER
           - UNDEFINED
-    PublicChannelIntegrations:
-      type:
-      - object
-      - 'null'
+          example: AUTO
+    PublicWhatsAppTemplateParameters:
+      type: object
+      properties:
+        HEADER:
+          type: array
+          items:
+            type: string
+            example: example
+        BODY:
+          type: array
+          items:
+            type: string
+            example: example
+        FOOTER:
+          type: array
+          items:
+            type: string
+            example: example
+        BUTTONS:
+          type: array
+          items:
+            type: string
+            example: example
+        BUTTONS_URL:
+          type: array
+          items:
+            type: string
+            example: example
+    PublicMessengerPage:
+      type: object
       properties:
         id:
           type: number
-        accountId:
-          type: number
-        whatsapp:
-          type:
-          - object
-          - 'null'
-          properties:
-            id:
-              type: number
-            integrationId:
-              type: number
-            status:
-              type: string
-              enum:
-              - PENDING
-              - ACTIVE
-              - DELETED
-            integratedById:
-              type: number
-            integratedBy:
-              type: object
-              properties:
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                avatar:
-                  type:
-                  - string
-                  - 'null'
-              required:
-              - firstName
-              - lastName
-            phoneNumbers:
-              type: array
-              items:
-                $ref: '#/components/schemas/PublicWhatsAppNumber'
-            allocationId:
-              type:
-              - string
-              - 'null'
-            expirationTime:
-              type:
-              - string
-              - 'null'
-            createdAt:
-              type: string
-            updatedAt:
-              type: string
-          required:
-          - id
-          - integrationId
-          - status
-          - integratedById
-          - integratedBy
-          - phoneNumbers
-          - allocationId
-          - createdAt
-          - updatedAt
-        instagram:
-          type:
-          - object
-          - 'null'
-          properties:
-            id:
-              type: number
-            integrationId:
-              type: number
-            status:
-              type: string
-              enum:
-              - PENDING
-              - ACTIVE
-              - EXPIRED
-              - DELETED
-            integratedById:
-              type: number
-            integratedBy:
-              type: object
-              properties:
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                avatar:
-                  type:
-                  - string
-                  - 'null'
-              required:
-              - firstName
-              - lastName
-            instagramAccounts:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: number
-                  instagramUserId:
-                    type: string
-                  username:
-                    type: string
-                  accountType:
-                    type: string
-                    enum:
-                    - BUSINESS
-                    - CREATOR
-                  profilePictureUrl:
-                    type:
-                    - string
-                    - 'null'
-                  followersCount:
-                    type:
-                    - number
-                    - 'null'
-                  mediaCount:
-                    type:
-                    - number
-                    - 'null'
-                  assistantId:
-                    type:
-                    - string
-                    - 'null'
-                  createdAt:
-                    type: string
-                  updatedAt:
-                    type: string
-                required:
-                - id
-                - instagramUserId
-                - username
-                - accountType
-                - profilePictureUrl
-                - followersCount
-                - mediaCount
-                - assistantId
-                - createdAt
-                - updatedAt
-            tokenExpiresAt:
-              type:
-              - string
-              - 'null'
-            createdAt:
-              type: string
-            updatedAt:
-              type: string
-          required:
-          - id
-          - integrationId
-          - status
-          - integratedById
-          - integratedBy
-          - instagramAccounts
-          - tokenExpiresAt
-          - createdAt
-          - updatedAt
-        messenger:
-          type:
-          - object
-          - 'null'
-          properties:
-            id:
-              type: number
-            integrationId:
-              type: number
-            status:
-              type: string
-              enum:
-              - PENDING
-              - ACTIVE
-              - EXPIRED
-              - DELETED
-            integratedById:
-              type: number
-            integratedBy:
-              type: object
-              properties:
-                firstName:
-                  type: string
-                lastName:
-                  type: string
-                avatar:
-                  type:
-                  - string
-                  - 'null'
-              required:
-              - firstName
-              - lastName
-            messengerPages:
-              type: array
-              items:
-                type: object
-                properties:
-                  id:
-                    type: number
-                  messengerPageId:
-                    type: string
-                  businessAccountId:
-                    type:
-                    - string
-                    - 'null'
-                  pageName:
-                    type: string
-                  pageType:
-                    type: string
-                    enum:
-                    - business
-                  pagePictureUrl:
-                    type:
-                    - string
-                    - 'null'
-                  followersCount:
-                    type:
-                    - number
-                    - 'null'
-                  likesCount:
-                    type:
-                    - number
-                    - 'null'
-                  assistantId:
-                    type:
-                    - string
-                    - 'null'
-                  createdAt:
-                    type: string
-                  updatedAt:
-                    type: string
-                required:
-                - id
-                - messengerPageId
-                - businessAccountId
-                - pageName
-                - pageType
-                - pagePictureUrl
-                - followersCount
-                - likesCount
-                - assistantId
-                - createdAt
-                - updatedAt
-            createdAt:
-              type: string
-            updatedAt:
-              type: string
-          required:
-          - id
-          - integrationId
-          - status
-          - integratedById
-          - integratedBy
-          - messengerPages
-          - createdAt
-          - updatedAt
-      required:
-      - id
-      - accountId
-      - whatsapp
-      - instagram
-      - messenger
-    PublicChannelAssignInput:
-      type: object
-      properties:
-        agentId:
+          example: 1
+        pageId:
+          type: string
+          example: example
+        pageName:
           type:
           - string
           - 'null'
-          example: asst_123
-      required:
-      - agentId
-    PublicWhatsAppNumber:
-      type: object
-      properties:
-        id:
-          type: number
-        phoneNumberId:
-          type: string
+          example: example
         assistantId:
           type:
           - string
           - 'null'
+          example: example
         assistant:
-          type:
-          - object
-          - 'null'
-          properties:
-            id:
-              type: string
-            name:
-              type: string
-          required:
-          - id
-          - name
-        status:
-          type: string
-          enum:
-          - CONNECTED
-          - PENDING
-          - UNREGISTERED
-          - ERROR
-          - VERIFICATION_PENDING
-          - DELETED
-        wabaId:
-          type: string
-        name:
-          type: string
-        about:
-          type:
-          - string
-          - 'null'
-        description:
-          type:
-          - string
-          - 'null'
-        address:
-          type:
-          - string
-          - 'null'
-        category:
-          type: string
-          enum:
-          - AUTO
-          - BEAUTY
-          - APPAREL
-          - EDU
-          - ENTERTAIN
-          - EVENT_PLAN
-          - FINANCE
-          - GROCERY
-          - GOVT
-          - HOTEL
-          - HEALTH
-          - NONPROFIT
-          - PROF_SERVICES
-          - RETAIL
-          - TRAVEL
-          - RESTAURANT
-          - OTHER
-          - UNDEFINED
-        displayPhoneNumber:
-          type: string
-        website:
-          type:
-          - string
-          - 'null'
-        secondaryWebsite:
-          type:
-          - string
-          - 'null'
-        verificationStatus:
-          type: string
-          enum:
-          - VERIFIED
-          - NOT_VERIFIED
-        image:
-          type:
-          - string
-          - 'null'
-        email:
-          type:
-          - string
-          - 'null'
-        createdAt:
-          type: string
-        updatedAt:
-          type: string
+          $ref: '#/components/schemas/PublicChannelAssistant'
       required:
       - id
+      - pageId
+    PublicWhatsAppPhoneNumber:
+      type: object
+      properties:
+        phoneNumberId:
+          type: string
+          description: Meta WhatsApp Business phone number ID. Use in SEND_WHATSAPP_MESSAGE nodes.
+          example: '1132681309928224'
+        displayPhoneNumber:
+          type:
+          - string
+          - 'null'
+          example: example
+        assistantId:
+          type:
+          - string
+          - 'null'
+          example: example
+        assistant:
+          $ref: '#/components/schemas/PublicChannelAssistant'
+        canSendMessages:
+          type: boolean
+          description: True when assistantId is assigned. Only these numbers work in Send WhatsApp Message nodes.
+          example: false
+      required:
       - phoneNumberId
-      - assistantId
-      - status
-      - wabaId
-      - name
-      - about
-      - description
-      - address
-      - category
-      - displayPhoneNumber
-      - website
-      - secondaryWebsite
-      - verificationStatus
-      - image
-      - email
-      - createdAt
-      - updatedAt
+      - canSendMessages
+    PublicInstagramAccount:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        instagramUserId:
+          type: string
+          example: example
+        username:
+          type:
+          - string
+          - 'null'
+          example: example
+        assistantId:
+          type:
+          - string
+          - 'null'
+          example: example
+        assistant:
+          $ref: '#/components/schemas/PublicChannelAssistant'
+      required:
+      - id
+      - instagramUserId
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          - upgrade_required
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
   securitySchemes:
     accountApiKey:
       type: http
@@ -719,6 +876,14 @@ x-tagGroups:
   tags:
   - Workflows
   - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
 - name: Objects
   tags:
   - Objects
@@ -744,24 +909,34 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
-- name: Channels
-  tags:
-  - Channels
 - name: Integrations
   tags:
   - Custom Tools
   - Incoming Webhooks
-  - Account Integrations
+  - Workspace Connectors
   - Agent Channels
   - Integration Resources
 - name: Knowledge
   tags:
   - Knowledge Bases
-- name: Core
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
   tags:
   - Account
-  - AI Models
-  - Billing
   - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
   - User Tasks
   - Guidance

@@ -2,7 +2,35 @@ openapi: 3.2.0
 info:
   title: Public Objects API
   version: 1.0.0
-  description: Public API for accessing agents, flows, and analytics.
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -33,6 +61,7 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: array
                     items:
@@ -40,33 +69,44 @@ paths:
                       properties:
                         id:
                           type: number
+                          example: 1
                         name:
                           type: string
+                          example: example
                         display_name:
                           type: string
+                          example: example
                         type:
                           type: string
                           enum:
                           - table
                           - object
+                          example: table
                         custom:
                           type: boolean
+                          example: false
                         created_at:
                           type:
                           - string
                           - 'null'
+                          example: example
                         updated_at:
                           type:
                           - string
                           - 'null'
+                          example: example
                         description:
                           type: string
+                          example: example
                         emoji:
                           type: string
+                          example: example
                         icon_color:
                           type: string
+                          example: example
                         field_count:
                           type: number
+                          example: 1
                       required:
                       - id
                       - name
@@ -101,17 +141,23 @@ paths:
                 name:
                   type: string
                   minLength: 1
+                  example: example
                 displayName:
                   type: string
                   minLength: 1
+                  example: example
                 emoji:
                   type: string
+                  example: example
                 icon_color:
                   type: string
+                  example: example
                 iconColor:
                   type: string
+                  example: example
                 description:
                   type: string
+                  example: example
                 columns:
                   type: array
                   items:
@@ -120,6 +166,7 @@ paths:
                       name:
                         type: string
                         minLength: 1
+                        example: example
                       type:
                         anyOf:
                         - type: string
@@ -138,18 +185,22 @@ paths:
                           - avatar
                           - permissions
                           - formula
+                          example: string
                         - type: string
                           enum:
                           - select
+                          example: select
                       metadata:
                         type: object
                         additionalProperties: {}
                       record_type_id:
                         type: integer
-                        exclusiveMinimum: 0
+                        minimum: 1
+                        example: 1
                       recordTypeId:
                         type: integer
-                        exclusiveMinimum: 0
+                        minimum: 1
+                        example: 1
                     required:
                     - name
                     - type
@@ -171,38 +222,50 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
+                        example: 1
                       name:
                         type: string
+                        example: example
                       display_name:
                         type: string
+                        example: example
                       type:
                         type: string
                         enum:
                         - table
                         - object
+                        example: table
                       custom:
                         type: boolean
+                        example: false
                       created_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                       updated_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                       description:
                         type: string
+                        example: example
                       emoji:
                         type: string
+                        example: example
                       icon_color:
                         type: string
+                        example: example
                       field_count:
                         type: number
+                        example: 1
                       fields:
                         type: array
                         items:
@@ -210,35 +273,51 @@ paths:
                           properties:
                             id:
                               type: number
+                              example: 1
                             name:
                               type: string
+                              example: example
                             key:
                               type: string
+                              example: example
                             type:
                               type: string
+                              example: example
                             editable:
                               type: boolean
+                              example: false
                             created_at:
                               type:
                               - string
                               - 'null'
+                              example: example
                             updated_at:
                               type:
                               - string
                               - 'null'
+                              example: example
                             read_only:
                               type: boolean
+                              example: false
                             required:
                               type: boolean
+                              example: false
                             unique:
                               type: boolean
+                              example: false
                             is_system:
                               type: boolean
+                              example: false
                             is_predefined:
                               type: boolean
-                            default_value: {}
+                              example: false
+                            default_value:
+                              type:
+                              - object
+                              - 'null'
                             format:
                               type: string
+                              example: example
                             mode:
                               type: string
                               enum:
@@ -246,44 +325,59 @@ paths:
                               - multiSelect
                               - single
                               - multi
+                              example: singleSelect
                             timezone:
                               type: string
+                              example: example
                             decimals:
                               type: number
+                              example: 1
                             currency:
                               type: string
+                              example: example
                             min:
                               type:
                               - number
                               - 'null'
+                              example: 1
                             max:
                               type:
                               - number
                               - 'null'
+                              example: 1
                             time_format:
                               type: string
+                              example: example
                             show_preview:
                               type: boolean
+                              example: false
                             allowed_file_types:
                               type: array
                               items:
                                 type: string
+                                example: example
                             max_file_size:
                               type: number
+                              example: 1
                             related_table_id:
                               type: number
+                              example: 1
                             related_record_type_ids:
                               type:
                               - array
                               - 'null'
                               items:
                                 type: number
+                                example: 1
                             display_field_id:
                               type: number
+                              example: 1
                             relation_mode:
                               type: string
+                              example: example
                             include_activity:
                               type: boolean
+                              example: false
                             metadata:
                               type: object
                               additionalProperties: {}
@@ -294,20 +388,26 @@ paths:
                                 properties:
                                   id:
                                     type: number
+                                    example: 1
                                   name:
                                     type: string
+                                    example: example
                                   color:
                                     type: string
+                                    example: example
                                   order:
                                     type: number
+                                    example: 1
                                   created_at:
                                     type:
                                     - string
                                     - 'null'
+                                    example: example
                                   updated_at:
                                     type:
                                     - string
                                     - 'null'
+                                    example: example
                                 required:
                                 - id
                                 - name
@@ -315,13 +415,29 @@ paths:
                                 - order
                                 - created_at
                                 - updated_at
-                            expression: {}
+                            expression:
+                              type:
+                              - object
+                              - 'null'
                             output_type:
                               type: string
-                            apply_if: {}
-                            number_config: {}
-                            date_config: {}
-                            string_config: {}
+                              example: example
+                            apply_if:
+                              type:
+                              - object
+                              - 'null'
+                            number_config:
+                              type:
+                              - object
+                              - 'null'
+                            date_config:
+                              type:
+                              - object
+                              - 'null'
+                            string_config:
+                              type:
+                              - object
+                              - 'null'
                           required:
                           - id
                           - name
@@ -337,51 +453,68 @@ paths:
                           properties:
                             id:
                               type: number
+                              example: 1
                             name:
                               type: string
+                              example: example
                             type:
                               type: string
                               enum:
                               - TABLE
                               - KANBAN
                               - RECORD
+                              example: TABLE
                             is_default:
                               type: boolean
+                              example: false
                             is_private:
                               type: boolean
+                              example: false
                             record_type_id:
                               type:
                               - number
                               - 'null'
+                              example: 1
                             created_at:
                               type:
                               - string
                               - 'null'
+                              example: example
                             updated_at:
                               type:
                               - string
                               - 'null'
+                              example: example
                             column_order:
                               type: array
                               items:
                                 type: string
+                                example: example
                             hidden_columns:
                               type: array
                               items:
                                 type: string
+                                example: example
                             sticky_columns:
                               type: array
                               items:
                                 type: string
+                                example: example
                             grouping_field_id:
                               type: number
-                            column_ordering: {}
+                              example: 1
+                            column_ordering:
+                              type:
+                              - object
+                              - 'null'
                             title_field_id:
                               type: number
+                              example: 1
                             display_field_ids:
                               type: array
                               items:
                                 type: number
+                                example: 1
                           required:
                           - id
                           - name
@@ -398,28 +531,39 @@ paths:
                           properties:
                             id:
                               type: number
+                              example: 1
                             name:
                               type: string
+                              example: example
                             display_name:
                               type: string
+                              example: example
                             is_default:
                               type: boolean
+                              example: false
                             single_noun:
                               type: string
+                              example: example
                             emoji:
                               type: string
+                              example: example
                             icon_color:
                               type: string
+                              example: example
                             disable_side_effects:
                               type: boolean
+                              example: false
                             disable_relation_logging:
                               type: boolean
+                              example: false
                             default_view_id:
                               type: number
+                              example: 1
                             field_ids:
                               type: array
                               items:
                                 type: number
+                                example: 1
                             views:
                               type: array
                               items:
@@ -427,51 +571,68 @@ paths:
                                 properties:
                                   id:
                                     type: number
+                                    example: 1
                                   name:
                                     type: string
+                                    example: example
                                   type:
                                     type: string
                                     enum:
                                     - TABLE
                                     - KANBAN
                                     - RECORD
+                                    example: TABLE
                                   is_default:
                                     type: boolean
+                                    example: false
                                   is_private:
                                     type: boolean
+                                    example: false
                                   record_type_id:
                                     type:
                                     - number
                                     - 'null'
+                                    example: 1
                                   created_at:
                                     type:
                                     - string
                                     - 'null'
+                                    example: example
                                   updated_at:
                                     type:
                                     - string
                                     - 'null'
+                                    example: example
                                   column_order:
                                     type: array
                                     items:
                                       type: string
+                                      example: example
                                   hidden_columns:
                                     type: array
                                     items:
                                       type: string
+                                      example: example
                                   sticky_columns:
                                     type: array
                                     items:
                                       type: string
+                                      example: example
                                   grouping_field_id:
                                     type: number
-                                  column_ordering: {}
+                                    example: 1
+                                  column_ordering:
+                                    type:
+                                    - object
+                                    - 'null'
                                   title_field_id:
                                     type: number
+                                    example: 1
                                   display_field_ids:
                                     type: array
                                     items:
                                       type: number
+                                      example: 1
                                 required:
                                 - id
                                 - name
@@ -544,38 +705,50 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
+                        example: 1
                       name:
                         type: string
+                        example: example
                       display_name:
                         type: string
+                        example: example
                       type:
                         type: string
                         enum:
                         - table
                         - object
+                        example: table
                       custom:
                         type: boolean
+                        example: false
                       created_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                       updated_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                       description:
                         type: string
+                        example: example
                       emoji:
                         type: string
+                        example: example
                       icon_color:
                         type: string
+                        example: example
                       field_count:
                         type: number
+                        example: 1
                       fields:
                         type: array
                         items:
@@ -583,35 +756,51 @@ paths:
                           properties:
                             id:
                               type: number
+                              example: 1
                             name:
                               type: string
+                              example: example
                             key:
                               type: string
+                              example: example
                             type:
                               type: string
+                              example: example
                             editable:
                               type: boolean
+                              example: false
                             created_at:
                               type:
                               - string
                               - 'null'
+                              example: example
                             updated_at:
                               type:
                               - string
                               - 'null'
+                              example: example
                             read_only:
                               type: boolean
+                              example: false
                             required:
                               type: boolean
+                              example: false
                             unique:
                               type: boolean
+                              example: false
                             is_system:
                               type: boolean
+                              example: false
                             is_predefined:
                               type: boolean
-                            default_value: {}
+                              example: false
+                            default_value:
+                              type:
+                              - object
+                              - 'null'
                             format:
                               type: string
+                              example: example
                             mode:
                               type: string
                               enum:
@@ -619,44 +808,59 @@ paths:
                               - multiSelect
                               - single
                               - multi
+                              example: singleSelect
                             timezone:
                               type: string
+                              example: example
                             decimals:
                               type: number
+                              example: 1
                             currency:
                               type: string
+                              example: example
                             min:
                               type:
                               - number
                               - 'null'
+                              example: 1
                             max:
                               type:
                               - number
                               - 'null'
+                              example: 1
                             time_format:
                               type: string
+                              example: example
                             show_preview:
                               type: boolean
+                              example: false
                             allowed_file_types:
                               type: array
                               items:
                                 type: string
+                                example: example
                             max_file_size:
                               type: number
+                              example: 1
                             related_table_id:
                               type: number
+                              example: 1
                             related_record_type_ids:
                               type:
                               - array
                               - 'null'
                               items:
                                 type: number
+                                example: 1
                             display_field_id:
                               type: number
+                              example: 1
                             relation_mode:
                               type: string
+                              example: example
                             include_activity:
                               type: boolean
+                              example: false
                             metadata:
                               type: object
                               additionalProperties: {}
@@ -667,20 +871,26 @@ paths:
                                 properties:
                                   id:
                                     type: number
+                                    example: 1
                                   name:
                                     type: string
+                                    example: example
                                   color:
                                     type: string
+                                    example: example
                                   order:
                                     type: number
+                                    example: 1
                                   created_at:
                                     type:
                                     - string
                                     - 'null'
+                                    example: example
                                   updated_at:
                                     type:
                                     - string
                                     - 'null'
+                                    example: example
                                 required:
                                 - id
                                 - name
@@ -688,13 +898,29 @@ paths:
                                 - order
                                 - created_at
                                 - updated_at
-                            expression: {}
+                            expression:
+                              type:
+                              - object
+                              - 'null'
                             output_type:
                               type: string
-                            apply_if: {}
-                            number_config: {}
-                            date_config: {}
-                            string_config: {}
+                              example: example
+                            apply_if:
+                              type:
+                              - object
+                              - 'null'
+                            number_config:
+                              type:
+                              - object
+                              - 'null'
+                            date_config:
+                              type:
+                              - object
+                              - 'null'
+                            string_config:
+                              type:
+                              - object
+                              - 'null'
                           required:
                           - id
                           - name
@@ -710,51 +936,68 @@ paths:
                           properties:
                             id:
                               type: number
+                              example: 1
                             name:
                               type: string
+                              example: example
                             type:
                               type: string
                               enum:
                               - TABLE
                               - KANBAN
                               - RECORD
+                              example: TABLE
                             is_default:
                               type: boolean
+                              example: false
                             is_private:
                               type: boolean
+                              example: false
                             record_type_id:
                               type:
                               - number
                               - 'null'
+                              example: 1
                             created_at:
                               type:
                               - string
                               - 'null'
+                              example: example
                             updated_at:
                               type:
                               - string
                               - 'null'
+                              example: example
                             column_order:
                               type: array
                               items:
                                 type: string
+                                example: example
                             hidden_columns:
                               type: array
                               items:
                                 type: string
+                                example: example
                             sticky_columns:
                               type: array
                               items:
                                 type: string
+                                example: example
                             grouping_field_id:
                               type: number
-                            column_ordering: {}
+                              example: 1
+                            column_ordering:
+                              type:
+                              - object
+                              - 'null'
                             title_field_id:
                               type: number
+                              example: 1
                             display_field_ids:
                               type: array
                               items:
                                 type: number
+                                example: 1
                           required:
                           - id
                           - name
@@ -771,28 +1014,39 @@ paths:
                           properties:
                             id:
                               type: number
+                              example: 1
                             name:
                               type: string
+                              example: example
                             display_name:
                               type: string
+                              example: example
                             is_default:
                               type: boolean
+                              example: false
                             single_noun:
                               type: string
+                              example: example
                             emoji:
                               type: string
+                              example: example
                             icon_color:
                               type: string
+                              example: example
                             disable_side_effects:
                               type: boolean
+                              example: false
                             disable_relation_logging:
                               type: boolean
+                              example: false
                             default_view_id:
                               type: number
+                              example: 1
                             field_ids:
                               type: array
                               items:
                                 type: number
+                                example: 1
                             views:
                               type: array
                               items:
@@ -800,51 +1054,68 @@ paths:
                                 properties:
                                   id:
                                     type: number
+                                    example: 1
                                   name:
                                     type: string
+                                    example: example
                                   type:
                                     type: string
                                     enum:
                                     - TABLE
                                     - KANBAN
                                     - RECORD
+                                    example: TABLE
                                   is_default:
                                     type: boolean
+                                    example: false
                                   is_private:
                                     type: boolean
+                                    example: false
                                   record_type_id:
                                     type:
                                     - number
                                     - 'null'
+                                    example: 1
                                   created_at:
                                     type:
                                     - string
                                     - 'null'
+                                    example: example
                                   updated_at:
                                     type:
                                     - string
                                     - 'null'
+                                    example: example
                                   column_order:
                                     type: array
                                     items:
                                       type: string
+                                      example: example
                                   hidden_columns:
                                     type: array
                                     items:
                                       type: string
+                                      example: example
                                   sticky_columns:
                                     type: array
                                     items:
                                       type: string
+                                      example: example
                                   grouping_field_id:
                                     type: number
-                                  column_ordering: {}
+                                    example: 1
+                                  column_ordering:
+                                    type:
+                                    - object
+                                    - 'null'
                                   title_field_id:
                                     type: number
+                                    example: 1
                                   display_field_ids:
                                     type: array
                                     items:
                                       type: number
+                                      example: 1
                                 required:
                                 - id
                                 - name
@@ -913,14 +1184,19 @@ paths:
                 displayName:
                   type: string
                   minLength: 1
+                  example: example
                 emoji:
                   type: string
+                  example: example
                 icon_color:
                   type: string
+                  example: example
                 iconColor:
                   type: string
+                  example: example
                 description:
                   type: string
+                  example: example
       responses:
         '200':
           description: Updated object
@@ -933,38 +1209,50 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
+                        example: 1
                       name:
                         type: string
+                        example: example
                       display_name:
                         type: string
+                        example: example
                       type:
                         type: string
                         enum:
                         - table
                         - object
+                        example: table
                       custom:
                         type: boolean
+                        example: false
                       created_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                       updated_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                       description:
                         type: string
+                        example: example
                       emoji:
                         type: string
+                        example: example
                       icon_color:
                         type: string
+                        example: example
                       field_count:
                         type: number
+                        example: 1
                     required:
                     - id
                     - name
@@ -1022,6 +1310,7 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: object
                     properties:
@@ -1029,10 +1318,13 @@ paths:
                         type: boolean
                         enum:
                         - true
+                        example: true
                       id:
                         anyOf:
                         - type: string
+                          example: example
                         - type: number
+                          example: 1
                     required:
                     - deleted
                 required:
@@ -1085,6 +1377,7 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: object
                     additionalProperties: {}
@@ -1124,6 +1417,7 @@ components:
           - conflict
           - internal_error
           - cli_outdated
+          - upgrade_required
           example: unauthorized
         message:
           type: string
@@ -1177,6 +1471,14 @@ x-tagGroups:
   tags:
   - Workflows
   - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
 - name: Objects
   tags:
   - Objects
@@ -1202,24 +1504,34 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
-- name: Channels
-  tags:
-  - Channels
 - name: Integrations
   tags:
   - Custom Tools
   - Incoming Webhooks
-  - Account Integrations
+  - Workspace Connectors
   - Agent Channels
   - Integration Resources
 - name: Knowledge
   tags:
   - Knowledge Bases
-- name: Core
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
   tags:
   - Account
-  - AI Models
-  - Billing
   - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
   - User Tasks
   - Guidance

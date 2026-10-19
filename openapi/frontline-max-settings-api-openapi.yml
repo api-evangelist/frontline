@@ -1,0 +1,2035 @@
+openapi: 3.2.0
+info:
+  title: Public Max Settings API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Max Settings
+  description: 'Configure the calling user''s Max assistant: overview, general behaviour, scheduling, knowledge base, and per-mailbox email'
+paths:
+  /public/v1/max/settings/overview:
+    get:
+      summary: Get the Max overview settings
+      operationId: getMaxOverviewSettings
+      description: 'Returns the assistant''s headline state for the calling user: whether Max is enabled, the WhatsApp and Slack connections, and a summary of connected accounts. This is the best first call for understanding what a user''s Max can currently do. Requires a USER API key.'
+      security:
+      - userApiKey: []
+      tags:
+      - Max Settings
+      responses:
+        '200':
+          description: Overview settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        enum:
+                        - ENABLED
+                        - DISABLED
+                        example: ENABLED
+                      phoneNumber:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      phoneNumberValidated:
+                        type: boolean
+                        example: false
+                      enabled:
+                        type: boolean
+                        example: false
+                      freeDaysAllowed:
+                        type: number
+                        example: 1
+                      freeDaysActivatedAt:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      maxSeat:
+                        type:
+                        - object
+                        - 'null'
+                        properties:
+                          id:
+                            type: number
+                            example: 1
+                          assignedAt:
+                            type:
+                            - string
+                            - 'null'
+                            example: example
+                          isActive:
+                            type: boolean
+                            example: false
+                          billingPlan:
+                            type: object
+                            properties:
+                              id:
+                                type: number
+                                example: 1
+                              name:
+                                type: string
+                                example: example
+                              description:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              subscriptionInterval:
+                                type: string
+                                enum:
+                                - MONTHLY
+                                - ANNUAL
+                                example: MONTHLY
+                              capabilities:
+                                type: array
+                                items:
+                                  type: string
+                                  enum:
+                                  - MAX_PLAN
+                                  - MAX_MEETINGS
+                                  - MAX_EMAIL_AGENT
+                                  - MAX_ADDITIONAL_CREDITS
+                                  example: MAX_PLAN
+                            required:
+                            - id
+                            - name
+                            - description
+                            - subscriptionInterval
+                            - capabilities
+                        required:
+                        - id
+                        - assignedAt
+                        - isActive
+                        - billingPlan
+                      connectedAccounts:
+                        type: object
+                        properties:
+                          gmail:
+                            type: object
+                            properties:
+                              isConnected:
+                                type: boolean
+                                example: false
+                              email:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              connectedAt:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              id:
+                                type:
+                                - number
+                                - 'null'
+                                example: 1
+                            required:
+                            - isConnected
+                            - email
+                            - connectedAt
+                          googleCalendar:
+                            type: object
+                            properties:
+                              isConnected:
+                                type: boolean
+                                example: false
+                              email:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              connectedAt:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              id:
+                                type:
+                                - number
+                                - 'null'
+                                example: 1
+                            required:
+                            - isConnected
+                            - email
+                            - connectedAt
+                          outlook:
+                            type: object
+                            properties:
+                              isConnected:
+                                type: boolean
+                                example: false
+                              email:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              connectedAt:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              id:
+                                type:
+                                - number
+                                - 'null'
+                                example: 1
+                            required:
+                            - isConnected
+                            - email
+                            - connectedAt
+                          slack:
+                            type: object
+                            properties:
+                              isConnected:
+                                type: boolean
+                                example: false
+                              slackUserId:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              slackTeamName:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                            required:
+                            - isConnected
+                            - slackUserId
+                            - slackTeamName
+                          teams:
+                            type: object
+                            properties:
+                              isConnected:
+                                type: boolean
+                                example: false
+                              teamsUserId:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              teamsTenantId:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              teamsDisplayName:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                            required:
+                            - isConnected
+                            - teamsUserId
+                            - teamsTenantId
+                            - teamsDisplayName
+                        required:
+                        - gmail
+                        - googleCalendar
+                        - outlook
+                        - slack
+                        - teams
+                      availableTools:
+                        type:
+                        - object
+                        - 'null'
+                      timezone:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      maxAgentId:
+                        type: string
+                        pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|agent-[0-9a-zA-Z-]+'
+                      maxUserProfileId:
+                        type:
+                        - number
+                        - 'null'
+                        example: 1
+                    required:
+                    - status
+                    - phoneNumber
+                    - phoneNumberValidated
+                    - enabled
+                    - freeDaysAllowed
+                    - freeDaysActivatedAt
+                    - maxSeat
+                    - connectedAccounts
+                    - timezone
+                    - maxAgentId
+                    - maxUserProfileId
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update the Max overview settings
+      operationId: updateMaxOverviewSettings
+      description: Turns the calling user's Max assistant on or off, and updates the phone number used for WhatsApp. Only the fields you send are changed. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  enum:
+                  - ENABLED
+                  - DISABLED
+                  example: ENABLED
+              required:
+              - status
+      responses:
+        '200':
+          description: Updated overview settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      status:
+                        type: string
+                        enum:
+                        - ENABLED
+                        - DISABLED
+                        example: ENABLED
+                      phoneNumber:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      phoneNumberValidated:
+                        type: boolean
+                        example: false
+                      enabled:
+                        type: boolean
+                        example: false
+                      freeDaysAllowed:
+                        type: number
+                        example: 1
+                      freeDaysActivatedAt:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      maxSeat:
+                        type:
+                        - object
+                        - 'null'
+                        properties:
+                          id:
+                            type: number
+                            example: 1
+                          assignedAt:
+                            type:
+                            - string
+                            - 'null'
+                            example: example
+                          isActive:
+                            type: boolean
+                            example: false
+                          billingPlan:
+                            type: object
+                            properties:
+                              id:
+                                type: number
+                                example: 1
+                              name:
+                                type: string
+                                example: example
+                              description:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              subscriptionInterval:
+                                type: string
+                                enum:
+                                - MONTHLY
+                                - ANNUAL
+                                example: MONTHLY
+                              capabilities:
+                                type: array
+                                items:
+                                  type: string
+                                  enum:
+                                  - MAX_PLAN
+                                  - MAX_MEETINGS
+                                  - MAX_EMAIL_AGENT
+                                  - MAX_ADDITIONAL_CREDITS
+                                  example: MAX_PLAN
+                            required:
+                            - id
+                            - name
+                            - description
+                            - subscriptionInterval
+                            - capabilities
+                        required:
+                        - id
+                        - assignedAt
+                        - isActive
+                        - billingPlan
+                      connectedAccounts:
+                        type: object
+                        properties:
+                          gmail:
+                            type: object
+                            properties:
+                              isConnected:
+                                type: boolean
+                                example: false
+                              email:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              connectedAt:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              id:
+                                type:
+                                - number
+                                - 'null'
+                                example: 1
+                            required:
+                            - isConnected
+                            - email
+                            - connectedAt
+                          googleCalendar:
+                            type: object
+                            properties:
+                              isConnected:
+                                type: boolean
+                                example: false
+                              email:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              connectedAt:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              id:
+                                type:
+                                - number
+                                - 'null'
+                                example: 1
+                            required:
+                            - isConnected
+                            - email
+                            - connectedAt
+                          outlook:
+                            type: object
+                            properties:
+                              isConnected:
+                                type: boolean
+                                example: false
+                              email:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              connectedAt:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              id:
+                                type:
+                                - number
+                                - 'null'
+                                example: 1
+                            required:
+                            - isConnected
+                            - email
+                            - connectedAt
+                          slack:
+                            type: object
+                            properties:
+                              isConnected:
+                                type: boolean
+                                example: false
+                              slackUserId:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              slackTeamName:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                            required:
+                            - isConnected
+                            - slackUserId
+                            - slackTeamName
+                          teams:
+                            type: object
+                            properties:
+                              isConnected:
+                                type: boolean
+                                example: false
+                              teamsUserId:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              teamsTenantId:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                              teamsDisplayName:
+                                type:
+                                - string
+                                - 'null'
+                                example: example
+                            required:
+                            - isConnected
+                            - teamsUserId
+                            - teamsTenantId
+                            - teamsDisplayName
+                        required:
+                        - gmail
+                        - googleCalendar
+                        - outlook
+                        - slack
+                        - teams
+                      availableTools:
+                        type:
+                        - object
+                        - 'null'
+                      timezone:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      maxAgentId:
+                        type: string
+                        pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|agent-[0-9a-zA-Z-]+'
+                      maxUserProfileId:
+                        type:
+                        - number
+                        - 'null'
+                        example: 1
+                    required:
+                    - status
+                    - phoneNumber
+                    - phoneNumberValidated
+                    - enabled
+                    - freeDaysAllowed
+                    - freeDaysActivatedAt
+                    - maxSeat
+                    - connectedAccounts
+                    - timezone
+                    - maxAgentId
+                    - maxUserProfileId
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/max/settings/advanced:
+    get:
+      summary: Get the Max general settings
+      operationId: getMaxAdvancedSettings
+      description: 'Returns how Max behaves and speaks for the calling user: language, personality, timezone, and the free-form custom instructions it follows. Requires a USER API key.'
+      security:
+      - userApiKey: []
+      tags:
+      - Max Settings
+      responses:
+        '200':
+          description: General settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      preferredLanguage:
+                        type: string
+                        enum:
+                        - ENGLISH
+                        - SPANISH
+                        - PORTUGUESE
+                        - FRENCH
+                        - GERMAN
+                        - ITALIAN
+                        example: ENGLISH
+                      instructions:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      slackPreApprovePlans:
+                        type: boolean
+                        example: false
+                      whatsAppPreApprovePlans:
+                        type: boolean
+                        example: false
+                      slackAuthorizationMode:
+                        type: string
+                        enum:
+                        - AUTO
+                        - SUPERVISED
+                        - ASK
+                        example: AUTO
+                      whatsAppAuthorizationMode:
+                        type: string
+                        enum:
+                        - AUTO
+                        - SUPERVISED
+                        - ASK
+                        example: AUTO
+                      teamsAuthorizationMode:
+                        type: string
+                        enum:
+                        - AUTO
+                        - SUPERVISED
+                        - ASK
+                        example: AUTO
+                      webAuthorizationMode:
+                        type: string
+                        enum:
+                        - AUTO
+                        - SUPERVISED
+                        - ASK
+                        example: AUTO
+                      slackModelTier:
+                        type: string
+                        enum:
+                        - AUTO
+                        - LITE
+                        - HIGH
+                        example: AUTO
+                      whatsAppModelTier:
+                        type: string
+                        enum:
+                        - AUTO
+                        - LITE
+                        - HIGH
+                        example: AUTO
+                      teamsModelTier:
+                        type: string
+                        enum:
+                        - AUTO
+                        - LITE
+                        - HIGH
+                        example: AUTO
+                    required:
+                    - preferredLanguage
+                    - instructions
+                    - slackPreApprovePlans
+                    - whatsAppPreApprovePlans
+                    - slackAuthorizationMode
+                    - whatsAppAuthorizationMode
+                    - teamsAuthorizationMode
+                    - webAuthorizationMode
+                    - slackModelTier
+                    - whatsAppModelTier
+                    - teamsModelTier
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update the Max general settings
+      operationId: updateMaxAdvancedSettings
+      description: Changes Max's language, personality, timezone, or custom instructions for the calling user. Custom instructions are the main lever for steering tone and defaults across every conversation. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                preferredLanguage:
+                  type: string
+                  enum:
+                  - ENGLISH
+                  - SPANISH
+                  - PORTUGUESE
+                  - FRENCH
+                  - GERMAN
+                  - ITALIAN
+                  example: ENGLISH
+                instructions:
+                  type:
+                  - string
+                  - 'null'
+                  maxLength: 2000
+                  example: example
+                slackPreApprovePlans:
+                  type: boolean
+                  example: false
+                whatsAppPreApprovePlans:
+                  type: boolean
+                  example: false
+                slackAuthorizationMode:
+                  type: string
+                  enum:
+                  - AUTO
+                  - SUPERVISED
+                  - ASK
+                  example: AUTO
+                whatsAppAuthorizationMode:
+                  type: string
+                  enum:
+                  - AUTO
+                  - SUPERVISED
+                  - ASK
+                  example: AUTO
+                teamsAuthorizationMode:
+                  type: string
+                  enum:
+                  - AUTO
+                  - SUPERVISED
+                  - ASK
+                  example: AUTO
+                webAuthorizationMode:
+                  type: string
+                  enum:
+                  - AUTO
+                  - SUPERVISED
+                  - ASK
+                  example: AUTO
+                slackModelTier:
+                  type: string
+                  enum:
+                  - AUTO
+                  - LITE
+                  - HIGH
+                  example: AUTO
+                whatsAppModelTier:
+                  type: string
+                  enum:
+                  - AUTO
+                  - LITE
+                  - HIGH
+                  example: AUTO
+                teamsModelTier:
+                  type: string
+                  enum:
+                  - AUTO
+                  - LITE
+                  - HIGH
+                  example: AUTO
+      responses:
+        '200':
+          description: Updated general settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      preferredLanguage:
+                        type: string
+                        enum:
+                        - ENGLISH
+                        - SPANISH
+                        - PORTUGUESE
+                        - FRENCH
+                        - GERMAN
+                        - ITALIAN
+                        example: ENGLISH
+                      instructions:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      slackPreApprovePlans:
+                        type: boolean
+                        example: false
+                      whatsAppPreApprovePlans:
+                        type: boolean
+                        example: false
+                      slackAuthorizationMode:
+                        type: string
+                        enum:
+                        - AUTO
+                        - SUPERVISED
+                        - ASK
+                        example: AUTO
+                      whatsAppAuthorizationMode:
+                        type: string
+                        enum:
+                        - AUTO
+                        - SUPERVISED
+                        - ASK
+                        example: AUTO
+                      teamsAuthorizationMode:
+                        type: string
+                        enum:
+                        - AUTO
+                        - SUPERVISED
+                        - ASK
+                        example: AUTO
+                      webAuthorizationMode:
+                        type: string
+                        enum:
+                        - AUTO
+                        - SUPERVISED
+                        - ASK
+                        example: AUTO
+                      slackModelTier:
+                        type: string
+                        enum:
+                        - AUTO
+                        - LITE
+                        - HIGH
+                        example: AUTO
+                      whatsAppModelTier:
+                        type: string
+                        enum:
+                        - AUTO
+                        - LITE
+                        - HIGH
+                        example: AUTO
+                      teamsModelTier:
+                        type: string
+                        enum:
+                        - AUTO
+                        - LITE
+                        - HIGH
+                        example: AUTO
+                    required:
+                    - preferredLanguage
+                    - instructions
+                    - slackPreApprovePlans
+                    - whatsAppPreApprovePlans
+                    - slackAuthorizationMode
+                    - whatsAppAuthorizationMode
+                    - teamsAuthorizationMode
+                    - webAuthorizationMode
+                    - slackModelTier
+                    - whatsAppModelTier
+                    - teamsModelTier
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/max/settings/scheduling:
+    get:
+      summary: Get the Max scheduling settings
+      operationId: getMaxSchedulingSettings
+      description: 'Returns the meeting-booking preferences Max uses when it schedules on the caller''s behalf: default duration and buffers, working hours, and the scheduling links it can share. Requires a USER API key.'
+      security:
+      - userApiKey: []
+      tags:
+      - Max Settings
+      responses:
+        '200':
+          description: Scheduling settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      schedulingEnabled:
+                        type: boolean
+                        example: false
+                      schedulingInstructions:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      timezone:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      schedulingLinks:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            link:
+                              type: string
+                              example: example
+                            description:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            isActive:
+                              type: boolean
+                              example: false
+                            createdAt:
+                              type: string
+                              example: example
+                            updatedAt:
+                              type: string
+                              example: example
+                          required:
+                          - id
+                          - link
+                          - description
+                          - isActive
+                          - createdAt
+                          - updatedAt
+                    required:
+                    - schedulingEnabled
+                    - schedulingInstructions
+                    - timezone
+                    - schedulingLinks
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update the Max scheduling settings
+      operationId: updateMaxSchedulingSettings
+      description: Updates the calling user's meeting-booking preferences and scheduling instructions. Only the fields you send are changed. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                schedulingEnabled:
+                  type: boolean
+                  example: false
+                schedulingInstructions:
+                  type:
+                  - string
+                  - 'null'
+                  maxLength: 2000
+                  example: example
+                timezone:
+                  type: string
+                  example: example
+                schedulingLinks:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type:
+                        - number
+                        - 'null'
+                        example: 1
+                      link:
+                        type: string
+                        format: uri
+                        example: https://api.example.com/contacts/123
+                      description:
+                        type:
+                        - string
+                        - 'null'
+                        minLength: 1
+                        maxLength: 100
+                        example: example
+                      isActive:
+                        type: boolean
+                        default: true
+                        example: false
+                    required:
+                    - link
+                  maxItems: 5
+      responses:
+        '200':
+          description: Updated scheduling settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      schedulingEnabled:
+                        type: boolean
+                        example: false
+                      schedulingInstructions:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      timezone:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      schedulingLinks:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            link:
+                              type: string
+                              example: example
+                            description:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            isActive:
+                              type: boolean
+                              example: false
+                            createdAt:
+                              type: string
+                              example: example
+                            updatedAt:
+                              type: string
+                              example: example
+                          required:
+                          - id
+                          - link
+                          - description
+                          - isActive
+                          - createdAt
+                          - updatedAt
+                    required:
+                    - schedulingEnabled
+                    - schedulingInstructions
+                    - timezone
+                    - schedulingLinks
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/max/settings/knowledge-base:
+    get:
+      summary: Get the Max knowledge base settings
+      operationId: getMaxKnowledgeBaseSettings
+      description: Returns whether Max may consult the caller's personal knowledge base when answering. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Settings
+      responses:
+        '200':
+          description: Knowledge base settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      knowledgeBaseEnabled:
+                        type: boolean
+                        example: false
+                    required:
+                    - knowledgeBaseEnabled
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update the Max knowledge base settings
+      operationId: updateMaxKnowledgeBaseSettings
+      description: Enables or disables Max's use of the caller's personal knowledge base. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Settings
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                knowledgeBaseEnabled:
+                  type: boolean
+                  example: false
+      responses:
+        '200':
+          description: Updated knowledge base settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      knowledgeBaseEnabled:
+                        type: boolean
+                        example: false
+                    required:
+                    - knowledgeBaseEnabled
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/max/settings/email/{connectedAccountId}:
+    get:
+      summary: Get the Max email settings for a mailbox
+      operationId: getMaxEmailSettings
+      description: 'Returns the per-mailbox email configuration: auto-drafting and its sensitivity, the labels Max applies, signature handling, and whether contacts are created automatically from correspondents. The `connectedAccountId` is the mailbox integration''s id, from `GET /max/integrations`. `emailAgentEnabled` reports whether this user''s Max seat holds the `MAX_EMAIL_AGENT` license; while it is false the labeling, drafting and follow-up flags are stored but have no effect. Requires a USER API key.'
+      security:
+      - userApiKey: []
+      tags:
+      - Max Settings
+      parameters:
+      - schema:
+          type: string
+          example: example
+        required: true
+        name: connectedAccountId
+        in: path
+      responses:
+        '200':
+          description: Email settings for the mailbox
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      connectedAccountId:
+                        type: number
+                        example: 1
+                      connectedEmail:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      toolkit:
+                        type: string
+                        example: example
+                      emailAgentEnabled:
+                        type: boolean
+                        example: false
+                      customLabelsLimit:
+                        type: number
+                        example: 1
+                      categorizationEnabled:
+                        type: boolean
+                        example: false
+                      categorizationInstructions:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      toRespondSensitivity:
+                        type: string
+                        enum:
+                        - LEVEL_1
+                        - LEVEL_2
+                        - LEVEL_3
+                        - LEVEL_4
+                        example: LEVEL_1
+                      marketingSensitivity:
+                        type: string
+                        enum:
+                        - LEVEL_1
+                        - LEVEL_2
+                        - LEVEL_3
+                        - LEVEL_4
+                        example: LEVEL_1
+                      labels:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            name:
+                              type: string
+                              example: example
+                            color:
+                              type: string
+                              example: example
+                            guidelines:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            ingestEmail:
+                              type: boolean
+                              example: false
+                            generateAutoDraft:
+                              type: boolean
+                              example: false
+                            description:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            moveToFolder:
+                              type: boolean
+                              example: false
+                            isActive:
+                              type: boolean
+                              example: false
+                            type:
+                              type: string
+                              enum:
+                              - SYSTEM
+                              - CUSTOM
+                              example: SYSTEM
+                            createdAt:
+                              type: string
+                              example: example
+                            updatedAt:
+                              type: string
+                              example: example
+                          required:
+                          - id
+                          - name
+                          - color
+                          - guidelines
+                          - ingestEmail
+                          - generateAutoDraft
+                          - description
+                          - moveToFolder
+                          - isActive
+                          - type
+                          - createdAt
+                          - updatedAt
+                      draftEnabled:
+                        type: boolean
+                        example: false
+                      draftInstructions:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      customSignature:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      writingStyle:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      followupEnabled:
+                        type: boolean
+                        example: false
+                      followUpInstructions:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      followUpAfter:
+                        type: number
+                        example: 1
+                      emailProcessingEnabled:
+                        type: boolean
+                        example: false
+                      contactSyncEnabled:
+                        type: boolean
+                        example: false
+                      autoCreateContactsModeOverride:
+                        type:
+                        - string
+                        - 'null'
+                        enum:
+                        - ALL_CONTACTS
+                        - SELECTIVE
+                        - NONE
+                        example: ALL_CONTACTS
+                      linkMaxContactToPeopleOverride:
+                        type:
+                        - boolean
+                        - 'null'
+                        example: false
+                      peopleSyncDefaultOverride:
+                        type:
+                        - boolean
+                        - 'null'
+                        example: false
+                      peopleSyncRecordTypeId:
+                        type:
+                        - integer
+                        - 'null'
+                        minimum: 1
+                        example: 1
+                      effectiveAutoCreateContactsMode:
+                        type: string
+                        enum:
+                        - ALL_CONTACTS
+                        - SELECTIVE
+                        - NONE
+                        example: ALL_CONTACTS
+                      effectiveLinkMaxContactToPeople:
+                        type: boolean
+                        example: false
+                      effectivePeopleSyncDefault:
+                        type: boolean
+                        example: false
+                      effectivePeopleSyncRecordTypeId:
+                        type:
+                        - integer
+                        - 'null'
+                        minimum: 1
+                        example: 1
+                      accountDefaultRecordTypeId:
+                        type:
+                        - integer
+                        - 'null'
+                        minimum: 1
+                        example: 1
+                      canEditSettings:
+                        type: boolean
+                        example: false
+                    required:
+                    - connectedAccountId
+                    - connectedEmail
+                    - toolkit
+                    - emailAgentEnabled
+                    - customLabelsLimit
+                    - categorizationEnabled
+                    - categorizationInstructions
+                    - toRespondSensitivity
+                    - marketingSensitivity
+                    - labels
+                    - draftEnabled
+                    - draftInstructions
+                    - customSignature
+                    - writingStyle
+                    - followupEnabled
+                    - followUpInstructions
+                    - followUpAfter
+                    - emailProcessingEnabled
+                    - contactSyncEnabled
+                    - autoCreateContactsModeOverride
+                    - linkMaxContactToPeopleOverride
+                    - peopleSyncDefaultOverride
+                    - peopleSyncRecordTypeId
+                    - effectiveAutoCreateContactsMode
+                    - effectiveLinkMaxContactToPeople
+                    - effectivePeopleSyncDefault
+                    - effectivePeopleSyncRecordTypeId
+                    - accountDefaultRecordTypeId
+                    - canEditSettings
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update the Max email settings for a mailbox
+      operationId: updateMaxEmailSettings
+      description: Updates one connected mailbox's email behaviour — auto-drafting, labels, signature, and contact auto-creation. Settings are per mailbox, so a user with several mailboxes configures each one separately. Switching `categorizationEnabled`, `draftEnabled` or `followupEnabled` on requires the `MAX_EMAIL_AGENT` license on the user's seat; switching them off always works. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Settings
+      parameters:
+      - schema:
+          type: string
+          example: example
+        required: true
+        name: connectedAccountId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                categorizationEnabled:
+                  type: boolean
+                  example: false
+                categorizationInstructions:
+                  type:
+                  - string
+                  - 'null'
+                  maxLength: 2000
+                  example: example
+                toRespondSensitivity:
+                  type: string
+                  enum:
+                  - LEVEL_1
+                  - LEVEL_2
+                  - LEVEL_3
+                  - LEVEL_4
+                  example: LEVEL_1
+                marketingSensitivity:
+                  type: string
+                  enum:
+                  - LEVEL_1
+                  - LEVEL_2
+                  - LEVEL_3
+                  - LEVEL_4
+                  example: LEVEL_1
+                labels:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type:
+                        - number
+                        - 'null'
+                        example: 1
+                      isActive:
+                        type: boolean
+                        example: false
+                      moveToFolder:
+                        type: boolean
+                        example: false
+                      color:
+                        type: string
+                        enum:
+                        - SALMON
+                        - APRICOT
+                        - VANILLA
+                        - TEAL
+                        - MINT
+                        - SKY
+                        - LAVENDER
+                        - ROSE
+                        - GRAY
+                        - RED
+                        - ORANGE
+                        - YELLOW
+                        - GREEN
+                        - EMERALD
+                        - TURQUOISE
+                        - BLUE
+                        - COBALT
+                        - VIOLET
+                        - PURPLE
+                        - PINK
+                        - CORAL
+                        - BROWN
+                        - CHOCOLATE
+                        - BLACK
+                        - WHITE
+                        - LIGHTGRAY
+                        - DARKGRAY
+                        - DANGER
+                        - WARNING
+                        - SUCCESS
+                        - INFO
+                        - NEUTRAL
+                        example: SALMON
+                      generateAutoDraft:
+                        type: boolean
+                        example: false
+                      name:
+                        type: string
+                        example: example
+                      description:
+                        type: string
+                        example: example
+                      ingestEmail:
+                        type: boolean
+                        example: false
+                    required:
+                    - isActive
+                    - moveToFolder
+                    - color
+                    - generateAutoDraft
+                    - name
+                    - description
+                    - ingestEmail
+                draftEnabled:
+                  type: boolean
+                  example: false
+                draftInstructions:
+                  type:
+                  - string
+                  - 'null'
+                  maxLength: 2000
+                  example: example
+                customSignature:
+                  type:
+                  - string
+                  - 'null'
+                  maxLength: 5000
+                  example: example
+                followupEnabled:
+                  type: boolean
+                  example: false
+                followUpInstructions:
+                  type:
+                  - string
+                  - 'null'
+                  maxLength: 2000
+                  example: example
+                followUpAfter:
+                  type: integer
+                  minimum: 1
+                  maximum: 30
+                  example: 1
+                emailProcessingEnabled:
+                  type: boolean
+                  example: false
+                contactSyncEnabled:
+                  type: boolean
+                  example: false
+                autoCreateContactsModeOverride:
+                  type:
+                  - string
+                  - 'null'
+                  enum:
+                  - ALL_CONTACTS
+                  - SELECTIVE
+                  - NONE
+                  example: ALL_CONTACTS
+                linkMaxContactToPeopleOverride:
+                  type:
+                  - boolean
+                  - 'null'
+                  example: false
+                peopleSyncDefaultOverride:
+                  type:
+                  - boolean
+                  - 'null'
+                  example: false
+                peopleSyncRecordTypeId:
+                  type:
+                  - integer
+                  - 'null'
+                  minimum: 1
+                  example: 1
+      responses:
+        '200':
+          description: Updated email settings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      connectedAccountId:
+                        type: number
+                        example: 1
+                      connectedEmail:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      toolkit:
+                        type: string
+                        example: example
+                      emailAgentEnabled:
+                        type: boolean
+                        example: false
+                      customLabelsLimit:
+                        type: number
+                        example: 1
+                      categorizationEnabled:
+                        type: boolean
+                        example: false
+                      categorizationInstructions:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      toRespondSensitivity:
+                        type: string
+                        enum:
+                        - LEVEL_1
+                        - LEVEL_2
+                        - LEVEL_3
+                        - LEVEL_4
+                        example: LEVEL_1
+                      marketingSensitivity:
+                        type: string
+                        enum:
+                        - LEVEL_1
+                        - LEVEL_2
+                        - LEVEL_3
+                        - LEVEL_4
+                        example: LEVEL_1
+                      labels:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            name:
+                              type: string
+                              example: example
+                            color:
+                              type: string
+                              example: example
+                            guidelines:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            ingestEmail:
+                              type: boolean
+                              example: false
+                            generateAutoDraft:
+                              type: boolean
+                              example: false
+                            description:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            moveToFolder:
+                              type: boolean
+                              example: false
+                            isActive:
+                              type: boolean
+                              example: false
+                            type:
+                              type: string
+                              enum:
+                              - SYSTEM
+                              - CUSTOM
+                              example: SYSTEM
+                            createdAt:
+                              type: string
+                              example: example
+                            updatedAt:
+                              type: string
+                              example: example
+                          required:
+                          - id
+                          - name
+                          - color
+                          - guidelines
+                          - ingestEmail
+                          - generateAutoDraft
+                          - description
+                          - moveToFolder
+                          - isActive
+                          - type
+                          - createdAt
+                          - updatedAt
+                      draftEnabled:
+                        type: boolean
+                        example: false
+                      draftInstructions:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      customSignature:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      writingStyle:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      followupEnabled:
+                        type: boolean
+                        example: false
+                      followUpInstructions:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      followUpAfter:
+                        type: number
+                        example: 1
+                      emailProcessingEnabled:
+                        type: boolean
+                        example: false
+                      contactSyncEnabled:
+                        type: boolean
+                        example: false
+                      autoCreateContactsModeOverride:
+                        type:
+                        - string
+                        - 'null'
+                        enum:
+                        - ALL_CONTACTS
+                        - SELECTIVE
+                        - NONE
+                        example: ALL_CONTACTS
+                      linkMaxContactToPeopleOverride:
+                        type:
+                        - boolean
+                        - 'null'
+                        example: false
+                      peopleSyncDefaultOverride:
+                        type:
+                        - boolean
+                        - 'null'
+                        example: false
+                      peopleSyncRecordTypeId:
+                        type:
+                        - integer
+                        - 'null'
+                        minimum: 1
+                        example: 1
+                      effectiveAutoCreateContactsMode:
+                        type: string
+                        enum:
+                        - ALL_CONTACTS
+                        - SELECTIVE
+                        - NONE
+                        example: ALL_CONTACTS
+                      effectiveLinkMaxContactToPeople:
+                        type: boolean
+                        example: false
+                      effectivePeopleSyncDefault:
+                        type: boolean
+                        example: false
+                      effectivePeopleSyncRecordTypeId:
+                        type:
+                        - integer
+                        - 'null'
+                        minimum: 1
+                        example: 1
+                      accountDefaultRecordTypeId:
+                        type:
+                        - integer
+                        - 'null'
+                        minimum: 1
+                        example: 1
+                      canEditSettings:
+                        type: boolean
+                        example: false
+                    required:
+                    - connectedAccountId
+                    - connectedEmail
+                    - toolkit
+                    - emailAgentEnabled
+                    - customLabelsLimit
+                    - categorizationEnabled
+                    - categorizationInstructions
+                    - toRespondSensitivity
+                    - marketingSensitivity
+                    - labels
+                    - draftEnabled
+                    - draftInstructions
+                    - customSignature
+                    - writingStyle
+                    - followupEnabled
+                    - followUpInstructions
+                    - followUpAfter
+                    - emailProcessingEnabled
+                    - contactSyncEnabled
+                    - autoCreateContactsModeOverride
+                    - linkMaxContactToPeopleOverride
+                    - peopleSyncDefaultOverride
+                    - peopleSyncRecordTypeId
+                    - effectiveAutoCreateContactsMode
+                    - effectiveLinkMaxContactToPeople
+                    - effectivePeopleSyncDefault
+                    - effectivePeopleSyncRecordTypeId
+                    - accountDefaultRecordTypeId
+                    - canEditSettings
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '402':
+          description: Enabling labeling, drafting or follow-ups without the Email Agent add-on on this seat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          - upgrade_required
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Workspace Connectors
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
+  tags:
+  - Account
+  - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
+  - User Tasks
+  - Guidance

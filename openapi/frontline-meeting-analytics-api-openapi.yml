@@ -1,0 +1,454 @@
+openapi: 3.2.0
+info:
+  title: Public Meeting Analytics API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Meeting Analytics
+  description: Meeting volume and duration across the whole account, broken down by day, platform, source, and user. Requires an OWNER or ADMIN.
+paths:
+  /public/v1/meetings/analytics:
+    get:
+      summary: Get account meeting analytics
+      operationId: getAccountMeetingAnalytics
+      description: Returns meeting volume and duration across the whole account, broken down by day, platform, source, and user, plus the raw meeting list so you can bucket by hour or weekday yourself. Narrow the scope with `userIds` or `teamIds`, which accept comma-separated ids. Accepts an account API key, or a USER API key belonging to an OWNER or ADMIN — for one caller's own numbers instead, use `GET /max/meetings/analytics`. The notetaker defaults every user inherits are at `/settings/meetings`.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Meeting Analytics
+      parameters:
+      - schema:
+          type:
+          - string
+          - 'null'
+          example: example
+        required: false
+        name: startDate
+        in: query
+      - schema:
+          type:
+          - string
+          - 'null'
+          example: example
+        required: false
+        name: endDate
+        in: query
+      - schema:
+          anyOf:
+          - type: string
+            example: example
+          - type: array
+            items:
+              type: string
+              example: example
+        required: false
+        name: userIds
+        in: query
+      - schema:
+          anyOf:
+          - type: string
+            example: example
+          - type: array
+            items:
+              type: string
+              example: example
+        required: false
+        name: teamIds
+        in: query
+      responses:
+        '200':
+          description: Account meeting analytics
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      range:
+                        type: object
+                        properties:
+                          startDate:
+                            type:
+                            - string
+                            - 'null'
+                            example: example
+                          endDate:
+                            type:
+                            - string
+                            - 'null'
+                            example: example
+                        required:
+                        - startDate
+                        - endDate
+                      scope:
+                        type: object
+                        properties:
+                          type:
+                            type: string
+                            enum:
+                            - self
+                            - account
+                            - filtered
+                            example: self
+                          maxUserProfileIds:
+                            type: array
+                            items:
+                              type: number
+                              example: 1
+                          userIds:
+                            type: array
+                            items:
+                              type: number
+                              example: 1
+                          teamIds:
+                            type: array
+                            items:
+                              type: number
+                              example: 1
+                        required:
+                        - type
+                        - maxUserProfileIds
+                        - userIds
+                        - teamIds
+                      totals:
+                        type: object
+                        properties:
+                          totalMeetings:
+                            type: number
+                            example: 1
+                          totalDurationSeconds:
+                            type: number
+                            example: 1
+                          avgDurationSeconds:
+                            type: number
+                            example: 1
+                        required:
+                        - totalMeetings
+                        - totalDurationSeconds
+                        - avgDurationSeconds
+                      byDay:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            date:
+                              type: string
+                              example: example
+                            count:
+                              type: number
+                              example: 1
+                            durationSeconds:
+                              type: number
+                              example: 1
+                          required:
+                          - date
+                          - count
+                          - durationSeconds
+                      byPlatform:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            key:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            count:
+                              type: number
+                              example: 1
+                          required:
+                          - key
+                          - count
+                      bySource:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            key:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            count:
+                              type: number
+                              example: 1
+                          required:
+                          - key
+                          - count
+                      byUser:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            maxUserProfileId:
+                              type: number
+                              example: 1
+                            userId:
+                              type:
+                              - number
+                              - 'null'
+                              example: 1
+                            name:
+                              type: string
+                              example: example
+                            count:
+                              type: number
+                              example: 1
+                            durationSeconds:
+                              type: number
+                              example: 1
+                          required:
+                          - maxUserProfileId
+                          - userId
+                          - name
+                          - count
+                          - durationSeconds
+                      meetings:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                              example: example
+                            maxUserProfileId:
+                              type: number
+                              example: 1
+                            title:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            platform:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            source:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            startedAt:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            endedAt:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            duration:
+                              type:
+                              - number
+                              - 'null'
+                              example: 1
+                          required:
+                          - id
+                          - maxUserProfileId
+                          - title
+                          - platform
+                          - source
+                          - startedAt
+                          - endedAt
+                          - duration
+                    required:
+                    - range
+                    - scope
+                    - totals
+                    - byDay
+                    - byPlatform
+                    - bySource
+                    - byUser
+                    - meetings
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — the API key is missing or invalid
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: The USER API key does not belong to an OWNER or ADMIN of the account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          - upgrade_required
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Workspace Connectors
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
+  tags:
+  - Account
+  - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
+  - User Tasks
+  - Guidance

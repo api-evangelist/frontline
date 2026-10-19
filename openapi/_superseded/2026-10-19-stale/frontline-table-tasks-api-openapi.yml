@@ -1,0 +1,825 @@
+openapi: 3.2.0
+info:
+  title: Public Table tasks API
+  version: 1.0.0
+  description: Public API for accessing agents, flows, and analytics.
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Table tasks
+  description: Tasks attached to table rows
+paths:
+  /public/v1/tables/{name}/rows/{rowId}/tasks:
+    get:
+      summary: List tasks
+      operationId: listTableTasks
+      description: Returns tasks attached to a row.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table tasks
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: string
+          example: 65cf9b3a4b7c2a0012a3b4c5
+        required: true
+        name: rowId
+        in: path
+      responses:
+        '200':
+          description: Tasks
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        row_id:
+                          type: string
+                        content:
+                          type: string
+                        due_date:
+                          type:
+                          - string
+                          - 'null'
+                        assignee_ids:
+                          type: array
+                          items:
+                            type: number
+                        completed:
+                          type: boolean
+                        completed_at:
+                          type:
+                          - string
+                          - 'null'
+                        created_by:
+                          type:
+                          - number
+                          - 'null'
+                        created_at:
+                          type:
+                          - string
+                          - 'null'
+                        updated_at:
+                          type:
+                          - string
+                          - 'null'
+                      required:
+                      - id
+                      - row_id
+                      - content
+                      - completed
+                      - created_at
+                      - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create task
+      operationId: createTableTask
+      description: Attaches a task to a row. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table tasks
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: string
+          example: 65cf9b3a4b7c2a0012a3b4c5
+        required: true
+        name: rowId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  minLength: 1
+                dueDate:
+                  type:
+                  - string
+                  - 'null'
+                assigneeIds:
+                  type: array
+                  items:
+                    type: number
+              required:
+              - content
+      responses:
+        '201':
+          description: Created task
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      row_id:
+                        type: string
+                      content:
+                        type: string
+                      due_date:
+                        type:
+                        - string
+                        - 'null'
+                      assignee_ids:
+                        type: array
+                        items:
+                          type: number
+                      completed:
+                        type: boolean
+                      completed_at:
+                        type:
+                        - string
+                        - 'null'
+                      created_by:
+                        type:
+                        - number
+                        - 'null'
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                    required:
+                    - id
+                    - row_id
+                    - content
+                    - completed
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tables/{name}/tasks/{id}:
+    get:
+      summary: Get task
+      operationId: getTableTask
+      description: Returns a task by id.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table tasks
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          example: 100
+          exclusiveMinimum: 0
+        required: true
+        name: id
+        in: path
+      responses:
+        '200':
+          description: Task
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      row_id:
+                        type: string
+                      content:
+                        type: string
+                      due_date:
+                        type:
+                        - string
+                        - 'null'
+                      assignee_ids:
+                        type: array
+                        items:
+                          type: number
+                      completed:
+                        type: boolean
+                      completed_at:
+                        type:
+                        - string
+                        - 'null'
+                      created_by:
+                        type:
+                        - number
+                        - 'null'
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                    required:
+                    - id
+                    - row_id
+                    - content
+                    - completed
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update task
+      operationId: updateTableTask
+      description: Updates a task's content, due date, or assignees. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table tasks
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          example: 100
+          exclusiveMinimum: 0
+        required: true
+        name: id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  minLength: 1
+                dueDate:
+                  type:
+                  - string
+                  - 'null'
+                assigneeIds:
+                  type: array
+                  items:
+                    type: number
+      responses:
+        '200':
+          description: Updated task
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      row_id:
+                        type: string
+                      content:
+                        type: string
+                      due_date:
+                        type:
+                        - string
+                        - 'null'
+                      assignee_ids:
+                        type: array
+                        items:
+                          type: number
+                      completed:
+                        type: boolean
+                      completed_at:
+                        type:
+                        - string
+                        - 'null'
+                      created_by:
+                        type:
+                        - number
+                        - 'null'
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                    required:
+                    - id
+                    - row_id
+                    - content
+                    - completed
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete task
+      operationId: deleteTableTask
+      description: Deletes a task. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table tasks
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          example: 100
+          exclusiveMinimum: 0
+        required: true
+        name: id
+        in: path
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      deleted:
+                        type: boolean
+                        enum:
+                        - true
+                      id:
+                        anyOf:
+                        - type: string
+                        - type: number
+                    required:
+                    - deleted
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tables/{name}/tasks/{id}/complete:
+    post:
+      summary: Complete task
+      operationId: completeTableTask
+      description: Marks a task as completed. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table tasks
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          example: 100
+          exclusiveMinimum: 0
+        required: true
+        name: id
+        in: path
+      responses:
+        '200':
+          description: Completed task
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      row_id:
+                        type: string
+                      content:
+                        type: string
+                      due_date:
+                        type:
+                        - string
+                        - 'null'
+                      assignee_ids:
+                        type: array
+                        items:
+                          type: number
+                      completed:
+                        type: boolean
+                      completed_at:
+                        type:
+                        - string
+                        - 'null'
+                      created_by:
+                        type:
+                        - number
+                        - 'null'
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                    required:
+                    - id
+                    - row_id
+                    - content
+                    - completed
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/tables/{name}/tasks/{id}/uncomplete:
+    post:
+      summary: Uncomplete task
+      operationId: uncompleteTableTask
+      description: Marks a previously completed task as open again. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Table tasks
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: tasks_board
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          example: 100
+          exclusiveMinimum: 0
+        required: true
+        name: id
+        in: path
+      responses:
+        '200':
+          description: Uncompleted task
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      row_id:
+                        type: string
+                      content:
+                        type: string
+                      due_date:
+                        type:
+                        - string
+                        - 'null'
+                      assignee_ids:
+                        type: array
+                        items:
+                          type: number
+                      completed:
+                        type: boolean
+                      completed_at:
+                        type:
+                        - string
+                        - 'null'
+                      created_by:
+                        type:
+                        - number
+                        - 'null'
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                    required:
+                    - id
+                    - row_id
+                    - content
+                    - completed
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

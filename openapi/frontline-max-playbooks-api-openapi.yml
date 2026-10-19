@@ -1,0 +1,1798 @@
+openapi: 3.2.0
+info:
+  title: Public Max Playbooks API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Max Playbooks
+  description: Reusable instruction sets that steer how the calling user's Max handles recurring work
+paths:
+  /public/v1/max/playbooks:
+    get:
+      summary: List Max playbooks
+      operationId: listMaxPlaybooks
+      description: Returns the calling user's Max playbooks — reusable instruction sets that steer how Max handles a recurring task — along with the account's playbook quota. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Playbooks
+      parameters:
+      - schema:
+          type: string
+          enum:
+          - AUTO_DRAFTING
+          - MAIN_AGENT
+          example: AUTO_DRAFTING
+        required: false
+        name: type
+        in: query
+      - schema:
+          type:
+          - boolean
+          - 'null'
+          example: false
+        required: false
+        name: isActive
+        in: query
+      - schema:
+          type: string
+          example: example
+        required: false
+        name: filterText
+        in: query
+      - schema:
+          type: string
+          enum:
+          - PRIVATE
+          - ACCOUNT
+          example: PRIVATE
+        required: false
+        name: visibility
+        in: query
+      responses:
+        '200':
+          description: Playbooks and quota
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      results:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            name:
+                              type: string
+                              example: example
+                            description:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            type:
+                              type: string
+                              enum:
+                              - AUTO_DRAFTING
+                              - MAIN_AGENT
+                              example: AUTO_DRAFTING
+                            isActive:
+                              type: boolean
+                              example: false
+                            instructions:
+                              type: string
+                              example: example
+                            tools:
+                              type: array
+                              items:
+                                type: string
+                                example: example
+                            attachments:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                    example: 1
+                                  name:
+                                    type: string
+                                    example: example
+                                  description:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: example
+                                  fileUrl:
+                                    type: string
+                                    example: example
+                                  mimeType:
+                                    type: string
+                                    example: example
+                                  fileSize:
+                                    type: number
+                                    example: 1
+                                  createdAt:
+                                    type: string
+                                    example: example
+                                  updatedAt:
+                                    type: string
+                                    example: example
+                                required:
+                                - id
+                                - name
+                                - description
+                                - fileUrl
+                                - mimeType
+                                - fileSize
+                                - createdAt
+                                - updatedAt
+                            accountId:
+                              type: number
+                              example: 1
+                            createdByUserId:
+                              type:
+                              - number
+                              - 'null'
+                              example: 1
+                            visibility:
+                              type: string
+                              enum:
+                              - PRIVATE
+                              - ACCOUNT
+                              example: PRIVATE
+                            createdAt:
+                              type: string
+                              example: example
+                            updatedAt:
+                              type: string
+                              example: example
+                            isAssigned:
+                              type: boolean
+                              example: false
+                            assignedAt:
+                              type: string
+                              example: example
+                            integrations:
+                              type:
+                              - array
+                              - 'null'
+                              items:
+                                type: string
+                                enum:
+                                - GMAIL
+                                - GOOGLECALENDAR
+                                - SLACK
+                                - CALENDLY
+                                - GOOGLEDOCS
+                                - GOOGLESHEETS
+                                - NOTION
+                                - GOOGLEDRIVE
+                                - GRANOLA_MCP
+                                - GOOGLEMEET
+                                - ZOOM
+                                - GAMMA
+                                - STRIPE
+                                - POSTHOG
+                                - LINKEDIN
+                                - FACEBOOK
+                                - GOOGLE_ANALYTICS
+                                - GOOGLE_SEARCH_CONSOLE
+                                - MAILCHIMP
+                                - SEMRUSH
+                                - GOOGLEADS
+                                - INSTAGRAM
+                                - ADYNTEL
+                                - GOOGLETASKS
+                                - LINEAR
+                                - JIRA
+                                - ASANA
+                                - SHARE_POINT
+                                - ONE_DRIVE
+                                - EXCEL
+                                - TIKTOK
+                                - TWITTER
+                                - YOUTUBE
+                                - GOOGLE_MAPS
+                                - METAADS
+                                - SHOPIFY
+                                - AIRTABLE
+                                - MONDAY
+                                - TRELLO
+                                - GOOGLESLIDES
+                                - BUILTWITH
+                                - HUBSPOT
+                                - PIPEDRIVE
+                                - ATTIO
+                                - ZENDESK
+                                - SALESFORCE
+                                - SALESFORCE_SERVICE_CLOUD
+                                - INTERCOM
+                                - WEBFLOW
+                                - FIGMA
+                                - APOLLO
+                                - OUTLOOK
+                                - FRESHDESK
+                                - ZOHO_DESK
+                                - ZOHO_INVOICE
+                                - ZOHO
+                                - BREX
+                                example: GMAIL
+                            selectedRecordTypes:
+                              type:
+                              - array
+                              - 'null'
+                              items:
+                                type: object
+                                properties:
+                                  recordTypeId:
+                                    type: number
+                                    example: 1
+                                  read:
+                                    type: boolean
+                                    example: false
+                                  create:
+                                    type: boolean
+                                    example: false
+                                  update:
+                                    type: boolean
+                                    example: false
+                                  delete:
+                                    type: boolean
+                                    example: false
+                                  createActivity:
+                                    type: boolean
+                                    example: false
+                                required:
+                                - recordTypeId
+                            selectedCustomTools:
+                              type:
+                              - array
+                              - 'null'
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: integer
+                                    minimum: 1
+                                    example: 1
+                                  enabled:
+                                    type: boolean
+                                    default: true
+                                    example: false
+                                required:
+                                - id
+                            appliesToAllAccounts:
+                              type: boolean
+                              example: false
+                            connectedAccounts:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                    example: 1
+                                  toolkit:
+                                    type: string
+                                    example: example
+                                  connectedEmail:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: example
+                                  alias:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: example
+                                required:
+                                - id
+                                - toolkit
+                                - connectedEmail
+                                - alias
+                          required:
+                          - id
+                          - name
+                          - description
+                          - type
+                          - isActive
+                          - instructions
+                          - tools
+                          - accountId
+                          - createdByUserId
+                          - visibility
+                          - createdAt
+                          - updatedAt
+                          - appliesToAllAccounts
+                      total:
+                        type: number
+                        example: 1
+                      page:
+                        type: number
+                        example: 1
+                      pageSize:
+                        type: number
+                        example: 1
+                      totalPages:
+                        type: number
+                        example: 1
+                    required:
+                    - results
+                    - total
+                    - page
+                    - pageSize
+                    - totalPages
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a Max playbook
+      operationId: createMaxPlaybook
+      description: Creates a playbook. Chat playbooks describe a workflow Max should follow when asked; auto-drafting playbooks shape the email replies Max writes for you. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Playbooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                  example: example
+                description:
+                  type: string
+                  maxLength: 750
+                  example: example
+                type:
+                  type: string
+                  enum:
+                  - AUTO_DRAFTING
+                  - MAIN_AGENT
+                  example: AUTO_DRAFTING
+                instructions:
+                  type: string
+                  minLength: 10
+                  maxLength: 10000
+                  example: example value
+                tools:
+                  type: array
+                  items:
+                    type: string
+                    example: example
+                  maxItems: 20
+                  default: []
+                visibility:
+                  type: string
+                  enum:
+                  - PRIVATE
+                  - ACCOUNT
+                  default: PRIVATE
+                  example: PRIVATE
+                assignToMyMaxAgent:
+                  type: boolean
+                  default: true
+                  example: false
+                isActive:
+                  type: boolean
+                  default: true
+                  example: false
+                integrations:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - GMAIL
+                    - GOOGLECALENDAR
+                    - SLACK
+                    - CALENDLY
+                    - GOOGLEDOCS
+                    - GOOGLESHEETS
+                    - NOTION
+                    - GOOGLEDRIVE
+                    - GRANOLA_MCP
+                    - GOOGLEMEET
+                    - ZOOM
+                    - GAMMA
+                    - STRIPE
+                    - POSTHOG
+                    - LINKEDIN
+                    - FACEBOOK
+                    - GOOGLE_ANALYTICS
+                    - GOOGLE_SEARCH_CONSOLE
+                    - MAILCHIMP
+                    - SEMRUSH
+                    - GOOGLEADS
+                    - INSTAGRAM
+                    - ADYNTEL
+                    - GOOGLETASKS
+                    - LINEAR
+                    - JIRA
+                    - ASANA
+                    - SHARE_POINT
+                    - ONE_DRIVE
+                    - EXCEL
+                    - TIKTOK
+                    - TWITTER
+                    - YOUTUBE
+                    - GOOGLE_MAPS
+                    - METAADS
+                    - SHOPIFY
+                    - AIRTABLE
+                    - MONDAY
+                    - TRELLO
+                    - GOOGLESLIDES
+                    - BUILTWITH
+                    - HUBSPOT
+                    - PIPEDRIVE
+                    - ATTIO
+                    - ZENDESK
+                    - SALESFORCE
+                    - SALESFORCE_SERVICE_CLOUD
+                    - INTERCOM
+                    - WEBFLOW
+                    - FIGMA
+                    - APOLLO
+                    - OUTLOOK
+                    - FRESHDESK
+                    - ZOHO_DESK
+                    - ZOHO_INVOICE
+                    - ZOHO
+                    - BREX
+                    example: GMAIL
+                selectedRecordTypes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      recordTypeId:
+                        type: number
+                        example: 1
+                      read:
+                        type: boolean
+                        example: false
+                      create:
+                        type: boolean
+                        example: false
+                      update:
+                        type: boolean
+                        example: false
+                      delete:
+                        type: boolean
+                        example: false
+                      createActivity:
+                        type: boolean
+                        example: false
+                    required:
+                    - recordTypeId
+                selectedCustomTools:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        minimum: 1
+                        example: 1
+                      enabled:
+                        type: boolean
+                        default: true
+                        example: false
+                    required:
+                    - id
+                appliesToAllAccounts:
+                  type:
+                  - boolean
+                  - 'null'
+                  default: true
+                  example: false
+                connectedAccountIds:
+                  type: array
+                  items:
+                    type: integer
+                    minimum: 1
+                    example: 1
+              required:
+              - name
+              - type
+              - instructions
+      responses:
+        '201':
+          description: Playbook created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: example
+                      description:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      type:
+                        type: string
+                        enum:
+                        - AUTO_DRAFTING
+                        - MAIN_AGENT
+                        example: AUTO_DRAFTING
+                      isActive:
+                        type: boolean
+                        example: false
+                      instructions:
+                        type: string
+                        example: example
+                      tools:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      attachments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            name:
+                              type: string
+                              example: example
+                            description:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            fileUrl:
+                              type: string
+                              example: example
+                            mimeType:
+                              type: string
+                              example: example
+                            fileSize:
+                              type: number
+                              example: 1
+                            createdAt:
+                              type: string
+                              example: example
+                            updatedAt:
+                              type: string
+                              example: example
+                          required:
+                          - id
+                          - name
+                          - description
+                          - fileUrl
+                          - mimeType
+                          - fileSize
+                          - createdAt
+                          - updatedAt
+                      accountId:
+                        type: number
+                        example: 1
+                      createdByUserId:
+                        type:
+                        - number
+                        - 'null'
+                        example: 1
+                      visibility:
+                        type: string
+                        enum:
+                        - PRIVATE
+                        - ACCOUNT
+                        example: PRIVATE
+                      createdAt:
+                        type: string
+                        example: example
+                      updatedAt:
+                        type: string
+                        example: example
+                      isAssigned:
+                        type: boolean
+                        example: false
+                      assignedAt:
+                        type: string
+                        example: example
+                      integrations:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: string
+                          enum:
+                          - GMAIL
+                          - GOOGLECALENDAR
+                          - SLACK
+                          - CALENDLY
+                          - GOOGLEDOCS
+                          - GOOGLESHEETS
+                          - NOTION
+                          - GOOGLEDRIVE
+                          - GRANOLA_MCP
+                          - GOOGLEMEET
+                          - ZOOM
+                          - GAMMA
+                          - STRIPE
+                          - POSTHOG
+                          - LINKEDIN
+                          - FACEBOOK
+                          - GOOGLE_ANALYTICS
+                          - GOOGLE_SEARCH_CONSOLE
+                          - MAILCHIMP
+                          - SEMRUSH
+                          - GOOGLEADS
+                          - INSTAGRAM
+                          - ADYNTEL
+                          - GOOGLETASKS
+                          - LINEAR
+                          - JIRA
+                          - ASANA
+                          - SHARE_POINT
+                          - ONE_DRIVE
+                          - EXCEL
+                          - TIKTOK
+                          - TWITTER
+                          - YOUTUBE
+                          - GOOGLE_MAPS
+                          - METAADS
+                          - SHOPIFY
+                          - AIRTABLE
+                          - MONDAY
+                          - TRELLO
+                          - GOOGLESLIDES
+                          - BUILTWITH
+                          - HUBSPOT
+                          - PIPEDRIVE
+                          - ATTIO
+                          - ZENDESK
+                          - SALESFORCE
+                          - SALESFORCE_SERVICE_CLOUD
+                          - INTERCOM
+                          - WEBFLOW
+                          - FIGMA
+                          - APOLLO
+                          - OUTLOOK
+                          - FRESHDESK
+                          - ZOHO_DESK
+                          - ZOHO_INVOICE
+                          - ZOHO
+                          - BREX
+                          example: GMAIL
+                      selectedRecordTypes:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: object
+                          properties:
+                            recordTypeId:
+                              type: number
+                              example: 1
+                            read:
+                              type: boolean
+                              example: false
+                            create:
+                              type: boolean
+                              example: false
+                            update:
+                              type: boolean
+                              example: false
+                            delete:
+                              type: boolean
+                              example: false
+                            createActivity:
+                              type: boolean
+                              example: false
+                          required:
+                          - recordTypeId
+                      selectedCustomTools:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              minimum: 1
+                              example: 1
+                            enabled:
+                              type: boolean
+                              default: true
+                              example: false
+                          required:
+                          - id
+                      appliesToAllAccounts:
+                        type: boolean
+                        example: false
+                      connectedAccounts:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            toolkit:
+                              type: string
+                              example: example
+                            connectedEmail:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            alias:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                          required:
+                          - id
+                          - toolkit
+                          - connectedEmail
+                          - alias
+                    required:
+                    - id
+                    - name
+                    - description
+                    - type
+                    - isActive
+                    - instructions
+                    - tools
+                    - accountId
+                    - createdByUserId
+                    - visibility
+                    - createdAt
+                    - updatedAt
+                    - appliesToAllAccounts
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/max/playbooks/{playbookId}:
+    get:
+      summary: Get a Max playbook
+      operationId: getMaxPlaybook
+      description: Returns one playbook with its full instructions and assignment state. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Playbooks
+      parameters:
+      - schema:
+          type:
+          - integer
+          - 'null'
+          example: 42
+        required: false
+        name: playbookId
+        in: path
+      responses:
+        '200':
+          description: Playbook detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: example
+                      description:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      type:
+                        type: string
+                        enum:
+                        - AUTO_DRAFTING
+                        - MAIN_AGENT
+                        example: AUTO_DRAFTING
+                      isActive:
+                        type: boolean
+                        example: false
+                      instructions:
+                        type: string
+                        example: example
+                      tools:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      attachments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            name:
+                              type: string
+                              example: example
+                            description:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            fileUrl:
+                              type: string
+                              example: example
+                            mimeType:
+                              type: string
+                              example: example
+                            fileSize:
+                              type: number
+                              example: 1
+                            createdAt:
+                              type: string
+                              example: example
+                            updatedAt:
+                              type: string
+                              example: example
+                          required:
+                          - id
+                          - name
+                          - description
+                          - fileUrl
+                          - mimeType
+                          - fileSize
+                          - createdAt
+                          - updatedAt
+                      accountId:
+                        type: number
+                        example: 1
+                      createdByUserId:
+                        type:
+                        - number
+                        - 'null'
+                        example: 1
+                      visibility:
+                        type: string
+                        enum:
+                        - PRIVATE
+                        - ACCOUNT
+                        example: PRIVATE
+                      createdAt:
+                        type: string
+                        example: example
+                      updatedAt:
+                        type: string
+                        example: example
+                      isAssigned:
+                        type: boolean
+                        example: false
+                      assignedAt:
+                        type: string
+                        example: example
+                      integrations:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: string
+                          enum:
+                          - GMAIL
+                          - GOOGLECALENDAR
+                          - SLACK
+                          - CALENDLY
+                          - GOOGLEDOCS
+                          - GOOGLESHEETS
+                          - NOTION
+                          - GOOGLEDRIVE
+                          - GRANOLA_MCP
+                          - GOOGLEMEET
+                          - ZOOM
+                          - GAMMA
+                          - STRIPE
+                          - POSTHOG
+                          - LINKEDIN
+                          - FACEBOOK
+                          - GOOGLE_ANALYTICS
+                          - GOOGLE_SEARCH_CONSOLE
+                          - MAILCHIMP
+                          - SEMRUSH
+                          - GOOGLEADS
+                          - INSTAGRAM
+                          - ADYNTEL
+                          - GOOGLETASKS
+                          - LINEAR
+                          - JIRA
+                          - ASANA
+                          - SHARE_POINT
+                          - ONE_DRIVE
+                          - EXCEL
+                          - TIKTOK
+                          - TWITTER
+                          - YOUTUBE
+                          - GOOGLE_MAPS
+                          - METAADS
+                          - SHOPIFY
+                          - AIRTABLE
+                          - MONDAY
+                          - TRELLO
+                          - GOOGLESLIDES
+                          - BUILTWITH
+                          - HUBSPOT
+                          - PIPEDRIVE
+                          - ATTIO
+                          - ZENDESK
+                          - SALESFORCE
+                          - SALESFORCE_SERVICE_CLOUD
+                          - INTERCOM
+                          - WEBFLOW
+                          - FIGMA
+                          - APOLLO
+                          - OUTLOOK
+                          - FRESHDESK
+                          - ZOHO_DESK
+                          - ZOHO_INVOICE
+                          - ZOHO
+                          - BREX
+                          example: GMAIL
+                      selectedRecordTypes:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: object
+                          properties:
+                            recordTypeId:
+                              type: number
+                              example: 1
+                            read:
+                              type: boolean
+                              example: false
+                            create:
+                              type: boolean
+                              example: false
+                            update:
+                              type: boolean
+                              example: false
+                            delete:
+                              type: boolean
+                              example: false
+                            createActivity:
+                              type: boolean
+                              example: false
+                          required:
+                          - recordTypeId
+                      selectedCustomTools:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              minimum: 1
+                              example: 1
+                            enabled:
+                              type: boolean
+                              default: true
+                              example: false
+                          required:
+                          - id
+                      appliesToAllAccounts:
+                        type: boolean
+                        example: false
+                      connectedAccounts:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            toolkit:
+                              type: string
+                              example: example
+                            connectedEmail:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            alias:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                          required:
+                          - id
+                          - toolkit
+                          - connectedEmail
+                          - alias
+                    required:
+                    - id
+                    - name
+                    - description
+                    - type
+                    - isActive
+                    - instructions
+                    - tools
+                    - accountId
+                    - createdByUserId
+                    - visibility
+                    - createdAt
+                    - updatedAt
+                    - appliesToAllAccounts
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update a Max playbook
+      operationId: updateMaxPlaybook
+      description: Updates a playbook's name, instructions, or enabled state. Only the fields you send are changed. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Playbooks
+      parameters:
+      - schema:
+          type:
+          - integer
+          - 'null'
+          example: 42
+        required: false
+        name: playbookId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 100
+                  example: example
+                description:
+                  type: string
+                  maxLength: 750
+                  example: example
+                instructions:
+                  type: string
+                  minLength: 10
+                  maxLength: 10000
+                  example: example value
+                tools:
+                  type: array
+                  items:
+                    type: string
+                    example: example
+                  maxItems: 20
+                visibility:
+                  type: string
+                  enum:
+                  - PRIVATE
+                  - ACCOUNT
+                  example: PRIVATE
+                isActive:
+                  type: boolean
+                  example: false
+                integrations:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                    - GMAIL
+                    - GOOGLECALENDAR
+                    - SLACK
+                    - CALENDLY
+                    - GOOGLEDOCS
+                    - GOOGLESHEETS
+                    - NOTION
+                    - GOOGLEDRIVE
+                    - GRANOLA_MCP
+                    - GOOGLEMEET
+                    - ZOOM
+                    - GAMMA
+                    - STRIPE
+                    - POSTHOG
+                    - LINKEDIN
+                    - FACEBOOK
+                    - GOOGLE_ANALYTICS
+                    - GOOGLE_SEARCH_CONSOLE
+                    - MAILCHIMP
+                    - SEMRUSH
+                    - GOOGLEADS
+                    - INSTAGRAM
+                    - ADYNTEL
+                    - GOOGLETASKS
+                    - LINEAR
+                    - JIRA
+                    - ASANA
+                    - SHARE_POINT
+                    - ONE_DRIVE
+                    - EXCEL
+                    - TIKTOK
+                    - TWITTER
+                    - YOUTUBE
+                    - GOOGLE_MAPS
+                    - METAADS
+                    - SHOPIFY
+                    - AIRTABLE
+                    - MONDAY
+                    - TRELLO
+                    - GOOGLESLIDES
+                    - BUILTWITH
+                    - HUBSPOT
+                    - PIPEDRIVE
+                    - ATTIO
+                    - ZENDESK
+                    - SALESFORCE
+                    - SALESFORCE_SERVICE_CLOUD
+                    - INTERCOM
+                    - WEBFLOW
+                    - FIGMA
+                    - APOLLO
+                    - OUTLOOK
+                    - FRESHDESK
+                    - ZOHO_DESK
+                    - ZOHO_INVOICE
+                    - ZOHO
+                    - BREX
+                    example: GMAIL
+                selectedRecordTypes:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      recordTypeId:
+                        type: number
+                        example: 1
+                      read:
+                        type: boolean
+                        example: false
+                      create:
+                        type: boolean
+                        example: false
+                      update:
+                        type: boolean
+                        example: false
+                      delete:
+                        type: boolean
+                        example: false
+                      createActivity:
+                        type: boolean
+                        example: false
+                    required:
+                    - recordTypeId
+                selectedCustomTools:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        minimum: 1
+                        example: 1
+                      enabled:
+                        type: boolean
+                        default: true
+                        example: false
+                    required:
+                    - id
+                appliesToAllAccounts:
+                  type: boolean
+                  example: false
+                connectedAccountIds:
+                  type: array
+                  items:
+                    type: integer
+                    minimum: 1
+                    example: 1
+      responses:
+        '200':
+          description: Updated playbook
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      name:
+                        type: string
+                        example: example
+                      description:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                      type:
+                        type: string
+                        enum:
+                        - AUTO_DRAFTING
+                        - MAIN_AGENT
+                        example: AUTO_DRAFTING
+                      isActive:
+                        type: boolean
+                        example: false
+                      instructions:
+                        type: string
+                        example: example
+                      tools:
+                        type: array
+                        items:
+                          type: string
+                          example: example
+                      attachments:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            name:
+                              type: string
+                              example: example
+                            description:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            fileUrl:
+                              type: string
+                              example: example
+                            mimeType:
+                              type: string
+                              example: example
+                            fileSize:
+                              type: number
+                              example: 1
+                            createdAt:
+                              type: string
+                              example: example
+                            updatedAt:
+                              type: string
+                              example: example
+                          required:
+                          - id
+                          - name
+                          - description
+                          - fileUrl
+                          - mimeType
+                          - fileSize
+                          - createdAt
+                          - updatedAt
+                      accountId:
+                        type: number
+                        example: 1
+                      createdByUserId:
+                        type:
+                        - number
+                        - 'null'
+                        example: 1
+                      visibility:
+                        type: string
+                        enum:
+                        - PRIVATE
+                        - ACCOUNT
+                        example: PRIVATE
+                      createdAt:
+                        type: string
+                        example: example
+                      updatedAt:
+                        type: string
+                        example: example
+                      isAssigned:
+                        type: boolean
+                        example: false
+                      assignedAt:
+                        type: string
+                        example: example
+                      integrations:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: string
+                          enum:
+                          - GMAIL
+                          - GOOGLECALENDAR
+                          - SLACK
+                          - CALENDLY
+                          - GOOGLEDOCS
+                          - GOOGLESHEETS
+                          - NOTION
+                          - GOOGLEDRIVE
+                          - GRANOLA_MCP
+                          - GOOGLEMEET
+                          - ZOOM
+                          - GAMMA
+                          - STRIPE
+                          - POSTHOG
+                          - LINKEDIN
+                          - FACEBOOK
+                          - GOOGLE_ANALYTICS
+                          - GOOGLE_SEARCH_CONSOLE
+                          - MAILCHIMP
+                          - SEMRUSH
+                          - GOOGLEADS
+                          - INSTAGRAM
+                          - ADYNTEL
+                          - GOOGLETASKS
+                          - LINEAR
+                          - JIRA
+                          - ASANA
+                          - SHARE_POINT
+                          - ONE_DRIVE
+                          - EXCEL
+                          - TIKTOK
+                          - TWITTER
+                          - YOUTUBE
+                          - GOOGLE_MAPS
+                          - METAADS
+                          - SHOPIFY
+                          - AIRTABLE
+                          - MONDAY
+                          - TRELLO
+                          - GOOGLESLIDES
+                          - BUILTWITH
+                          - HUBSPOT
+                          - PIPEDRIVE
+                          - ATTIO
+                          - ZENDESK
+                          - SALESFORCE
+                          - SALESFORCE_SERVICE_CLOUD
+                          - INTERCOM
+                          - WEBFLOW
+                          - FIGMA
+                          - APOLLO
+                          - OUTLOOK
+                          - FRESHDESK
+                          - ZOHO_DESK
+                          - ZOHO_INVOICE
+                          - ZOHO
+                          - BREX
+                          example: GMAIL
+                      selectedRecordTypes:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: object
+                          properties:
+                            recordTypeId:
+                              type: number
+                              example: 1
+                            read:
+                              type: boolean
+                              example: false
+                            create:
+                              type: boolean
+                              example: false
+                            update:
+                              type: boolean
+                              example: false
+                            delete:
+                              type: boolean
+                              example: false
+                            createActivity:
+                              type: boolean
+                              example: false
+                          required:
+                          - recordTypeId
+                      selectedCustomTools:
+                        type:
+                        - array
+                        - 'null'
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              minimum: 1
+                              example: 1
+                            enabled:
+                              type: boolean
+                              default: true
+                              example: false
+                          required:
+                          - id
+                      appliesToAllAccounts:
+                        type: boolean
+                        example: false
+                      connectedAccounts:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            toolkit:
+                              type: string
+                              example: example
+                            connectedEmail:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                            alias:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                          required:
+                          - id
+                          - toolkit
+                          - connectedEmail
+                          - alias
+                    required:
+                    - id
+                    - name
+                    - description
+                    - type
+                    - isActive
+                    - instructions
+                    - tools
+                    - accountId
+                    - createdByUserId
+                    - visibility
+                    - createdAt
+                    - updatedAt
+                    - appliesToAllAccounts
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a Max playbook
+      operationId: deleteMaxPlaybook
+      description: Permanently deletes a playbook. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Playbooks
+      parameters:
+      - schema:
+          type:
+          - integer
+          - 'null'
+          example: 42
+        required: false
+        name: playbookId
+        in: path
+      responses:
+        '200':
+          description: Playbook deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                        example: true
+                      playbookId:
+                        type: number
+                        example: 42
+                    required:
+                    - success
+                    - playbookId
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/max/playbooks/{playbookId}/assignment:
+    post:
+      summary: Assign or unassign a Max playbook
+      operationId: toggleMaxPlaybookAssignment
+      description: Attaches a playbook to the caller's Max, or detaches it. An unassigned playbook still exists but has no effect on how Max behaves. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Max Playbooks
+      parameters:
+      - schema:
+          type:
+          - integer
+          - 'null'
+          example: 42
+        required: false
+        name: playbookId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                assign:
+                  type: boolean
+                  example: false
+              required:
+              - assign
+      responses:
+        '200':
+          description: Updated assignment
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                    example: true
+                  data:
+                    type: object
+                    properties:
+                      success:
+                        type: boolean
+                        example: false
+                      assigned:
+                        type: boolean
+                        example: false
+                      isActive:
+                        type: boolean
+                        example: false
+                    required:
+                    - success
+                    - assigned
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized — a USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          - upgrade_required
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Workspace Connectors
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
+  tags:
+  - Account
+  - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
+  - User Tasks
+  - Guidance

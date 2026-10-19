@@ -2,7 +2,35 @@ openapi: 3.2.0
 info:
   title: Public Agent Builder API
   version: 1.0.0
-  description: Public API for accessing agents, flows, and analytics.
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -350,12 +378,15 @@ paths:
                 properties:
                   splitMessages:
                     type: boolean
+                    example: false
                   splitCharacterLimit:
                     type: integer
+                    example: 1
                   closeAfter:
                     type:
                     - number
                     - 'null'
+                    example: 1
                   timeUnit:
                     type:
                     - string
@@ -363,31 +394,39 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   conversationClose:
                     type: string
                     enum:
                     - NEVER
                     - AUTOMATICALLY
                     - DYNAMICALLY
+                    example: NEVER
                   collectFeedback:
                     type: boolean
+                    example: false
                   feedbackVisibility:
                     type: string
                     enum:
                     - ON_HOVER
                     - ALWAYS_VISIBLE
+                    example: ON_HOVER
                   feedbackText:
                     type:
                     - string
                     - 'null'
+                    example: example
                   collectFeedbackReason:
                     type: boolean
+                    example: false
                   includeOtherReason:
                     type: boolean
+                    example: false
                   openFeedbackText:
                     type:
                     - string
                     - 'null'
+                    example: example
                   feedbackReasons:
                     type:
                     - array
@@ -397,20 +436,26 @@ paths:
                       properties:
                         id:
                           type: number
+                          example: 1
                         reason:
                           type: string
+                          example: example
                         order:
                           type: number
+                          example: 1
                       required:
                       - id
                       - reason
                       - order
                   enableDocumentProcessing:
                     type: boolean
+                    example: false
                   enableImageProcessing:
                     type: boolean
+                    example: false
                   enableIdle:
                     type: boolean
+                    example: false
                   idleSettings:
                     type:
                     - object
@@ -420,10 +465,12 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       after:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       timeUnit:
                         type:
                         - string
@@ -431,10 +478,12 @@ paths:
                         enum:
                         - MINUTES
                         - HOURS
+                        example: MINUTES
                       resetsLimit:
                         type:
                         - number
                         - 'null'
+                        example: 1
                     required:
                     - after
                     - timeUnit
@@ -475,18 +524,22 @@ paths:
               properties:
                 splitMessages:
                   type: boolean
+                  example: false
                 splitCharacterLimit:
                   type: integer
+                  example: 1
                 conversationClose:
                   type: string
                   enum:
                   - NEVER
                   - AUTOMATICALLY
                   - DYNAMICALLY
+                  example: NEVER
                 closeAfter:
                   type:
                   - integer
                   - 'null'
+                  example: 1
                 timeUnit:
                   type:
                   - string
@@ -494,28 +547,35 @@ paths:
                   enum:
                   - MINUTES
                   - HOURS
+                  example: MINUTES
                 collectFeedback:
                   type: boolean
+                  example: false
                 feedbackVisibility:
                   type: string
                   enum:
                   - ON_HOVER
                   - ALWAYS_VISIBLE
+                  example: ON_HOVER
                 feedbackText:
                   type:
                   - string
                   - 'null'
                   minLength: 1
                   maxLength: 45
+                  example: example
                 collectFeedbackReason:
                   type: boolean
+                  example: false
                 includeOtherReason:
                   type: boolean
+                  example: false
                 openFeedbackText:
                   type:
                   - string
                   - 'null'
                   maxLength: 45
+                  example: example
                 feedbackReasons:
                   type: array
                   items:
@@ -523,22 +583,28 @@ paths:
                     properties:
                       id:
                         type: number
+                        example: 1
                       reason:
                         type: string
                         minLength: 1
                         maxLength: 45
+                        example: example
                       order:
                         type: integer
                         minimum: 0
+                        example: 0
                     required:
                     - reason
                   maxItems: 5
                 enableDocumentProcessing:
                   type: boolean
+                  example: false
                 enableImageProcessing:
                   type: boolean
+                  example: false
                 enableIdle:
                   type: boolean
+                  example: false
                 idleSettings:
                   type:
                   - object
@@ -548,6 +614,7 @@ paths:
                       type:
                       - integer
                       - 'null'
+                      example: 1
                     timeUnit:
                       type:
                       - string
@@ -555,10 +622,12 @@ paths:
                       enum:
                       - MINUTES
                       - HOURS
+                      example: MINUTES
                     resetsLimit:
                       type:
                       - integer
                       - 'null'
+                      example: 1
                   required:
                   - after
                   - timeUnit
@@ -584,18 +653,22 @@ paths:
                 properties:
                   splitMessages:
                     type: boolean
+                    example: false
                   splitCharacterLimit:
                     type: integer
+                    example: 1
                   conversationClose:
                     type: string
                     enum:
                     - NEVER
                     - AUTOMATICALLY
                     - DYNAMICALLY
+                    example: NEVER
                   closeAfter:
                     type:
                     - number
                     - 'null'
+                    example: 1
                   timeUnit:
                     type:
                     - string
@@ -603,25 +676,32 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   collectFeedback:
                     type: boolean
+                    example: false
                   feedbackVisibility:
                     type: string
                     enum:
                     - ON_HOVER
                     - ALWAYS_VISIBLE
+                    example: ON_HOVER
                   feedbackText:
                     type:
                     - string
                     - 'null'
+                    example: example
                   collectFeedbackReason:
                     type: boolean
+                    example: false
                   includeOtherReason:
                     type: boolean
+                    example: false
                   openFeedbackText:
                     type:
                     - string
                     - 'null'
+                    example: example
                   feedbackReasons:
                     type: array
                     items:
@@ -629,20 +709,26 @@ paths:
                       properties:
                         id:
                           type: number
+                          example: 1
                         reason:
                           type: string
+                          example: example
                         order:
                           type: number
+                          example: 1
                       required:
                       - id
                       - reason
                       - order
                   enableDocumentProcessing:
                     type: boolean
+                    example: false
                   enableImageProcessing:
                     type: boolean
+                    example: false
                   enableIdle:
                     type: boolean
+                    example: false
                   idleSettings:
                     type:
                     - object
@@ -652,10 +738,12 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       after:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       timeUnit:
                         type:
                         - string
@@ -663,10 +751,12 @@ paths:
                         enum:
                         - MINUTES
                         - HOURS
+                        example: MINUTES
                       resetsLimit:
                         type:
                         - number
                         - 'null'
+                        example: 1
                     required:
                     - after
                     - timeUnit
@@ -674,6 +764,7 @@ paths:
                   conversationInterruptTimeout:
                     type: integer
                     minimum: 0
+                    example: 0
                 required:
                 - splitMessages
                 - splitCharacterLimit
@@ -714,12 +805,15 @@ paths:
                 properties:
                   splitMessages:
                     type: boolean
+                    example: false
                   splitCharacterLimit:
                     type: integer
+                    example: 1
                   closeAfter:
                     type:
                     - number
                     - 'null'
+                    example: 1
                   timeUnit:
                     type:
                     - string
@@ -727,6 +821,7 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   conversationClose:
                     type:
                     - string
@@ -735,17 +830,23 @@ paths:
                     - NEVER
                     - AUTOMATICALLY
                     - DYNAMICALLY
+                    example: NEVER
                   enableDocumentProcessing:
                     type: boolean
+                    example: false
                   enableImageProcessing:
                     type: boolean
+                    example: false
                   debounce:
                     type: boolean
+                    example: false
                   debounceTime:
                     type: integer
                     minimum: 0
+                    example: 0
                   enableIdle:
                     type: boolean
+                    example: false
                   idleSettings:
                     type:
                     - object
@@ -755,10 +856,12 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       after:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       timeUnit:
                         type:
                         - string
@@ -766,10 +869,12 @@ paths:
                         enum:
                         - MINUTES
                         - HOURS
+                        example: MINUTES
                       resetsLimit:
                         type:
                         - number
                         - 'null'
+                        example: 1
                     required:
                     - after
                     - timeUnit
@@ -777,6 +882,7 @@ paths:
                   conversationInterruptTimeout:
                     type: integer
                     minimum: 0
+                    example: 0
                   conversationInterruptTimeUnit:
                     type:
                     - string
@@ -784,23 +890,29 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   sendCloseMessage:
                     type: boolean
+                    example: false
                   closeMessageType:
                     type: string
                     enum:
                     - STATIC
                     - DYNAMIC
+                    example: STATIC
                   closeMessage:
                     type:
                     - string
                     - 'null'
+                    example: example
                   closeInstruction:
                     type:
                     - string
                     - 'null'
+                    example: example
                   autoReplyOnUninterrupt:
                     type: boolean
+                    example: false
                 required:
                 - splitMessages
                 - splitCharacterLimit
@@ -830,18 +942,22 @@ paths:
               properties:
                 splitMessages:
                   type: boolean
+                  example: false
                 splitCharacterLimit:
                   type: integer
+                  example: 1
                 conversationClose:
                   type: string
                   enum:
                   - NEVER
                   - AUTOMATICALLY
                   - DYNAMICALLY
+                  example: NEVER
                 closeAfter:
                   type:
                   - integer
                   - 'null'
+                  example: 1
                 timeUnit:
                   type:
                   - string
@@ -849,17 +965,23 @@ paths:
                   enum:
                   - MINUTES
                   - HOURS
+                  example: MINUTES
                 enableDocumentProcessing:
                   type: boolean
+                  example: false
                 enableImageProcessing:
                   type: boolean
+                  example: false
                 debounce:
                   type: boolean
+                  example: false
                 debounceTime:
                   type: integer
                   minimum: 0
+                  example: 0
                 enableIdle:
                   type: boolean
+                  example: false
                 idleSettings:
                   type:
                   - object
@@ -869,6 +991,7 @@ paths:
                       type:
                       - integer
                       - 'null'
+                      example: 1
                     timeUnit:
                       type:
                       - string
@@ -876,10 +999,12 @@ paths:
                       enum:
                       - MINUTES
                       - HOURS
+                      example: MINUTES
                     resetsLimit:
                       type:
                       - integer
                       - 'null'
+                      example: 1
                   required:
                   - after
                   - timeUnit
@@ -887,28 +1012,35 @@ paths:
                 conversationInterruptTimeout:
                   type: integer
                   minimum: 0
+                  example: 0
                 conversationInterruptTimeUnit:
                   type: string
                   enum:
                   - MINUTES
                   - HOURS
+                  example: MINUTES
                 sendCloseMessage:
                   type: boolean
+                  example: false
                 closeMessageType:
                   type: string
                   enum:
                   - STATIC
                   - DYNAMIC
+                  example: STATIC
                 closeMessage:
                   type:
                   - string
                   - 'null'
+                  example: example
                 closeInstruction:
                   type:
                   - string
                   - 'null'
+                  example: example
                 autoReplyOnUninterrupt:
                   type: boolean
+                  example: false
               required:
               - splitMessages
               - splitCharacterLimit
@@ -925,18 +1057,22 @@ paths:
                 properties:
                   splitMessages:
                     type: boolean
+                    example: false
                   splitCharacterLimit:
                     type: integer
+                    example: 1
                   conversationClose:
                     type: string
                     enum:
                     - NEVER
                     - AUTOMATICALLY
                     - DYNAMICALLY
+                    example: NEVER
                   closeAfter:
                     type:
                     - integer
                     - 'null'
+                    example: 1
                   timeUnit:
                     type:
                     - string
@@ -944,17 +1080,23 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   enableDocumentProcessing:
                     type: boolean
+                    example: false
                   enableImageProcessing:
                     type: boolean
+                    example: false
                   debounce:
                     type: boolean
+                    example: false
                   debounceTime:
                     type: integer
                     minimum: 0
+                    example: 0
                   enableIdle:
                     type: boolean
+                    example: false
                   idleSettings:
                     type:
                     - object
@@ -964,10 +1106,12 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       after:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       timeUnit:
                         type:
                         - string
@@ -975,10 +1119,12 @@ paths:
                         enum:
                         - MINUTES
                         - HOURS
+                        example: MINUTES
                       resetsLimit:
                         type:
                         - number
                         - 'null'
+                        example: 1
                     required:
                     - after
                     - timeUnit
@@ -986,6 +1132,7 @@ paths:
                   conversationInterruptTimeout:
                     type: integer
                     minimum: 0
+                    example: 0
                   conversationInterruptTimeUnit:
                     type:
                     - string
@@ -993,23 +1140,29 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   sendCloseMessage:
                     type: boolean
+                    example: false
                   closeMessageType:
                     type: string
                     enum:
                     - STATIC
                     - DYNAMIC
+                    example: STATIC
                   closeMessage:
                     type:
                     - string
                     - 'null'
+                    example: example
                   closeInstruction:
                     type:
                     - string
                     - 'null'
+                    example: example
                   autoReplyOnUninterrupt:
                     type: boolean
+                    example: false
                 required:
                 - splitMessages
                 - splitCharacterLimit
@@ -1046,12 +1199,15 @@ paths:
                 properties:
                   splitMessages:
                     type: boolean
+                    example: false
                   splitCharacterLimit:
                     type: integer
+                    example: 1
                   closeAfter:
                     type:
                     - number
                     - 'null'
+                    example: 1
                   timeUnit:
                     type:
                     - string
@@ -1059,6 +1215,7 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   conversationClose:
                     type:
                     - string
@@ -1067,10 +1224,13 @@ paths:
                     - NEVER
                     - AUTOMATICALLY
                     - DYNAMICALLY
+                    example: NEVER
                   enableImageProcessing:
                     type: boolean
+                    example: false
                   enableIdle:
                     type: boolean
+                    example: false
                   idleSettings:
                     type:
                     - object
@@ -1080,10 +1240,12 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       after:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       timeUnit:
                         type:
                         - string
@@ -1091,10 +1253,12 @@ paths:
                         enum:
                         - MINUTES
                         - HOURS
+                        example: MINUTES
                       resetsLimit:
                         type:
                         - number
                         - 'null'
+                        example: 1
                     required:
                     - after
                     - timeUnit
@@ -1102,6 +1266,7 @@ paths:
                   conversationInterruptTimeout:
                     type: integer
                     minimum: 0
+                    example: 0
                   conversationInterruptTimeUnit:
                     type:
                     - string
@@ -1109,23 +1274,29 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   sendCloseMessage:
                     type: boolean
+                    example: false
                   closeMessageType:
                     type: string
                     enum:
                     - STATIC
                     - DYNAMIC
+                    example: STATIC
                   closeMessage:
                     type:
                     - string
                     - 'null'
+                    example: example
                   closeInstruction:
                     type:
                     - string
                     - 'null'
+                    example: example
                   autoReplyOnUninterrupt:
                     type: boolean
+                    example: false
                 required:
                 - splitMessages
                 - splitCharacterLimit
@@ -1155,18 +1326,22 @@ paths:
               properties:
                 splitMessages:
                   type: boolean
+                  example: false
                 splitCharacterLimit:
                   type: integer
+                  example: 1
                 conversationClose:
                   type: string
                   enum:
                   - NEVER
                   - AUTOMATICALLY
                   - DYNAMICALLY
+                  example: NEVER
                 closeAfter:
                   type:
                   - integer
                   - 'null'
+                  example: 1
                 timeUnit:
                   type:
                   - string
@@ -1174,10 +1349,13 @@ paths:
                   enum:
                   - MINUTES
                   - HOURS
+                  example: MINUTES
                 enableImageProcessing:
                   type: boolean
+                  example: false
                 enableIdle:
                   type: boolean
+                  example: false
                 idleSettings:
                   type:
                   - object
@@ -1187,6 +1365,7 @@ paths:
                       type:
                       - integer
                       - 'null'
+                      example: 1
                     timeUnit:
                       type:
                       - string
@@ -1194,10 +1373,12 @@ paths:
                       enum:
                       - MINUTES
                       - HOURS
+                      example: MINUTES
                     resetsLimit:
                       type:
                       - integer
                       - 'null'
+                      example: 1
                   required:
                   - after
                   - timeUnit
@@ -1205,28 +1386,35 @@ paths:
                 conversationInterruptTimeout:
                   type: integer
                   minimum: 0
+                  example: 0
                 conversationInterruptTimeUnit:
                   type: string
                   enum:
                   - MINUTES
                   - HOURS
+                  example: MINUTES
                 sendCloseMessage:
                   type: boolean
+                  example: false
                 closeMessageType:
                   type: string
                   enum:
                   - STATIC
                   - DYNAMIC
+                  example: STATIC
                 closeMessage:
                   type:
                   - string
                   - 'null'
+                  example: example
                 closeInstruction:
                   type:
                   - string
                   - 'null'
+                  example: example
                 autoReplyOnUninterrupt:
                   type: boolean
+                  example: false
               required:
               - splitMessages
               - splitCharacterLimit
@@ -1243,18 +1431,22 @@ paths:
                 properties:
                   splitMessages:
                     type: boolean
+                    example: false
                   splitCharacterLimit:
                     type: integer
+                    example: 1
                   conversationClose:
                     type: string
                     enum:
                     - NEVER
                     - AUTOMATICALLY
                     - DYNAMICALLY
+                    example: NEVER
                   closeAfter:
                     type:
                     - integer
                     - 'null'
+                    example: 1
                   timeUnit:
                     type:
                     - string
@@ -1262,10 +1454,13 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   enableImageProcessing:
                     type: boolean
+                    example: false
                   enableIdle:
                     type: boolean
+                    example: false
                   idleSettings:
                     type:
                     - object
@@ -1275,10 +1470,12 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       after:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       timeUnit:
                         type:
                         - string
@@ -1286,10 +1483,12 @@ paths:
                         enum:
                         - MINUTES
                         - HOURS
+                        example: MINUTES
                       resetsLimit:
                         type:
                         - number
                         - 'null'
+                        example: 1
                     required:
                     - after
                     - timeUnit
@@ -1297,6 +1496,7 @@ paths:
                   conversationInterruptTimeout:
                     type: integer
                     minimum: 0
+                    example: 0
                   conversationInterruptTimeUnit:
                     type:
                     - string
@@ -1304,23 +1504,29 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   sendCloseMessage:
                     type: boolean
+                    example: false
                   closeMessageType:
                     type: string
                     enum:
                     - STATIC
                     - DYNAMIC
+                    example: STATIC
                   closeMessage:
                     type:
                     - string
                     - 'null'
+                    example: example
                   closeInstruction:
                     type:
                     - string
                     - 'null'
+                    example: example
                   autoReplyOnUninterrupt:
                     type: boolean
+                    example: false
                 required:
                 - splitMessages
                 - splitCharacterLimit
@@ -1357,12 +1563,15 @@ paths:
                 properties:
                   splitMessages:
                     type: boolean
+                    example: false
                   splitCharacterLimit:
                     type: integer
+                    example: 1
                   closeAfter:
                     type:
                     - number
                     - 'null'
+                    example: 1
                   timeUnit:
                     type:
                     - string
@@ -1370,6 +1579,7 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   conversationClose:
                     type:
                     - string
@@ -1378,10 +1588,13 @@ paths:
                     - NEVER
                     - AUTOMATICALLY
                     - DYNAMICALLY
+                    example: NEVER
                   enableImageProcessing:
                     type: boolean
+                    example: false
                   enableIdle:
                     type: boolean
+                    example: false
                   idleSettings:
                     type:
                     - object
@@ -1391,10 +1604,12 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       after:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       timeUnit:
                         type:
                         - string
@@ -1402,10 +1617,12 @@ paths:
                         enum:
                         - MINUTES
                         - HOURS
+                        example: MINUTES
                       resetsLimit:
                         type:
                         - number
                         - 'null'
+                        example: 1
                     required:
                     - after
                     - timeUnit
@@ -1413,6 +1630,7 @@ paths:
                   conversationInterruptTimeout:
                     type: integer
                     minimum: 0
+                    example: 0
                   conversationInterruptTimeUnit:
                     type:
                     - string
@@ -1420,23 +1638,29 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   autoReplyOnUninterrupt:
                     type: boolean
+                    example: false
                   sendCloseMessage:
                     type: boolean
+                    example: false
                   closeMessageType:
                     type: string
                     enum:
                     - STATIC
                     - DYNAMIC
+                    example: STATIC
                   closeMessage:
                     type:
                     - string
                     - 'null'
+                    example: example
                   closeInstruction:
                     type:
                     - string
                     - 'null'
+                    example: example
                 required:
                 - splitMessages
                 - splitCharacterLimit
@@ -1466,18 +1690,22 @@ paths:
               properties:
                 splitMessages:
                   type: boolean
+                  example: false
                 splitCharacterLimit:
                   type: integer
+                  example: 1
                 conversationClose:
                   type: string
                   enum:
                   - NEVER
                   - AUTOMATICALLY
                   - DYNAMICALLY
+                  example: NEVER
                 closeAfter:
                   type:
                   - integer
                   - 'null'
+                  example: 1
                 timeUnit:
                   type:
                   - string
@@ -1485,10 +1713,13 @@ paths:
                   enum:
                   - MINUTES
                   - HOURS
+                  example: MINUTES
                 enableImageProcessing:
                   type: boolean
+                  example: false
                 enableIdle:
                   type: boolean
+                  example: false
                 idleSettings:
                   type:
                   - object
@@ -1498,6 +1729,7 @@ paths:
                       type:
                       - integer
                       - 'null'
+                      example: 1
                     timeUnit:
                       type:
                       - string
@@ -1505,10 +1737,12 @@ paths:
                       enum:
                       - MINUTES
                       - HOURS
+                      example: MINUTES
                     resetsLimit:
                       type:
                       - integer
                       - 'null'
+                      example: 1
                   required:
                   - after
                   - timeUnit
@@ -1516,28 +1750,35 @@ paths:
                 conversationInterruptTimeout:
                   type: integer
                   minimum: 0
+                  example: 0
                 conversationInterruptTimeUnit:
                   type: string
                   enum:
                   - MINUTES
                   - HOURS
+                  example: MINUTES
                 sendCloseMessage:
                   type: boolean
+                  example: false
                 closeMessageType:
                   type: string
                   enum:
                   - STATIC
                   - DYNAMIC
+                  example: STATIC
                 closeMessage:
                   type:
                   - string
                   - 'null'
+                  example: example
                 closeInstruction:
                   type:
                   - string
                   - 'null'
+                  example: example
                 autoReplyOnUninterrupt:
                   type: boolean
+                  example: false
               required:
               - splitMessages
               - splitCharacterLimit
@@ -1554,18 +1795,22 @@ paths:
                 properties:
                   splitMessages:
                     type: boolean
+                    example: false
                   splitCharacterLimit:
                     type: integer
+                    example: 1
                   conversationClose:
                     type: string
                     enum:
                     - NEVER
                     - AUTOMATICALLY
                     - DYNAMICALLY
+                    example: NEVER
                   closeAfter:
                     type:
                     - integer
                     - 'null'
+                    example: 1
                   timeUnit:
                     type:
                     - string
@@ -1573,10 +1818,13 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   enableImageProcessing:
                     type: boolean
+                    example: false
                   enableIdle:
                     type: boolean
+                    example: false
                   idleSettings:
                     type:
                     - object
@@ -1586,10 +1834,12 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       after:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       timeUnit:
                         type:
                         - string
@@ -1597,10 +1847,12 @@ paths:
                         enum:
                         - MINUTES
                         - HOURS
+                        example: MINUTES
                       resetsLimit:
                         type:
                         - number
                         - 'null'
+                        example: 1
                     required:
                     - after
                     - timeUnit
@@ -1608,6 +1860,7 @@ paths:
                   conversationInterruptTimeout:
                     type: integer
                     minimum: 0
+                    example: 0
                   conversationInterruptTimeUnit:
                     type:
                     - string
@@ -1615,23 +1868,29 @@ paths:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   sendCloseMessage:
                     type: boolean
+                    example: false
                   closeMessageType:
                     type: string
                     enum:
                     - STATIC
                     - DYNAMIC
+                    example: STATIC
                   closeMessage:
                     type:
                     - string
                     - 'null'
+                    example: example
                   closeInstruction:
                     type:
                     - string
                     - 'null'
+                    example: example
                   autoReplyOnUninterrupt:
                     type: boolean
+                    example: false
                 required:
                 - splitMessages
                 - splitCharacterLimit
@@ -1695,6 +1954,503 @@ paths:
                 $ref: '#/components/schemas/Error'
 components:
   schemas:
+    AgentSetting:
+      type:
+      - object
+      - 'null'
+      properties:
+        id:
+          type: number
+          example: 1
+        aiModelId:
+          type:
+          - number
+          - 'null'
+          example: 1
+        aiModel:
+          allOf:
+          - $ref: '#/components/schemas/AiModel'
+          type:
+          - object
+          - 'null'
+        model:
+          type:
+          - string
+          - 'null'
+          example: example
+        aiType:
+          type: string
+          enum:
+          - ASSISTANT
+          - AGENT
+          example: ASSISTANT
+        temperature:
+          type: number
+          example: 1
+        instructions:
+          type:
+          - string
+          - 'null'
+          example: example
+        agentRole:
+          type: string
+          enum:
+          - NONE
+          - CUSTOM
+          - CUSTOMER_SUPPORT
+          - SALES_REPRESENTATIVE
+          - COLLECTIONS
+          - RECRUITING_AGENT
+          - HR_MANAGER
+          - PRODUCT_COPILOT
+          - AI_ASSISTANT
+          - ANALYST
+          - POST_SALES
+          example: NONE
+        toneOfVoice:
+          type: string
+          enum:
+          - NONE
+          - CUSTOM
+          - FRIENDLY
+          - NEUTRAL
+          - MATTER_OF_FACT
+          - PROFESSIONAL
+          - HUMOROUS
+          - WITTY
+          - GEN_Z
+          example: NONE
+        answerLength:
+          type: string
+          enum:
+          - NONE
+          - CUSTOM
+          - DYNAMIC
+          - CONCISE
+          - STANDARD
+          - THOROUGH
+          example: NONE
+        maxIterations:
+          type: number
+          example: 1
+        agentType:
+          type: string
+          enum:
+          - BASIC
+          - ADVANCED
+          example: BASIC
+        customTools:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              id:
+                type: number
+                example: 1
+              name:
+                type: string
+                example: example
+              description:
+                type:
+                - string
+                - 'null'
+                example: example
+              status:
+                type:
+                - string
+                - 'null'
+                example: example
+              type:
+                type:
+                - string
+                - 'null'
+                example: example
+            required:
+            - id
+            - name
+        systemToolsConfig:
+          type:
+          - object
+          - 'null'
+        selectedRecordTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: number
+                example: 1
+              read:
+                type: boolean
+                example: false
+              create:
+                type: boolean
+                example: false
+              update:
+                type: boolean
+                example: false
+              delete:
+                type: boolean
+                example: false
+              createActivity:
+                type: boolean
+                example: false
+            required:
+            - recordTypeId
+        agentConnectedAccounts:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              connectedAccountId:
+                type: number
+                example: 1
+              useAllTools:
+                type: boolean
+                example: false
+              selectedToolSlugs:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: string
+                  example: example
+              connectedAccount:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  toolkit:
+                    type: string
+                    example: example
+                  alias:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  connectedEmail:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  isConnected:
+                    type: boolean
+                    example: false
+                required:
+                - id
+                - toolkit
+                - alias
+                - connectedEmail
+                - isConnected
+            required:
+            - connectedAccountId
+            - useAllTools
+        agentPlaybooks:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              playbookId:
+                type: number
+                example: 1
+              assignedAt:
+                type: string
+                example: example
+              playbook:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                required:
+                - id
+                - name
+            required:
+            - playbookId
+      required:
+      - id
+    PublicAgentThemeUpdateOutput:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        assistantId:
+          type: string
+          example: example
+        avatar:
+          type:
+          - string
+          - 'null'
+          example: example
+        bubbleImage:
+          type:
+          - string
+          - 'null'
+          example: example
+        title:
+          type: string
+          example: example
+        initialMessage:
+          type: string
+          example: example
+        placeholder:
+          type: string
+          example: example
+        bubbleColor:
+          type: string
+          example: example
+        userMessageColor:
+          type: string
+          example: example
+        agentMessageColor:
+          type:
+          - string
+          - 'null'
+          example: example
+        bubbleAlignment:
+          type: string
+          enum:
+          - RIGHT
+          - LEFT
+          example: RIGHT
+        progressIndicator:
+          type: string
+          enum:
+          - STATIC
+          - DYNAMIC
+          example: STATIC
+        verticalPositionInPixels:
+          type: number
+          example: 1
+        updatedAt:
+          type: string
+          example: example
+      required:
+      - id
+      - assistantId
+      - avatar
+      - bubbleImage
+      - title
+      - initialMessage
+      - placeholder
+      - bubbleColor
+      - userMessageColor
+      - agentMessageColor
+      - bubbleAlignment
+      - progressIndicator
+      - verticalPositionInPixels
+      - updatedAt
+    PublicAgentThemeUpdateInput:
+      type: object
+      properties:
+        avatar:
+          type:
+          - string
+          - 'null'
+          example: example
+        bubbleImage:
+          type:
+          - string
+          - 'null'
+          example: example
+        title:
+          type: string
+          example: example
+        initialMessage:
+          type: string
+          example: example
+        placeholder:
+          type: string
+          example: example
+        bubbleColor:
+          type: string
+          example: example
+        userMessageColor:
+          type: string
+          example: example
+        agentMessageColor:
+          type:
+          - string
+          - 'null'
+          example: example
+        bubbleAlignment:
+          type: string
+          enum:
+          - RIGHT
+          - LEFT
+          example: RIGHT
+        progressIndicator:
+          type: string
+          enum:
+          - STATIC
+          - DYNAMIC
+          example: STATIC
+        verticalPositionInPixels:
+          type: number
+          example: 1
+      required:
+      - avatar
+      - bubbleImage
+      - title
+      - initialMessage
+      - placeholder
+      - bubbleColor
+      - userMessageColor
+      - agentMessageColor
+      - bubbleAlignment
+      - progressIndicator
+      - verticalPositionInPixels
+    PublicAgentCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Support Agent
+      required:
+      - name
+    AiModel:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 1
+        name:
+          type: string
+          example: example
+        description:
+          type:
+          - string
+          - 'null'
+          example: example
+        creditsPerMessage:
+          type: number
+          example: 1
+        isDefault:
+          type: boolean
+          example: false
+        order:
+          type: number
+          example: 1
+        analyticsColor:
+          type:
+          - string
+          - 'null'
+          example: example
+        externalId:
+          type:
+          - string
+          - 'null'
+          example: example
+        aiVendor:
+          type: string
+          example: example
+        reasoningModel:
+          type: boolean
+          example: false
+        type:
+          type: string
+          enum:
+          - TEXT
+          - TRANSCRIPTION
+          - FILE_ANALYSIS
+          example: TEXT
+      required:
+      - id
+      - name
+    AgentTheme:
+      type:
+      - object
+      - 'null'
+      properties:
+        id:
+          type: number
+          example: 1
+        assistantId:
+          type: string
+          example: example
+        avatar:
+          type:
+          - string
+          - 'null'
+          example: example
+        bubbleImage:
+          type:
+          - string
+          - 'null'
+          example: example
+        title:
+          type: string
+          example: example
+        initialMessage:
+          type: string
+          example: example
+        placeholder:
+          type: string
+          example: example
+        bubbleColor:
+          type: string
+          example: example
+        userMessageColor:
+          type: string
+          example: example
+        agentMessageColor:
+          type:
+          - string
+          - 'null'
+          example: example
+        bubbleAlignment:
+          type: string
+          enum:
+          - RIGHT
+          - LEFT
+          example: RIGHT
+        progressIndicator:
+          type: string
+          enum:
+          - STATIC
+          - DYNAMIC
+          example: STATIC
+        verticalPositionInPixels:
+          type: number
+          example: 1
+        removePowerBy:
+          type: boolean
+          example: false
+        updatedAt:
+          type: string
+          example: example
+      required:
+      - id
+      - avatar
+      - bubbleImage
+      - title
+      - initialMessage
+      - placeholder
+      - bubbleColor
+      - userMessageColor
+      - agentMessageColor
+      - bubbleAlignment
+      - progressIndicator
+      - verticalPositionInPixels
     AgentChannelSettings:
       type: object
       properties:
@@ -1703,12 +2459,15 @@ components:
           properties:
             splitMessages:
               type: boolean
+              example: false
             splitCharacterLimit:
               type: integer
+              example: 1
             closeAfter:
               type:
               - number
               - 'null'
+              example: 1
             timeUnit:
               type:
               - string
@@ -1716,31 +2475,39 @@ components:
               enum:
               - MINUTES
               - HOURS
+              example: MINUTES
             conversationClose:
               type: string
               enum:
               - NEVER
               - AUTOMATICALLY
               - DYNAMICALLY
+              example: NEVER
             collectFeedback:
               type: boolean
+              example: false
             feedbackVisibility:
               type: string
               enum:
               - ON_HOVER
               - ALWAYS_VISIBLE
+              example: ON_HOVER
             feedbackText:
               type:
               - string
               - 'null'
+              example: example
             collectFeedbackReason:
               type: boolean
+              example: false
             includeOtherReason:
               type: boolean
+              example: false
             openFeedbackText:
               type:
               - string
               - 'null'
+              example: example
             feedbackReasons:
               type:
               - array
@@ -1750,20 +2517,26 @@ components:
                 properties:
                   id:
                     type: number
+                    example: 1
                   reason:
                     type: string
+                    example: example
                   order:
                     type: number
+                    example: 1
                 required:
                 - id
                 - reason
                 - order
             enableDocumentProcessing:
               type: boolean
+              example: false
             enableImageProcessing:
               type: boolean
+              example: false
             enableIdle:
               type: boolean
+              example: false
             idleSettings:
               type:
               - object
@@ -1773,10 +2546,12 @@ components:
                   type:
                   - number
                   - 'null'
+                  example: 1
                 after:
                   type:
                   - number
                   - 'null'
+                  example: 1
                 timeUnit:
                   type:
                   - string
@@ -1784,10 +2559,12 @@ components:
                   enum:
                   - MINUTES
                   - HOURS
+                  example: MINUTES
                 resetsLimit:
                   type:
                   - number
                   - 'null'
+                  example: 1
               required:
               - after
               - timeUnit
@@ -1810,12 +2587,15 @@ components:
           properties:
             splitMessages:
               type: boolean
+              example: false
             splitCharacterLimit:
               type: integer
+              example: 1
             closeAfter:
               type:
               - number
               - 'null'
+              example: 1
             timeUnit:
               type:
               - string
@@ -1823,6 +2603,7 @@ components:
               enum:
               - MINUTES
               - HOURS
+              example: MINUTES
             conversationClose:
               type:
               - string
@@ -1831,17 +2612,23 @@ components:
               - NEVER
               - AUTOMATICALLY
               - DYNAMICALLY
+              example: NEVER
             enableDocumentProcessing:
               type: boolean
+              example: false
             enableImageProcessing:
               type: boolean
+              example: false
             debounce:
               type: boolean
+              example: false
             debounceTime:
               type: integer
               minimum: 0
+              example: 0
             enableIdle:
               type: boolean
+              example: false
             idleSettings:
               type:
               - object
@@ -1851,10 +2638,12 @@ components:
                   type:
                   - number
                   - 'null'
+                  example: 1
                 after:
                   type:
                   - number
                   - 'null'
+                  example: 1
                 timeUnit:
                   type:
                   - string
@@ -1862,10 +2651,12 @@ components:
                   enum:
                   - MINUTES
                   - HOURS
+                  example: MINUTES
                 resetsLimit:
                   type:
                   - number
                   - 'null'
+                  example: 1
               required:
               - after
               - timeUnit
@@ -1873,6 +2664,7 @@ components:
             conversationInterruptTimeout:
               type: integer
               minimum: 0
+              example: 0
             conversationInterruptTimeUnit:
               type:
               - string
@@ -1880,23 +2672,29 @@ components:
               enum:
               - MINUTES
               - HOURS
+              example: MINUTES
             sendCloseMessage:
               type: boolean
+              example: false
             closeMessageType:
               type: string
               enum:
               - STATIC
               - DYNAMIC
+              example: STATIC
             closeMessage:
               type:
               - string
               - 'null'
+              example: example
             closeInstruction:
               type:
               - string
               - 'null'
+              example: example
             autoReplyOnUninterrupt:
               type: boolean
+              example: false
           required:
           - splitMessages
           - splitCharacterLimit
@@ -1908,12 +2706,15 @@ components:
           properties:
             splitMessages:
               type: boolean
+              example: false
             splitCharacterLimit:
               type: integer
+              example: 1
             closeAfter:
               type:
               - number
               - 'null'
+              example: 1
             timeUnit:
               type:
               - string
@@ -1921,6 +2722,7 @@ components:
               enum:
               - MINUTES
               - HOURS
+              example: MINUTES
             conversationClose:
               type:
               - string
@@ -1929,10 +2731,13 @@ components:
               - NEVER
               - AUTOMATICALLY
               - DYNAMICALLY
+              example: NEVER
             enableImageProcessing:
               type: boolean
+              example: false
             enableIdle:
               type: boolean
+              example: false
             idleSettings:
               type:
               - object
@@ -1942,10 +2747,12 @@ components:
                   type:
                   - number
                   - 'null'
+                  example: 1
                 after:
                   type:
                   - number
                   - 'null'
+                  example: 1
                 timeUnit:
                   type:
                   - string
@@ -1953,10 +2760,12 @@ components:
                   enum:
                   - MINUTES
                   - HOURS
+                  example: MINUTES
                 resetsLimit:
                   type:
                   - number
                   - 'null'
+                  example: 1
               required:
               - after
               - timeUnit
@@ -1964,6 +2773,7 @@ components:
             conversationInterruptTimeout:
               type: integer
               minimum: 0
+              example: 0
             conversationInterruptTimeUnit:
               type:
               - string
@@ -1971,23 +2781,29 @@ components:
               enum:
               - MINUTES
               - HOURS
+              example: MINUTES
             sendCloseMessage:
               type: boolean
+              example: false
             closeMessageType:
               type: string
               enum:
               - STATIC
               - DYNAMIC
+              example: STATIC
             closeMessage:
               type:
               - string
               - 'null'
+              example: example
             closeInstruction:
               type:
               - string
               - 'null'
+              example: example
             autoReplyOnUninterrupt:
               type: boolean
+              example: false
           required:
           - splitMessages
           - splitCharacterLimit
@@ -1999,12 +2815,15 @@ components:
           properties:
             splitMessages:
               type: boolean
+              example: false
             splitCharacterLimit:
               type: integer
+              example: 1
             closeAfter:
               type:
               - number
               - 'null'
+              example: 1
             timeUnit:
               type:
               - string
@@ -2012,6 +2831,7 @@ components:
               enum:
               - MINUTES
               - HOURS
+              example: MINUTES
             conversationClose:
               type:
               - string
@@ -2020,10 +2840,13 @@ components:
               - NEVER
               - AUTOMATICALLY
               - DYNAMICALLY
+              example: NEVER
             enableImageProcessing:
               type: boolean
+              example: false
             enableIdle:
               type: boolean
+              example: false
             idleSettings:
               type:
               - object
@@ -2033,10 +2856,12 @@ components:
                   type:
                   - number
                   - 'null'
+                  example: 1
                 after:
                   type:
                   - number
                   - 'null'
+                  example: 1
                 timeUnit:
                   type:
                   - string
@@ -2044,10 +2869,12 @@ components:
                   enum:
                   - MINUTES
                   - HOURS
+                  example: MINUTES
                 resetsLimit:
                   type:
                   - number
                   - 'null'
+                  example: 1
               required:
               - after
               - timeUnit
@@ -2055,6 +2882,7 @@ components:
             conversationInterruptTimeout:
               type: integer
               minimum: 0
+              example: 0
             conversationInterruptTimeUnit:
               type:
               - string
@@ -2062,23 +2890,29 @@ components:
               enum:
               - MINUTES
               - HOURS
+              example: MINUTES
             autoReplyOnUninterrupt:
               type: boolean
+              example: false
             sendCloseMessage:
               type: boolean
+              example: false
             closeMessageType:
               type: string
               enum:
               - STATIC
               - DYNAMIC
+              example: STATIC
             closeMessage:
               type:
               - string
               - 'null'
+              example: example
             closeInstruction:
               type:
               - string
               - 'null'
+              example: example
           required:
           - splitMessages
           - splitCharacterLimit
@@ -2090,329 +2924,6 @@ components:
       - whatsApp
       - instagram
       - messenger
-    AgentTheme:
-      type:
-      - object
-      - 'null'
-      properties:
-        id:
-          type: number
-        assistantId:
-          type: string
-        avatar:
-          type:
-          - string
-          - 'null'
-        bubbleImage:
-          type:
-          - string
-          - 'null'
-        title:
-          type: string
-        initialMessage:
-          type: string
-        placeholder:
-          type: string
-        bubbleColor:
-          type: string
-        userMessageColor:
-          type: string
-        agentMessageColor:
-          type:
-          - string
-          - 'null'
-        bubbleAlignment:
-          type: string
-          enum:
-          - RIGHT
-          - LEFT
-        progressIndicator:
-          type: string
-          enum:
-          - STATIC
-          - DYNAMIC
-        verticalPositionInPixels:
-          type: number
-        removePowerBy:
-          type: boolean
-        updatedAt:
-          type: string
-      required:
-      - id
-      - avatar
-      - bubbleImage
-      - title
-      - initialMessage
-      - placeholder
-      - bubbleColor
-      - userMessageColor
-      - agentMessageColor
-      - bubbleAlignment
-      - progressIndicator
-      - verticalPositionInPixels
-    AgentSetting:
-      type:
-      - object
-      - 'null'
-      properties:
-        id:
-          type: number
-        aiModelId:
-          type:
-          - number
-          - 'null'
-        aiModel:
-          allOf:
-          - $ref: '#/components/schemas/AiModel'
-          - {}
-        model:
-          type:
-          - string
-          - 'null'
-        aiType:
-          type: string
-          enum:
-          - ASSISTANT
-          - AGENT
-        temperature:
-          type: number
-        instructions:
-          type:
-          - string
-          - 'null'
-        agentRole:
-          type: string
-          enum:
-          - NONE
-          - CUSTOM
-          - CUSTOMER_SUPPORT
-          - SALES_REPRESENTATIVE
-          - COLLECTIONS
-          - RECRUITING_AGENT
-          - HR_MANAGER
-          - PRODUCT_COPILOT
-          - AI_ASSISTANT
-          - ANALYST
-          - POST_SALES
-        toneOfVoice:
-          type: string
-          enum:
-          - NONE
-          - CUSTOM
-          - FRIENDLY
-          - NEUTRAL
-          - MATTER_OF_FACT
-          - PROFESSIONAL
-          - HUMOROUS
-          - WITTY
-          - GEN_Z
-        answerLength:
-          type: string
-          enum:
-          - NONE
-          - CUSTOM
-          - DYNAMIC
-          - CONCISE
-          - STANDARD
-          - THOROUGH
-        maxIterations:
-          type: number
-        agentType:
-          type: string
-          enum:
-          - BASIC
-          - ADVANCED
-        customTools:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              id:
-                type: number
-              name:
-                type: string
-              description:
-                type:
-                - string
-                - 'null'
-              status:
-                type:
-                - string
-                - 'null'
-              type:
-                type:
-                - string
-                - 'null'
-            required:
-            - id
-            - name
-        systemToolsConfig: {}
-        selectedRecordTypes:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              recordTypeId:
-                type: number
-              read:
-                type: boolean
-              create:
-                type: boolean
-              update:
-                type: boolean
-              delete:
-                type: boolean
-              createActivity:
-                type: boolean
-            required:
-            - recordTypeId
-        agentConnectedAccounts:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              connectedAccountId:
-                type: number
-              useAllTools:
-                type: boolean
-              selectedToolSlugs:
-                type:
-                - array
-                - 'null'
-                items:
-                  type: string
-              connectedAccount:
-                type: object
-                properties:
-                  id:
-                    type: number
-                  toolkit:
-                    type: string
-                  alias:
-                    type:
-                    - string
-                    - 'null'
-                  connectedEmail:
-                    type:
-                    - string
-                    - 'null'
-                  isConnected:
-                    type: boolean
-                required:
-                - id
-                - toolkit
-                - alias
-                - connectedEmail
-                - isConnected
-            required:
-            - connectedAccountId
-            - useAllTools
-        agentPlaybooks:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              playbookId:
-                type: number
-              assignedAt:
-                type: string
-              playbook:
-                type: object
-                properties:
-                  id:
-                    type: number
-                  name:
-                    type: string
-                  description:
-                    type:
-                    - string
-                    - 'null'
-                required:
-                - id
-                - name
-            required:
-            - playbookId
-      required:
-      - id
-    PublicAgentCreateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          example: Support Agent
-      required:
-      - name
-    Error:
-      type: object
-      properties:
-        ok:
-          type: boolean
-          enum:
-          - false
-          example: false
-        error:
-          $ref: '#/components/schemas/ErrorBody'
-      required:
-      - ok
-      - error
-    PublicAgentThemeUpdateInput:
-      type: object
-      properties:
-        avatar:
-          type:
-          - string
-          - 'null'
-        bubbleImage:
-          type:
-          - string
-          - 'null'
-        title:
-          type: string
-        initialMessage:
-          type: string
-        placeholder:
-          type: string
-        bubbleColor:
-          type: string
-        userMessageColor:
-          type: string
-        agentMessageColor:
-          type:
-          - string
-          - 'null'
-        bubbleAlignment:
-          type: string
-          enum:
-          - RIGHT
-          - LEFT
-        progressIndicator:
-          type: string
-          enum:
-          - STATIC
-          - DYNAMIC
-        verticalPositionInPixels:
-          type: number
-      required:
-      - avatar
-      - bubbleImage
-      - title
-      - initialMessage
-      - placeholder
-      - bubbleColor
-      - userMessageColor
-      - agentMessageColor
-      - bubbleAlignment
-      - progressIndicator
-      - verticalPositionInPixels
     AgentAnalytics:
       type: object
       properties:
@@ -2468,6 +2979,147 @@ components:
       - summary
       - creditsByDate
       - conversationsByChannel
+    PublicAgentDeploymentStatusInput:
+      type: object
+      properties:
+        isOffline:
+          type: boolean
+          example: false
+      required:
+      - isOffline
+    PublicAgentSettingUpdateInput:
+      type: object
+      properties:
+        aiModelId:
+          type:
+          - number
+          - 'null'
+          example: 1
+        temperature:
+          type: number
+          minimum: 0
+          maximum: 1
+          example: 0
+        instructions:
+          type:
+          - string
+          - 'null'
+          example: example
+        maxIterations:
+          type: number
+          minimum: 3
+          maximum: 30
+          default: 10
+          example: 3
+        agentType:
+          type: string
+          enum:
+          - BASIC
+          - ADVANCED
+          default: BASIC
+          example: BASIC
+        customToolIds:
+          type:
+          - array
+          - 'null'
+          items:
+            type: number
+            example: 1
+        connectedAccountConfigs:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              connectedAccountId:
+                type: number
+                example: 1
+              useAllTools:
+                type: boolean
+                default: true
+                example: false
+              selectedToolSlugs:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: string
+                  example: example
+            required:
+            - connectedAccountId
+        systemToolsConfig:
+          type:
+          - object
+          - 'null'
+          properties:
+            webSearchEnabled:
+              type: boolean
+              default: false
+              example: false
+            urlScrapeEnabled:
+              type: boolean
+              default: false
+              example: false
+            linkedinSearchEnabled:
+              type: boolean
+              default: false
+              example: false
+        selectedRecordTypes:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: number
+                example: 1
+              read:
+                type: boolean
+                example: false
+              create:
+                type: boolean
+                example: false
+              update:
+                type: boolean
+                example: false
+              delete:
+                type: boolean
+                example: false
+              createActivity:
+                type: boolean
+                example: false
+            required:
+            - recordTypeId
+      required:
+      - aiModelId
+      - temperature
+      - instructions
+      additionalProperties: false
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicAgentUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 256
+          example: Support Agent
+      required:
+      - name
     Agent:
       type: object
       properties:
@@ -2504,203 +3156,6 @@ components:
       - status
       - createdAt
       - updatedAt
-    AiModel:
-      type: object
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-        creditsPerMessage:
-          type: number
-        isDefault:
-          type: boolean
-        order:
-          type: number
-        analyticsColor:
-          type:
-          - string
-          - 'null'
-        externalId:
-          type:
-          - string
-          - 'null'
-        aiVendor:
-          type: string
-        reasoningModel:
-          type: boolean
-        type:
-          type: string
-          enum:
-          - TEXT
-          - TRANSCRIPTION
-          - FILE_ANALYSIS
-      required:
-      - id
-      - name
-    PublicAgentThemeUpdateOutput:
-      type: object
-      properties:
-        id:
-          type: number
-        assistantId:
-          type: string
-        avatar:
-          type:
-          - string
-          - 'null'
-        bubbleImage:
-          type:
-          - string
-          - 'null'
-        title:
-          type: string
-        initialMessage:
-          type: string
-        placeholder:
-          type: string
-        bubbleColor:
-          type: string
-        userMessageColor:
-          type: string
-        agentMessageColor:
-          type:
-          - string
-          - 'null'
-        bubbleAlignment:
-          type: string
-          enum:
-          - RIGHT
-          - LEFT
-        progressIndicator:
-          type: string
-          enum:
-          - STATIC
-          - DYNAMIC
-        verticalPositionInPixels:
-          type: number
-        updatedAt:
-          type: string
-      required:
-      - id
-      - assistantId
-      - avatar
-      - bubbleImage
-      - title
-      - initialMessage
-      - placeholder
-      - bubbleColor
-      - userMessageColor
-      - agentMessageColor
-      - bubbleAlignment
-      - progressIndicator
-      - verticalPositionInPixels
-      - updatedAt
-    PublicAgentSettingUpdateInput:
-      type: object
-      properties:
-        aiModelId:
-          type:
-          - number
-          - 'null'
-        temperature:
-          type: number
-          minimum: 0
-          maximum: 1
-        instructions:
-          type:
-          - string
-          - 'null'
-        maxIterations:
-          type: number
-          minimum: 3
-          maximum: 30
-          default: 10
-        agentType:
-          type: string
-          enum:
-          - BASIC
-          - ADVANCED
-          default: BASIC
-        customToolIds:
-          type:
-          - array
-          - 'null'
-          items:
-            type: number
-        connectedAccountConfigs:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              connectedAccountId:
-                type: number
-              useAllTools:
-                type: boolean
-                default: true
-              selectedToolSlugs:
-                type:
-                - array
-                - 'null'
-                items:
-                  type: string
-            required:
-            - connectedAccountId
-        systemToolsConfig:
-          type:
-          - object
-          - 'null'
-          properties:
-            webSearchEnabled:
-              type: boolean
-              default: false
-            urlScrapeEnabled:
-              type: boolean
-              default: false
-            linkedinSearchEnabled:
-              type: boolean
-              default: false
-        selectedRecordTypes:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            properties:
-              recordTypeId:
-                type: number
-              read:
-                type: boolean
-              create:
-                type: boolean
-              update:
-                type: boolean
-              delete:
-                type: boolean
-              createActivity:
-                type: boolean
-            required:
-            - recordTypeId
-      required:
-      - aiModelId
-      - temperature
-      - instructions
-    PublicAgentUpdateInput:
-      type: object
-      properties:
-        name:
-          type: string
-          minLength: 1
-          maxLength: 256
-          example: Support Agent
-      required:
-      - name
     ErrorBody:
       type: object
       properties:
@@ -2714,6 +3169,7 @@ components:
           - conflict
           - internal_error
           - cli_outdated
+          - upgrade_required
           example: unauthorized
         message:
           type: string
@@ -2730,13 +3186,6 @@ components:
       required:
       - code
       - message
-    PublicAgentDeploymentStatusInput:
-      type: object
-      properties:
-        isOffline:
-          type: boolean
-      required:
-      - isOffline
     AgentDetail:
       allOf:
       - $ref: '#/components/schemas/Agent'
@@ -2747,8 +3196,10 @@ components:
             example: false
           ownerId:
             type: number
+            example: 1
           accountId:
             type: number
+            example: 1
           theme:
             $ref: '#/components/schemas/AgentTheme'
           agentSetting:
@@ -2760,6 +3211,7 @@ components:
             properties:
               id:
                 type: number
+                example: 1
               channelLiveChat:
                 type:
                 - object
@@ -2767,12 +3219,15 @@ components:
                 properties:
                   splitMessages:
                     type: boolean
+                    example: false
                   splitCharacterLimit:
                     type: integer
+                    example: 1
                   closeAfter:
                     type:
                     - number
                     - 'null'
+                    example: 1
                   timeUnit:
                     type:
                     - string
@@ -2780,31 +3235,39 @@ components:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   conversationClose:
                     type: string
                     enum:
                     - NEVER
                     - AUTOMATICALLY
                     - DYNAMICALLY
+                    example: NEVER
                   collectFeedback:
                     type: boolean
+                    example: false
                   feedbackVisibility:
                     type: string
                     enum:
                     - ON_HOVER
                     - ALWAYS_VISIBLE
+                    example: ON_HOVER
                   feedbackText:
                     type:
                     - string
                     - 'null'
+                    example: example
                   collectFeedbackReason:
                     type: boolean
+                    example: false
                   includeOtherReason:
                     type: boolean
+                    example: false
                   openFeedbackText:
                     type:
                     - string
                     - 'null'
+                    example: example
                   feedbackReasons:
                     type:
                     - array
@@ -2814,20 +3277,26 @@ components:
                       properties:
                         id:
                           type: number
+                          example: 1
                         reason:
                           type: string
+                          example: example
                         order:
                           type: number
+                          example: 1
                       required:
                       - id
                       - reason
                       - order
                   enableDocumentProcessing:
                     type: boolean
+                    example: false
                   enableImageProcessing:
                     type: boolean
+                    example: false
                   enableIdle:
                     type: boolean
+                    example: false
                   idleSettings:
                     type:
                     - object
@@ -2837,10 +3306,12 @@ components:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       after:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       timeUnit:
                         type:
                         - string
@@ -2848,16 +3319,19 @@ components:
                         enum:
                         - MINUTES
                         - HOURS
+                        example: MINUTES
                       resetsLimit:
                         type:
                         - number
                         - 'null'
+                        example: 1
                     required:
                     - after
                     - timeUnit
                     - resetsLimit
                   id:
                     type: number
+                    example: 1
                 required:
                 - splitMessages
                 - splitCharacterLimit
@@ -2879,12 +3353,15 @@ components:
                 properties:
                   splitMessages:
                     type: boolean
+                    example: false
                   splitCharacterLimit:
                     type: integer
+                    example: 1
                   closeAfter:
                     type:
                     - number
                     - 'null'
+                    example: 1
                   timeUnit:
                     type:
                     - string
@@ -2892,6 +3369,7 @@ components:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   conversationClose:
                     type:
                     - string
@@ -2900,17 +3378,23 @@ components:
                     - NEVER
                     - AUTOMATICALLY
                     - DYNAMICALLY
+                    example: NEVER
                   enableDocumentProcessing:
                     type: boolean
+                    example: false
                   enableImageProcessing:
                     type: boolean
+                    example: false
                   debounce:
                     type: boolean
+                    example: false
                   debounceTime:
                     type: integer
                     minimum: 0
+                    example: 0
                   enableIdle:
                     type: boolean
+                    example: false
                   idleSettings:
                     type:
                     - object
@@ -2920,10 +3404,12 @@ components:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       after:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       timeUnit:
                         type:
                         - string
@@ -2931,10 +3417,12 @@ components:
                         enum:
                         - MINUTES
                         - HOURS
+                        example: MINUTES
                       resetsLimit:
                         type:
                         - number
                         - 'null'
+                        example: 1
                     required:
                     - after
                     - timeUnit
@@ -2942,6 +3430,7 @@ components:
                   conversationInterruptTimeout:
                     type: integer
                     minimum: 0
+                    example: 0
                   conversationInterruptTimeUnit:
                     type:
                     - string
@@ -2949,25 +3438,32 @@ components:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   sendCloseMessage:
                     type: boolean
+                    example: false
                   closeMessageType:
                     type: string
                     enum:
                     - STATIC
                     - DYNAMIC
+                    example: STATIC
                   closeMessage:
                     type:
                     - string
                     - 'null'
+                    example: example
                   closeInstruction:
                     type:
                     - string
                     - 'null'
+                    example: example
                   autoReplyOnUninterrupt:
                     type: boolean
+                    example: false
                   id:
                     type: number
+                    example: 1
                 required:
                 - splitMessages
                 - splitCharacterLimit
@@ -2982,12 +3478,15 @@ components:
                 properties:
                   splitMessages:
                     type: boolean
+                    example: false
                   splitCharacterLimit:
                     type: integer
+                    example: 1
                   closeAfter:
                     type:
                     - number
                     - 'null'
+                    example: 1
                   timeUnit:
                     type:
                     - string
@@ -2995,6 +3494,7 @@ components:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   conversationClose:
                     type:
                     - string
@@ -3003,10 +3503,13 @@ components:
                     - NEVER
                     - AUTOMATICALLY
                     - DYNAMICALLY
+                    example: NEVER
                   enableImageProcessing:
                     type: boolean
+                    example: false
                   enableIdle:
                     type: boolean
+                    example: false
                   idleSettings:
                     type:
                     - object
@@ -3016,10 +3519,12 @@ components:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       after:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       timeUnit:
                         type:
                         - string
@@ -3027,10 +3532,12 @@ components:
                         enum:
                         - MINUTES
                         - HOURS
+                        example: MINUTES
                       resetsLimit:
                         type:
                         - number
                         - 'null'
+                        example: 1
                     required:
                     - after
                     - timeUnit
@@ -3038,6 +3545,7 @@ components:
                   conversationInterruptTimeout:
                     type: integer
                     minimum: 0
+                    example: 0
                   conversationInterruptTimeUnit:
                     type:
                     - string
@@ -3045,25 +3553,32 @@ components:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   sendCloseMessage:
                     type: boolean
+                    example: false
                   closeMessageType:
                     type: string
                     enum:
                     - STATIC
                     - DYNAMIC
+                    example: STATIC
                   closeMessage:
                     type:
                     - string
                     - 'null'
+                    example: example
                   closeInstruction:
                     type:
                     - string
                     - 'null'
+                    example: example
                   autoReplyOnUninterrupt:
                     type: boolean
+                    example: false
                   id:
                     type: number
+                    example: 1
                 required:
                 - splitMessages
                 - splitCharacterLimit
@@ -3078,12 +3593,15 @@ components:
                 properties:
                   splitMessages:
                     type: boolean
+                    example: false
                   splitCharacterLimit:
                     type: integer
+                    example: 1
                   closeAfter:
                     type:
                     - number
                     - 'null'
+                    example: 1
                   timeUnit:
                     type:
                     - string
@@ -3091,6 +3609,7 @@ components:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   conversationClose:
                     type:
                     - string
@@ -3099,10 +3618,13 @@ components:
                     - NEVER
                     - AUTOMATICALLY
                     - DYNAMICALLY
+                    example: NEVER
                   enableImageProcessing:
                     type: boolean
+                    example: false
                   enableIdle:
                     type: boolean
+                    example: false
                   idleSettings:
                     type:
                     - object
@@ -3112,10 +3634,12 @@ components:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       after:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       timeUnit:
                         type:
                         - string
@@ -3123,10 +3647,12 @@ components:
                         enum:
                         - MINUTES
                         - HOURS
+                        example: MINUTES
                       resetsLimit:
                         type:
                         - number
                         - 'null'
+                        example: 1
                     required:
                     - after
                     - timeUnit
@@ -3134,6 +3660,7 @@ components:
                   conversationInterruptTimeout:
                     type: integer
                     minimum: 0
+                    example: 0
                   conversationInterruptTimeUnit:
                     type:
                     - string
@@ -3141,25 +3668,32 @@ components:
                     enum:
                     - MINUTES
                     - HOURS
+                    example: MINUTES
                   autoReplyOnUninterrupt:
                     type: boolean
+                    example: false
                   sendCloseMessage:
                     type: boolean
+                    example: false
                   closeMessageType:
                     type: string
                     enum:
                     - STATIC
                     - DYNAMIC
+                    example: STATIC
                   closeMessage:
                     type:
                     - string
                     - 'null'
+                    example: example
                   closeInstruction:
                     type:
                     - string
                     - 'null'
+                    example: example
                   id:
                     type: number
+                    example: 1
                 required:
                 - splitMessages
                 - splitCharacterLimit
@@ -3196,6 +3730,14 @@ x-tagGroups:
   tags:
   - Workflows
   - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
 - name: Objects
   tags:
   - Objects
@@ -3221,24 +3763,34 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
-- name: Channels
-  tags:
-  - Channels
 - name: Integrations
   tags:
   - Custom Tools
   - Incoming Webhooks
-  - Account Integrations
+  - Workspace Connectors
   - Agent Channels
   - Integration Resources
 - name: Knowledge
   tags:
   - Knowledge Bases
-- name: Core
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
   tags:
   - Account
-  - AI Models
-  - Billing
   - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
   - User Tasks
   - Guidance

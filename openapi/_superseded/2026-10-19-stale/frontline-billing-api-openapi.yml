@@ -1,0 +1,548 @@
+openapi: 3.2.0
+info:
+  title: Public Billing API
+  version: 1.0.0
+  description: Public API for accessing agents, flows, and analytics.
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Billing
+  description: View billing plan details, credits, and renewal information
+paths:
+  /public/v1/billing:
+    get:
+      summary: Get billing plan details
+      operationId: getBillingPlan
+      description: Returns billing plan information including plan name, credits per month, credits used, and subscription renewal date.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Billing
+      responses:
+        '200':
+          description: Billing plan details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillingPlan'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/billing/usage:
+    get:
+      summary: Get Studio usage details
+      operationId: getStudioUsage
+      description: 'Returns Studio (account-level) usage: credits used vs limit, counts of agents, workflows, flows, users and knowledge bases, current plan, subscription details, and upcoming plan changes. Requires a USER API key.'
+      security:
+      - userApiKey: []
+      tags:
+      - Billing
+      responses:
+        '200':
+          description: Studio usage details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicStudioUsage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/billing/credits/history:
+    get:
+      summary: Get credit consumption history
+      operationId: getCreditHistory
+      description: Returns daily credit consumption broken down by AI model. Optionally filter with start_date and end_date (ISO dates).
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Billing
+      parameters:
+      - schema:
+          type:
+          - string
+          - 'null'
+          example: '2026-05-01'
+        required: false
+        name: start_date
+        in: query
+      - schema:
+          type:
+          - string
+          - 'null'
+          example: '2026-05-31'
+        required: false
+        name: end_date
+        in: query
+      responses:
+        '200':
+          description: Credit history grouped by date and model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicCreditHistory'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/billing/max/usage:
+    get:
+      summary: Get Max usage details
+      operationId: getMaxUsage
+      description: 'Returns Max plan details: plan name and features, subscription status and renewal, seat totals, feature limits (knowledge sources, playbooks, custom labels, tasks, WhatsApp), and upcoming plan changes. Requires a USER API key.'
+      security:
+      - userApiKey: []
+      tags:
+      - Billing
+      responses:
+        '200':
+          description: Max usage details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicMaxUsage'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/billing/max/seats:
+    get:
+      summary: List Max seat assignments
+      operationId: getMaxSeats
+      description: Returns total/available Max seat counts plus the users currently holding a seat and the users without one. Requires a USER API key.
+      security:
+      - userApiKey: []
+      tags:
+      - Billing
+      responses:
+        '200':
+          description: Seat overview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicMaxSeats'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/billing/max/seats/assign:
+    post:
+      summary: Assign a Max seat to a user
+      operationId: assignMaxSeat
+      description: Assigns a Max seat to the given user. Fails if no seats are available or the user already holds one. Requires a USER API key belonging to an OWNER or ADMIN.
+      security:
+      - userApiKey: []
+      tags:
+      - Billing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicMaxSeatInput'
+      responses:
+        '200':
+          description: Seat assigned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicMaxSeatResult'
+        '400':
+          description: Bad Request (no Max profile / already has a seat)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found, or caller is not an OWNER/ADMIN of the account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/billing/max/seats/unassign:
+    post:
+      summary: Unassign a user's Max seat
+      operationId: unassignMaxSeat
+      description: Removes the Max seat from the given user, freeing it for someone else. Requires a USER API key belonging to an OWNER or ADMIN.
+      security:
+      - userApiKey: []
+      tags:
+      - Billing
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicMaxSeatInput'
+      responses:
+        '200':
+          description: Seat unassigned
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicMaxSeatResult'
+        '400':
+          description: Bad Request (user has no active seat)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: User not found, or caller is not an OWNER/ADMIN of the account
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    PublicMaxUsage:
+      type: object
+      properties:
+        plan:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        subscription:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        seats:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        limits:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        next:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+    PublicCreditHistory:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicCreditHistoryItem'
+      required:
+      - results
+    BillingPlan:
+      type: object
+      properties:
+        planName:
+          type:
+          - string
+          - 'null'
+          example: Professional
+        creditsPerMonth:
+          type:
+          - number
+          - 'null'
+          example: 5000
+        creditsUsed:
+          type: number
+          example: 1250.5
+        subscriptionRenews:
+          type:
+          - string
+          - 'null'
+          example: '2026-03-25T00:00:00Z'
+      required:
+      - planName
+      - creditsPerMonth
+      - creditsUsed
+      - subscriptionRenews
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicCreditHistoryItem:
+      type: object
+      properties:
+        date:
+          type: string
+          example: '2026-05-12'
+        aiModelId:
+          type:
+          - number
+          - 'null'
+        model:
+          type:
+          - string
+          - 'null'
+          example: gpt-4o
+        modelName:
+          type:
+          - string
+          - 'null'
+          example: GPT-4o
+        analyticsColor:
+          type:
+          - string
+          - 'null'
+        totalCredits:
+          type: number
+          example: 42.5
+        messageCount:
+          type: number
+          example: 120
+      required:
+      - date
+      - totalCredits
+      - messageCount
+    PublicStudioUsage:
+      type: object
+      properties:
+        usage:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        plan:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        subscription:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        limits:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        next:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+    PublicMaxSeats:
+      type: object
+      properties:
+        totalSeats:
+          type: number
+          example: 5
+        assignedCount:
+          type: number
+          example: 3
+        available:
+          type: number
+          example: 2
+        assigned:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicMaxSeatUser'
+        unassigned:
+          type: array
+          items:
+            type: object
+            properties:
+              userId:
+                type: number
+                example: 12
+              firstName:
+                type:
+                - string
+                - 'null'
+              lastName:
+                type:
+                - string
+                - 'null'
+              email:
+                type:
+                - string
+                - 'null'
+            required:
+            - userId
+      required:
+      - totalSeats
+      - assignedCount
+      - available
+      - assigned
+      - unassigned
+    PublicMaxSeatInput:
+      type: object
+      properties:
+        userId:
+          type: integer
+          description: ID of the user to assign/unassign (see GET /users)
+          example: 12
+          exclusiveMinimum: 0
+      required:
+      - userId
+    PublicMaxSeatResult:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        userId:
+          type: number
+          example: 12
+        assigned:
+          type: boolean
+          description: Whether the user holds a Max seat after this operation
+      required:
+      - success
+      - userId
+      - assigned
+    PublicMaxSeatUser:
+      type: object
+      properties:
+        userId:
+          type: number
+          example: 12
+        firstName:
+          type:
+          - string
+          - 'null'
+        lastName:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        assignedAt:
+          type:
+          - string
+          - 'null'
+      required:
+      - userId
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

@@ -2,7 +2,35 @@ openapi: 3.2.0
 info:
   title: Public Object activities API
   version: 1.0.0
-  description: Public API for accessing agents, flows, and analytics.
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
   license:
     name: Proprietary
     url: https://www.getfrontline.ai/terms-and-conditions
@@ -47,6 +75,7 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: array
                     items:
@@ -54,8 +83,10 @@ paths:
                       properties:
                         id:
                           type: number
+                          example: 1
                         row_id:
                           type: string
+                          example: example
                         type:
                           type: string
                           enum:
@@ -65,12 +96,15 @@ paths:
                           - MEETING
                           - WHATSAPP
                           description: NOTE | EMAIL | PHONE_CALL | MEETING | WHATSAPP
+                          example: NOTE
                         content:
                           type: string
+                          example: example
                         activity_date:
                           type:
                           - string
                           - 'null'
+                          example: example
                         additional_data:
                           type:
                           - object
@@ -80,10 +114,12 @@ paths:
                           type:
                           - number
                           - 'null'
+                          example: 1
                         related_row_id:
                           type:
                           - string
                           - 'null'
+                          example: example
                         users:
                           type: array
                           items:
@@ -91,8 +127,10 @@ paths:
                             properties:
                               id:
                                 type: number
+                                example: 1
                               email:
                                 type: string
+                                example: example
                             required:
                             - id
                             - email
@@ -100,14 +138,17 @@ paths:
                           type:
                           - number
                           - 'null'
+                          example: 1
                         created_at:
                           type:
                           - string
                           - 'null'
+                          example: example
                         updated_at:
                           type:
                           - string
                           - 'null'
+                          example: example
                       required:
                       - id
                       - row_id
@@ -167,6 +208,7 @@ paths:
                 content:
                   type: string
                   minLength: 1
+                  example: example
                 type:
                   type: string
                   enum:
@@ -176,10 +218,12 @@ paths:
                   - MEETING
                   - WHATSAPP
                   default: NOTE
+                  example: NOTE
                 activityDate:
                   type:
                   - string
                   - 'null'
+                  example: example
                 additionalData:
                   type:
                   - object
@@ -189,12 +233,15 @@ paths:
                   type: array
                   items:
                     type: integer
-                    exclusiveMinimum: 0
+                    minimum: 1
+                    example: 1
                 relatedTableId:
                   type: integer
-                  exclusiveMinimum: 0
+                  minimum: 1
+                  example: 1
                 relatedRowId:
                   type: string
+                  example: example
               required:
               - content
       responses:
@@ -209,13 +256,16 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
+                        example: 1
                       row_id:
                         type: string
+                        example: example
                       type:
                         type: string
                         enum:
@@ -225,12 +275,15 @@ paths:
                         - MEETING
                         - WHATSAPP
                         description: NOTE | EMAIL | PHONE_CALL | MEETING | WHATSAPP
+                        example: NOTE
                       content:
                         type: string
+                        example: example
                       activity_date:
                         type:
                         - string
                         - 'null'
+                        example: example
                       additional_data:
                         type:
                         - object
@@ -240,10 +293,12 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       related_row_id:
                         type:
                         - string
                         - 'null'
+                        example: example
                       users:
                         type: array
                         items:
@@ -251,8 +306,10 @@ paths:
                           properties:
                             id:
                               type: number
+                              example: 1
                             email:
                               type: string
+                              example: example
                           required:
                           - id
                           - email
@@ -260,14 +317,17 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       created_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                       updated_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                     required:
                     - id
                     - row_id
@@ -315,8 +375,8 @@ paths:
         in: path
       - schema:
           type: integer
+          minimum: 1
           example: 100
-          exclusiveMinimum: 0
         required: true
         name: id
         in: path
@@ -332,13 +392,16 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
+                        example: 1
                       row_id:
                         type: string
+                        example: example
                       type:
                         type: string
                         enum:
@@ -348,12 +411,15 @@ paths:
                         - MEETING
                         - WHATSAPP
                         description: NOTE | EMAIL | PHONE_CALL | MEETING | WHATSAPP
+                        example: NOTE
                       content:
                         type: string
+                        example: example
                       activity_date:
                         type:
                         - string
                         - 'null'
+                        example: example
                       additional_data:
                         type:
                         - object
@@ -363,10 +429,12 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       related_row_id:
                         type:
                         - string
                         - 'null'
+                        example: example
                       users:
                         type: array
                         items:
@@ -374,8 +442,10 @@ paths:
                           properties:
                             id:
                               type: number
+                              example: 1
                             email:
                               type: string
+                              example: example
                           required:
                           - id
                           - email
@@ -383,14 +453,17 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       created_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                       updated_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                     required:
                     - id
                     - row_id
@@ -437,8 +510,8 @@ paths:
         in: path
       - schema:
           type: integer
+          minimum: 1
           example: 100
-          exclusiveMinimum: 0
         required: true
         name: id
         in: path
@@ -451,10 +524,12 @@ paths:
                 content:
                   type: string
                   minLength: 1
+                  example: example
                 activityDate:
                   type:
                   - string
                   - 'null'
+                  example: example
                 additionalData:
                   type:
                   - object
@@ -464,16 +539,19 @@ paths:
                   type: array
                   items:
                     type: integer
-                    exclusiveMinimum: 0
+                    minimum: 1
+                    example: 1
                 relatedTableId:
                   type:
                   - integer
                   - 'null'
-                  exclusiveMinimum: 0
+                  minimum: 1
+                  example: 1
                 relatedRowId:
                   type:
                   - string
                   - 'null'
+                  example: example
       responses:
         '200':
           description: Updated activity
@@ -486,13 +564,16 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: object
                     properties:
                       id:
                         type: number
+                        example: 1
                       row_id:
                         type: string
+                        example: example
                       type:
                         type: string
                         enum:
@@ -502,12 +583,15 @@ paths:
                         - MEETING
                         - WHATSAPP
                         description: NOTE | EMAIL | PHONE_CALL | MEETING | WHATSAPP
+                        example: NOTE
                       content:
                         type: string
+                        example: example
                       activity_date:
                         type:
                         - string
                         - 'null'
+                        example: example
                       additional_data:
                         type:
                         - object
@@ -517,10 +601,12 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       related_row_id:
                         type:
                         - string
                         - 'null'
+                        example: example
                       users:
                         type: array
                         items:
@@ -528,8 +614,10 @@ paths:
                           properties:
                             id:
                               type: number
+                              example: 1
                             email:
                               type: string
+                              example: example
                           required:
                           - id
                           - email
@@ -537,14 +625,17 @@ paths:
                         type:
                         - number
                         - 'null'
+                        example: 1
                       created_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                       updated_at:
                         type:
                         - string
                         - 'null'
+                        example: example
                     required:
                     - id
                     - row_id
@@ -591,8 +682,8 @@ paths:
         in: path
       - schema:
           type: integer
+          minimum: 1
           example: 100
-          exclusiveMinimum: 0
         required: true
         name: id
         in: path
@@ -608,6 +699,7 @@ paths:
                     type: boolean
                     enum:
                     - true
+                    example: true
                   data:
                     type: object
                     properties:
@@ -615,10 +707,13 @@ paths:
                         type: boolean
                         enum:
                         - true
+                        example: true
                       id:
                         anyOf:
                         - type: string
+                          example: example
                         - type: number
+                          example: 1
                     required:
                     - deleted
                 required:
@@ -657,6 +752,7 @@ components:
           - conflict
           - internal_error
           - cli_outdated
+          - upgrade_required
           example: unauthorized
         message:
           type: string
@@ -710,6 +806,14 @@ x-tagGroups:
   tags:
   - Workflows
   - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
 - name: Objects
   tags:
   - Objects
@@ -735,24 +839,34 @@ x-tagGroups:
   - Table tasks
   - Table files
   - Table export
-- name: Channels
-  tags:
-  - Channels
 - name: Integrations
   tags:
   - Custom Tools
   - Incoming Webhooks
-  - Account Integrations
+  - Workspace Connectors
   - Agent Channels
   - Integration Resources
 - name: Knowledge
   tags:
   - Knowledge Bases
-- name: Core
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
   tags:
   - Account
-  - AI Models
-  - Billing
   - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
   - User Tasks
   - Guidance

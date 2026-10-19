@@ -587,25 +587,6 @@ apis:
     url: https://frontline-public-api.redocly.app/
   - type: GettingStarted
     url: https://docs.getfrontline.ai/docs/getting-started
-- aid: frontline:frontline-account-integrations-api
-  name: Frontline Account Integrations API
-  description: >-
-    View account-scoped (Studio) connected integrations, discover connectable toolkits, and configure
-    which tools each integration exposes to agents, flows, and workflows. These are used for workflows
-    and agents, separate from Max integrations.
-  humanURL: https://docs.getfrontline.ai/reference/openapi
-  baseURL: https://prod-api.getfrontline.ai/public/v1
-  tags:
-  - Account Integrations
-  properties:
-  - type: OpenAPI
-    url: openapi/frontline-account-integrations-api-openapi.yml
-  - type: Documentation
-    url: https://docs.getfrontline.ai/
-  - type: APIReference
-    url: https://frontline-public-api.redocly.app/
-  - type: GettingStarted
-    url: https://docs.getfrontline.ai/docs/getting-started
 - aid: frontline:frontline-agent-channels-api
   name: Frontline Agent Channels API
   description: >-
@@ -634,22 +615,6 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/frontline-agent-playbooks-api-openapi.yml
-  - type: Documentation
-    url: https://docs.getfrontline.ai/
-  - type: APIReference
-    url: https://frontline-public-api.redocly.app/
-  - type: GettingStarted
-    url: https://docs.getfrontline.ai/docs/getting-started
-- aid: frontline:frontline-channels-api
-  name: Frontline Channels API
-  description: Communication channels connected to this account (WhatsApp, Instagram, Messenger)
-  humanURL: https://docs.getfrontline.ai/reference/openapi
-  baseURL: https://prod-api.getfrontline.ai/public/v1
-  tags:
-  - Channels
-  properties:
-  - type: OpenAPI
-    url: openapi/frontline-channels-api-openapi.yml
   - type: Documentation
     url: https://docs.getfrontline.ai/
   - type: APIReference
@@ -710,24 +675,6 @@ apis:
     url: https://frontline-public-api.redocly.app/
   - type: GettingStarted
     url: https://docs.getfrontline.ai/docs/getting-started
-- aid: frontline:frontline-integrations-api
-  name: Frontline Integrations API
-  description: OAuth/API connected accounts for toolkits like Google Sheets, Gmail, and Slack
-  humanURL: https://docs.getfrontline.ai/reference/openapi
-  baseURL: https://prod-api.getfrontline.ai/public/v1
-  tags:
-  - Integration
-  tags_raw:
-  - Integrations
-  properties:
-  - type: OpenAPI
-    url: openapi/frontline-integrations-api-openapi.yml
-  - type: Documentation
-    url: https://docs.getfrontline.ai/
-  - type: APIReference
-    url: https://frontline-public-api.redocly.app/
-  - type: GettingStarted
-    url: https://docs.getfrontline.ai/docs/getting-started
 - aid: frontline:frontline-knowledge-bases-api
   name: Frontline Knowledge Bases API
   description: >-
@@ -775,6 +722,253 @@ apis:
   properties:
   - type: OpenAPI
     url: openapi/frontline-users-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-audiences-api
+  name: Frontline Audiences API
+  description: Create and manage campaign audiences
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Audiences
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-audiences-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-campaigns-api
+  name: Frontline Campaigns API
+  description: Create, deliver, and report on campaigns
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Campaigns
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-campaigns-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-data-sync-api
+  name: Frontline Data & Sync API
+  description: >-
+    Account-wide defaults for how email, WhatsApp, calendar, and meetings turn activity into CRM records
+    — contact auto-creation, People linking, record assignment, and whether each is a default users may
+    change or a hard setting they cannot. Requires an OWNER or ADMIN.
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Data & Sync
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-data-sync-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-email-templates-api
+  name: Frontline Email Templates API
+  description: >-
+    Account-scoped email templates: reusable, versioned content that a Sequence Send Email node references
+    by id and any other feature can send standalone
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Email Templates
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-email-templates-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-max-connectors-api
+  name: Frontline Max Connectors API
+  description: >-
+    The calling user's own connected accounts — called 'my connectors' in the app, and `integrations`
+    in these URLs. Read-only: list and inspect connection health and enabled tools. Connecting, disconnecting,
+    and which tools Max may use are changed in the app only — not via an API key. Distinct from Workspace
+    Connectors, which the whole account shares.
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Max Connectors
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-max-connectors-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-max-conversations-api
+  name: Frontline Max Conversations API
+  description: Chat with Max and manage the resulting conversation threads for the calling user
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Max Conversations
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-max-conversations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-max-meetings-api
+  name: Frontline Max Meetings API
+  description: >-
+    The calling user's notetaker meetings: recordings, transcripts, AI notes, action items, folders, and
+    note templates
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Max Meetings
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-max-meetings-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-max-playbooks-api
+  name: Frontline Max Playbooks API
+  description: Reusable instruction sets that steer how the calling user's Max handles recurring work
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Max Playbooks
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-max-playbooks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-max-proactive-api
+  name: Frontline Max Proactive API
+  description: >-
+    Control whether Max reaches out unprompted, on which channel, how often, and within which hours
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Max Proactive
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-max-proactive-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-max-settings-api
+  name: Frontline Max Settings API
+  description: >-
+    Configure the calling user's Max assistant: overview, general behaviour, scheduling, knowledge base,
+    and per-mailbox email
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Max Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-max-settings-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-max-tasks-api
+  name: Frontline Max Tasks API
+  description: >-
+    The calling user's Max automations — scheduled (cron) and event-triggered — plus their triggers and
+    templates
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Max Tasks
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-max-tasks-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-meeting-analytics-api
+  name: Frontline Meeting Analytics API
+  description: >-
+    Meeting volume and duration across the whole account, broken down by day, platform, source, and user.
+    Requires an OWNER or ADMIN.
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Meeting Analytics
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-meeting-analytics-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-sequences-api
+  name: Frontline Sequences API
+  description: >-
+    Build and run multi-step outbound sequences: graph, nodes, edges, enrollments, recipients, and analytics
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Sequences
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-sequences-api-openapi.yml
+  - type: Documentation
+    url: https://docs.getfrontline.ai/
+  - type: APIReference
+    url: https://frontline-public-api.redocly.app/
+  - type: GettingStarted
+    url: https://docs.getfrontline.ai/docs/getting-started
+- aid: frontline:frontline-workspace-connectors-api
+  name: Frontline Workspace Connectors API
+  description: >-
+    The account's shared connected accounts — called 'workspace connectors' in the app, and `integrations`
+    in these URLs. Read-only: list them, discover connectable toolkits, and inspect which tools each one
+    exposes. Connecting, renaming, visibility, and which tools a connector exposes are changed in the
+    app only — not via an API key. Distinct from Max Connectors, which belong to a single user.
+  humanURL: https://docs.getfrontline.ai/reference/openapi
+  baseURL: https://prod-api.getfrontline.ai/public/v1
+  tags:
+  - Workspace Connectors
+  properties:
+  - type: OpenAPI
+    url: openapi/frontline-workspace-connectors-api-openapi.yml
   - type: Documentation
     url: https://docs.getfrontline.ai/
   - type: APIReference

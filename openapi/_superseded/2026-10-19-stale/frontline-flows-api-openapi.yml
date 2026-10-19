@@ -1,0 +1,2636 @@
+openapi: 3.2.0
+info:
+  title: Public Flows API
+  version: 1.0.0
+  description: Public API for accessing agents, flows, and analytics.
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Flows
+  description: View and manage flows associated with your agents
+paths:
+  /public/v1/agents/{agentId}/flows:
+    get:
+      summary: List flows for an agent
+      operationId: listAgentFlows
+      description: Returns a list of flows associated with a specific agent. Nodes and logic are excluded.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Flows
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type: string
+          enum:
+          - ACTIVE
+          - SUSPENDED
+          - DELETED
+          - DRAFT
+          example: ACTIVE
+        required: false
+        name: status
+        in: query
+      responses:
+        '200':
+          description: A list of flows
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Flow'
+                required:
+                - results
+                description: Standard list response
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a flow for an agent
+      operationId: createAgentFlow
+      description: Creates a flow and an empty graph snapshot for a specific agent.
+      security:
+      - userApiKey: []
+      tags:
+      - Flows
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicFlowCreateInput'
+      responses:
+        '201':
+          description: Created flow
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowDetail'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/agents/{agentId}/flows/{flowId}:
+    get:
+      summary: Get flow details
+      operationId: getAgentFlow
+      description: Returns flow metadata. Pass includeNodes=true to include graph nodes.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Flows
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: flowId
+        in: path
+      - schema:
+          anyOf:
+          - type: boolean
+          - type: string
+        required: false
+        name: includeNodes
+        in: query
+      - schema:
+          anyOf:
+          - type: boolean
+          - type: string
+        required: false
+        name: draft
+        in: query
+      responses:
+        '200':
+          description: Flow details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowDetail'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update a flow
+      operationId: updateAgentFlow
+      description: Updates flow metadata or status.
+      security:
+      - userApiKey: []
+      tags:
+      - Flows
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: flowId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicFlowUpdateInput'
+      responses:
+        '200':
+          description: Updated flow
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowDetail'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a flow
+      operationId: deleteAgentFlow
+      description: Soft deletes a flow.
+      security:
+      - userApiKey: []
+      tags:
+      - Flows
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: flowId
+        in: path
+      responses:
+        '204':
+          description: Flow deleted
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/agents/{agentId}/flows/{flowId}/graph:
+    get:
+      summary: Get flow graph
+      operationId: getAgentFlowGraph
+      description: Returns the flow snapshot with nodes and edges.
+      security:
+      - accountApiKey: []
+      - userApiKey: []
+      tags:
+      - Flows
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: flowId
+        in: path
+      responses:
+        '200':
+          description: Flow graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowGraph'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/agents/{agentId}/flows/{flowId}/nodes:
+    post:
+      summary: Create flow node
+      operationId: createAgentFlowNode
+      description: Creates a node in a flow graph. The server assigns `nodeId` and `alias`; use the 201 response when adding edges or updates.
+      security:
+      - userApiKey: []
+      tags:
+      - Flows
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: flowId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicFlowNodeCreateInput'
+      responses:
+        '201':
+          description: Created node
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicFlowNodeCreated'
+        '409':
+          description: Conflict
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/agents/{agentId}/flows/{flowId}/nodes/{nodeId}:
+    put:
+      summary: Update flow node
+      operationId: updateAgentFlowNode
+      description: Updates a flow node and returns the updated graph.
+      security:
+      - userApiKey: []
+      tags:
+      - Flows
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: flowId
+        in: path
+      - schema:
+          type: string
+          example: start_1
+        required: true
+        name: nodeId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicFlowNodeUpdateInput'
+      responses:
+        '200':
+          description: Updated graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowGraph'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete flow node
+      operationId: deleteAgentFlowNode
+      description: Deletes a node and removes incoming and outgoing edges.
+      security:
+      - userApiKey: []
+      tags:
+      - Flows
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: flowId
+        in: path
+      - schema:
+          type: string
+          example: start_1
+        required: true
+        name: nodeId
+        in: path
+      responses:
+        '200':
+          description: Updated graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowGraph'
+  /public/v1/agents/{agentId}/flows/{flowId}/edges:
+    post:
+      summary: Create flow edge
+      operationId: createAgentFlowEdge
+      description: Adds or replaces an edge by handle in the flow graph.
+      security:
+      - userApiKey: []
+      tags:
+      - Flows
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: flowId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicFlowEdgeInput'
+      responses:
+        '200':
+          description: Updated graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowGraph'
+        '409':
+          description: Invalid graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete flow edge
+      operationId: deleteAgentFlowEdge
+      description: Removes an edge from the flow graph.
+      security:
+      - userApiKey: []
+      tags:
+      - Flows
+      parameters:
+      - schema:
+          type: string
+          example: uuid-xxxx-xxxx
+        required: true
+        name: agentId
+        in: path
+      - schema:
+          type:
+          - number
+          - 'null'
+          example: 101
+        required: false
+        name: flowId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicFlowEdgeDeleteInput'
+      responses:
+        '200':
+          description: Updated graph
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FlowGraph'
+components:
+  schemas:
+    PublicFlowNode:
+      type: object
+      properties:
+        nodeId:
+          type: string
+          pattern: node[_-][0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}
+          example: node_550e8400-e29b-41d4-a716-446655440000
+        alias:
+          type:
+          - string
+          - 'null'
+          example: Start
+        name:
+          type: string
+          example: Start
+        position:
+          type: object
+          properties:
+            positionX:
+              type: number
+            positionY:
+              type: number
+          required:
+          - positionX
+          - positionY
+        type:
+          type: string
+          enum:
+          - START
+          - TRIGGER_INTENT
+          - SAY_AI
+          - RESPONSE_AI
+          - TOOLS_AI
+          - API
+          - CONDITIONAL_ROUTING
+          - DYNAMIC_TABLES
+          example: START
+        data:
+          oneOf:
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TRIGGER_INTENT
+              agenticRouting:
+                type:
+                - string
+                - 'null'
+              intentIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: number
+              intents:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    name:
+                      type: string
+                    description:
+                      type:
+                      - string
+                      - 'null'
+                    createdAt:
+                      type:
+                      - string
+                      - 'null'
+                    updatedAt:
+                      type:
+                      - string
+                      - 'null'
+                    status:
+                      type: string
+                      enum:
+                      - ACTIVE
+                      - DELETED
+                    assistantId:
+                      type: string
+                    phrases:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          phrase:
+                            type: string
+                        required:
+                        - id
+                        - phrase
+                    flowId:
+                      type:
+                      - number
+                      - 'null'
+                  required:
+                  - id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - status
+                  - assistantId
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - SAY_AI
+              message:
+                type:
+                - string
+                - 'null'
+              temperature:
+                type: number
+                default: 0.7
+              prompt:
+                type:
+                - string
+                - 'null'
+              aiModelId:
+                type:
+                - number
+                - 'null'
+              model:
+                type:
+                - string
+                - 'null'
+              aiVendor:
+                type:
+                - string
+                - 'null'
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+              sayWithAi:
+                type: boolean
+            required:
+            - type
+            - sayWithAi
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - RESPONSE_AI
+              assistantId:
+                type: string
+                pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|agent-[0-9a-zA-Z-]+'
+                description: Owning assistant ID or UUID (e.g. agent-xxx or standard UUID). Validated against the account on save.
+                example: 550e8400-e29b-41d4-a716-446655440000
+              aiModelId:
+                type:
+                - number
+                - 'null'
+              model:
+                type: string
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+              instructions:
+                type:
+                - string
+                - 'null'
+              temperature:
+                type: number
+              captureVariables:
+                type: array
+                items: {}
+              exitNodeWhen:
+                type: string
+                enum:
+                - ALL_VARIABLES
+                - FLOW_TRIGGERED
+                - ANY_VARIABLES
+              knowledgeBaseMode:
+                type: string
+                enum:
+                - DEFAULT
+                - CUSTOM
+                - DISABLED
+                default: DEFAULT
+              knowledgeBaseIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: integer
+                  exclusiveMinimum: 0
+            required:
+            - type
+            - assistantId
+            - model
+            - aiVendor
+            - instructions
+            - temperature
+            - captureVariables
+            - exitNodeWhen
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TOOLS_AI
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    handleId:
+                      type: string
+                    expression:
+                      type: string
+                  required:
+                  - handleId
+                  - expression
+              temperature:
+                type: number
+              model:
+                type: string
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+              instructions:
+                type:
+                - string
+                - 'null'
+              prompt:
+                type:
+                - string
+                - 'null'
+              customToolIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: number
+              maxIterations:
+                type: number
+                minimum: 1
+                maximum: 30
+                default: 10
+              agentType:
+                type: string
+                enum:
+                - BASIC
+                - ADVANCED
+                default: BASIC
+              captureVariables:
+                type:
+                - array
+                - 'null'
+                items: {}
+              knowledgeBaseMode:
+                type: string
+                enum:
+                - DEFAULT
+                - CUSTOM
+                - DISABLED
+                default: DEFAULT
+              knowledgeBaseIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: integer
+                  exclusiveMinimum: 0
+              selectedRecordTypes:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    recordTypeId:
+                      type: number
+                    read:
+                      type: boolean
+                    create:
+                      type: boolean
+                    update:
+                      type: boolean
+                    delete:
+                      type: boolean
+                    createActivity:
+                      type: boolean
+                  required:
+                  - recordTypeId
+              systemToolsConfig:
+                type:
+                - object
+                - 'null'
+                properties:
+                  webSearchEnabled:
+                    type: boolean
+                    default: false
+                  urlScrapeEnabled:
+                    type: boolean
+                    default: false
+                  linkedinSearchEnabled:
+                    type: boolean
+                    default: false
+              connectedAccountConfigs:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    connectedAccountId:
+                      type: number
+                    useAllTools:
+                      type: boolean
+                      default: true
+                    selectedToolSlugs:
+                      type:
+                      - array
+                      - 'null'
+                      items:
+                        type: string
+                  required:
+                  - connectedAccountId
+              playbookIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: integer
+                  exclusiveMinimum: 0
+              aiModelId:
+                type:
+                - integer
+                - 'null'
+            required:
+            - type
+            - conditions
+            - instructions
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - API
+              url:
+                type: string
+                example: https://api.example.com/hook
+              method:
+                type: string
+                enum:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - PATCH
+              headers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                  required:
+                  - key
+                  - value
+              body:
+                type:
+                - string
+                - 'null'
+              response:
+                type:
+                - string
+                - 'null'
+              parameters:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                  required:
+                  - key
+                  - value
+              variables:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                    fullResponse:
+                      type: boolean
+                      default: false
+                  required:
+                  - key
+                  - value
+            required:
+            - type
+            - url
+            - method
+            - headers
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - CONDITIONAL_ROUTING
+              routingType:
+                type: string
+                enum:
+                - CONDITIONAL_AI
+                - DYNAMIC
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    handleId:
+                      type: string
+                    expression:
+                      type: string
+                  required:
+                  - handleId
+                  - expression
+              temperature:
+                type: number
+              model:
+                type: string
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+              aiModelId:
+                type:
+                - integer
+                - 'null'
+            required:
+            - type
+            - routingType
+            - conditions
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - DYNAMIC_TABLES
+              tableId:
+                type:
+                - number
+                - 'null'
+              recordTypeId:
+                type:
+                - number
+                - 'null'
+              targetRecordTypeId:
+                type:
+                - number
+                - 'null'
+                description: Destination record type id. Required when actionType is CHANGE_RECORD_TYPE.
+                example: 12
+              actionType:
+                type:
+                - string
+                - 'null'
+                enum:
+                - CREATE
+                - UPDATE
+                - DELETE
+                - SEARCH
+                - SEARCH_BY_ID
+                - CHANGE_RECORD_TYPE
+                description: 'Operation to run. Required-field rules per action: CREATE → rowData; UPDATE → rowId + rowData; DELETE / SEARCH_BY_ID → rowId; CHANGE_RECORD_TYPE → rowId + targetRecordTypeId.'
+                example: CREATE
+              rowData:
+                type:
+                - object
+                - 'null'
+                additionalProperties: {}
+              inputModeByField:
+                type:
+                - object
+                - 'null'
+                additionalProperties:
+                  type: string
+                  enum:
+                  - INPUT
+                  - VARIABLE
+                  - EMPTY
+              rowId:
+                type:
+                - string
+                - 'null'
+              search:
+                type:
+                - string
+                - 'null'
+              pageNum:
+                anyOf:
+                - type: number
+                - type: string
+                - {}
+              pageSize:
+                anyOf:
+                - type: number
+                - type: string
+                - {}
+              pageNumMode:
+                type:
+                - string
+                - 'null'
+                enum:
+                - INPUT
+                - VARIABLE
+                - EMPTY
+              pageSizeMode:
+                type:
+                - string
+                - 'null'
+                enum:
+                - INPUT
+                - VARIABLE
+                - EMPTY
+              sort:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    path:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - asc
+                      - desc
+                  required:
+                  - path
+                  - type
+              query:
+                $ref: '#/components/schemas/DynamicTablesQuery'
+            required:
+            - type
+          - {}
+        workflowId:
+          type: string
+        handles:
+          type: array
+          items:
+            type: object
+            properties:
+              handleId:
+                type: string
+              sourceEdge:
+                type: object
+                properties:
+                  from:
+                    type: string
+                  fromHandleId:
+                    type: string
+                  to:
+                    type: string
+                  toHandleId:
+                    type: string
+                required:
+                - from
+                - fromHandleId
+                - to
+                - toHandleId
+              text:
+                type: string
+            required:
+            - handleId
+            - sourceEdge
+            - text
+        targetEdges:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              from:
+                type: string
+              fromHandleId:
+                type: string
+              to:
+                type: string
+              toHandleId:
+                type: string
+            required:
+            - from
+            - fromHandleId
+            - to
+            - toHandleId
+        createdAt:
+          type:
+          - string
+          - 'null'
+        updatedAt:
+          type:
+          - string
+          - 'null'
+      required:
+      - nodeId
+      - position
+      - type
+    PublicFlowNodeCreated:
+      allOf:
+      - $ref: '#/components/schemas/PublicFlowNode'
+      - type: object
+        properties:
+          alias:
+            type: string
+            example: Say
+        required:
+        - alias
+    PublicFlowNodeCreateInput:
+      type: object
+      properties:
+        node:
+          type: object
+          properties:
+            name:
+              type: string
+              example: Start
+            position:
+              type: object
+              properties:
+                positionX:
+                  type: number
+                positionY:
+                  type: number
+              required:
+              - positionX
+              - positionY
+            type:
+              type: string
+              enum:
+              - START
+              - TRIGGER_INTENT
+              - SAY_AI
+              - RESPONSE_AI
+              - TOOLS_AI
+              - API
+              - CONDITIONAL_ROUTING
+              - DYNAMIC_TABLES
+              example: START
+            data:
+              oneOf:
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - TRIGGER_INTENT
+                  agenticRouting:
+                    type:
+                    - string
+                    - 'null'
+                  intentIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: number
+                  intents:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        name:
+                          type: string
+                        description:
+                          type:
+                          - string
+                          - 'null'
+                        createdAt:
+                          type:
+                          - string
+                          - 'null'
+                        updatedAt:
+                          type:
+                          - string
+                          - 'null'
+                        status:
+                          type: string
+                          enum:
+                          - ACTIVE
+                          - DELETED
+                        assistantId:
+                          type: string
+                        phrases:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: number
+                              phrase:
+                                type: string
+                            required:
+                            - id
+                            - phrase
+                        flowId:
+                          type:
+                          - number
+                          - 'null'
+                      required:
+                      - id
+                      - name
+                      - createdAt
+                      - updatedAt
+                      - status
+                      - assistantId
+                required:
+                - type
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - SAY_AI
+                  message:
+                    type:
+                    - string
+                    - 'null'
+                  temperature:
+                    type: number
+                    default: 0.7
+                  prompt:
+                    type:
+                    - string
+                    - 'null'
+                  aiModelId:
+                    type:
+                    - number
+                    - 'null'
+                  model:
+                    type:
+                    - string
+                    - 'null'
+                  aiVendor:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  sayWithAi:
+                    type: boolean
+                required:
+                - type
+                - sayWithAi
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - RESPONSE_AI
+                  assistantId:
+                    type: string
+                    pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|agent-[0-9a-zA-Z-]+'
+                    description: Owning assistant ID or UUID (e.g. agent-xxx or standard UUID). Validated against the account on save.
+                    example: 550e8400-e29b-41d4-a716-446655440000
+                  aiModelId:
+                    type:
+                    - number
+                    - 'null'
+                  model:
+                    type: string
+                  aiVendor:
+                    type: string
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  instructions:
+                    type:
+                    - string
+                    - 'null'
+                  temperature:
+                    type: number
+                  captureVariables:
+                    type: array
+                    items: {}
+                  exitNodeWhen:
+                    type: string
+                    enum:
+                    - ALL_VARIABLES
+                    - FLOW_TRIGGERED
+                    - ANY_VARIABLES
+                  knowledgeBaseMode:
+                    type: string
+                    enum:
+                    - DEFAULT
+                    - CUSTOM
+                    - DISABLED
+                    default: DEFAULT
+                  knowledgeBaseIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: integer
+                      exclusiveMinimum: 0
+                required:
+                - type
+                - assistantId
+                - model
+                - aiVendor
+                - instructions
+                - temperature
+                - captureVariables
+                - exitNodeWhen
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - TOOLS_AI
+                  conditions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        handleId:
+                          type: string
+                        expression:
+                          type: string
+                      required:
+                      - handleId
+                      - expression
+                  temperature:
+                    type: number
+                  model:
+                    type: string
+                  aiVendor:
+                    type: string
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  instructions:
+                    type:
+                    - string
+                    - 'null'
+                  prompt:
+                    type:
+                    - string
+                    - 'null'
+                  customToolIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: number
+                  maxIterations:
+                    type: number
+                    minimum: 1
+                    maximum: 30
+                    default: 10
+                  agentType:
+                    type: string
+                    enum:
+                    - BASIC
+                    - ADVANCED
+                    default: BASIC
+                  captureVariables:
+                    type:
+                    - array
+                    - 'null'
+                    items: {}
+                  knowledgeBaseMode:
+                    type: string
+                    enum:
+                    - DEFAULT
+                    - CUSTOM
+                    - DISABLED
+                    default: DEFAULT
+                  knowledgeBaseIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: integer
+                      exclusiveMinimum: 0
+                  selectedRecordTypes:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        recordTypeId:
+                          type: number
+                        read:
+                          type: boolean
+                        create:
+                          type: boolean
+                        update:
+                          type: boolean
+                        delete:
+                          type: boolean
+                        createActivity:
+                          type: boolean
+                      required:
+                      - recordTypeId
+                  systemToolsConfig:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      webSearchEnabled:
+                        type: boolean
+                        default: false
+                      urlScrapeEnabled:
+                        type: boolean
+                        default: false
+                      linkedinSearchEnabled:
+                        type: boolean
+                        default: false
+                  connectedAccountConfigs:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        connectedAccountId:
+                          type: number
+                        useAllTools:
+                          type: boolean
+                          default: true
+                        selectedToolSlugs:
+                          type:
+                          - array
+                          - 'null'
+                          items:
+                            type: string
+                      required:
+                      - connectedAccountId
+                  playbookIds:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: integer
+                      exclusiveMinimum: 0
+                  aiModelId:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - type
+                - conditions
+                - instructions
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - API
+                  url:
+                    type: string
+                    example: https://api.example.com/hook
+                  method:
+                    type: string
+                    enum:
+                    - GET
+                    - POST
+                    - PUT
+                    - DELETE
+                    - PATCH
+                  headers:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                      - key
+                      - value
+                  body:
+                    type:
+                    - string
+                    - 'null'
+                  response:
+                    type:
+                    - string
+                    - 'null'
+                  parameters:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                      - key
+                      - value
+                  variables:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        key:
+                          type: string
+                        value:
+                          type: string
+                        fullResponse:
+                          type: boolean
+                          default: false
+                      required:
+                      - key
+                      - value
+                required:
+                - type
+                - url
+                - method
+                - headers
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - CONDITIONAL_ROUTING
+                  routingType:
+                    type: string
+                    enum:
+                    - CONDITIONAL_AI
+                    - DYNAMIC
+                  conditions:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        handleId:
+                          type: string
+                        expression:
+                          type: string
+                      required:
+                      - handleId
+                      - expression
+                  temperature:
+                    type: number
+                  model:
+                    type: string
+                  aiVendor:
+                    type: string
+                    enum:
+                    - OPENAI
+                    - ANTHROPIC
+                    - GOOGLE
+                    - AZURE
+                    - DEEPSEEK
+                    - LLAMA
+                  aiModelId:
+                    type:
+                    - integer
+                    - 'null'
+                required:
+                - type
+                - routingType
+                - conditions
+              - type: object
+                properties:
+                  type:
+                    type: string
+                    enum:
+                    - DYNAMIC_TABLES
+                  tableId:
+                    type:
+                    - number
+                    - 'null'
+                  recordTypeId:
+                    type:
+                    - number
+                    - 'null'
+                  targetRecordTypeId:
+                    type:
+                    - number
+                    - 'null'
+                    description: Destination record type id. Required when actionType is CHANGE_RECORD_TYPE.
+                    example: 12
+                  actionType:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - CREATE
+                    - UPDATE
+                    - DELETE
+                    - SEARCH
+                    - SEARCH_BY_ID
+                    - CHANGE_RECORD_TYPE
+                    description: 'Operation to run. Required-field rules per action: CREATE → rowData; UPDATE → rowId + rowData; DELETE / SEARCH_BY_ID → rowId; CHANGE_RECORD_TYPE → rowId + targetRecordTypeId.'
+                    example: CREATE
+                  rowData:
+                    type:
+                    - object
+                    - 'null'
+                    additionalProperties: {}
+                  inputModeByField:
+                    type:
+                    - object
+                    - 'null'
+                    additionalProperties:
+                      type: string
+                      enum:
+                      - INPUT
+                      - VARIABLE
+                      - EMPTY
+                  rowId:
+                    type:
+                    - string
+                    - 'null'
+                  search:
+                    type:
+                    - string
+                    - 'null'
+                  pageNum:
+                    anyOf:
+                    - type: number
+                    - type: string
+                    - {}
+                  pageSize:
+                    anyOf:
+                    - type: number
+                    - type: string
+                    - {}
+                  pageNumMode:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - INPUT
+                    - VARIABLE
+                    - EMPTY
+                  pageSizeMode:
+                    type:
+                    - string
+                    - 'null'
+                    enum:
+                    - INPUT
+                    - VARIABLE
+                    - EMPTY
+                  sort:
+                    type:
+                    - array
+                    - 'null'
+                    items:
+                      type: object
+                      properties:
+                        path:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - asc
+                          - desc
+                      required:
+                      - path
+                      - type
+                  query:
+                    $ref: '#/components/schemas/DynamicTablesQuery'
+                required:
+                - type
+              - {}
+          required:
+          - position
+          - type
+      required:
+      - node
+    FlowGraph:
+      type: object
+      properties:
+        id:
+          type: string
+        assistantId:
+          type:
+          - string
+          - 'null'
+        accountId:
+          type:
+          - number
+          - 'null'
+        entityId:
+          type: number
+        type:
+          type: string
+          enum:
+          - FLOW
+          - AUTOMATION
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicFlowNode'
+        createdAt:
+          type: string
+        updatedAt:
+          type:
+          - string
+          - 'null'
+        executed:
+          type: boolean
+          default: false
+        breakingChangeAt:
+          type:
+          - string
+          - 'null'
+        breakingChangeReason:
+          type:
+          - string
+          - 'null'
+      required:
+      - entityId
+      - type
+      - nodes
+      - createdAt
+    PublicFlowNodeUpdateInput:
+      type: object
+      properties:
+        node:
+          $ref: '#/components/schemas/PublicFlowNodePatch'
+      required:
+      - node
+    PublicFlowUpdateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Order Routing
+        description:
+          type:
+          - string
+          - 'null'
+          example: Routes order conversations
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - SUSPENDED
+          - DELETED
+          - DRAFT
+          example: ACTIVE
+      required:
+      - name
+    PublicFlowCreateInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          example: Order Routing
+        description:
+          type:
+          - string
+          - 'null'
+          example: Routes order conversations
+      required:
+      - name
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicFlowNodePatch:
+      type: object
+      properties:
+        alias:
+          type:
+          - string
+          - 'null'
+          example: Greeting
+        name:
+          type: string
+          example: Start
+        position:
+          type: object
+          properties:
+            positionX:
+              type: number
+            positionY:
+              type: number
+          required:
+          - positionX
+          - positionY
+        type:
+          type: string
+          enum:
+          - START
+          - TRIGGER_INTENT
+          - SAY_AI
+          - RESPONSE_AI
+          - TOOLS_AI
+          - API
+          - CONDITIONAL_ROUTING
+          - DYNAMIC_TABLES
+          example: START
+        data:
+          oneOf:
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TRIGGER_INTENT
+              agenticRouting:
+                type:
+                - string
+                - 'null'
+              intentIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: number
+              intents:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: number
+                    name:
+                      type: string
+                    description:
+                      type:
+                      - string
+                      - 'null'
+                    createdAt:
+                      type:
+                      - string
+                      - 'null'
+                    updatedAt:
+                      type:
+                      - string
+                      - 'null'
+                    status:
+                      type: string
+                      enum:
+                      - ACTIVE
+                      - DELETED
+                    assistantId:
+                      type: string
+                    phrases:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          id:
+                            type: number
+                          phrase:
+                            type: string
+                        required:
+                        - id
+                        - phrase
+                    flowId:
+                      type:
+                      - number
+                      - 'null'
+                  required:
+                  - id
+                  - name
+                  - createdAt
+                  - updatedAt
+                  - status
+                  - assistantId
+            required:
+            - type
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - SAY_AI
+              message:
+                type:
+                - string
+                - 'null'
+              temperature:
+                type: number
+                default: 0.7
+              prompt:
+                type:
+                - string
+                - 'null'
+              aiModelId:
+                type:
+                - number
+                - 'null'
+              model:
+                type:
+                - string
+                - 'null'
+              aiVendor:
+                type:
+                - string
+                - 'null'
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+              sayWithAi:
+                type: boolean
+            required:
+            - type
+            - sayWithAi
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - RESPONSE_AI
+              assistantId:
+                type: string
+                pattern: '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}|agent-[0-9a-zA-Z-]+'
+                description: Owning assistant ID or UUID (e.g. agent-xxx or standard UUID). Validated against the account on save.
+                example: 550e8400-e29b-41d4-a716-446655440000
+              aiModelId:
+                type:
+                - number
+                - 'null'
+              model:
+                type: string
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+              instructions:
+                type:
+                - string
+                - 'null'
+              temperature:
+                type: number
+              captureVariables:
+                type: array
+                items: {}
+              exitNodeWhen:
+                type: string
+                enum:
+                - ALL_VARIABLES
+                - FLOW_TRIGGERED
+                - ANY_VARIABLES
+              knowledgeBaseMode:
+                type: string
+                enum:
+                - DEFAULT
+                - CUSTOM
+                - DISABLED
+                default: DEFAULT
+              knowledgeBaseIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: integer
+                  exclusiveMinimum: 0
+            required:
+            - type
+            - assistantId
+            - model
+            - aiVendor
+            - instructions
+            - temperature
+            - captureVariables
+            - exitNodeWhen
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - TOOLS_AI
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    handleId:
+                      type: string
+                    expression:
+                      type: string
+                  required:
+                  - handleId
+                  - expression
+              temperature:
+                type: number
+              model:
+                type: string
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+              instructions:
+                type:
+                - string
+                - 'null'
+              prompt:
+                type:
+                - string
+                - 'null'
+              customToolIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: number
+              maxIterations:
+                type: number
+                minimum: 1
+                maximum: 30
+                default: 10
+              agentType:
+                type: string
+                enum:
+                - BASIC
+                - ADVANCED
+                default: BASIC
+              captureVariables:
+                type:
+                - array
+                - 'null'
+                items: {}
+              knowledgeBaseMode:
+                type: string
+                enum:
+                - DEFAULT
+                - CUSTOM
+                - DISABLED
+                default: DEFAULT
+              knowledgeBaseIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: integer
+                  exclusiveMinimum: 0
+              selectedRecordTypes:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    recordTypeId:
+                      type: number
+                    read:
+                      type: boolean
+                    create:
+                      type: boolean
+                    update:
+                      type: boolean
+                    delete:
+                      type: boolean
+                    createActivity:
+                      type: boolean
+                  required:
+                  - recordTypeId
+              systemToolsConfig:
+                type:
+                - object
+                - 'null'
+                properties:
+                  webSearchEnabled:
+                    type: boolean
+                    default: false
+                  urlScrapeEnabled:
+                    type: boolean
+                    default: false
+                  linkedinSearchEnabled:
+                    type: boolean
+                    default: false
+              connectedAccountConfigs:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    connectedAccountId:
+                      type: number
+                    useAllTools:
+                      type: boolean
+                      default: true
+                    selectedToolSlugs:
+                      type:
+                      - array
+                      - 'null'
+                      items:
+                        type: string
+                  required:
+                  - connectedAccountId
+              playbookIds:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: integer
+                  exclusiveMinimum: 0
+              aiModelId:
+                type:
+                - integer
+                - 'null'
+            required:
+            - type
+            - conditions
+            - instructions
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - API
+              url:
+                type: string
+                example: https://api.example.com/hook
+              method:
+                type: string
+                enum:
+                - GET
+                - POST
+                - PUT
+                - DELETE
+                - PATCH
+              headers:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                  required:
+                  - key
+                  - value
+              body:
+                type:
+                - string
+                - 'null'
+              response:
+                type:
+                - string
+                - 'null'
+              parameters:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                  required:
+                  - key
+                  - value
+              variables:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    key:
+                      type: string
+                    value:
+                      type: string
+                    fullResponse:
+                      type: boolean
+                      default: false
+                  required:
+                  - key
+                  - value
+            required:
+            - type
+            - url
+            - method
+            - headers
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - CONDITIONAL_ROUTING
+              routingType:
+                type: string
+                enum:
+                - CONDITIONAL_AI
+                - DYNAMIC
+              conditions:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    handleId:
+                      type: string
+                    expression:
+                      type: string
+                  required:
+                  - handleId
+                  - expression
+              temperature:
+                type: number
+              model:
+                type: string
+              aiVendor:
+                type: string
+                enum:
+                - OPENAI
+                - ANTHROPIC
+                - GOOGLE
+                - AZURE
+                - DEEPSEEK
+                - LLAMA
+              aiModelId:
+                type:
+                - integer
+                - 'null'
+            required:
+            - type
+            - routingType
+            - conditions
+          - type: object
+            properties:
+              type:
+                type: string
+                enum:
+                - DYNAMIC_TABLES
+              tableId:
+                type:
+                - number
+                - 'null'
+              recordTypeId:
+                type:
+                - number
+                - 'null'
+              targetRecordTypeId:
+                type:
+                - number
+                - 'null'
+                description: Destination record type id. Required when actionType is CHANGE_RECORD_TYPE.
+                example: 12
+              actionType:
+                type:
+                - string
+                - 'null'
+                enum:
+                - CREATE
+                - UPDATE
+                - DELETE
+                - SEARCH
+                - SEARCH_BY_ID
+                - CHANGE_RECORD_TYPE
+                description: 'Operation to run. Required-field rules per action: CREATE → rowData; UPDATE → rowId + rowData; DELETE / SEARCH_BY_ID → rowId; CHANGE_RECORD_TYPE → rowId + targetRecordTypeId.'
+                example: CREATE
+              rowData:
+                type:
+                - object
+                - 'null'
+                additionalProperties: {}
+              inputModeByField:
+                type:
+                - object
+                - 'null'
+                additionalProperties:
+                  type: string
+                  enum:
+                  - INPUT
+                  - VARIABLE
+                  - EMPTY
+              rowId:
+                type:
+                - string
+                - 'null'
+              search:
+                type:
+                - string
+                - 'null'
+              pageNum:
+                anyOf:
+                - type: number
+                - type: string
+                - {}
+              pageSize:
+                anyOf:
+                - type: number
+                - type: string
+                - {}
+              pageNumMode:
+                type:
+                - string
+                - 'null'
+                enum:
+                - INPUT
+                - VARIABLE
+                - EMPTY
+              pageSizeMode:
+                type:
+                - string
+                - 'null'
+                enum:
+                - INPUT
+                - VARIABLE
+                - EMPTY
+              sort:
+                type:
+                - array
+                - 'null'
+                items:
+                  type: object
+                  properties:
+                    path:
+                      type: string
+                    type:
+                      type: string
+                      enum:
+                      - asc
+                      - desc
+                  required:
+                  - path
+                  - type
+              query:
+                $ref: '#/components/schemas/DynamicTablesQuery'
+            required:
+            - type
+          - {}
+    PublicFlowEdgeDeleteInput:
+      type: object
+      properties:
+        edge:
+          type: object
+          properties:
+            source:
+              type: string
+              example: trigger_1
+            sourceHandle:
+              type: string
+              example: default
+            target:
+              type: string
+              example: api_1
+            targetHandle:
+              type: string
+              example: default
+          required:
+          - source
+          - sourceHandle
+          - target
+          - targetHandle
+      required:
+      - edge
+    PublicFlowEdgeInput:
+      type: object
+      properties:
+        edge:
+          type: object
+          properties:
+            source:
+              type: string
+              example: trigger_1
+            sourceHandle:
+              type: string
+              example: default
+            target:
+              type: string
+              example: api_1
+            targetHandle:
+              type: string
+              example: default
+          required:
+          - source
+          - sourceHandle
+          - target
+          - targetHandle
+      required:
+      - edge
+    Flow:
+      type: object
+      properties:
+        id:
+          type: number
+          example: 101
+        name:
+          type: string
+          example: Order Retrieval
+        description:
+          type:
+          - string
+          - 'null'
+          example: Extracts order info from DB
+        status:
+          type: string
+          enum:
+          - ACTIVE
+          - SUSPENDED
+          - DELETED
+          - DRAFT
+          example: ACTIVE
+        createdAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        updatedAt:
+          type: string
+          example: '2024-01-01T12:00:00Z'
+        runCount:
+          type: number
+          example: 450
+      required:
+      - id
+      - name
+      - description
+      - status
+      - createdAt
+      - updatedAt
+      - runCount
+    DynamicTablesQueryGroup:
+      type: object
+      properties:
+        operator:
+          type: string
+          enum:
+          - and
+          - or
+        conditions:
+          type: array
+          items: {}
+          description: Nested filter conditions or AND/OR groups
+      required:
+      - operator
+      - conditions
+    DynamicTablesQuery:
+      anyOf:
+      - $ref: '#/components/schemas/DynamicTablesQueryCondition'
+      - $ref: '#/components/schemas/DynamicTablesQueryGroup'
+      - {}
+    DynamicTablesQueryCondition:
+      type: object
+      properties:
+        path:
+          type: string
+          description: Field path in format [Field] or [Relation].[Field]
+          example: '[Status]'
+        operator:
+          type: string
+          example: equals
+        value: {}
+        valueType: {}
+      required:
+      - path
+      - operator
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    FlowDetail:
+      allOf:
+      - $ref: '#/components/schemas/Flow'
+      - type: object
+        properties:
+          assistantId:
+            type: string
+            example: 550e8400-e29b-41d4-a716-446655440000
+          isDefault:
+            type: boolean
+            example: false
+          liveSnapshotId:
+            type:
+            - string
+            - 'null'
+            example: 64f1c2e6a75f2d4a9a2f1234
+          draftSnapshotId:
+            type:
+            - string
+            - 'null'
+            example: 64f1c2e6a75f2d4a9a2f1234
+          nodes:
+            type: array
+            items:
+              $ref: '#/components/schemas/PublicFlowNode'
+        required:
+        - assistantId
+        - isDefault
+        - liveSnapshotId
+        - draftSnapshotId
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

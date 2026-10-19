@@ -1,0 +1,2193 @@
+openapi: 3.2.0
+info:
+  title: Public Email Templates API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Email Templates
+  description: 'Account-scoped email templates: reusable, versioned content that a Sequence Send Email node references by id and any other feature can send standalone'
+paths:
+  /public/v1/email-templates:
+    get:
+      summary: List email templates
+      operationId: listEmailTemplates
+      description: Returns a paginated list of account-scoped email templates. Archived templates are excluded unless requested.
+      security:
+      - bearerAuth: []
+      tags:
+      - Email Templates
+      parameters:
+      - schema:
+          type: number
+          default: 20
+          example: 1
+        required: false
+        name: pageSize
+        in: query
+      - schema:
+          type: number
+          default: 1
+          example: 1
+        required: false
+        name: pageNum
+        in: query
+      - schema:
+          anyOf:
+          - type:
+            - number
+            - 'null'
+            example: 1
+          - type: string
+            example: example
+          - type:
+            - object
+            - 'null'
+        required: false
+        name: cursor
+        in: query
+      - schema:
+          type: string
+          minLength: 1
+          example: example
+        required: false
+        name: search
+        in: query
+      - schema:
+          type: string
+          enum:
+          - ACTIVE
+          - ARCHIVED
+          example: ACTIVE
+        required: false
+        name: status
+        in: query
+      - schema:
+          type:
+          - boolean
+          - 'null'
+          example: false
+        required: false
+        name: includeArchived
+        in: query
+      responses:
+        '200':
+          description: Paginated email templates
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: number
+                    example: 1
+                  pageSize:
+                    type: number
+                    example: 1
+                  pageNum:
+                    type: number
+                    example: 1
+                  totalPages:
+                    type: number
+                    example: 1
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        name:
+                          type: string
+                          example: example
+                        description:
+                          type:
+                          - string
+                          - 'null'
+                          example: example
+                        subject:
+                          type: string
+                          example: example
+                        bodyText:
+                          type: string
+                          example: example
+                        contentHash:
+                          type: string
+                          example: example
+                        status:
+                          type: string
+                          enum:
+                          - ACTIVE
+                          - ARCHIVED
+                          example: ACTIVE
+                        version:
+                          type: number
+                          example: 1
+                        updatedAt:
+                          type:
+                          - string
+                          - 'null'
+                          example: example
+                        createdAt:
+                          type:
+                          - string
+                          - 'null'
+                          example: example
+                        createdBy:
+                          type:
+                          - object
+                          - 'null'
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            firstName:
+                              type: string
+                              example: example
+                            lastName:
+                              type: string
+                              example: example
+                            email:
+                              type: string
+                              format: email
+                              example: user@example.com
+                            avatar:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                          required:
+                          - id
+                          - firstName
+                          - lastName
+                          - email
+                        updatedBy:
+                          type:
+                          - object
+                          - 'null'
+                          properties:
+                            id:
+                              type: number
+                              example: 1
+                            firstName:
+                              type: string
+                              example: example
+                            lastName:
+                              type: string
+                              example: example
+                            email:
+                              type: string
+                              format: email
+                              example: user@example.com
+                            avatar:
+                              type:
+                              - string
+                              - 'null'
+                              example: example
+                          required:
+                          - id
+                          - firstName
+                          - lastName
+                          - email
+                      required:
+                      - id
+                      - name
+                      - description
+                      - subject
+                      - bodyText
+                      - contentHash
+                      - status
+                      - version
+                      - updatedAt
+                      - createdAt
+                required:
+                - pageSize
+                - results
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create email template
+      operationId: createEmailTemplate
+      description: Creates an email template from a TipTap document. Requires a USER API key. Only Person and User variables are allowed.
+      security:
+      - bearerAuth: []
+      tags:
+      - Email Templates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 200
+                  example: example
+                description:
+                  type:
+                  - string
+                  - 'null'
+                  maxLength: 1000
+                  example: example
+                subject:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+                  example: example
+                bodyDocument:
+                  type:
+                  - object
+                  - 'null'
+              required:
+              - name
+              - subject
+              additionalProperties: false
+      responses:
+        '201':
+          description: Template created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  accountId:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  subject:
+                    type: string
+                    example: example
+                  bodyDocument:
+                    type:
+                    - object
+                    - 'null'
+                  bodyHtml:
+                    type: string
+                    example: example
+                  bodyText:
+                    type: string
+                    example: example
+                  contentHash:
+                    type: string
+                    example: example
+                  documentSchemaVersion:
+                    type: number
+                    example: 1
+                  rendererVersion:
+                    type: number
+                    example: 1
+                  status:
+                    type: string
+                    enum:
+                    - ACTIVE
+                    - ARCHIVED
+                    example: ACTIVE
+                  version:
+                    type: number
+                    example: 1
+                  archivedAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  createdAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  updatedAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  createdBy:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      firstName:
+                        type: string
+                        example: example
+                      lastName:
+                        type: string
+                        example: example
+                      email:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      avatar:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                  updatedBy:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      firstName:
+                        type: string
+                        example: example
+                      lastName:
+                        type: string
+                        example: example
+                      email:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      avatar:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                required:
+                - id
+                - accountId
+                - name
+                - description
+                - subject
+                - bodyHtml
+                - bodyText
+                - contentHash
+                - documentSchemaVersion
+                - rendererVersion
+                - status
+                - version
+                - archivedAt
+                - createdAt
+                - updatedAt
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Email template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Version conflict (TEMPLATE_VERSION_CONFLICT)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/email-templates/variables:
+    get:
+      summary: List email template variables
+      operationId: listEmailTemplateVariables
+      description: Returns the Person and User variables an email template may reference.
+      security:
+      - bearerAuth: []
+      tags:
+      - Email Templates
+      responses:
+        '200':
+          description: Universal variables
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    path:
+                      type: string
+                      example: example
+                    label:
+                      type: string
+                      example: example
+                    type:
+                      type: string
+                      enum:
+                      - string
+                      - number
+                      - boolean
+                      - date
+                      - dateOnly
+                      example: string
+                    namespace:
+                      type: string
+                      enum:
+                      - Person
+                      - User
+                      example: Person
+                  required:
+                  - path
+                  - label
+                  - type
+                  - namespace
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/email-templates/{templateId}:
+    get:
+      summary: Get email template
+      operationId: getEmailTemplate
+      security:
+      - bearerAuth: []
+      tags:
+      - Email Templates
+      parameters:
+      - schema:
+          type: integer
+          minimum: 1
+          example: 1
+        required: true
+        name: templateId
+        in: path
+      responses:
+        '200':
+          description: Email template
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  accountId:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  subject:
+                    type: string
+                    example: example
+                  bodyDocument:
+                    type:
+                    - object
+                    - 'null'
+                  bodyHtml:
+                    type: string
+                    example: example
+                  bodyText:
+                    type: string
+                    example: example
+                  contentHash:
+                    type: string
+                    example: example
+                  documentSchemaVersion:
+                    type: number
+                    example: 1
+                  rendererVersion:
+                    type: number
+                    example: 1
+                  status:
+                    type: string
+                    enum:
+                    - ACTIVE
+                    - ARCHIVED
+                    example: ACTIVE
+                  version:
+                    type: number
+                    example: 1
+                  archivedAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  createdAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  updatedAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  createdBy:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      firstName:
+                        type: string
+                        example: example
+                      lastName:
+                        type: string
+                        example: example
+                      email:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      avatar:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                  updatedBy:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      firstName:
+                        type: string
+                        example: example
+                      lastName:
+                        type: string
+                        example: example
+                      email:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      avatar:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                required:
+                - id
+                - accountId
+                - name
+                - description
+                - subject
+                - bodyHtml
+                - bodyText
+                - contentHash
+                - documentSchemaVersion
+                - rendererVersion
+                - status
+                - version
+                - archivedAt
+                - createdAt
+                - updatedAt
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Email template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      summary: Update email template
+      operationId: updateEmailTemplate
+      description: Replaces the template content. `expectedVersion` is required; a mismatch returns 409 with the current version and document.
+      security:
+      - bearerAuth: []
+      tags:
+      - Email Templates
+      parameters:
+      - schema:
+          type: integer
+          minimum: 1
+          example: 1
+        required: true
+        name: templateId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expectedVersion:
+                  type: integer
+                  minimum: 1
+                  example: 1
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 200
+                  example: example
+                description:
+                  type:
+                  - string
+                  - 'null'
+                  maxLength: 1000
+                  example: example
+                subject:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+                  example: example
+                bodyDocument:
+                  type:
+                  - object
+                  - 'null'
+              required:
+              - expectedVersion
+              - name
+              - subject
+              additionalProperties: false
+      responses:
+        '200':
+          description: Template updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  accountId:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  subject:
+                    type: string
+                    example: example
+                  bodyDocument:
+                    type:
+                    - object
+                    - 'null'
+                  bodyHtml:
+                    type: string
+                    example: example
+                  bodyText:
+                    type: string
+                    example: example
+                  contentHash:
+                    type: string
+                    example: example
+                  documentSchemaVersion:
+                    type: number
+                    example: 1
+                  rendererVersion:
+                    type: number
+                    example: 1
+                  status:
+                    type: string
+                    enum:
+                    - ACTIVE
+                    - ARCHIVED
+                    example: ACTIVE
+                  version:
+                    type: number
+                    example: 1
+                  archivedAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  createdAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  updatedAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  createdBy:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      firstName:
+                        type: string
+                        example: example
+                      lastName:
+                        type: string
+                        example: example
+                      email:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      avatar:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                  updatedBy:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      firstName:
+                        type: string
+                        example: example
+                      lastName:
+                        type: string
+                        example: example
+                      email:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      avatar:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                required:
+                - id
+                - accountId
+                - name
+                - description
+                - subject
+                - bodyHtml
+                - bodyText
+                - contentHash
+                - documentSchemaVersion
+                - rendererVersion
+                - status
+                - version
+                - archivedAt
+                - createdAt
+                - updatedAt
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Email template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Version conflict (TEMPLATE_VERSION_CONFLICT)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/email-templates/{templateId}/patch:
+    post:
+      summary: Patch email template
+      operationId: patchEmailTemplate
+      description: Applies a focused list of operations. `expectedVersion` is required; a mismatch returns 409 with the current version and document.
+      security:
+      - bearerAuth: []
+      tags:
+      - Email Templates
+      parameters:
+      - schema:
+          type: integer
+          minimum: 1
+          example: 1
+        required: true
+        name: templateId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expectedVersion:
+                  type: integer
+                  minimum: 1
+                  example: 1
+                operations:
+                  type: array
+                  items:
+                    oneOf:
+                    - type: object
+                      properties:
+                        op:
+                          type: string
+                          enum:
+                          - SET_NAME
+                          example: SET_NAME
+                        name:
+                          type: string
+                          minLength: 1
+                          maxLength: 200
+                          example: example
+                      required:
+                      - op
+                      - name
+                      additionalProperties: false
+                    - type: object
+                      properties:
+                        op:
+                          type: string
+                          enum:
+                          - SET_SUBJECT
+                          example: SET_SUBJECT
+                        subject:
+                          type: string
+                          minLength: 1
+                          maxLength: 500
+                          example: example
+                      required:
+                      - op
+                      - subject
+                      additionalProperties: false
+                    - type: object
+                      properties:
+                        op:
+                          type: string
+                          enum:
+                          - REPLACE_BLOCK
+                          example: REPLACE_BLOCK
+                        blockId:
+                          type: string
+                          minLength: 1
+                          example: example
+                        block:
+                          type: object
+                          additionalProperties: {}
+                      required:
+                      - op
+                      - blockId
+                      - block
+                      additionalProperties: false
+                    - type: object
+                      properties:
+                        op:
+                          type: string
+                          enum:
+                          - INSERT_BLOCK_AFTER
+                          example: INSERT_BLOCK_AFTER
+                        afterBlockId:
+                          type:
+                          - string
+                          - 'null'
+                          minLength: 1
+                          example: example
+                        block:
+                          type: object
+                          additionalProperties: {}
+                      required:
+                      - op
+                      - afterBlockId
+                      - block
+                      additionalProperties: false
+                    - type: object
+                      properties:
+                        op:
+                          type: string
+                          enum:
+                          - DELETE_BLOCK
+                          example: DELETE_BLOCK
+                        blockId:
+                          type: string
+                          minLength: 1
+                          example: example
+                      required:
+                      - op
+                      - blockId
+                      additionalProperties: false
+                    - type: object
+                      properties:
+                        op:
+                          type: string
+                          enum:
+                          - REPLACE_DOCUMENT
+                          example: REPLACE_DOCUMENT
+                        document:
+                          type:
+                          - object
+                          - 'null'
+                      required:
+                      - op
+                      additionalProperties: false
+                  minItems: 1
+                  maxItems: 50
+              required:
+              - expectedVersion
+              - operations
+              additionalProperties: false
+      responses:
+        '200':
+          description: Template patched
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  accountId:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  subject:
+                    type: string
+                    example: example
+                  bodyDocument:
+                    type:
+                    - object
+                    - 'null'
+                  bodyHtml:
+                    type: string
+                    example: example
+                  bodyText:
+                    type: string
+                    example: example
+                  contentHash:
+                    type: string
+                    example: example
+                  documentSchemaVersion:
+                    type: number
+                    example: 1
+                  rendererVersion:
+                    type: number
+                    example: 1
+                  status:
+                    type: string
+                    enum:
+                    - ACTIVE
+                    - ARCHIVED
+                    example: ACTIVE
+                  version:
+                    type: number
+                    example: 1
+                  archivedAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  createdAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  updatedAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  createdBy:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      firstName:
+                        type: string
+                        example: example
+                      lastName:
+                        type: string
+                        example: example
+                      email:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      avatar:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                  updatedBy:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      firstName:
+                        type: string
+                        example: example
+                      lastName:
+                        type: string
+                        example: example
+                      email:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      avatar:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                required:
+                - id
+                - accountId
+                - name
+                - description
+                - subject
+                - bodyHtml
+                - bodyText
+                - contentHash
+                - documentSchemaVersion
+                - rendererVersion
+                - status
+                - version
+                - archivedAt
+                - createdAt
+                - updatedAt
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Email template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Version conflict (TEMPLATE_VERSION_CONFLICT)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/email-templates/{templateId}/patch-preview:
+    post:
+      summary: Preview an email template patch
+      operationId: previewEmailTemplatePatch
+      description: Returns the block-level before/after result of a patch without persisting it.
+      security:
+      - bearerAuth: []
+      tags:
+      - Email Templates
+      parameters:
+      - schema:
+          type: integer
+          minimum: 1
+          example: 1
+        required: true
+        name: templateId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expectedVersion:
+                  type: integer
+                  minimum: 1
+                  example: 1
+                operations:
+                  type: array
+                  items:
+                    oneOf:
+                    - type: object
+                      properties:
+                        op:
+                          type: string
+                          enum:
+                          - SET_NAME
+                          example: SET_NAME
+                        name:
+                          type: string
+                          minLength: 1
+                          maxLength: 200
+                          example: example
+                      required:
+                      - op
+                      - name
+                      additionalProperties: false
+                    - type: object
+                      properties:
+                        op:
+                          type: string
+                          enum:
+                          - SET_SUBJECT
+                          example: SET_SUBJECT
+                        subject:
+                          type: string
+                          minLength: 1
+                          maxLength: 500
+                          example: example
+                      required:
+                      - op
+                      - subject
+                      additionalProperties: false
+                    - type: object
+                      properties:
+                        op:
+                          type: string
+                          enum:
+                          - REPLACE_BLOCK
+                          example: REPLACE_BLOCK
+                        blockId:
+                          type: string
+                          minLength: 1
+                          example: example
+                        block:
+                          type: object
+                          additionalProperties: {}
+                      required:
+                      - op
+                      - blockId
+                      - block
+                      additionalProperties: false
+                    - type: object
+                      properties:
+                        op:
+                          type: string
+                          enum:
+                          - INSERT_BLOCK_AFTER
+                          example: INSERT_BLOCK_AFTER
+                        afterBlockId:
+                          type:
+                          - string
+                          - 'null'
+                          minLength: 1
+                          example: example
+                        block:
+                          type: object
+                          additionalProperties: {}
+                      required:
+                      - op
+                      - afterBlockId
+                      - block
+                      additionalProperties: false
+                    - type: object
+                      properties:
+                        op:
+                          type: string
+                          enum:
+                          - DELETE_BLOCK
+                          example: DELETE_BLOCK
+                        blockId:
+                          type: string
+                          minLength: 1
+                          example: example
+                      required:
+                      - op
+                      - blockId
+                      additionalProperties: false
+                    - type: object
+                      properties:
+                        op:
+                          type: string
+                          enum:
+                          - REPLACE_DOCUMENT
+                          example: REPLACE_DOCUMENT
+                        document:
+                          type:
+                          - object
+                          - 'null'
+                      required:
+                      - op
+                      additionalProperties: false
+                  minItems: 1
+                  maxItems: 50
+              required:
+              - operations
+              additionalProperties: false
+      responses:
+        '200':
+          description: Patch preview
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  templateId:
+                    type: number
+                    example: 1
+                  currentVersion:
+                    type: number
+                    example: 1
+                  name:
+                    type: object
+                    properties:
+                      before:
+                        type: string
+                        example: example
+                      after:
+                        type: string
+                        example: example
+                      changed:
+                        type: boolean
+                        example: false
+                    required:
+                    - before
+                    - after
+                    - changed
+                  subject:
+                    type: object
+                    properties:
+                      before:
+                        type: string
+                        example: example
+                      after:
+                        type: string
+                        example: example
+                      changed:
+                        type: boolean
+                        example: false
+                    required:
+                    - before
+                    - after
+                    - changed
+                  blockChanges:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        blockId:
+                          type: string
+                          example: example
+                        changeType:
+                          type: string
+                          enum:
+                          - ADDED
+                          - REMOVED
+                          - MODIFIED
+                          - UNCHANGED
+                          example: ADDED
+                        before:
+                          type:
+                          - object
+                          - 'null'
+                          properties:
+                            html:
+                              type: string
+                              example: example
+                            text:
+                              type: string
+                              example: example
+                          required:
+                          - html
+                          - text
+                        after:
+                          type:
+                          - object
+                          - 'null'
+                          properties:
+                            html:
+                              type: string
+                              example: example
+                            text:
+                              type: string
+                              example: example
+                          required:
+                          - html
+                          - text
+                      required:
+                      - blockId
+                      - changeType
+                      - before
+                      - after
+                  resultDocument:
+                    type:
+                    - object
+                    - 'null'
+                  resultHtml:
+                    type: string
+                    example: example
+                  resultText:
+                    type: string
+                    example: example
+                  resultContentHash:
+                    type: string
+                    example: example
+                required:
+                - templateId
+                - currentVersion
+                - name
+                - subject
+                - blockChanges
+                - resultHtml
+                - resultText
+                - resultContentHash
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Email template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Version conflict (TEMPLATE_VERSION_CONFLICT)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/email-templates/{templateId}/duplicate:
+    post:
+      summary: Duplicate email template
+      operationId: duplicateEmailTemplate
+      security:
+      - bearerAuth: []
+      tags:
+      - Email Templates
+      parameters:
+      - schema:
+          type: integer
+          minimum: 1
+          example: 1
+        required: true
+        name: templateId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                  maxLength: 200
+                  example: example
+              additionalProperties: false
+      responses:
+        '201':
+          description: Template duplicated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  accountId:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  subject:
+                    type: string
+                    example: example
+                  bodyDocument:
+                    type:
+                    - object
+                    - 'null'
+                  bodyHtml:
+                    type: string
+                    example: example
+                  bodyText:
+                    type: string
+                    example: example
+                  contentHash:
+                    type: string
+                    example: example
+                  documentSchemaVersion:
+                    type: number
+                    example: 1
+                  rendererVersion:
+                    type: number
+                    example: 1
+                  status:
+                    type: string
+                    enum:
+                    - ACTIVE
+                    - ARCHIVED
+                    example: ACTIVE
+                  version:
+                    type: number
+                    example: 1
+                  archivedAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  createdAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  updatedAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  createdBy:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      firstName:
+                        type: string
+                        example: example
+                      lastName:
+                        type: string
+                        example: example
+                      email:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      avatar:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                  updatedBy:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      firstName:
+                        type: string
+                        example: example
+                      lastName:
+                        type: string
+                        example: example
+                      email:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      avatar:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                required:
+                - id
+                - accountId
+                - name
+                - description
+                - subject
+                - bodyHtml
+                - bodyText
+                - contentHash
+                - documentSchemaVersion
+                - rendererVersion
+                - status
+                - version
+                - archivedAt
+                - createdAt
+                - updatedAt
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Email template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Version conflict (TEMPLATE_VERSION_CONFLICT)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/email-templates/{templateId}/status:
+    post:
+      summary: Archive or restore email template
+      operationId: setEmailTemplateStatus
+      description: Moves a template between ACTIVE and ARCHIVED. Archiving a template referenced by a Send Email node makes that node fail at send time until it is reassigned.
+      security:
+      - bearerAuth: []
+      tags:
+      - Email Templates
+      parameters:
+      - schema:
+          type: integer
+          minimum: 1
+          example: 1
+        required: true
+        name: templateId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                expectedVersion:
+                  type: integer
+                  minimum: 1
+                  example: 1
+                status:
+                  type: string
+                  enum:
+                  - ACTIVE
+                  - ARCHIVED
+                  example: ACTIVE
+              required:
+              - expectedVersion
+              - status
+              additionalProperties: false
+      responses:
+        '200':
+          description: Template status updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: number
+                    example: 1
+                  accountId:
+                    type: number
+                    example: 1
+                  name:
+                    type: string
+                    example: example
+                  description:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  subject:
+                    type: string
+                    example: example
+                  bodyDocument:
+                    type:
+                    - object
+                    - 'null'
+                  bodyHtml:
+                    type: string
+                    example: example
+                  bodyText:
+                    type: string
+                    example: example
+                  contentHash:
+                    type: string
+                    example: example
+                  documentSchemaVersion:
+                    type: number
+                    example: 1
+                  rendererVersion:
+                    type: number
+                    example: 1
+                  status:
+                    type: string
+                    enum:
+                    - ACTIVE
+                    - ARCHIVED
+                    example: ACTIVE
+                  version:
+                    type: number
+                    example: 1
+                  archivedAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  createdAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  updatedAt:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  createdBy:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      firstName:
+                        type: string
+                        example: example
+                      lastName:
+                        type: string
+                        example: example
+                      email:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      avatar:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                  updatedBy:
+                    type:
+                    - object
+                    - 'null'
+                    properties:
+                      id:
+                        type: number
+                        example: 1
+                      firstName:
+                        type: string
+                        example: example
+                      lastName:
+                        type: string
+                        example: example
+                      email:
+                        type: string
+                        format: email
+                        example: user@example.com
+                      avatar:
+                        type:
+                        - string
+                        - 'null'
+                        example: example
+                    required:
+                    - id
+                    - firstName
+                    - lastName
+                    - email
+                required:
+                - id
+                - accountId
+                - name
+                - description
+                - subject
+                - bodyHtml
+                - bodyText
+                - contentHash
+                - documentSchemaVersion
+                - rendererVersion
+                - status
+                - version
+                - archivedAt
+                - createdAt
+                - updatedAt
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Email template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Version conflict (TEMPLATE_VERSION_CONFLICT)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/email-templates/{templateId}/preview:
+    post:
+      summary: Preview a rendered email template
+      operationId: previewEmailTemplate
+      description: Renders the template with the same renderer the runtime uses. Supplying a personRowId interpolates that Person's values.
+      security:
+      - bearerAuth: []
+      tags:
+      - Email Templates
+      parameters:
+      - schema:
+          type: integer
+          minimum: 1
+          example: 1
+        required: true
+        name: templateId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                personRowId:
+                  type: string
+                  minLength: 1
+                  example: example
+              additionalProperties: false
+      responses:
+        '200':
+          description: Rendered email
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  subject:
+                    type: string
+                    example: example
+                  html:
+                    type: string
+                    example: example
+                  text:
+                    type: string
+                    example: example
+                  personRowId:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  unresolvedVariables:
+                    type: array
+                    items:
+                      type: string
+                      example: example
+                required:
+                - subject
+                - html
+                - text
+                - personRowId
+                - unresolvedVariables
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Email template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Version conflict (TEMPLATE_VERSION_CONFLICT)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/email-templates/{templateId}/revisions:
+    get:
+      summary: List email template revisions
+      operationId: listEmailTemplateRevisions
+      security:
+      - bearerAuth: []
+      tags:
+      - Email Templates
+      parameters:
+      - schema:
+          type: integer
+          minimum: 1
+          example: 1
+        required: true
+        name: templateId
+        in: path
+      responses:
+        '200':
+          description: Revision history
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      example: example
+                    version:
+                      type: number
+                      example: 1
+                    previousVersion:
+                      type:
+                      - number
+                      - 'null'
+                      example: 1
+                    kind:
+                      type: string
+                      example: example
+                    origin:
+                      type: string
+                      example: example
+                    name:
+                      type: string
+                      example: example
+                    subject:
+                      type: string
+                      example: example
+                    bodyDocument:
+                      type:
+                      - object
+                      - 'null'
+                    bodyText:
+                      type: string
+                      example: example
+                    contentHash:
+                      type: string
+                      example: example
+                    status:
+                      type: string
+                      enum:
+                      - ACTIVE
+                      - ARCHIVED
+                      example: ACTIVE
+                    createdAt:
+                      type:
+                      - string
+                      - 'null'
+                      example: example
+                    actor:
+                      type:
+                      - object
+                      - 'null'
+                      properties:
+                        id:
+                          type: number
+                          example: 1
+                        firstName:
+                          type: string
+                          example: example
+                        lastName:
+                          type: string
+                          example: example
+                        email:
+                          type: string
+                          format: email
+                          example: user@example.com
+                        avatar:
+                          type:
+                          - string
+                          - 'null'
+                          example: example
+                      required:
+                      - id
+                      - firstName
+                      - lastName
+                      - email
+                  required:
+                  - id
+                  - version
+                  - previousVersion
+                  - kind
+                  - origin
+                  - name
+                  - subject
+                  - bodyText
+                  - contentHash
+                  - status
+                  - createdAt
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Email template not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          - upgrade_required
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Workspace Connectors
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
+  tags:
+  - Account
+  - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
+  - User Tasks
+  - Guidance

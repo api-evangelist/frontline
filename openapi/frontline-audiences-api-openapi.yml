@@ -1,0 +1,2273 @@
+openapi: 3.2.0
+info:
+  title: Public Audiences API
+  version: 1.0.0
+  description: 'Public API for accessing agents, flows, and analytics.
+
+
+    ## Authentication
+
+
+    The Public API supports two API key types. Pass the key as a Bearer token:
+
+
+    ```
+
+    Authorization: Bearer
+
+    ```
+
+
+    ### Account API key (GENERAL)
+
+
+    Account-level key that acts on behalf of the entire account. Required for account-level endpoints unless noted otherwise.
+
+
+    ### User API key (USER)
+
+
+    User-level key tied to a specific user. Required for write operations and user-owned resources. **Also accepted on all account-level endpoints.**
+
+
+    Each operation documents which key type(s) it accepts in its **Security** section.'
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Audiences
+  description: Create and manage campaign audiences
+paths:
+  /public/v1/audience-drafts:
+    get:
+      summary: List audience drafts owned by the API user
+      operationId: listAudienceDrafts
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      responses:
+        '200':
+          description: Audience drafts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudienceList'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create an audience draft
+      operationId: createAudienceDraft
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAudienceDraftInput'
+      responses:
+        '201':
+          description: Created audience draft
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudience'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audience-drafts/{audienceId}:
+    get:
+      summary: Get an audience draft
+      operationId: getAudienceDraft
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      responses:
+        '200':
+          description: Audience draft
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudience'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update an audience draft
+      operationId: updateAudienceDraft
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAudienceDraftUpdate'
+      responses:
+        '200':
+          description: Updated audience draft
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudience'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Discard an audience draft
+      operationId: discardAudienceDraft
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      responses:
+        '204':
+          description: Audience draft discarded
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audience-drafts/{audienceId}/import-batches:
+    post:
+      summary: Create a streaming CSV import batch
+      operationId: createAudienceDraftImportBatch
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAudienceImportUploadBatchInput'
+      responses:
+        '201':
+          description: Audience upload batch created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudienceImportBatchEnqueue'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audiences/{audienceId}/imports/{importId}/errors:
+    get:
+      summary: Download rejected audience import rows
+      operationId: downloadAudienceImportErrors
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: importId
+        in: path
+      responses:
+        '200':
+          description: Rejected rows CSV
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+                example: example
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audience-drafts/{audienceId}/import-batches/{batchId}/imports/{importId}/file:
+    put:
+      summary: Stream one CSV file into a private import
+      operationId: uploadAudienceDraftImportFile
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: batchId
+        in: path
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: importId
+        in: path
+      requestBody:
+        required: true
+        content:
+          text/csv:
+            schema:
+              type: string
+              format: binary
+              example: example
+      responses:
+        '201':
+          description: CSV uploaded
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  size:
+                    type: number
+                    example: 1
+                  checksum:
+                    type: string
+                    example: example
+                required:
+                - size
+                - checksum
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audience-drafts/{audienceId}/import-batches/{batchId}/confirm:
+    post:
+      summary: Confirm and enqueue an uploaded audience import batch
+      operationId: confirmAudienceDraftImportUploadBatch
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: batchId
+        in: path
+      responses:
+        '202':
+          description: Audience import batch enqueued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudienceImportBatchEnqueue'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audience-drafts/{audienceId}/import-batches/{batchId}:
+    get:
+      summary: Get an audience draft import batch
+      operationId: getAudienceDraftImportBatch
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: batchId
+        in: path
+      responses:
+        '200':
+          description: Audience import batch
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudienceImportBatch'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete a stopped audience draft import batch
+      operationId: deleteAudienceDraftImportBatch
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: batchId
+        in: path
+      responses:
+        '200':
+          description: Audience import batch cleanup result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudienceImportBatchDelete'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audience-drafts/{audienceId}/import-batches/{batchId}/retry:
+    post:
+      summary: Retry a failed audience draft import batch
+      operationId: retryAudienceDraftImportBatch
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: batchId
+        in: path
+      responses:
+        '202':
+          description: Audience import batch
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudienceImportBatch'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audience-drafts/{audienceId}/publish:
+    post:
+      summary: Publish an audience draft
+      operationId: publishAudienceDraft
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAudienceDraftPublish'
+      responses:
+        '200':
+          description: Published audience
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudience'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audiences:
+    get:
+      summary: List audiences
+      operationId: listAudiences
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      responses:
+        '200':
+          description: Audiences
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudienceList'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create an audience
+      operationId: createAudience
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAudienceInput'
+      responses:
+        '201':
+          description: Created audience
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudience'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audiences/{audienceId}:
+    get:
+      summary: Get an audience
+      operationId: getAudience
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      responses:
+        '200':
+          description: Audience
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudience'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update an audience
+      operationId: updateAudience
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PublicAudienceUpdate'
+      responses:
+        '200':
+          description: Updated audience
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudience'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Archive an audience
+      operationId: archiveAudience
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      responses:
+        '204':
+          description: Audience archived
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audiences/{audienceId}/preview:
+    get:
+      summary: Preview audience members
+      operationId: previewAudience
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      - schema:
+          type: integer
+          minimum: 1
+          default: 1
+          example: 1
+        required: false
+        name: pageNum
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 200
+          default: 50
+          example: 1
+        required: false
+        name: pageSize
+        in: query
+      responses:
+        '200':
+          description: Audience preview
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudiencePreview'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audiences/{audienceId}/history:
+    get:
+      summary: List audience edit history
+      operationId: listAudienceHistory
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      - schema:
+          type: integer
+          minimum: 1
+          default: 1
+          example: 1
+        required: false
+        name: pageNum
+        in: query
+      - schema:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
+          example: 1
+        required: false
+        name: pageSize
+        in: query
+      responses:
+        '200':
+          description: Audience history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudienceHistory'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audiences/{audienceId}/import:
+    post:
+      summary: Import CSV rows into an audience
+      operationId: importAudience
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                filename:
+                  type: string
+                  minLength: 1
+                  maxLength: 255
+                  example: example
+                rows:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: {}
+                  minItems: 1
+                  maxItems: 10000
+              required:
+              - filename
+              - rows
+      responses:
+        '202':
+          description: Audience import enqueued
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudienceImportEnqueue'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audiences/{audienceId}/imports/{importId}:
+    get:
+      summary: Get audience import status
+      operationId: getAudienceImport
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: importId
+        in: path
+      responses:
+        '200':
+          description: Audience import
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PublicAudienceImport'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/audiences/{audienceId}/exports:
+    post:
+      summary: Download an audience export
+      description: Streams the audience's resolved members as CSV. Returns 409 with the resolution status while the audience is still resolving; poll `GET /audiences/{audienceId}/preview` until `resolution.status` is `COMPLETED` and retry. `fresh=true` discards the cached resolution and starts a new one (returns 409 until it completes; retry without `fresh`).
+      operationId: createAudienceExport
+      security:
+      - userApiKey: []
+      tags:
+      - Audiences
+      parameters:
+      - schema:
+          type: string
+          format: cuid
+          example: example
+        required: true
+        name: audienceId
+        in: path
+      - schema:
+          anyOf:
+          - type: boolean
+            enum:
+            - true
+            example: true
+          - type: boolean
+            enum:
+            - false
+            example: false
+          - type: string
+            enum:
+            - 'true'
+            example: 'true'
+          - type: string
+            enum:
+            - 'false'
+            example: 'false'
+        required: false
+        name: fresh
+        in: query
+      responses:
+        '200':
+          description: Audience export file
+          headers:
+            X-Total-Count:
+              description: Number of audience members in the export
+              schema:
+                type: integer
+                example: 1
+            X-Audience-Truncated:
+              description: Whether the audience exceeded the maximum size and was truncated
+              schema:
+                type: boolean
+                example: false
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+                example: example
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: A USER API key is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '403':
+          description: Insufficient campaign or audience permission
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Resource not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: Audience resolution is not completed yet
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    PublicAudienceImportBatchDelete:
+      type: object
+      properties:
+        deletedPeople:
+          type: integer
+          minimum: 0
+          example: 0
+        preservedPeople:
+          type: integer
+          minimum: 0
+          example: 0
+      required:
+      - deletedPeople
+      - preservedPeople
+    PublicAudiencePreview:
+      type: object
+      properties:
+        count:
+          type: number
+          example: 1
+        pageSize:
+          type: number
+          example: 1
+        pageNum:
+          type: number
+          example: 1
+        totalPages:
+          type: number
+          example: 1
+        cursor:
+          type: number
+          example: 1
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              peopleId:
+                type: string
+                example: example
+              people:
+                type: object
+                additionalProperties: {}
+              sources:
+                type: array
+                items:
+                  type: string
+                  enum:
+                  - FILTER
+                  - CSV
+                  - MANUAL
+                  example: FILTER
+            required:
+            - peopleId
+            - people
+            - sources
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+          example: offset
+        nextCursor:
+          anyOf:
+          - type: string
+            example: example
+          - type: number
+            example: 1
+          - type:
+            - object
+            - 'null'
+        recordTypes:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+              minimum: 1
+              example: 1
+          - type: string
+            enum:
+            - all
+            example: all
+        truncated:
+          type: boolean
+          example: false
+        resolution:
+          type: object
+          properties:
+            id:
+              type: string
+              example: example
+            revision:
+              type: integer
+              example: 1
+            status:
+              type: string
+              enum:
+              - PENDING
+              - PROCESSING
+              - COMPLETED
+              - FAILED
+              - STALE
+              - CANCELLED
+              example: PENDING
+            processedCount:
+              type: integer
+              minimum: 0
+              example: 0
+            totalCount:
+              type: integer
+              minimum: 0
+              example: 0
+            nextCursor:
+              type:
+              - string
+              - 'null'
+              example: example
+            error:
+              type:
+              - string
+              - 'null'
+              example: example
+          required:
+          - id
+          - revision
+          - status
+          - processedCount
+          - totalCount
+          - nextCursor
+        composition:
+          type: object
+          properties:
+            includedPeople:
+              type: integer
+              minimum: 0
+              example: 0
+            excludedPeople:
+              type: integer
+              minimum: 0
+              example: 0
+            duplicateRows:
+              type: integer
+              minimum: 0
+              example: 0
+            rejectedRows:
+              type: integer
+              minimum: 0
+              example: 0
+            effectivePeople:
+              type: integer
+              minimum: 0
+              example: 0
+          required:
+          - includedPeople
+          - excludedPeople
+          - duplicateRows
+          - rejectedRows
+          - effectivePeople
+      required:
+      - pageSize
+      - results
+      - recordTypes
+      - truncated
+    PublicAudienceDraftUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 160
+          example: example
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 2000
+          example: example
+        recordTypes:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+              minimum: 1
+              example: 1
+            minItems: 1
+          - type: string
+            enum:
+            - all
+            example: all
+          default: all
+        recordTypeQueries:
+          type: array
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: integer
+                minimum: 1
+                example: 1
+              query:
+                type: object
+                description: 'Dynamic-table query. Either a single `{ path, operator, value }` condition, or a nested group `{ operator: ''and'' | ''or'', conditions: [...] }`.'
+            required:
+            - recordTypeId
+    PublicAudienceDraftInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 160
+          example: example
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 2000
+          example: example
+        recordTypes:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+              minimum: 1
+              example: 1
+            minItems: 1
+          - type: string
+            enum:
+            - all
+            example: all
+          default: all
+      required:
+      - name
+    PublicAudienceImportEnqueue:
+      type: object
+      properties:
+        audience:
+          $ref: '#/components/schemas/PublicAudience'
+        import:
+          $ref: '#/components/schemas/PublicAudienceImport'
+      required:
+      - audience
+      - import
+    PublicAudience:
+      type: object
+      properties:
+        id:
+          type: string
+          example: example
+        name:
+          type: string
+          example: example
+        description:
+          type:
+          - string
+          - 'null'
+          example: example
+        status:
+          type: string
+          enum:
+          - DRAFT
+          - ACTIVE
+          - ARCHIVED
+          example: DRAFT
+        source:
+          type: string
+          enum:
+          - FILTER
+          - CSV
+          example: FILTER
+        recordTypes:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+              minimum: 1
+              example: 1
+          - type: string
+            enum:
+            - all
+            example: all
+        recordTypeQueries:
+          type: array
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: integer
+                minimum: 1
+                example: 1
+              query:
+                type:
+                - object
+                - 'null'
+            required:
+            - recordTypeId
+        sort:
+          type:
+          - object
+          - 'null'
+        search:
+          type:
+          - string
+          - 'null'
+          example: example
+        revision:
+          type: integer
+          example: 1
+        createdBy:
+          type: object
+          properties:
+            id:
+              type: integer
+              example: 1
+            firstName:
+              type:
+              - string
+              - 'null'
+              example: example
+            lastName:
+              type:
+              - string
+              - 'null'
+              example: example
+            avatar:
+              type:
+              - string
+              - 'null'
+              example: example
+          required:
+          - id
+        imports:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicAudienceImport'
+        importBatches:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicAudienceImportBatch'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+      required:
+      - id
+      - name
+      - status
+      - source
+      - recordTypes
+      - recordTypeQueries
+      - revision
+    PublicAudienceHistory:
+      type: object
+      properties:
+        count:
+          type: number
+          example: 1
+        pageSize:
+          type: number
+          example: 1
+        pageNum:
+          type: number
+          example: 1
+        totalPages:
+          type: number
+          example: 1
+        cursor:
+          type: number
+          example: 1
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: example
+              action:
+                type: string
+                example: example
+              changes:
+                type:
+                - object
+                - 'null'
+              createdAt:
+                type: string
+                format: date-time
+                example: '2024-01-01T12:00:00.000Z'
+              actor:
+                type:
+                - object
+                - 'null'
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  firstName:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  lastName:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                  avatar:
+                    type:
+                    - string
+                    - 'null'
+                    example: example
+                required:
+                - id
+            required:
+            - id
+            - action
+            - createdAt
+            - actor
+        paginationType:
+          type: string
+          enum:
+          - offset
+          - cursor
+          default: offset
+          example: offset
+        nextCursor:
+          anyOf:
+          - type: string
+            example: example
+          - type: number
+            example: 1
+          - type:
+            - object
+            - 'null'
+      required:
+      - pageSize
+      - results
+    PublicAudienceDraftPublish:
+      oneOf:
+      - type: object
+        properties:
+          source:
+            type: string
+            enum:
+            - filter
+            example: filter
+          recordTypes:
+            anyOf:
+            - type: array
+              items:
+                type: integer
+                minimum: 1
+                example: 1
+              minItems: 1
+            - type: string
+              enum:
+              - all
+              example: all
+            default: all
+          recordTypeQueries:
+            type: array
+            items:
+              type: object
+              properties:
+                recordTypeId:
+                  type: integer
+                  minimum: 1
+                  example: 1
+                query:
+                  type: object
+                  description: 'Dynamic-table query. Either a single `{ path, operator, value }` condition, or a nested group `{ operator: ''and'' | ''or'', conditions: [...] }`.'
+              required:
+              - recordTypeId
+        required:
+        - source
+      - type: object
+        properties:
+          source:
+            type: string
+            enum:
+            - csv
+            example: csv
+          recordTypes:
+            type: array
+            items:
+              type: integer
+              minimum: 1
+              example: 1
+        required:
+        - source
+    PublicAudienceUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 160
+          example: example
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 2000
+          example: example
+        recordTypes:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+              minimum: 1
+              example: 1
+            minItems: 1
+          - type: string
+            enum:
+            - all
+            example: all
+          default: all
+        sort:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+                pattern: ^\[([^\]]+)\](?:\.\[([^\]]+)\])?$
+              type:
+                type: string
+                enum:
+                - asc
+                - desc
+                example: asc
+            required:
+            - path
+            - type
+        search:
+          type:
+          - string
+          - 'null'
+          maxLength: 500
+          example: example
+        recordTypeQueries:
+          type: array
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: integer
+                minimum: 1
+                example: 1
+              query:
+                type: object
+                description: 'Dynamic-table query. Either a single `{ path, operator, value }` condition, or a nested group `{ operator: ''and'' | ''or'', conditions: [...] }`.'
+            required:
+            - recordTypeId
+    PublicAudienceImportUploadBatchInput:
+      type: object
+      properties:
+        recordTypes:
+          type: array
+          items:
+            type: integer
+            minimum: 1
+            example: 1
+        recordTypeQueries:
+          type: array
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: integer
+                minimum: 1
+                example: 1
+              query:
+                type: object
+                description: 'Dynamic-table query. Either a single `{ path, operator, value }` condition, or a nested group `{ operator: ''and'' | ''or'', conditions: [...] }`.'
+            required:
+            - recordTypeId
+        overwriteExisting:
+          type: boolean
+          default: false
+          example: false
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              filename:
+                type: string
+                minLength: 1
+                maxLength: 255
+                example: example
+              disposition:
+                type: string
+                enum:
+                - INCLUDE
+                - EXCLUDE
+                example: INCLUDE
+            required:
+            - filename
+            - disposition
+          minItems: 1
+          maxItems: 10
+      required:
+      - recordTypes
+      - recordTypeQueries
+      - files
+    PublicAudienceList:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicAudience'
+      required:
+      - results
+      description: Standard list response
+    PublicAudienceImportBatchEnqueue:
+      type: object
+      properties:
+        audience:
+          $ref: '#/components/schemas/PublicAudience'
+        batch:
+          $ref: '#/components/schemas/PublicAudienceImportBatch'
+        imports:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicAudienceImport'
+      required:
+      - audience
+      - batch
+      - imports
+    PublicAudienceImport:
+      type: object
+      properties:
+        id:
+          type: string
+          example: example
+        audienceId:
+          type: string
+          example: example
+        filename:
+          type: string
+          example: example
+        disposition:
+          type: string
+          enum:
+          - INCLUDE
+          - EXCLUDE
+          example: INCLUDE
+        overwriteExisting:
+          type: boolean
+          example: false
+        status:
+          type: string
+          enum:
+          - PENDING
+          - VALIDATING
+          - PROCESSING
+          - COMPLETED
+          - FAILED
+          - CANCELLED
+          example: PENDING
+        totalRows:
+          type: integer
+          example: 1
+        createdRows:
+          type: integer
+          example: 1
+        linkedRows:
+          type: integer
+          example: 1
+        completedRows:
+          type: integer
+          example: 1
+        rejectedRows:
+          type: integer
+          example: 1
+        error:
+          type:
+          - string
+          - 'null'
+          example: example
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        completedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+      required:
+      - id
+      - audienceId
+      - filename
+      - disposition
+      - overwriteExisting
+      - status
+      - totalRows
+      - createdRows
+      - linkedRows
+      - completedRows
+      - rejectedRows
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+    PublicAudienceInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 160
+          example: example
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 2000
+          example: example
+        recordTypes:
+          anyOf:
+          - type: array
+            items:
+              type: integer
+              minimum: 1
+              example: 1
+            minItems: 1
+          - type: string
+            enum:
+            - all
+            example: all
+          default: all
+        sort:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            properties:
+              path:
+                type: string
+                pattern: ^\[([^\]]+)\](?:\.\[([^\]]+)\])?$
+              type:
+                type: string
+                enum:
+                - asc
+                - desc
+                example: asc
+            required:
+            - path
+            - type
+        search:
+          type:
+          - string
+          - 'null'
+          maxLength: 500
+          example: example
+        recordTypeQueries:
+          type: array
+          items:
+            type: object
+            properties:
+              recordTypeId:
+                type: integer
+                minimum: 1
+                example: 1
+              query:
+                type: object
+                description: 'Dynamic-table query. Either a single `{ path, operator, value }` condition, or a nested group `{ operator: ''and'' | ''or'', conditions: [...] }`.'
+            required:
+            - recordTypeId
+      required:
+      - name
+    PublicAudienceImportBatch:
+      type: object
+      properties:
+        id:
+          type: string
+          example: example
+        audienceId:
+          type: string
+          example: example
+        status:
+          type: string
+          enum:
+          - PENDING
+          - PROCESSING
+          - CANCEL_REQUESTED
+          - COMPLETED
+          - FAILED
+          - CANCELLED
+          example: PENDING
+        version:
+          type: integer
+          minimum: 1
+          example: 1
+        error:
+          type:
+          - string
+          - 'null'
+          example: example
+        deletedPeopleCount:
+          type: integer
+          minimum: 0
+          example: 0
+        preservedPeopleCount:
+          type: integer
+          minimum: 0
+          example: 0
+        imports:
+          type: array
+          items:
+            $ref: '#/components/schemas/PublicAudienceImport'
+        cancelRequestedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        completedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2024-01-01T12:00:00.000Z'
+      required:
+      - id
+      - audienceId
+      - status
+      - version
+      - deletedPeopleCount
+      - preservedPeopleCount
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          - upgrade_required
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Campaigns
+  tags:
+  - Campaigns
+  - Audiences
+- name: Sequences
+  tags:
+  - Sequences
+  - Email Templates
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Workspace Connectors
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Max
+  tags:
+  - Max Conversations
+  - Max Meetings
+  - Max Tasks
+  - Max Playbooks
+  - Max Settings
+  - Max Proactive
+  - Max Connectors
+- name: Admin
+  tags:
+  - Account
+  - Users
+  - Billing
+  - Data & Sync
+  - Meeting Analytics
+- name: Core
+  tags:
+  - AI Models
+  - User Tasks
+  - Guidance

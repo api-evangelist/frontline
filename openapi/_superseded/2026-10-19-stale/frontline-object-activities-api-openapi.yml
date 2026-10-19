@@ -1,0 +1,758 @@
+openapi: 3.2.0
+info:
+  title: Public Object activities API
+  version: 1.0.0
+  description: Public API for accessing agents, flows, and analytics.
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Object activities
+  description: Manual activities (notes, calls, meetings, emails) attached to object rows
+paths:
+  /public/v1/objects/{name}/rows/{rowId}/activities:
+    get:
+      summary: List activities
+      operationId: listObjectActivities
+      description: Returns manually-created activities attached to a row. Activities log interactions like notes, calls, meetings, and emails.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object activities
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: string
+          example: 65cf9b3a4b7c2a0012a3b4c5
+        required: true
+        name: rowId
+        in: path
+      responses:
+        '200':
+          description: Activities
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        row_id:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - NOTE
+                          - EMAIL
+                          - PHONE_CALL
+                          - MEETING
+                          - WHATSAPP
+                          description: NOTE | EMAIL | PHONE_CALL | MEETING | WHATSAPP
+                        content:
+                          type: string
+                        activity_date:
+                          type:
+                          - string
+                          - 'null'
+                        additional_data:
+                          type:
+                          - object
+                          - 'null'
+                          additionalProperties: {}
+                        related_table_id:
+                          type:
+                          - number
+                          - 'null'
+                        related_row_id:
+                          type:
+                          - string
+                          - 'null'
+                        users:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: number
+                              email:
+                                type: string
+                            required:
+                            - id
+                            - email
+                        created_by:
+                          type:
+                          - number
+                          - 'null'
+                        created_at:
+                          type:
+                          - string
+                          - 'null'
+                        updated_at:
+                          type:
+                          - string
+                          - 'null'
+                      required:
+                      - id
+                      - row_id
+                      - type
+                      - content
+                      - created_at
+                      - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create activity
+      operationId: createObjectActivity
+      description: Attaches a manual activity to a row. Use `type` to categorize it (NOTE, PHONE_CALL, MEETING, EMAIL, WHATSAPP). Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object activities
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: string
+          example: 65cf9b3a4b7c2a0012a3b4c5
+        required: true
+        name: rowId
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  minLength: 1
+                type:
+                  type: string
+                  enum:
+                  - NOTE
+                  - EMAIL
+                  - PHONE_CALL
+                  - MEETING
+                  - WHATSAPP
+                  default: NOTE
+                activityDate:
+                  type:
+                  - string
+                  - 'null'
+                additionalData:
+                  type:
+                  - object
+                  - 'null'
+                  additionalProperties: {}
+                userIds:
+                  type: array
+                  items:
+                    type: integer
+                    exclusiveMinimum: 0
+                relatedTableId:
+                  type: integer
+                  exclusiveMinimum: 0
+                relatedRowId:
+                  type: string
+              required:
+              - content
+      responses:
+        '201':
+          description: Created activity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      row_id:
+                        type: string
+                      type:
+                        type: string
+                        enum:
+                        - NOTE
+                        - EMAIL
+                        - PHONE_CALL
+                        - MEETING
+                        - WHATSAPP
+                        description: NOTE | EMAIL | PHONE_CALL | MEETING | WHATSAPP
+                      content:
+                        type: string
+                      activity_date:
+                        type:
+                        - string
+                        - 'null'
+                      additional_data:
+                        type:
+                        - object
+                        - 'null'
+                        additionalProperties: {}
+                      related_table_id:
+                        type:
+                        - number
+                        - 'null'
+                      related_row_id:
+                        type:
+                        - string
+                        - 'null'
+                      users:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            email:
+                              type: string
+                          required:
+                          - id
+                          - email
+                      created_by:
+                        type:
+                        - number
+                        - 'null'
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                    required:
+                    - id
+                    - row_id
+                    - type
+                    - content
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/objects/{name}/activities/{id}:
+    get:
+      summary: Get activity
+      operationId: getObjectActivity
+      description: Returns an activity by id.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object activities
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          example: 100
+          exclusiveMinimum: 0
+        required: true
+        name: id
+        in: path
+      responses:
+        '200':
+          description: Activity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      row_id:
+                        type: string
+                      type:
+                        type: string
+                        enum:
+                        - NOTE
+                        - EMAIL
+                        - PHONE_CALL
+                        - MEETING
+                        - WHATSAPP
+                        description: NOTE | EMAIL | PHONE_CALL | MEETING | WHATSAPP
+                      content:
+                        type: string
+                      activity_date:
+                        type:
+                        - string
+                        - 'null'
+                      additional_data:
+                        type:
+                        - object
+                        - 'null'
+                        additionalProperties: {}
+                      related_table_id:
+                        type:
+                        - number
+                        - 'null'
+                      related_row_id:
+                        type:
+                        - string
+                        - 'null'
+                      users:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            email:
+                              type: string
+                          required:
+                          - id
+                          - email
+                      created_by:
+                        type:
+                        - number
+                        - 'null'
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                    required:
+                    - id
+                    - row_id
+                    - type
+                    - content
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update activity
+      operationId: updateObjectActivity
+      description: Updates an activity. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object activities
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          example: 100
+          exclusiveMinimum: 0
+        required: true
+        name: id
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                content:
+                  type: string
+                  minLength: 1
+                activityDate:
+                  type:
+                  - string
+                  - 'null'
+                additionalData:
+                  type:
+                  - object
+                  - 'null'
+                  additionalProperties: {}
+                userIds:
+                  type: array
+                  items:
+                    type: integer
+                    exclusiveMinimum: 0
+                relatedTableId:
+                  type:
+                  - integer
+                  - 'null'
+                  exclusiveMinimum: 0
+                relatedRowId:
+                  type:
+                  - string
+                  - 'null'
+      responses:
+        '200':
+          description: Updated activity
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      row_id:
+                        type: string
+                      type:
+                        type: string
+                        enum:
+                        - NOTE
+                        - EMAIL
+                        - PHONE_CALL
+                        - MEETING
+                        - WHATSAPP
+                        description: NOTE | EMAIL | PHONE_CALL | MEETING | WHATSAPP
+                      content:
+                        type: string
+                      activity_date:
+                        type:
+                        - string
+                        - 'null'
+                      additional_data:
+                        type:
+                        - object
+                        - 'null'
+                        additionalProperties: {}
+                      related_table_id:
+                        type:
+                        - number
+                        - 'null'
+                      related_row_id:
+                        type:
+                        - string
+                        - 'null'
+                      users:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            email:
+                              type: string
+                          required:
+                          - id
+                          - email
+                      created_by:
+                        type:
+                        - number
+                        - 'null'
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                    required:
+                    - id
+                    - row_id
+                    - type
+                    - content
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete activity
+      operationId: deleteObjectActivity
+      description: Deletes a manually-created activity. Only the owner or an account admin can delete. Auto-generated activities (email sync, conversation audit, etc.) cannot be deleted. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Object activities
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      - schema:
+          type: integer
+          example: 100
+          exclusiveMinimum: 0
+        required: true
+        name: id
+        in: path
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      deleted:
+                        type: boolean
+                        enum:
+                        - true
+                      id:
+                        anyOf:
+                        - type: string
+                        - type: number
+                    required:
+                    - deleted
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance

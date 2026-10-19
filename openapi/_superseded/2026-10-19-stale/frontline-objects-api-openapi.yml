@@ -1,0 +1,1225 @@
+openapi: 3.2.0
+info:
+  title: Public Objects API
+  version: 1.0.0
+  description: Public API for accessing agents, flows, and analytics.
+  license:
+    name: Proprietary
+    url: https://www.getfrontline.ai/terms-and-conditions
+servers:
+- url: https://prod-api.getfrontline.ai
+tags:
+- name: Objects
+  description: Manage CRM objects (standard and custom)
+paths:
+  /public/v1/objects:
+    get:
+      summary: List objects
+      operationId: listObjects
+      description: Returns every object (standard + custom) for the authenticated account.
+      security:
+      - bearerAuth: []
+      tags:
+      - Objects
+      responses:
+        '200':
+          description: Objects list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: number
+                        name:
+                          type: string
+                        display_name:
+                          type: string
+                        type:
+                          type: string
+                          enum:
+                          - table
+                          - object
+                        custom:
+                          type: boolean
+                        created_at:
+                          type:
+                          - string
+                          - 'null'
+                        updated_at:
+                          type:
+                          - string
+                          - 'null'
+                        description:
+                          type: string
+                        emoji:
+                          type: string
+                        icon_color:
+                          type: string
+                        field_count:
+                          type: number
+                      required:
+                      - id
+                      - name
+                      - display_name
+                      - type
+                      - custom
+                      - created_at
+                      - updated_at
+                required:
+                - ok
+                - data
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create object
+      operationId: createObject
+      description: Creates a custom object. At least one column is required. Requires a USER API key.
+      security:
+      - bearerAuth: []
+      tags:
+      - Objects
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  minLength: 1
+                displayName:
+                  type: string
+                  minLength: 1
+                emoji:
+                  type: string
+                icon_color:
+                  type: string
+                iconColor:
+                  type: string
+                description:
+                  type: string
+                columns:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      name:
+                        type: string
+                        minLength: 1
+                      type:
+                        anyOf:
+                        - type: string
+                          enum:
+                          - string
+                          - number
+                          - boolean
+                          - date
+                          - tags
+                          - relation
+                          - autoIncrement
+                          - dateOnly
+                          - prismaRelation
+                          - kanbanViewOrder
+                          - file
+                          - avatar
+                          - permissions
+                          - formula
+                        - type: string
+                          enum:
+                          - select
+                      metadata:
+                        type: object
+                        additionalProperties: {}
+                      record_type_id:
+                        type: integer
+                        exclusiveMinimum: 0
+                      recordTypeId:
+                        type: integer
+                        exclusiveMinimum: 0
+                    required:
+                    - name
+                    - type
+                    additionalProperties: false
+                  minItems: 1
+              required:
+              - name
+              - displayName
+              - columns
+      responses:
+        '201':
+          description: Created object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                      display_name:
+                        type: string
+                      type:
+                        type: string
+                        enum:
+                        - table
+                        - object
+                      custom:
+                        type: boolean
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                      description:
+                        type: string
+                      emoji:
+                        type: string
+                      icon_color:
+                        type: string
+                      field_count:
+                        type: number
+                      fields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            key:
+                              type: string
+                            type:
+                              type: string
+                            editable:
+                              type: boolean
+                            created_at:
+                              type:
+                              - string
+                              - 'null'
+                            updated_at:
+                              type:
+                              - string
+                              - 'null'
+                            read_only:
+                              type: boolean
+                            required:
+                              type: boolean
+                            unique:
+                              type: boolean
+                            is_system:
+                              type: boolean
+                            is_predefined:
+                              type: boolean
+                            default_value: {}
+                            format:
+                              type: string
+                            mode:
+                              type: string
+                              enum:
+                              - singleSelect
+                              - multiSelect
+                              - single
+                              - multi
+                            timezone:
+                              type: string
+                            decimals:
+                              type: number
+                            currency:
+                              type: string
+                            min:
+                              type:
+                              - number
+                              - 'null'
+                            max:
+                              type:
+                              - number
+                              - 'null'
+                            time_format:
+                              type: string
+                            show_preview:
+                              type: boolean
+                            allowed_file_types:
+                              type: array
+                              items:
+                                type: string
+                            max_file_size:
+                              type: number
+                            related_table_id:
+                              type: number
+                            related_record_type_ids:
+                              type:
+                              - array
+                              - 'null'
+                              items:
+                                type: number
+                            display_field_id:
+                              type: number
+                            relation_mode:
+                              type: string
+                            include_activity:
+                              type: boolean
+                            metadata:
+                              type: object
+                              additionalProperties: {}
+                            options:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                  name:
+                                    type: string
+                                  color:
+                                    type: string
+                                  order:
+                                    type: number
+                                  created_at:
+                                    type:
+                                    - string
+                                    - 'null'
+                                  updated_at:
+                                    type:
+                                    - string
+                                    - 'null'
+                                required:
+                                - id
+                                - name
+                                - color
+                                - order
+                                - created_at
+                                - updated_at
+                            expression: {}
+                            output_type:
+                              type: string
+                            apply_if: {}
+                            number_config: {}
+                            date_config: {}
+                            string_config: {}
+                          required:
+                          - id
+                          - name
+                          - key
+                          - type
+                          - editable
+                          - created_at
+                          - updated_at
+                      views:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            type:
+                              type: string
+                              enum:
+                              - TABLE
+                              - KANBAN
+                              - RECORD
+                            is_default:
+                              type: boolean
+                            is_private:
+                              type: boolean
+                            record_type_id:
+                              type:
+                              - number
+                              - 'null'
+                            created_at:
+                              type:
+                              - string
+                              - 'null'
+                            updated_at:
+                              type:
+                              - string
+                              - 'null'
+                            column_order:
+                              type: array
+                              items:
+                                type: string
+                            hidden_columns:
+                              type: array
+                              items:
+                                type: string
+                            sticky_columns:
+                              type: array
+                              items:
+                                type: string
+                            grouping_field_id:
+                              type: number
+                            column_ordering: {}
+                            title_field_id:
+                              type: number
+                            display_field_ids:
+                              type: array
+                              items:
+                                type: number
+                          required:
+                          - id
+                          - name
+                          - type
+                          - is_default
+                          - is_private
+                          - record_type_id
+                          - created_at
+                          - updated_at
+                      record_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            display_name:
+                              type: string
+                            is_default:
+                              type: boolean
+                            single_noun:
+                              type: string
+                            emoji:
+                              type: string
+                            icon_color:
+                              type: string
+                            disable_side_effects:
+                              type: boolean
+                            disable_relation_logging:
+                              type: boolean
+                            default_view_id:
+                              type: number
+                            field_ids:
+                              type: array
+                              items:
+                                type: number
+                            views:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                  name:
+                                    type: string
+                                  type:
+                                    type: string
+                                    enum:
+                                    - TABLE
+                                    - KANBAN
+                                    - RECORD
+                                  is_default:
+                                    type: boolean
+                                  is_private:
+                                    type: boolean
+                                  record_type_id:
+                                    type:
+                                    - number
+                                    - 'null'
+                                  created_at:
+                                    type:
+                                    - string
+                                    - 'null'
+                                  updated_at:
+                                    type:
+                                    - string
+                                    - 'null'
+                                  column_order:
+                                    type: array
+                                    items:
+                                      type: string
+                                  hidden_columns:
+                                    type: array
+                                    items:
+                                      type: string
+                                  sticky_columns:
+                                    type: array
+                                    items:
+                                      type: string
+                                  grouping_field_id:
+                                    type: number
+                                  column_ordering: {}
+                                  title_field_id:
+                                    type: number
+                                  display_field_ids:
+                                    type: array
+                                    items:
+                                      type: number
+                                required:
+                                - id
+                                - name
+                                - type
+                                - is_default
+                                - is_private
+                                - record_type_id
+                                - created_at
+                                - updated_at
+                          required:
+                          - id
+                          - name
+                          - display_name
+                          - is_default
+                    required:
+                    - id
+                    - name
+                    - display_name
+                    - type
+                    - custom
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/objects/{name}:
+    get:
+      summary: Get object
+      operationId: getObject
+      description: Returns one object including fields, views, and record types.
+      security:
+      - bearerAuth: []
+      tags:
+      - Objects
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      responses:
+        '200':
+          description: Object detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                      display_name:
+                        type: string
+                      type:
+                        type: string
+                        enum:
+                        - table
+                        - object
+                      custom:
+                        type: boolean
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                      description:
+                        type: string
+                      emoji:
+                        type: string
+                      icon_color:
+                        type: string
+                      field_count:
+                        type: number
+                      fields:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            key:
+                              type: string
+                            type:
+                              type: string
+                            editable:
+                              type: boolean
+                            created_at:
+                              type:
+                              - string
+                              - 'null'
+                            updated_at:
+                              type:
+                              - string
+                              - 'null'
+                            read_only:
+                              type: boolean
+                            required:
+                              type: boolean
+                            unique:
+                              type: boolean
+                            is_system:
+                              type: boolean
+                            is_predefined:
+                              type: boolean
+                            default_value: {}
+                            format:
+                              type: string
+                            mode:
+                              type: string
+                              enum:
+                              - singleSelect
+                              - multiSelect
+                              - single
+                              - multi
+                            timezone:
+                              type: string
+                            decimals:
+                              type: number
+                            currency:
+                              type: string
+                            min:
+                              type:
+                              - number
+                              - 'null'
+                            max:
+                              type:
+                              - number
+                              - 'null'
+                            time_format:
+                              type: string
+                            show_preview:
+                              type: boolean
+                            allowed_file_types:
+                              type: array
+                              items:
+                                type: string
+                            max_file_size:
+                              type: number
+                            related_table_id:
+                              type: number
+                            related_record_type_ids:
+                              type:
+                              - array
+                              - 'null'
+                              items:
+                                type: number
+                            display_field_id:
+                              type: number
+                            relation_mode:
+                              type: string
+                            include_activity:
+                              type: boolean
+                            metadata:
+                              type: object
+                              additionalProperties: {}
+                            options:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                  name:
+                                    type: string
+                                  color:
+                                    type: string
+                                  order:
+                                    type: number
+                                  created_at:
+                                    type:
+                                    - string
+                                    - 'null'
+                                  updated_at:
+                                    type:
+                                    - string
+                                    - 'null'
+                                required:
+                                - id
+                                - name
+                                - color
+                                - order
+                                - created_at
+                                - updated_at
+                            expression: {}
+                            output_type:
+                              type: string
+                            apply_if: {}
+                            number_config: {}
+                            date_config: {}
+                            string_config: {}
+                          required:
+                          - id
+                          - name
+                          - key
+                          - type
+                          - editable
+                          - created_at
+                          - updated_at
+                      views:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            type:
+                              type: string
+                              enum:
+                              - TABLE
+                              - KANBAN
+                              - RECORD
+                            is_default:
+                              type: boolean
+                            is_private:
+                              type: boolean
+                            record_type_id:
+                              type:
+                              - number
+                              - 'null'
+                            created_at:
+                              type:
+                              - string
+                              - 'null'
+                            updated_at:
+                              type:
+                              - string
+                              - 'null'
+                            column_order:
+                              type: array
+                              items:
+                                type: string
+                            hidden_columns:
+                              type: array
+                              items:
+                                type: string
+                            sticky_columns:
+                              type: array
+                              items:
+                                type: string
+                            grouping_field_id:
+                              type: number
+                            column_ordering: {}
+                            title_field_id:
+                              type: number
+                            display_field_ids:
+                              type: array
+                              items:
+                                type: number
+                          required:
+                          - id
+                          - name
+                          - type
+                          - is_default
+                          - is_private
+                          - record_type_id
+                          - created_at
+                          - updated_at
+                      record_types:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: number
+                            name:
+                              type: string
+                            display_name:
+                              type: string
+                            is_default:
+                              type: boolean
+                            single_noun:
+                              type: string
+                            emoji:
+                              type: string
+                            icon_color:
+                              type: string
+                            disable_side_effects:
+                              type: boolean
+                            disable_relation_logging:
+                              type: boolean
+                            default_view_id:
+                              type: number
+                            field_ids:
+                              type: array
+                              items:
+                                type: number
+                            views:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: number
+                                  name:
+                                    type: string
+                                  type:
+                                    type: string
+                                    enum:
+                                    - TABLE
+                                    - KANBAN
+                                    - RECORD
+                                  is_default:
+                                    type: boolean
+                                  is_private:
+                                    type: boolean
+                                  record_type_id:
+                                    type:
+                                    - number
+                                    - 'null'
+                                  created_at:
+                                    type:
+                                    - string
+                                    - 'null'
+                                  updated_at:
+                                    type:
+                                    - string
+                                    - 'null'
+                                  column_order:
+                                    type: array
+                                    items:
+                                      type: string
+                                  hidden_columns:
+                                    type: array
+                                    items:
+                                      type: string
+                                  sticky_columns:
+                                    type: array
+                                    items:
+                                      type: string
+                                  grouping_field_id:
+                                    type: number
+                                  column_ordering: {}
+                                  title_field_id:
+                                    type: number
+                                  display_field_ids:
+                                    type: array
+                                    items:
+                                      type: number
+                                required:
+                                - id
+                                - name
+                                - type
+                                - is_default
+                                - is_private
+                                - record_type_id
+                                - created_at
+                                - updated_at
+                          required:
+                          - id
+                          - name
+                          - display_name
+                          - is_default
+                    required:
+                    - id
+                    - name
+                    - display_name
+                    - type
+                    - custom
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    patch:
+      summary: Update object
+      operationId: updateObject
+      description: Updates an object's display name, emoji, color, or description. Requires a USER API key with ADMIN or OWNER role.
+      security:
+      - bearerAuth: []
+      tags:
+      - Objects
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                displayName:
+                  type: string
+                  minLength: 1
+                emoji:
+                  type: string
+                icon_color:
+                  type: string
+                iconColor:
+                  type: string
+                description:
+                  type: string
+      responses:
+        '200':
+          description: Updated object
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: number
+                      name:
+                        type: string
+                      display_name:
+                        type: string
+                      type:
+                        type: string
+                        enum:
+                        - table
+                        - object
+                      custom:
+                        type: boolean
+                      created_at:
+                        type:
+                        - string
+                        - 'null'
+                      updated_at:
+                        type:
+                        - string
+                        - 'null'
+                      description:
+                        type: string
+                      emoji:
+                        type: string
+                      icon_color:
+                        type: string
+                      field_count:
+                        type: number
+                    required:
+                    - id
+                    - name
+                    - display_name
+                    - type
+                    - custom
+                    - created_at
+                    - updated_at
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      summary: Delete object
+      operationId: deleteObject
+      description: Deletes a custom object. System objects cannot be deleted. Requires a USER API key with ADMIN or OWNER role.
+      security:
+      - bearerAuth: []
+      tags:
+      - Objects
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    properties:
+                      deleted:
+                        type: boolean
+                        enum:
+                        - true
+                      id:
+                        anyOf:
+                        - type: string
+                        - type: number
+                    required:
+                    - deleted
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /public/v1/objects/{name}/schema:
+    get:
+      summary: Get object schema
+      operationId: getObjectSchema
+      description: Returns only the schema (fields, types, formats) for an object.
+      security:
+      - bearerAuth: []
+      tags:
+      - Objects
+      parameters:
+      - schema:
+          type: string
+          minLength: 1
+          example: deals
+        required: true
+        name: name
+        in: path
+      responses:
+        '200':
+          description: Object schema
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    enum:
+                    - true
+                  data:
+                    type: object
+                    additionalProperties: {}
+                required:
+                - ok
+                - data
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '404':
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ErrorBody:
+      type: object
+      properties:
+        code:
+          type: string
+          enum:
+          - bad_request
+          - unauthorized
+          - forbidden
+          - not_found
+          - conflict
+          - internal_error
+          - cli_outdated
+          example: unauthorized
+        message:
+          type: string
+          example: Detailed error message
+        details:
+          type: object
+          description: 'Optional structured details. Validation errors include `{ issues: [...] }`.'
+          example:
+            issues:
+            - path:
+              - name
+              message: String must contain at least 1 character(s)
+              code: too_small
+      required:
+      - code
+      - message
+    Error:
+      type: object
+      properties:
+        ok:
+          type: boolean
+          enum:
+          - false
+          example: false
+        error:
+          $ref: '#/components/schemas/ErrorBody'
+      required:
+      - ok
+      - error
+  securitySchemes:
+    accountApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: Account API Key
+      description: Account-level API key (GENERAL). Authenticates on behalf of the entire account. Use for read-only and analytics endpoints marked as account-level in this documentation.
+    userApiKey:
+      type: http
+      scheme: bearer
+      bearerFormat: User API Key
+      description: User-level API key (USER). Authenticates on behalf of a specific user. Required for write operations and user-owned resources. Also accepted on all account-level endpoints.
+x-tagGroups:
+- name: Agent Builder
+  tags:
+  - Agent Builder
+  - Flows
+  - Flow Variables
+  - Intents
+  - Agents
+  - Agent Playbooks
+- name: Workflows
+  tags:
+  - Workflows
+  - Workflow Variables
+- name: Objects
+  tags:
+  - Objects
+  - Object fields
+  - Object options
+  - Object record types
+  - Object views
+  - Object relations
+  - Object rows
+  - Object aggregations
+  - Object activities
+  - Object tasks
+  - Object files
+  - Object export
+- name: Tables
+  tags:
+  - Tables
+  - Table fields
+  - Table options
+  - Table rows
+  - Table aggregations
+  - Table activities
+  - Table tasks
+  - Table files
+  - Table export
+- name: Channels
+  tags:
+  - Channels
+- name: Integrations
+  tags:
+  - Custom Tools
+  - Incoming Webhooks
+  - Account Integrations
+  - Agent Channels
+  - Integration Resources
+- name: Knowledge
+  tags:
+  - Knowledge Bases
+- name: Core
+  tags:
+  - Account
+  - AI Models
+  - Billing
+  - Users
+  - User Tasks
+  - Guidance
