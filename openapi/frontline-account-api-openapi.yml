@@ -356,3 +356,9 @@ x-tagGroups:
   - AI Models
   - User Tasks
   - Guidance
+x-provenance:
+  method: harvested
+  publisher: Frontline
+  source: https://docs.getfrontline.ai/_bundle/reference/openapi.json?download
+  note: split by refine-openapis from the provider's own published document, verified by fetch (openapi/_original/*.fetch.json);
+    stamped by stamp-openapi-provenance.py (roadmap#793)
